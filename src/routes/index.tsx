@@ -7,6 +7,7 @@ import dypallLogo from "@/assets/DYPALL-logo.png.asset.json";
 import bataljongLogo from "@/assets/Bataljong-logo.png.asset.json";
 import fundacioLogo from "@/assets/Fundacio-logo.png.asset.json";
 import nuvaLogo from "@/assets/Nuva-logo.png.asset.json";
+import cofundLogo from "@/assets/cofund-eu-white.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -373,37 +374,39 @@ function Consortium() {
 function Footer() {
   return (
     <footer className="w-full bg-[color:var(--impact-purple-dark)] text-white">
-      <div className="mx-auto grid max-w-[1440px] gap-10 px-6 py-16 md:grid-cols-3 lg:px-[120px]">
+      <div className="mx-auto grid max-w-[1440px] gap-10 px-6 py-16 md:grid-cols-[1.5fr_1fr] lg:px-[120px]">
         <div>
           <img
             src={whiteLogoAsset.url}
             alt="IMPACT logo"
             className="h-8 w-auto"
           />
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
-            A digital platform helping Local Youth Councils across Europe
-            measure impact and plan action.
+          <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
           </p>
+          <img
+            src={cofundLogo.url}
+            alt="Co-funded by the European Union"
+            className="mt-6 h-10 w-auto"
+          />
         </div>
         <div>
           <h4 className="text-sm font-bold uppercase tracking-wide text-white/80">
-            Platform
+            Quick links
           </h4>
           <ul className="mt-4 space-y-2 text-sm text-white/70">
             <li><a href="#">Home</a></li>
             <li><a href="#">Resource Hub</a></li>
-            <li><a href="#">Start assessment</a></li>
+            <li><a href="#">Send us a message</a></li>
           </ul>
         </div>
-        <div>
-          <h4 className="text-sm font-bold uppercase tracking-wide text-white/80">
-            Contact
-          </h4>
-          <ul className="mt-4 space-y-2 text-sm text-white/70">
-            <li>Send us a message</li>
-            <li>Privacy policy</li>
-            <li>© {new Date().getFullYear()} IMPACT Consortium</li>
-          </ul>
+      </div>
+      <div className="border-t border-white/10">
+        <div className="mx-auto max-w-[1440px] px-6 py-6 text-xs text-white/60 lg:px-[120px]">
+          © {new Date().getFullYear()} IMPACT Consortium
         </div>
       </div>
     </footer>
