@@ -237,7 +237,6 @@ function AdminDashboard() {
       </div>
 
       <ManageResources />
-      <CommunityFeedback />
     </div>
   );
 }
