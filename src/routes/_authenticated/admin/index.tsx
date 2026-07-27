@@ -244,10 +244,10 @@ function AdminDashboard() {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Total Accounts" value={metrics.accounts.toLocaleString()} delta={metrics.accountsDelta} icon={Users} iconTint="#502181" />
-        <KpiCard label="Questionnaires Completed" value={metrics.questionnaires.toLocaleString()} delta={metrics.questionnairesDelta} icon={CheckCircle2} iconTint="#219c9e" />
-        <KpiCard label="Total Visits" value={metrics.visits.toLocaleString()} delta={metrics.visitsDelta} icon={HeartPulse} iconTint="#e84393" />
-        <KpiCard label="Action Plans Created" value={metrics.actionPlans.toLocaleString()} delta={metrics.actionPlansDelta} icon={ListChecks} iconTint="#f4a261" positive={false} />
+        <KpiCard label="Total Accounts" value={(metrics?.accounts ?? 0).toLocaleString()} delta={metrics ? `${metrics.newAccounts} new · ${metrics.accountsDelta}` : "…"} icon={Users} iconTint="#502181" positive={metrics?.accountsPositive ?? true} />
+        <KpiCard label="Questionnaires Completed" value={(metrics?.questionnaires ?? 0).toLocaleString()} delta="not tracked yet" icon={CheckCircle2} iconTint="#219c9e" positive={false} />
+        <KpiCard label="Total Visits" value={(metrics?.visits ?? 0).toLocaleString()} delta="analytics coming soon" icon={HeartPulse} iconTint="#e84393" positive={false} />
+        <KpiCard label="Action Plans Created" value={(metrics?.actionPlans ?? 0).toLocaleString()} delta="feature coming soon" icon={ListChecks} iconTint="#f4a261" positive={false} />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1.6fr_1fr]">
