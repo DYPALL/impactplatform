@@ -191,7 +191,7 @@ function Hero() {
         </div>
         <div className="relative z-10 w-full max-w-[597px] lg:mr-0">
           <img
-            src={heroImg}
+            src={heroImg.url}
             alt="Youth council members collaborating"
             width={1200}
             height={800}
@@ -250,12 +250,13 @@ function HowItWorks() {
               key={s.n}
               className="flex flex-col overflow-hidden rounded-[20px] border border-[color:var(--impact-border)] bg-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.05)]"
             >
-              <div
-                className={`relative h-[180px] w-full bg-gradient-to-br ${s.tint}`}
-              >
-                <div className="absolute inset-0 bg-black/10" />
-                <Polygon size={90} rotate={20} color="rgba(255,255,255,0.25)" style={{ top: 20, left: 30 }} />
-                <Polygon size={50} rotate={-30} color="rgba(255,255,255,0.2)" style={{ bottom: 20, right: 30 }} />
+              <div className="relative h-[220px] w-full overflow-hidden">
+                <img
+                  src={s.image}
+                  alt={s.title}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-[rgba(17,24,39,0.15)]" />
               </div>
               <div className="flex flex-col gap-4 p-8">
                 <div className="relative h-[52px] w-[56px]">
@@ -323,7 +324,7 @@ function CtaBanner() {
         </div>
         <div className="relative z-10 w-full max-w-[520px]">
           <img
-            src={ctaImg}
+            src={ctaImg.url}
             alt="Team planning action steps"
             width={1040}
             height={912}
