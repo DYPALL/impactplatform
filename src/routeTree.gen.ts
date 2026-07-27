@@ -9,11 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SendUsAMessageRouteImport } from './routes/send-us-a-message'
+import { Route as ResourceHubRouteImport } from './routes/resource-hub'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
+const SendUsAMessageRoute = SendUsAMessageRouteImport.update({
+  id: '/send-us-a-message',
+  path: '/send-us-a-message',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourceHubRoute = ResourceHubRouteImport.update({
+  id: '/resource-hub',
+  path: '/resource-hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -37,11 +49,15 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/resource-hub': typeof ResourceHubRoute
+  '/send-us-a-message': typeof SendUsAMessageRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/resource-hub': typeof ResourceHubRoute
+  '/send-us-a-message': typeof SendUsAMessageRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRoutesById {
@@ -49,18 +65,27 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/resource-hub': typeof ResourceHubRoute
+  '/send-us-a-message': typeof SendUsAMessageRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/resource-hub'
+    | '/send-us-a-message'
+    | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard'
+  to: '/' | '/auth' | '/resource-hub' | '/send-us-a-message' | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/resource-hub'
+    | '/send-us-a-message'
     | '/_authenticated/dashboard'
   fileRoutesById: FileRoutesById
 }
@@ -68,10 +93,26 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ResourceHubRoute: typeof ResourceHubRoute
+  SendUsAMessageRoute: typeof SendUsAMessageRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/send-us-a-message': {
+      id: '/send-us-a-message'
+      path: '/send-us-a-message'
+      fullPath: '/send-us-a-message'
+      preLoaderRoute: typeof SendUsAMessageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resource-hub': {
+      id: '/resource-hub'
+      path: '/resource-hub'
+      fullPath: '/resource-hub'
+      preLoaderRoute: typeof ResourceHubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -118,6 +159,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ResourceHubRoute: ResourceHubRoute,
+  SendUsAMessageRoute: SendUsAMessageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
