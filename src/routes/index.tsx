@@ -209,24 +209,28 @@ const steps = [
     title: "Create your account",
     body: "Register your Local Youth Council so results, action plans and reflections are stored securely in one place.",
     image: step1Img.url,
+    color: "var(--impact-purple)",
   },
   {
     n: 2,
     title: "Pick a focus area",
     body: "Choose one of the IMPACT thematic areas to start with, or run the full self-assessment across all dimensions.",
     image: step2Img.url,
+    color: "var(--impact-orange)",
   },
   {
     n: 3,
     title: "Answer the questionnaire",
     body: "Rate your council against each indicator. It takes 15–30 minutes and you can save your progress anytime.",
     image: step3Img.url,
+    color: "var(--impact-green)",
   },
   {
     n: 4,
     title: "Review your results",
     body: "Get a visual scoreboard, reflection prompts and a tailored action plan you can share with your team.",
     image: step4Img.url,
+    color: "var(--impact-pink)",
   },
 ];
 
