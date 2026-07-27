@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect, useRouterState, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, FolderOpen, MessageCircle, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, FolderOpen, Settings, LogOut, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoWhite from "@/assets/IMPACT_Logo_white.png.asset.json";
 
