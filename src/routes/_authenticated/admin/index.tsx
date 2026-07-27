@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Search, Filter, Pencil, Trash2, Users, ClipboardCheck, Activity, ListChecks } from "lucide-react";
+import { Plus, Search, Filter, Pencil, Trash2, Users, ClipboardCheck, Activity, ListChecks, ArrowLeft } from "lucide-react";
 import { BarChart, Bar, XAxis, ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 
