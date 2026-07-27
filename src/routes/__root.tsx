@@ -78,14 +78,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "IMPACT — Digital platform for Local Youth Councils" },
+      { name: "description", content: "IMPACT helps Local Youth Councils measure their impact, identify opportunities for growth, and access practical guidance and resources." },
+      { name: "author", content: "IMPACT Consortium" },
+      { property: "og:title", content: "IMPACT — Digital platform for Local Youth Councils" },
+      { property: "og:description", content: "IMPACT helps Local Youth Councils measure their impact, identify opportunities for growth, and access practical guidance and resources." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
