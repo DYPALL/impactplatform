@@ -131,7 +131,7 @@ function Header() {
             Send us a message
           </a>
           <a
-            href="#"
+            href="/auth"
             className="inline-flex h-11 items-center gap-2 rounded-full bg-[color:var(--impact-purple)] px-[18px] text-[14px] font-bold text-white transition hover:opacity-90"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
