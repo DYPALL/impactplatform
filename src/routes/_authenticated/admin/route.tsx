@@ -65,23 +65,25 @@ function AdminLayout() {
                   <Link
                     to={item.to}
                     className={
-                      "flex items-center justify-between gap-3 rounded-xl px-3 py-3 text-[14px] font-medium transition " +
+                      "flex items-center gap-3 rounded-xl px-3 py-3 text-[14px] font-medium transition " +
                       (active ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10")
                     }
                   >
-                    <span className="flex items-center gap-3">
-                      <Icon className="h-[18px] w-[18px]" />
-                      {item.label}
-                    </span>
-                    {"badge" in item && item.badge ? (
-                      <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#e84393] px-1.5 text-[11px] font-bold text-white">
-                        {item.badge}
-                      </span>
-                    ) : null}
+                    <Icon className="h-[18px] w-[18px]" />
+                    {item.label}
                   </Link>
                 </li>
               );
             })}
+            <li>
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-3 rounded-xl px-3 py-3 text-[14px] font-medium text-white/80 transition hover:bg-white/10"
+              >
+                <ArrowLeft className="h-[18px] w-[18px]" />
+                Back to Dashboard
+              </Link>
+            </li>
           </ul>
         </nav>
 
