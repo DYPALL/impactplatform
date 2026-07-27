@@ -3,6 +3,10 @@ import heroImg from "@/assets/hero-youth.jpg";
 import ctaImg from "@/assets/cta-action.jpg";
 import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import whiteLogoAsset from "@/assets/IMPACT_Logo_white.png.asset.json";
+import dypallLogo from "@/assets/DYPALL-logo.png.asset.json";
+import bataljongLogo from "@/assets/Bataljong-logo.png.asset.json";
+import fundacioLogo from "@/assets/Fundacio-logo.png.asset.json";
+import nuvaLogo from "@/assets/Nuva-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -327,7 +331,12 @@ function CtaBanner() {
   );
 }
 
-const partners = ["DYPALL Network", "Bataljong", "Fundació Ferrer i Guàrdia", "Nuva"];
+const partners = [
+  { name: "DYPALL Network", logo: dypallLogo.url },
+  { name: "Bataljong", logo: bataljongLogo.url },
+  { name: "Fundació Ferrer i Guàrdia", logo: fundacioLogo.url },
+  { name: "Nuva", logo: nuvaLogo.url },
+];
 
 function Consortium() {
   return (
@@ -345,12 +354,14 @@ function Consortium() {
         <div className="mt-7 grid grid-cols-2 gap-6 md:grid-cols-4">
           {partners.map((p) => (
             <div
-              key={p}
-              className="flex h-[120px] items-center justify-center rounded-lg border border-[color:var(--impact-border)] bg-white px-6 text-center shadow-[0_4px_6px_rgba(0,0,0,0.04)]"
+              key={p.name}
+              className="flex h-[120px] items-center justify-center rounded-lg border border-[color:var(--impact-border)] bg-white px-6 shadow-[0_4px_6px_rgba(0,0,0,0.04)]"
             >
-              <span className="text-[15px] font-bold text-[color:var(--impact-purple)]">
-                {p}
-              </span>
+              <img
+                src={p.logo}
+                alt={`${p.name} logo`}
+                className="max-h-[80px] max-w-full object-contain"
+              />
             </div>
           ))}
         </div>
