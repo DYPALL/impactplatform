@@ -47,6 +47,42 @@ export type Database = {
         }
         Relationships: []
       }
+      resources: {
+        Row: {
+          area: Database["public"]["Enums"]["resource_area"]
+          created_at: string
+          description: string
+          id: string
+          published: boolean
+          resource_type: Database["public"]["Enums"]["resource_type"]
+          title: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          area?: Database["public"]["Enums"]["resource_area"]
+          created_at?: string
+          description?: string
+          id?: string
+          published?: boolean
+          resource_type: Database["public"]["Enums"]["resource_type"]
+          title: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          area?: Database["public"]["Enums"]["resource_area"]
+          created_at?: string
+          description?: string
+          id?: string
+          published?: boolean
+          resource_type?: Database["public"]["Enums"]["resource_type"]
+          title?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -55,7 +91,18 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      resource_area:
+        | "representativeness"
+        | "governance"
+        | "empowerment"
+        | "results"
+        | "general"
+      resource_type:
+        | "publication"
+        | "video"
+        | "template"
+        | "session_outline"
+        | "document"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -182,6 +229,21 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      resource_area: [
+        "representativeness",
+        "governance",
+        "empowerment",
+        "results",
+        "general",
+      ],
+      resource_type: [
+        "publication",
+        "video",
+        "template",
+        "session_outline",
+        "document",
+      ],
+    },
   },
 } as const
