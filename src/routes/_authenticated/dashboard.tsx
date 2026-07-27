@@ -26,6 +26,7 @@ type Profile = {
 function Dashboard() {
   const { user } = Route.useRouteContext() as { user: { id: string; email?: string } };
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
   const router = useRouter();
 
@@ -36,6 +37,11 @@ function Dashboard() {
       .eq("id", user.id)
       .maybeSingle()
       .then(({ data }) => setProfile(data as Profile | null));
+    supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .then(({ data }) => setIsAdmin((data ?? []).some((r) => r.role === "admin")));
   }, [user.id]);
 
   async function handleSignOut() {
@@ -57,6 +63,14 @@ function Dashboard() {
             <span className="hidden text-sm text-[color:var(--impact-ink)]/70 sm:inline">
               {user.email}
             </span>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="inline-flex h-10 items-center rounded-full bg-[color:var(--impact-purple)] px-4 text-sm font-semibold text-white hover:opacity-90"
+              >
+                Admin
+              </Link>
+            )}
             <button
               onClick={handleSignOut}
               className="inline-flex h-10 items-center rounded-full border border-black/10 px-4 text-sm font-semibold text-[color:var(--impact-ink)] hover:bg-black/5"

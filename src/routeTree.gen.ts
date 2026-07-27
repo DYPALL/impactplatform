@@ -15,6 +15,10 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminResourcesNewRouteImport } from './routes/_authenticated/admin/resources.new'
+import { Route as AuthenticatedAdminResourcesIdEditRouteImport } from './routes/_authenticated/admin/resources.$id.edit'
 
 const SendUsAMessageRoute = SendUsAMessageRouteImport.update({
   id: '/send-us-a-message',
@@ -45,13 +49,39 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
+const AuthenticatedAdminResourcesNewRoute =
+  AuthenticatedAdminResourcesNewRouteImport.update({
+    id: '/resources/new',
+    path: '/resources/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminResourcesIdEditRoute =
+  AuthenticatedAdminResourcesIdEditRouteImport.update({
+    id: '/resources/$id/edit',
+    path: '/resources/$id/edit',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/resource-hub': typeof ResourceHubRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
+  '/admin/resources/$id/edit': typeof AuthenticatedAdminResourcesIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,6 +89,9 @@ export interface FileRoutesByTo {
   '/resource-hub': typeof ResourceHubRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
+  '/admin/resources/$id/edit': typeof AuthenticatedAdminResourcesIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -67,7 +100,11 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/resource-hub': typeof ResourceHubRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
+  '/_authenticated/admin/resources/$id/edit': typeof AuthenticatedAdminResourcesIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -76,9 +113,21 @@ export interface FileRouteTypes {
     | '/auth'
     | '/resource-hub'
     | '/send-us-a-message'
+    | '/admin'
     | '/dashboard'
+    | '/admin/'
+    | '/admin/resources/new'
+    | '/admin/resources/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/resource-hub' | '/send-us-a-message' | '/dashboard'
+  to:
+    | '/'
+    | '/auth'
+    | '/resource-hub'
+    | '/send-us-a-message'
+    | '/dashboard'
+    | '/admin'
+    | '/admin/resources/new'
+    | '/admin/resources/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -86,7 +135,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/resource-hub'
     | '/send-us-a-message'
+    | '/_authenticated/admin'
     | '/_authenticated/dashboard'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/resources/new'
+    | '/_authenticated/admin/resources/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -141,14 +194,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/resources/new': {
+      id: '/_authenticated/admin/resources/new'
+      path: '/resources/new'
+      fullPath: '/admin/resources/new'
+      preLoaderRoute: typeof AuthenticatedAdminResourcesNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/resources/$id/edit': {
+      id: '/_authenticated/admin/resources/$id/edit'
+      path: '/resources/$id/edit'
+      fullPath: '/admin/resources/$id/edit'
+      preLoaderRoute: typeof AuthenticatedAdminResourcesIdEditRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminResourcesNewRoute: typeof AuthenticatedAdminResourcesNewRoute
+  AuthenticatedAdminResourcesIdEditRoute: typeof AuthenticatedAdminResourcesIdEditRoute
+}
+
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+    AuthenticatedAdminResourcesNewRoute: AuthenticatedAdminResourcesNewRoute,
+    AuthenticatedAdminResourcesIdEditRoute:
+      AuthenticatedAdminResourcesIdEditRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
 }
 
