@@ -173,10 +173,19 @@ function AuthPage() {
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* Left purple panel */}
         <aside className="relative overflow-hidden bg-[color:var(--impact-purple)] px-8 py-14 text-white lg:w-[45%] lg:px-[80px] lg:py-16 xl:px-[120px]">
-          <Triangle size={44} rotate={-15} color="rgba(255,255,255,0.35)" style={{ top: 120, left: "20%" }} />
-          <Triangle size={28} rotate={40} color="rgba(244,162,97,0.7)" style={{ top: 140, left: "22%" }} />
-          <Triangle size={34} rotate={-30} color="rgba(255,255,255,0.30)" style={{ top: 220, right: "18%" }} />
-          <Triangle size={54} rotate={180} color="rgba(0,0,0,0.15)" style={{ bottom: 240, left: 40 }} />
+          {/* Decorative triangle cluster — spread across the whole panel */}
+          <Triangle size={120} rotate={-18} color="rgba(255,255,255,0.08)" style={{ top: -30, right: -20 }} />
+          <Triangle size={70} rotate={35} color="rgba(244,162,97,0.55)" style={{ top: 60, right: 90 }} />
+          <Triangle size={40} rotate={-40} color="rgba(33,156,158,0.75)" style={{ top: 40, right: 200 }} />
+
+          <Triangle size={90} rotate={210} color="rgba(233,75,138,0.35)" style={{ top: "38%", left: -30 }} />
+          <Triangle size={54} rotate={15} color="rgba(255,255,255,0.18)" style={{ top: "46%", left: 70 }} />
+
+          <Triangle size={64} rotate={165} color="rgba(244,162,97,0.35)" style={{ top: "58%", right: 40 }} />
+          <Triangle size={32} rotate={-25} color="rgba(255,255,255,0.28)" style={{ top: "62%", right: 130 }} />
+
+          <Triangle size={140} rotate={200} color="rgba(0,0,0,0.18)" style={{ bottom: -40, right: -30 }} />
+          <Triangle size={48} rotate={-10} color="rgba(33,156,158,0.5)" style={{ bottom: 180, left: "45%" }} />
 
           <div className="relative z-10 max-w-[420px]">
             <h1 className="text-[44px] font-extrabold leading-[1.05] tracking-tight lg:text-[52px]">
