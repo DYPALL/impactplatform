@@ -70,12 +70,12 @@ function Hero() {
             >
               Start your assessment
             </a>
-            <a
-              href="#how"
+            <button
+              onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })}
               className="inline-flex h-[52px] items-center justify-center rounded-full border border-[color:var(--impact-orange)] px-[22px] text-[15px] font-bold text-white transition hover:bg-white/10"
             >
               How to get started?
-            </a>
+            </button>
           </div>
         </div>
         <div className="relative z-10 w-full max-w-[597px] lg:mr-0">
