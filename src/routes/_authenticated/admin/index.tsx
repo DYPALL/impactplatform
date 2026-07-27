@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Search, Filter, Pencil, Trash2, Users, ClipboardCheck, Activity, ListChecks } from "lucide-react";
+import { Plus, Search, Filter, Pencil, Trash2, Users, ClipboardCheck, Activity, ListChecks, ArrowLeft } from "lucide-react";
 import { BarChart, Bar, XAxis, ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({
     meta: [
       { title: "Admin Dashboard — IMPACT" },
-      { name: "description", content: "Manage resources, moderate community feedback and monitor platform metrics." },
+      { name: "description", content: "Manage resources and monitor platform metrics." },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -84,15 +84,13 @@ function AdminDashboard() {
   const { data: kpis } = useQuery({
     queryKey: ["admin-kpis"],
     queryFn: async () => {
-      const [{ count: accounts }, { count: resourcesCount }, { count: feedbackCount }] = await Promise.all([
+      const [{ count: accounts }, { count: resourcesCount }] = await Promise.all([
         supabase.from("profiles").select("id", { count: "exact", head: true }),
         supabase.from("resources").select("id", { count: "exact", head: true }),
-        supabase.from("community_feedback").select("id", { count: "exact", head: true }),
       ]);
       return {
         accounts: accounts ?? 0,
         resources: resourcesCount ?? 0,
-        feedback: feedbackCount ?? 0,
       };
     },
   });
@@ -145,7 +143,16 @@ function AdminDashboard() {
 
   return (
     <div className="mx-auto max-w-[1200px]">
-      <h1 className="text-[32px] font-extrabold text-[#111827]">Admin Dashboard</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-[32px] font-extrabold text-[#111827]">Admin Dashboard</h1>
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[13px] font-bold text-[#111827] shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:bg-[#f5f5f7]"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Link>
+      </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <span className="mr-1 text-[13px] font-medium text-[#6b7280]">Period:</span>
@@ -230,7 +237,6 @@ function AdminDashboard() {
       </div>
 
       <ManageResources />
-      <CommunityFeedback />
     </div>
   );
 }
@@ -395,151 +401,3 @@ function ManageResources() {
   );
 }
 
-type FeedbackRow = {
-  id: string;
-  author_name: string;
-  message: string;
-  area: string;
-  status: "pending" | "approved" | "rejected";
-  created_at: string;
-};
-
-const AREA_BADGE: Record<string, string> = {
-  representativeness: "#f3ecfb",
-  governance: "#fef1e2",
-  empowerment: "#fde7f0",
-  results: "#dcf5f2",
-  general: "#eef0f4",
-};
-
-function timeAgo(iso: string) {
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 60) return `${mins || 1} min${mins === 1 ? "" : "s"} ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs} hour${hrs === 1 ? "" : "s"} ago`;
-  const days = Math.floor(hrs / 24);
-  return `${days} day${days === 1 ? "" : "s"} ago`;
-}
-
-function CommunityFeedback() {
-  const qc = useQueryClient();
-  const [tab, setTab] = useState<"all" | "pending" | "approved">("all");
-
-  const { data: feedback = [] } = useQuery({
-    queryKey: ["admin-feedback"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("community_feedback")
-        .select("id, author_name, message, area, status, created_at")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data as FeedbackRow[];
-    },
-  });
-
-  const approve = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("community_feedback").update({ status: "approved" }).eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-feedback"] }),
-  });
-
-  const remove = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("community_feedback").delete().eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-feedback"] }),
-  });
-
-  const counts = {
-    all: feedback.length,
-    pending: feedback.filter((f) => f.status === "pending").length,
-    approved: feedback.filter((f) => f.status === "approved").length,
-  };
-  const filtered = tab === "all" ? feedback : feedback.filter((f) => f.status === tab);
-
-  return (
-    <section className="mt-6 rounded-2xl bg-white p-6 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-      <h2 className="text-[18px] font-bold text-[#111827]">Community Feedback</h2>
-
-      <div className="mt-4 flex items-center gap-6 border-b border-[#f1f2f4] pb-3">
-        {(
-          [
-            { key: "all", label: "All", color: "#502181" },
-            { key: "pending", label: "Pending Review", color: "#f4a261" },
-            { key: "approved", label: "Approved", color: "#219c9e" },
-          ] as const
-        ).map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={
-              "flex items-center gap-2 pb-2 text-[13px] font-bold transition " +
-              (tab === t.key
-                ? "border-b-2 border-[color:var(--impact-purple)] text-[color:var(--impact-purple)]"
-                : "text-[#6b7280]")
-            }
-          >
-            {t.label}
-            <span
-              className="rounded-full px-2 py-0.5 text-[11px] font-bold"
-              style={{ backgroundColor: t.color + "22", color: t.color }}
-            >
-              {counts[t.key]}
-            </span>
-          </button>
-        ))}
-      </div>
-
-      <ul className="mt-4 space-y-3">
-        {filtered.map((f) => (
-          <li key={f.id} className="rounded-xl border border-[#f1f2f4] p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-[14px] font-bold text-[#111827]">
-                  {f.author_name} <span className="ml-2 text-[12px] font-medium text-[#9ca3af]">{timeAgo(f.created_at)}</span>
-                </p>
-                <p className="mt-1 text-[13px] leading-[1.6] text-[#374151]">{f.message}</p>
-              </div>
-              <span
-                className="whitespace-nowrap rounded-full px-3 py-1 text-[11px] font-bold text-[#374151]"
-                style={{ backgroundColor: AREA_BADGE[f.area] ?? "#eef0f4" }}
-              >
-                {AREA_LABEL[f.area] ?? f.area}
-              </span>
-            </div>
-            <div className="mt-3 flex items-center gap-4">
-              {f.status !== "approved" && (
-                <button
-                  onClick={() => approve.mutate(f.id)}
-                  className="text-[13px] font-bold text-[#219c9e] hover:underline"
-                >
-                  Approve
-                </button>
-              )}
-              <button
-                onClick={() => {
-                  if (confirm("Delete this feedback?")) remove.mutate(f.id);
-                }}
-                className="text-[13px] font-bold text-[#e84393] hover:underline"
-              >
-                Delete
-              </button>
-              {f.status === "approved" && (
-                <span className="ml-auto text-[11px] font-bold text-[#219c9e]">✓ Approved</span>
-              )}
-            </div>
-          </li>
-        ))}
-        {filtered.length === 0 && (
-          <li className="rounded-xl border border-dashed border-[#e5e7eb] p-8 text-center text-[13px] text-[#6b7280]">
-            No feedback in this view yet.
-          </li>
-        )}
-      </ul>
-    </section>
-  );
-}

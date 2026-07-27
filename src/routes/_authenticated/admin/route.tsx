@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect, useRouterState, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, FolderOpen, MessageCircle, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, FolderOpen, Settings, LogOut, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoWhite from "@/assets/IMPACT_Logo_white.png.asset.json";
 
@@ -36,19 +36,9 @@ function AdminLayout() {
       .then(({ data }) => setProfileName((data?.full_name as string) || user.email || "Admin"));
   }, [user.id, user.email]);
 
-  const [pendingCount, setPendingCount] = useState<number>(0);
-  useEffect(() => {
-    supabase
-      .from("community_feedback")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "pending")
-      .then(({ count }) => setPendingCount(count ?? 0));
-  }, [pathname]);
-
   const items = [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard, match: (p: string) => p === "/admin" },
     { to: "/admin/resources/new", label: "Resource Hub", icon: FolderOpen, match: (p: string) => p.startsWith("/admin/resources") },
-    { to: "/admin", label: "Feedback Moderation", icon: MessageCircle, match: () => false, badge: pendingCount },
     { to: "/admin", label: "Settings", icon: Settings, match: () => false },
   ] as const;
 
@@ -75,23 +65,25 @@ function AdminLayout() {
                   <Link
                     to={item.to}
                     className={
-                      "flex items-center justify-between gap-3 rounded-xl px-3 py-3 text-[14px] font-medium transition " +
+                      "flex items-center gap-3 rounded-xl px-3 py-3 text-[14px] font-medium transition " +
                       (active ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10")
                     }
                   >
-                    <span className="flex items-center gap-3">
-                      <Icon className="h-[18px] w-[18px]" />
-                      {item.label}
-                    </span>
-                    {"badge" in item && item.badge ? (
-                      <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#e84393] px-1.5 text-[11px] font-bold text-white">
-                        {item.badge}
-                      </span>
-                    ) : null}
+                    <Icon className="h-[18px] w-[18px]" />
+                    {item.label}
                   </Link>
                 </li>
               );
             })}
+            <li>
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-3 rounded-xl px-3 py-3 text-[14px] font-medium text-white/80 transition hover:bg-white/10"
+              >
+                <ArrowLeft className="h-[18px] w-[18px]" />
+                Back to Dashboard
+              </Link>
+            </li>
           </ul>
         </nav>
 
