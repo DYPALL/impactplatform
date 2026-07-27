@@ -17,17 +17,17 @@ export function Header() {
         <nav className="hidden items-center gap-7 md:flex">
           <Link
             to="/"
-            className={`${navLinkBase} ${pathname === "/" ? "text-[color:var(--impact-purple)]" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
+            className={`${navLinkBase} ${pathname === "/" ? "rounded-full bg-[color:var(--impact-green)] px-3 py-2 text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
           >
             <svg width="16" height="18" viewBox="0 0 16 18" fill="none" aria-hidden>
               <path
                 d="M0.872437 8.65795C0.872437 7.30418 0.872437 6.6273 1.14558 6.03216C1.41973 5.43702 1.93312 4.99739 2.96091 4.11615L3.9578 3.26182C5.81699 1.66979 6.74409 0.872284 7.85063 0.872284C8.95717 0.872284 9.88527 1.6688 11.7435 3.26082L12.7404 4.11515C13.7671 4.9964 14.2815 5.43602 14.5547 6.03116C14.8288 6.6263 14.8288 7.30319 14.8288 8.65696V12.8847C14.8288 14.7649 14.8288 15.7039 14.2446 16.2881C13.6605 16.8723 12.7214 16.8723 10.8413 16.8723H4.85998C2.97985 16.8723 2.04079 16.8723 1.45661 16.2881C0.872436 15.7039 0.872437 14.7649 0.872437 12.8847V8.65795Z"
-                stroke="#502181"
+                stroke={pathname === "/" ? "#ffffff" : "#502181"}
                 strokeWidth="1.74455"
               />
               <path
                 d="M10.3431 16.8723V11.8878C10.3431 11.6235 10.238 11.3699 10.0511 11.1829C9.86413 10.996 9.61057 10.891 9.34618 10.891H6.35553C6.09114 10.891 5.83758 10.996 5.65062 11.1829C5.46367 11.3699 5.35864 11.6235 5.35864 11.8878V16.8723"
-                stroke="#502181"
+                stroke={pathname === "/" ? "#ffffff" : "#502181"}
                 strokeWidth="1.74455"
                 strokeLinecap="round"
                 strokeLinejoin="round"
