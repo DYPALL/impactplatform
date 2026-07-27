@@ -77,7 +77,7 @@ function KpiCard({
   label: string;
   value: string | number;
   delta: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   iconTint: string;
   positive?: boolean;
 }) {
