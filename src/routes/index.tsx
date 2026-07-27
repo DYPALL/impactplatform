@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero-youth.jpg";
 import ctaImg from "@/assets/cta-action.jpg";
+import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -92,7 +93,11 @@ function Header() {
     <header className="w-full border-b border-[color:var(--impact-border)] bg-white">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-5 lg:px-[120px]">
         <Link to="/" className="flex items-center">
-          <ImpactLogo className="h-8 w-auto" />
+          <img
+            src={logoAsset.url}
+            alt="IMPACT logo"
+            className="h-8 w-auto"
+          />
         </Link>
         <nav className="hidden items-center gap-7 md:flex">
           <a href="#" className="inline-flex items-center gap-2 text-[15px] font-bold text-[color:var(--impact-ink)]">
