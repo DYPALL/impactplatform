@@ -39,7 +39,6 @@ function AdminLayout() {
   const items = [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard, match: (p: string) => p === "/admin" },
     { to: "/admin/resources/new", label: "Resource Hub", icon: FolderOpen, match: (p: string) => p.startsWith("/admin/resources") },
-    { to: "/admin", label: "Settings", icon: Settings, match: () => false },
   ] as const;
 
   async function handleSignOut() {
