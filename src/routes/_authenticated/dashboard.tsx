@@ -63,6 +63,14 @@ function Dashboard() {
             <span className="hidden text-sm text-[color:var(--impact-ink)]/70 sm:inline">
               {user.email}
             </span>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="inline-flex h-10 items-center rounded-full bg-[color:var(--impact-purple)] px-4 text-sm font-semibold text-white hover:opacity-90"
+              >
+                Admin
+              </Link>
+            )}
             <button
               onClick={handleSignOut}
               className="inline-flex h-10 items-center rounded-full border border-black/10 px-4 text-sm font-semibold text-[color:var(--impact-ink)] hover:bg-black/5"
