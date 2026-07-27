@@ -209,24 +209,28 @@ const steps = [
     title: "Create your account",
     body: "Register your Local Youth Council so results, action plans and reflections are stored securely in one place.",
     image: step1Img.url,
+    color: "var(--impact-purple)",
   },
   {
     n: 2,
     title: "Pick a focus area",
     body: "Choose one of the IMPACT thematic areas to start with, or run the full self-assessment across all dimensions.",
     image: step2Img.url,
+    color: "var(--impact-orange)",
   },
   {
     n: 3,
     title: "Answer the questionnaire",
     body: "Rate your council against each indicator. It takes 15–30 minutes and you can save your progress anytime.",
     image: step3Img.url,
+    color: "var(--impact-green)",
   },
   {
     n: 4,
     title: "Review your results",
     body: "Get a visual scoreboard, reflection prompts and a tailored action plan you can share with your team.",
     image: step4Img.url,
+    color: "var(--impact-pink)",
   },
 ];
 
@@ -259,14 +263,21 @@ function HowItWorks() {
                 <div className="absolute inset-0 bg-[rgba(17,24,39,0.15)]" />
               </div>
               <div className="flex flex-col gap-4 p-8">
-                <div className="relative h-[52px] w-[56px]">
-                  <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
-                    <polygon points="50,5 95,80 5,80" fill="var(--impact-purple)" />
-                  </svg>
-                  <span className="absolute inset-0 flex items-center justify-center pt-1 text-[20px] font-bold text-white">
-                    {s.n}
-                  </span>
-                </div>
+              <div className="relative h-[52px] w-[56px]">
+                <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+                  <path
+                    d="M50,8 L90,80 L10,80 Z"
+                    fill={s.color}
+                    stroke={s.color}
+                    strokeWidth="10"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <span className="absolute inset-0 flex items-center justify-center pt-1 text-[20px] font-bold text-white">
+                  {s.n}
+                </span>
+              </div>
                 <h3 className="text-[20px] font-bold text-[color:var(--impact-ink)]">
                   {s.title}
                 </h3>
