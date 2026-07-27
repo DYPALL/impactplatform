@@ -364,7 +364,11 @@ function Footer() {
     <footer className="w-full bg-[color:var(--impact-purple-dark)] text-white">
       <div className="mx-auto grid max-w-[1440px] gap-10 px-6 py-16 md:grid-cols-3 lg:px-[120px]">
         <div>
-          <ImpactLogo className="h-8 w-auto brightness-0 invert" />
+          <img
+            src={whiteLogoAsset.url}
+            alt="IMPACT logo"
+            className="h-8 w-auto"
+          />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
             A digital platform helping Local Youth Councils across Europe
             measure impact and plan action.
