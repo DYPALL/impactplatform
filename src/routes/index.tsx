@@ -1,6 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import heroImg from "@/assets/hero-youth.jpg";
-import ctaImg from "@/assets/cta-action.jpg";
+import heroImg from "@/assets/hero-photo.webp.asset.json";
+import ctaImg from "@/assets/cta-photo.webp.asset.json";
+import step1Img from "@/assets/step-1.webp.asset.json";
+import step2Img from "@/assets/step-2.webp.asset.json";
+import step3Img from "@/assets/step-3.webp.asset.json";
+import step4Img from "@/assets/step-4.webp.asset.json";
 import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import whiteLogoAsset from "@/assets/IMPACT_Logo_white.png.asset.json";
 import dypallLogo from "@/assets/DYPALL-logo.png.asset.json";
