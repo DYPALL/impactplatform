@@ -60,12 +60,6 @@ const TYPE_LABEL: Record<string, string> = {
   document: "Document",
 };
 
-// Deterministic pseudo-random to keep numbers stable per period
-function seeded(seed: number) {
-  let x = Math.sin(seed) * 10000;
-  return x - Math.floor(x);
-}
-
 function KpiCard({
   label,
   value,
@@ -90,12 +84,13 @@ function KpiCard({
         </span>
       </div>
       <p className="mt-3 text-[34px] font-extrabold leading-none text-[#111827]">{value}</p>
-      <p className={"mt-3 text-[12px] font-semibold " + (positive ? "text-[#219c9e]" : "text-[#e84393]")}>
-        {positive ? "↗" : "↘"} {delta}
+      <p className={"mt-3 text-[12px] font-semibold " + (positive ? "text-[#219c9e]" : "text-[#6b7280]")}>
+        {positive ? "↗" : "•"} {delta}
       </p>
     </div>
   );
 }
+
 
 function AdminDashboard() {
   const [period, setPeriod] = useState<Period>("30d");
@@ -104,66 +99,83 @@ function AdminDashboard() {
   const [customFrom, setCustomFrom] = useState<string>(monthAgo);
   const [customTo, setCustomTo] = useState<string>(today);
 
-  const rangeDays = useMemo(() => {
-    if (period === "custom") {
-      const from = new Date(customFrom).getTime();
-      const to = new Date(customTo).getTime();
-      return Math.max(1, Math.round((to - from) / 86400_000) + 1);
-    }
-    return PERIOD_DAYS[period];
+  const { fromISO, toISO, rangeDays } = useMemo(() => {
+    const to = period === "custom" ? new Date(`${customTo}T23:59:59`) : new Date();
+    const days = period === "custom"
+      ? Math.max(1, Math.round((new Date(customTo).getTime() - new Date(customFrom).getTime()) / 86400_000) + 1)
+      : PERIOD_DAYS[period];
+    const from = period === "custom" ? new Date(`${customFrom}T00:00:00`) : new Date(to.getTime() - days * 86400_000);
+    return { fromISO: from.toISOString(), toISO: to.toISOString(), rangeDays: days };
   }, [period, customFrom, customTo]);
 
-  // Demo metrics — scale with selected timeframe. Wire real queries when features ship.
-  const metrics = useMemo(() => {
-    const factor = rangeDays / 30;
-    const s = seeded(rangeDays);
-    return {
-      accounts: Math.round(180 + 90 * factor + s * 40),
-      questionnaires: Math.round(1200 + 700 * factor + s * 300),
-      visits: Math.round(8000 + 4500 * factor + s * 1500),
-      actionPlans: Math.round(420 + 210 * factor + s * 80),
-      accountsDelta: `+${(8 + s * 8).toFixed(1)}% this period`,
-      questionnairesDelta: `+${(5 + s * 6).toFixed(1)}% vs previous`,
-      visitsDelta: `+${(12 + s * 10).toFixed(1)}% daily average`,
-      actionPlansDelta: `-${(1 + s * 3).toFixed(1)}% low cohort`,
-    };
-  }, [rangeDays]);
+  // Real metrics from the database. Features not yet built report 0.
+  const { data: metrics } = useQuery({
+    queryKey: ["admin-metrics", fromISO, toISO],
+    queryFn: async () => {
+      const prevFrom = new Date(new Date(fromISO).getTime() - rangeDays * 86400_000).toISOString();
+      const [curAcc, prevAcc, totAcc, totRes] = await Promise.all([
+        supabase.from("profiles").select("id", { count: "exact", head: true }).gte("created_at", fromISO).lte("created_at", toISO),
+        supabase.from("profiles").select("id", { count: "exact", head: true }).gte("created_at", prevFrom).lt("created_at", fromISO),
+        supabase.from("profiles").select("id", { count: "exact", head: true }),
+        supabase.from("resources").select("id", { count: "exact", head: true }),
+      ]);
+      const cur = curAcc.count ?? 0;
+      const prev = prevAcc.count ?? 0;
+      const pct = prev === 0 ? (cur > 0 ? 100 : 0) : Math.round(((cur - prev) / prev) * 100);
+      return {
+        accounts: totAcc.count ?? 0,
+        newAccounts: cur,
+        accountsDelta: `${pct >= 0 ? "+" : ""}${pct}% vs previous period`,
+        accountsPositive: pct >= 0,
+        resources: totRes.count ?? 0,
+        questionnaires: 0,
+        visits: 0,
+        actionPlans: 0,
+      };
+    },
+  });
 
-  const activitySeries = useMemo(() => {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const bucketCount = rangeDays <= 14 ? Math.min(rangeDays, 7) : 6;
-    const colors = ["#502181", "#219c9e", "#e84393", "#f4a261", "#502181", "#219c9e", "#e84393"];
-    const now = new Date();
-    if (rangeDays <= 14) {
-      return Array.from({ length: bucketCount }).map((_, i) => {
-        const d = new Date(now.getTime() - (bucketCount - 1 - i) * 86400_000);
-        const s = seeded(rangeDays + i + 1);
-        return { name: `${d.getDate()}/${d.getMonth() + 1}`, value: Math.round(40 + s * 200), fill: colors[i % colors.length] };
+  const { data: activitySeries = [] } = useQuery({
+    queryKey: ["admin-activity", fromISO, toISO, rangeDays],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("created_at")
+        .gte("created_at", fromISO)
+        .lte("created_at", toISO);
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const colors = ["#502181", "#219c9e", "#e84393", "#f4a261", "#502181", "#219c9e", "#e84393"];
+      const useDays = rangeDays <= 31;
+      const bucketCount = useDays ? Math.min(rangeDays, 14) : Math.min(12, Math.max(3, Math.ceil(rangeDays / 30)));
+      const from = new Date(fromISO).getTime();
+      const to = new Date(toISO).getTime();
+      const step = (to - from) / bucketCount;
+      const buckets = Array.from({ length: bucketCount }).map((_, i) => {
+        const start = new Date(from + step * i);
+        const label = useDays ? `${start.getDate()}/${start.getMonth() + 1}` : months[start.getMonth()];
+        return { name: label, value: 0, fill: colors[i % colors.length] };
       });
-    }
-    const step = Math.max(1, Math.round(rangeDays / bucketCount / 30));
-    return Array.from({ length: bucketCount }).map((_, i) => {
-      const d = new Date(now.getFullYear(), now.getMonth() - (bucketCount - 1 - i) * step, 1);
-      const s = seeded(rangeDays + i + 1);
-      return { name: months[d.getMonth()], value: Math.round(120 + s * 400), fill: colors[i % colors.length] };
-    });
-  }, [rangeDays]);
+      (data ?? []).forEach((r) => {
+        const t = new Date(r.created_at).getTime();
+        const idx = Math.min(bucketCount - 1, Math.max(0, Math.floor((t - from) / step)));
+        buckets[idx].value += 1;
+      });
+      return buckets;
+    },
+  });
 
   const { data: questionnaireAreas } = useQuery({
-    queryKey: ["admin-questionnaire-areas", rangeDays],
+    queryKey: ["admin-areas"],
     queryFn: async () => {
-      // Placeholder distribution based on resource area mix until questionnaires ship.
       const { data } = await supabase.from("resources").select("area");
       const base: Record<string, number> = { representativeness: 0, governance: 0, empowerment: 0, results: 0 };
       (data ?? []).forEach((r) => {
         if (r.area in base) base[r.area]++;
       });
-      const anyData = Object.values(base).some((n) => n > 0);
-      const seed = anyData ? base : { representativeness: 26, governance: 13, empowerment: 10, results: 6 };
-      const total = Object.values(seed).reduce((a, b) => a + b, 0);
+      const total = Object.values(base).reduce((a, b) => a + b, 0);
       return {
         total,
-        slices: Object.entries(seed).map(([area, count]) => ({
+        slices: Object.entries(base).map(([area, count]) => ({
           area,
           count,
           pct: total ? Math.round((count / total) * 100) : 0,
@@ -232,10 +244,10 @@ function AdminDashboard() {
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Total Accounts" value={metrics.accounts.toLocaleString()} delta={metrics.accountsDelta} icon={Users} iconTint="#502181" />
-        <KpiCard label="Questionnaires Completed" value={metrics.questionnaires.toLocaleString()} delta={metrics.questionnairesDelta} icon={CheckCircle2} iconTint="#219c9e" />
-        <KpiCard label="Total Visits" value={metrics.visits.toLocaleString()} delta={metrics.visitsDelta} icon={HeartPulse} iconTint="#e84393" />
-        <KpiCard label="Action Plans Created" value={metrics.actionPlans.toLocaleString()} delta={metrics.actionPlansDelta} icon={ListChecks} iconTint="#f4a261" positive={false} />
+        <KpiCard label="Total Accounts" value={(metrics?.accounts ?? 0).toLocaleString()} delta={metrics ? `${metrics.newAccounts} new · ${metrics.accountsDelta}` : "…"} icon={Users} iconTint="#502181" positive={metrics?.accountsPositive ?? true} />
+        <KpiCard label="Questionnaires Completed" value={(metrics?.questionnaires ?? 0).toLocaleString()} delta="not tracked yet" icon={CheckCircle2} iconTint="#219c9e" positive={false} />
+        <KpiCard label="Total Visits" value={(metrics?.visits ?? 0).toLocaleString()} delta="analytics coming soon" icon={HeartPulse} iconTint="#e84393" positive={false} />
+        <KpiCard label="Action Plans Created" value={(metrics?.actionPlans ?? 0).toLocaleString()} delta="feature coming soon" icon={ListChecks} iconTint="#f4a261" positive={false} />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1.6fr_1fr]">
