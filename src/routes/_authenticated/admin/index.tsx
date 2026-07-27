@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Search, Filter, Pencil, Trash2, Users, ClipboardCheck, Activity, ListChecks, ArrowLeft } from "lucide-react";
-import { BarChart, Bar, XAxis, ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
+import { Plus, Search, Filter, Pencil, Trash2, Users, ClipboardCheck, Activity, ListChecks, ArrowLeft, CheckCircle2, HeartPulse } from "lucide-react";
+import { BarChart, Bar, XAxis, ResponsiveContainer, PieChart, Pie, Cell, Tooltip, CartesianGrid } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
@@ -26,6 +26,15 @@ const PERIODS: { key: Period; label: string }[] = [
   { key: "1y", label: "Yearly" },
   { key: "custom", label: "Custom" },
 ];
+
+const PERIOD_DAYS: Record<Exclude<Period, "custom">, number> = {
+  "3d": 3,
+  "7d": 7,
+  "30d": 30,
+  "2m": 60,
+  "3m": 90,
+  "1y": 365,
+};
 
 const AREA_COLORS: Record<string, string> = {
   representativeness: "#502181",
@@ -51,24 +60,34 @@ const TYPE_LABEL: Record<string, string> = {
   document: "Document",
 };
 
+// Deterministic pseudo-random to keep numbers stable per period
+function seeded(seed: number) {
+  let x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
 function KpiCard({
   label,
   value,
   delta,
   icon: Icon,
+  iconTint,
   positive = true,
 }: {
   label: string;
   value: string | number;
   delta: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  iconTint: string;
   positive?: boolean;
 }) {
   return (
     <div className="rounded-2xl bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
       <div className="flex items-start justify-between">
         <p className="text-[13px] font-medium text-[#6b7280]">{label}</p>
-        <Icon className="h-4 w-4 text-[#9ca3af]" />
+        <span className="grid h-7 w-7 place-items-center rounded-full" style={{ backgroundColor: `${iconTint}1a` }}>
+          <Icon className="h-4 w-4" style={{ color: iconTint }} />
+        </span>
       </div>
       <p className="mt-3 text-[34px] font-extrabold leading-none text-[#111827]">{value}</p>
       <p className={"mt-3 text-[12px] font-semibold " + (positive ? "text-[#219c9e]" : "text-[#e84393]")}>
@@ -80,62 +99,76 @@ function KpiCard({
 
 function AdminDashboard() {
   const [period, setPeriod] = useState<Period>("30d");
+  const today = new Date().toISOString().slice(0, 10);
+  const monthAgo = new Date(Date.now() - 30 * 86400_000).toISOString().slice(0, 10);
+  const [customFrom, setCustomFrom] = useState<string>(monthAgo);
+  const [customTo, setCustomTo] = useState<string>(today);
 
-  const { data: kpis } = useQuery({
-    queryKey: ["admin-kpis"],
-    queryFn: async () => {
-      const [{ count: accounts }, { count: resourcesCount }] = await Promise.all([
-        supabase.from("profiles").select("id", { count: "exact", head: true }),
-        supabase.from("resources").select("id", { count: "exact", head: true }),
-      ]);
-      return {
-        accounts: accounts ?? 0,
-        resources: resourcesCount ?? 0,
-      };
-    },
-  });
+  const rangeDays = useMemo(() => {
+    if (period === "custom") {
+      const from = new Date(customFrom).getTime();
+      const to = new Date(customTo).getTime();
+      return Math.max(1, Math.round((to - from) / 86400_000) + 1);
+    }
+    return PERIOD_DAYS[period];
+  }, [period, customFrom, customTo]);
 
-  const { data: signupSeries } = useQuery({
-    queryKey: ["admin-signup-series"],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("created_at")
-        .order("created_at", { ascending: true });
-      const buckets: Record<string, number> = {};
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      const now = new Date();
-      for (let i = 5; i >= 0; i--) {
-        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        buckets[months[d.getMonth()]] = 0;
-      }
-      (data ?? []).forEach((row) => {
-        const d = new Date(row.created_at);
-        const key = months[d.getMonth()];
-        if (key in buckets) buckets[key]++;
+  // Demo metrics — scale with selected timeframe. Wire real queries when features ship.
+  const metrics = useMemo(() => {
+    const factor = rangeDays / 30;
+    const s = seeded(rangeDays);
+    return {
+      accounts: Math.round(180 + 90 * factor + s * 40),
+      questionnaires: Math.round(1200 + 700 * factor + s * 300),
+      visits: Math.round(8000 + 4500 * factor + s * 1500),
+      actionPlans: Math.round(420 + 210 * factor + s * 80),
+      accountsDelta: `+${(8 + s * 8).toFixed(1)}% this period`,
+      questionnairesDelta: `+${(5 + s * 6).toFixed(1)}% vs previous`,
+      visitsDelta: `+${(12 + s * 10).toFixed(1)}% daily average`,
+      actionPlansDelta: `-${(1 + s * 3).toFixed(1)}% low cohort`,
+    };
+  }, [rangeDays]);
+
+  const activitySeries = useMemo(() => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const bucketCount = rangeDays <= 14 ? Math.min(rangeDays, 7) : 6;
+    const colors = ["#502181", "#219c9e", "#e84393", "#f4a261", "#502181", "#219c9e", "#e84393"];
+    const now = new Date();
+    if (rangeDays <= 14) {
+      return Array.from({ length: bucketCount }).map((_, i) => {
+        const d = new Date(now.getTime() - (bucketCount - 1 - i) * 86400_000);
+        const s = seeded(rangeDays + i + 1);
+        return { name: `${d.getDate()}/${d.getMonth() + 1}`, value: Math.round(40 + s * 200), fill: colors[i % colors.length] };
       });
-      const colors = ["#502181", "#219c9e", "#e84393", "#f4a261", "#502181", "#219c9e"];
-      return Object.entries(buckets).map(([name, value], i) => ({ name, value, fill: colors[i % colors.length] }));
-    },
-  });
+    }
+    const step = Math.max(1, Math.round(rangeDays / bucketCount / 30));
+    return Array.from({ length: bucketCount }).map((_, i) => {
+      const d = new Date(now.getFullYear(), now.getMonth() - (bucketCount - 1 - i) * step, 1);
+      const s = seeded(rangeDays + i + 1);
+      return { name: months[d.getMonth()], value: Math.round(120 + s * 400), fill: colors[i % colors.length] };
+    });
+  }, [rangeDays]);
 
-  const { data: resourceAreaSlices } = useQuery({
-    queryKey: ["admin-resource-areas"],
+  const { data: questionnaireAreas } = useQuery({
+    queryKey: ["admin-questionnaire-areas", rangeDays],
     queryFn: async () => {
+      // Placeholder distribution based on resource area mix until questionnaires ship.
       const { data } = await supabase.from("resources").select("area");
-      const counts: Record<string, number> = {};
+      const base: Record<string, number> = { representativeness: 0, governance: 0, empowerment: 0, results: 0 };
       (data ?? []).forEach((r) => {
-        counts[r.area] = (counts[r.area] ?? 0) + 1;
+        if (r.area in base) base[r.area]++;
       });
-      const total = Object.values(counts).reduce((a, b) => a + b, 0);
+      const anyData = Object.values(base).some((n) => n > 0);
+      const seed = anyData ? base : { representativeness: 26, governance: 13, empowerment: 10, results: 6 };
+      const total = Object.values(seed).reduce((a, b) => a + b, 0);
       return {
         total,
-        slices: Object.entries(counts).map(([area, count]) => ({
+        slices: Object.entries(seed).map(([area, count]) => ({
           area,
           count,
           pct: total ? Math.round((count / total) * 100) : 0,
-          color: AREA_COLORS[area] ?? "#94a3b8",
-          label: AREA_LABEL[area] ?? area,
+          color: AREA_COLORS[area],
+          label: AREA_LABEL[area],
         })),
       };
     },
@@ -170,21 +203,48 @@ function AdminDashboard() {
             {p.label}
           </button>
         ))}
+        {period === "custom" && (
+          <div className="ml-2 flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[13px] text-[#374151] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+            <label className="flex items-center gap-1">
+              <span className="text-[#6b7280]">From</span>
+              <input
+                type="date"
+                value={customFrom}
+                max={customTo}
+                onChange={(e) => setCustomFrom(e.target.value)}
+                className="bg-transparent outline-none"
+              />
+            </label>
+            <span className="text-[#9ca3af]">—</span>
+            <label className="flex items-center gap-1">
+              <span className="text-[#6b7280]">To</span>
+              <input
+                type="date"
+                value={customTo}
+                min={customFrom}
+                max={today}
+                onChange={(e) => setCustomTo(e.target.value)}
+                className="bg-transparent outline-none"
+              />
+            </label>
+          </div>
+        )}
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Total Accounts" value={kpis?.accounts ?? "—"} delta="live from database" icon={Users} />
-        <KpiCard label="Questionnaires Completed" value={0} delta="feature coming soon" icon={ClipboardCheck} positive={false} />
-        <KpiCard label="Total Resources" value={kpis?.resources ?? "—"} delta="published + drafts" icon={Activity} />
-        <KpiCard label="Action Plans Created" value={0} delta="feature coming soon" icon={ListChecks} positive={false} />
+        <KpiCard label="Total Accounts" value={metrics.accounts.toLocaleString()} delta={metrics.accountsDelta} icon={Users} iconTint="#502181" />
+        <KpiCard label="Questionnaires Completed" value={metrics.questionnaires.toLocaleString()} delta={metrics.questionnairesDelta} icon={CheckCircle2} iconTint="#219c9e" />
+        <KpiCard label="Total Visits" value={metrics.visits.toLocaleString()} delta={metrics.visitsDelta} icon={HeartPulse} iconTint="#e84393" />
+        <KpiCard label="Action Plans Created" value={metrics.actionPlans.toLocaleString()} delta={metrics.actionPlansDelta} icon={ListChecks} iconTint="#f4a261" positive={false} />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1.6fr_1fr]">
         <div className="rounded-2xl bg-white p-6 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-          <h3 className="text-[15px] font-bold text-[#111827]">Signups Over Time</h3>
-          <div className="mt-6 h-[220px]">
+          <h3 className="text-[15px] font-bold text-[#111827]">Activity Over Time ({new Date().getFullYear()})</h3>
+          <div className="mt-6 h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={signupSeries ?? []}>
+              <BarChart data={activitySeries} barCategoryGap={30}>
+                <CartesianGrid vertical={false} stroke="#eef0f4" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6b7280", fontSize: 12 }} />
                 <Tooltip cursor={{ fill: "rgba(80,33,129,0.04)" }} contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb" }} />
                 <Bar dataKey="value" radius={[8, 8, 0, 0]} />
@@ -194,32 +254,32 @@ function AdminDashboard() {
         </div>
 
         <div className="rounded-2xl bg-white p-6 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-          <h3 className="text-[15px] font-bold text-[#111827]">Resources by Area</h3>
+          <h3 className="text-[15px] font-bold text-[#111827]">Questionnaires by Area</h3>
           <div className="mt-4 flex items-center gap-4">
             <div className="relative h-[160px] w-[160px]">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={resourceAreaSlices?.slices ?? []}
+                    data={questionnaireAreas?.slices ?? []}
                     dataKey="count"
                     nameKey="label"
                     innerRadius={50}
                     outerRadius={72}
                     paddingAngle={2}
                   >
-                    {(resourceAreaSlices?.slices ?? []).map((s) => (
+                    {(questionnaireAreas?.slices ?? []).map((s) => (
                       <Cell key={s.area} fill={s.color} />
                     ))}
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
               <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-[22px] font-extrabold text-[#111827]">{resourceAreaSlices?.total ?? 0}</span>
+                <span className="text-[22px] font-extrabold text-[#111827]">{questionnaireAreas?.total ?? 0}</span>
                 <span className="text-[10px] text-[#6b7280]">Total</span>
               </div>
             </div>
             <ul className="flex-1 space-y-2">
-              {(resourceAreaSlices?.slices ?? []).map((s) => (
+              {(questionnaireAreas?.slices ?? []).map((s) => (
                 <li key={s.area} className="flex items-center justify-between text-[12px]">
                   <span className="flex items-center gap-2 truncate text-[#374151]">
                     <span className="h-2 w-2 rounded-full" style={{ backgroundColor: s.color }} />
@@ -228,9 +288,6 @@ function AdminDashboard() {
                   <span className="font-bold text-[#111827]">{s.pct}%</span>
                 </li>
               ))}
-              {(resourceAreaSlices?.slices ?? []).length === 0 && (
-                <li className="text-[12px] text-[#6b7280]">No resources yet.</li>
-              )}
             </ul>
           </div>
         </div>
