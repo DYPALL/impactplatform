@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({
     meta: [
       { title: "Admin Dashboard — IMPACT" },
-      { name: "description", content: "Manage resources, moderate community feedback and monitor platform metrics." },
+      { name: "description", content: "Manage resources and monitor platform metrics." },
       { name: "robots", content: "noindex" },
     ],
   }),
