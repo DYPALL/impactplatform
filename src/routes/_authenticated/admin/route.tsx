@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect, useRouterState, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, FolderOpen, Settings, LogOut, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, FolderOpen, LogOut, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logoWhite from "@/assets/IMPACT_Logo_white.png.asset.json";
 
@@ -39,7 +39,6 @@ function AdminLayout() {
   const items = [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard, match: (p: string) => p === "/admin" },
     { to: "/admin/resources/new", label: "Resource Hub", icon: FolderOpen, match: (p: string) => p.startsWith("/admin/resources") },
-    { to: "/admin", label: "Settings", icon: Settings, match: () => false },
   ] as const;
 
   async function handleSignOut() {
