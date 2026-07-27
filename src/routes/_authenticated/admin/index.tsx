@@ -60,6 +60,38 @@ const TYPE_LABEL: Record<string, string> = {
   document: "Document",
 };
 
+function KpiCard({
+  label,
+  value,
+  delta,
+  icon: Icon,
+  iconTint,
+  positive = true,
+}: {
+  label: string;
+  value: string | number;
+  delta: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  iconTint: string;
+  positive?: boolean;
+}) {
+  return (
+    <div className="rounded-2xl bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+      <div className="flex items-start justify-between">
+        <p className="text-[13px] font-medium text-[#6b7280]">{label}</p>
+        <span className="grid h-7 w-7 place-items-center rounded-full" style={{ backgroundColor: `${iconTint}1a` }}>
+          <Icon className="h-4 w-4" style={{ color: iconTint }} />
+        </span>
+      </div>
+      <p className="mt-3 text-[34px] font-extrabold leading-none text-[#111827]">{value}</p>
+      <p className={"mt-3 text-[12px] font-semibold " + (positive ? "text-[#219c9e]" : "text-[#6b7280]")}>
+        {positive ? "↗" : "•"} {delta}
+      </p>
+    </div>
+  );
+}
+
+
 function AdminDashboard() {
   const [period, setPeriod] = useState<Period>("30d");
   const today = new Date().toISOString().slice(0, 10);
