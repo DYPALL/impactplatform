@@ -143,7 +143,16 @@ function AdminDashboard() {
 
   return (
     <div className="mx-auto max-w-[1200px]">
-      <h1 className="text-[32px] font-extrabold text-[#111827]">Admin Dashboard</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-[32px] font-extrabold text-[#111827]">Admin Dashboard</h1>
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[13px] font-bold text-[#111827] shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:bg-[#f5f5f7]"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Link>
+      </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <span className="mr-1 text-[13px] font-medium text-[#6b7280]">Period:</span>
