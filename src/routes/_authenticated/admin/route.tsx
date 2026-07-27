@@ -36,19 +36,9 @@ function AdminLayout() {
       .then(({ data }) => setProfileName((data?.full_name as string) || user.email || "Admin"));
   }, [user.id, user.email]);
 
-  const [pendingCount, setPendingCount] = useState<number>(0);
-  useEffect(() => {
-    supabase
-      .from("community_feedback")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "pending")
-      .then(({ count }) => setPendingCount(count ?? 0));
-  }, [pathname]);
-
   const items = [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard, match: (p: string) => p === "/admin" },
     { to: "/admin/resources/new", label: "Resource Hub", icon: FolderOpen, match: (p: string) => p.startsWith("/admin/resources") },
-    { to: "/admin", label: "Feedback Moderation", icon: MessageCircle, match: () => false, badge: pendingCount },
     { to: "/admin", label: "Settings", icon: Settings, match: () => false },
   ] as const;
 
