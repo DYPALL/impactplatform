@@ -84,15 +84,13 @@ function AdminDashboard() {
   const { data: kpis } = useQuery({
     queryKey: ["admin-kpis"],
     queryFn: async () => {
-      const [{ count: accounts }, { count: resourcesCount }, { count: feedbackCount }] = await Promise.all([
+      const [{ count: accounts }, { count: resourcesCount }] = await Promise.all([
         supabase.from("profiles").select("id", { count: "exact", head: true }),
         supabase.from("resources").select("id", { count: "exact", head: true }),
-        supabase.from("community_feedback").select("id", { count: "exact", head: true }),
       ]);
       return {
         accounts: accounts ?? 0,
         resources: resourcesCount ?? 0,
-        feedback: feedbackCount ?? 0,
       };
     },
   });
