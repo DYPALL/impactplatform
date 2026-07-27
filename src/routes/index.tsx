@@ -1,6 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import heroImg from "@/assets/hero-youth.jpg";
-import ctaImg from "@/assets/cta-action.jpg";
+import heroImg from "@/assets/hero-photo.webp.asset.json";
+import ctaImg from "@/assets/cta-photo.webp.asset.json";
+import step1Img from "@/assets/step-1.webp.asset.json";
+import step2Img from "@/assets/step-2.webp.asset.json";
+import step3Img from "@/assets/step-3.webp.asset.json";
+import step4Img from "@/assets/step-4.webp.asset.json";
 import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import whiteLogoAsset from "@/assets/IMPACT_Logo_white.png.asset.json";
 import dypallLogo from "@/assets/DYPALL-logo.png.asset.json";
@@ -187,7 +191,7 @@ function Hero() {
         </div>
         <div className="relative z-10 w-full max-w-[597px] lg:mr-0">
           <img
-            src={heroImg}
+            src={heroImg.url}
             alt="Youth council members collaborating"
             width={1200}
             height={800}
@@ -204,25 +208,25 @@ const steps = [
     n: 1,
     title: "Create your account",
     body: "Register your Local Youth Council so results, action plans and reflections are stored securely in one place.",
-    tint: "from-[#502181] to-[#7a3fbf]",
+    image: step1Img.url,
   },
   {
     n: 2,
     title: "Pick a focus area",
     body: "Choose one of the IMPACT thematic areas to start with, or run the full self-assessment across all dimensions.",
-    tint: "from-[#219c9e] to-[#3ac9cb]",
+    image: step2Img.url,
   },
   {
     n: 3,
     title: "Answer the questionnaire",
     body: "Rate your council against each indicator. It takes 15–30 minutes and you can save your progress anytime.",
-    tint: "from-[#f4a261] to-[#f6b98a]",
+    image: step3Img.url,
   },
   {
     n: 4,
     title: "Review your results",
     body: "Get a visual scoreboard, reflection prompts and a tailored action plan you can share with your team.",
-    tint: "from-[#e94b8a] to-[#f28aae]",
+    image: step4Img.url,
   },
 ];
 
@@ -246,12 +250,13 @@ function HowItWorks() {
               key={s.n}
               className="flex flex-col overflow-hidden rounded-[20px] border border-[color:var(--impact-border)] bg-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.05)]"
             >
-              <div
-                className={`relative h-[180px] w-full bg-gradient-to-br ${s.tint}`}
-              >
-                <div className="absolute inset-0 bg-black/10" />
-                <Polygon size={90} rotate={20} color="rgba(255,255,255,0.25)" style={{ top: 20, left: 30 }} />
-                <Polygon size={50} rotate={-30} color="rgba(255,255,255,0.2)" style={{ bottom: 20, right: 30 }} />
+              <div className="relative h-[220px] w-full overflow-hidden">
+                <img
+                  src={s.image}
+                  alt={s.title}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-[rgba(17,24,39,0.15)]" />
               </div>
               <div className="flex flex-col gap-4 p-8">
                 <div className="relative h-[52px] w-[56px]">
@@ -319,7 +324,7 @@ function CtaBanner() {
         </div>
         <div className="relative z-10 w-full max-w-[520px]">
           <img
-            src={ctaImg}
+            src={ctaImg.url}
             alt="Team planning action steps"
             width={1040}
             height={912}
