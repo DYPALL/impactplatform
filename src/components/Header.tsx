@@ -37,11 +37,22 @@ export function Header() {
 
 
   return (
-    <header className="w-full border-b border-[color:var(--impact-border)] bg-white">
+    <header className="relative w-full border-b border-[color:var(--impact-border)] bg-white">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-5 lg:px-[120px]">
         <Link to="/" className="flex items-center">
           <img src={logoAsset.url} alt="IMPACT logo" className="h-8 w-auto" />
         </Link>
+
+        {user && (
+          <button
+            onClick={() => signOut()}
+            className="absolute right-4 top-1/2 -translate-y-1/2 inline-flex items-center gap-1.5 rounded-full bg-[color:var(--impact-surface-muted)] px-3 py-2 text-[13px] font-semibold text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white md:hidden"
+            aria-label="Sign out"
+          >
+            <LogOut size={16} />
+            Sign out
+          </button>
+        )}
 
         <nav className="hidden items-center gap-7 md:flex">
           <Link
