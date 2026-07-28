@@ -101,8 +101,13 @@ function TopNav({ email, isAdmin, onSignOut }: { email?: string; isAdmin: boolea
             Send us a message
           </Link>
           {isAdmin && (
-            <Link to="/admin" title="Admin" className="ml-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-[color:var(--impact-surface-muted)] text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white">
+            <Link
+              to="/admin"
+              title="Admin panel"
+              className={`${pillBase} bg-[color:var(--impact-orange)] text-white hover:opacity-90`}
+            >
               <Settings size={16} />
+              Admin panel
             </Link>
           )}
           <button
