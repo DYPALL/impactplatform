@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-r
 import { useEffect, useState } from "react";
 import { ChevronDown, Settings, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import logoWhite from "@/assets/IMPACT_Logo_white.png.asset.json";
+import logoColor from "@/assets/logo_color_impact.png.asset.json";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
