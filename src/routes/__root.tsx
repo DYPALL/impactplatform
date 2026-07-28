@@ -142,7 +142,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <div key={pathname} className="page-transition">
+      <div className="page-transition">
         <Outlet />
       </div>
       <MobileBottomNav />

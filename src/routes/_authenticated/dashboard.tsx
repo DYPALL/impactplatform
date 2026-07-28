@@ -8,10 +8,10 @@ import ctaImg from "@/assets/cta-photo.webp.asset.json";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — IMPACT" },
-      { name: "description", content: "Your IMPACT dashboard: assessments, results and action plans for your Local Youth Council." },
-      { property: "og:title", content: "Dashboard — IMPACT" },
-      { property: "og:description", content: "Your IMPACT dashboard: assessments, results and action plans for your Local Youth Council." },
+      { title: "My Assessments — IMPACT" },
+      { name: "description", content: "Your IMPACT assessments: results, progress and action plans for your Local Youth Council." },
+      { property: "og:title", content: "My Assessments — IMPACT" },
+      { property: "og:description", content: "Your IMPACT assessments: results, progress and action plans for your Local Youth Council." },
     ],
   }),
   component: Dashboard,
