@@ -17,11 +17,11 @@ export const Route = createFileRoute("/_authenticated/profile")({
 });
 
 type Profile = {
-  full_name: string | null;
-  council_name: string | null;
-  country: string | null;
-  city: string | null;
-  council_role: string | null;
+  full_name: string;
+  council_name: string;
+  country: string;
+  city: string;
+  council_role: string;
 };
 
 function ProfilePage() {
