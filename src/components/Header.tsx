@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 export function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { user } = useAuth();
 
   const navLinkBase =
     "inline-flex items-center gap-2 text-[15px] font-bold transition";
