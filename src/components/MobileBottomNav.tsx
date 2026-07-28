@@ -1,7 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/use-auth";
 
 export function MobileBottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { user } = useAuth();
 
   const itemBase =
     "flex flex-col items-center justify-center gap-1 px-2 py-1 text-[10px] font-semibold leading-none whitespace-nowrap text-center transition-colors";
