@@ -88,9 +88,13 @@ function TopNav({ email, isAdmin, onSignOut }: { email?: string; isAdmin: boolea
           <img src={logoColor.url} alt="IMPACT" className="h-9 w-auto" />
         </Link>
         <nav className="flex items-center gap-2">
-          <Link to="/_authenticated/dashboard" className={`${pillBase} bg-[color:var(--impact-purple)] text-white`}>
+          <Link to="/" className={`${pillBase} text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-surface-muted)]`}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
             Home
+          </Link>
+          <Link to="/dashboard" className={`${pillBase} bg-[color:var(--impact-purple)] text-white`}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+            Dashboard
           </Link>
           <Link to="/resource-hub" className={`${pillBase} text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-surface-muted)]`}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
