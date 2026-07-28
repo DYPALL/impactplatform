@@ -119,7 +119,7 @@ export function Header() {
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className={`${navLinkBase} ${pathname.startsWith("/admin") ? "rounded-full bg-[color:var(--impact-orange)] px-3 py-2 text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
+                  className={`${navLinkBase} ${pathname.startsWith("/admin") ? "bg-[color:var(--impact-orange)] text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
                 >
                   <Settings size={16} />
                   Admin panel
