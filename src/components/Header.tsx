@@ -94,12 +94,12 @@ export function Header() {
 
       {/* Mobile floating bottom nav with glass effect */}
       <nav
-        className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:hidden"
+        className="fixed inset-x-0 bottom-4 z-[100] flex justify-center px-4 md:hidden"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         aria-label="Mobile navigation"
       >
-        <div
-          className="flex items-center gap-1 rounded-full border border-white/40 bg-white/60 px-2 py-2 shadow-[0_10px_30px_-10px_rgba(80,33,129,0.35)] backdrop-blur-xl"
-        >
+        <div className="flex items-center gap-2 rounded-full border border-white/40 bg-white/60 px-3 py-2 shadow-[0_10px_30px_-10px_rgba(80,33,129,0.35)] backdrop-blur-xl">
+
           <Link
             to="/"
             className={`flex flex-col items-center gap-0.5 rounded-full px-3 py-1.5 text-[11px] font-bold transition ${pathname === "/" ? "bg-[color:var(--impact-green)] text-white" : "text-[color:var(--impact-purple)]"}`}
