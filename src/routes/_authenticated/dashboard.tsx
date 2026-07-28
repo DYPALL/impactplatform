@@ -82,10 +82,7 @@ const AREAS: AreaDef[] = [
 function Dashboard() {
   const { user } = Route.useRouteContext() as { user: { id: string; email?: string } };
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const navigate = useNavigate();
-  const router = useRouter();
 
   useEffect(() => {
     supabase
@@ -94,18 +91,7 @@ function Dashboard() {
       .eq("id", user.id)
       .maybeSingle()
       .then(({ data }) => setProfile(data as Profile | null));
-    supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .then(({ data }) => setIsAdmin((data ?? []).some((r) => r.role === "admin")));
   }, [user.id]);
-
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    router.invalidate();
-    navigate({ to: "/auth", replace: true });
-  }
 
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
 
