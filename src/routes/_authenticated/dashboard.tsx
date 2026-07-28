@@ -177,17 +177,17 @@ function Dashboard() {
 
           {/* Progress summary card */}
           <div className="rounded-3xl bg-white/10 p-6 backdrop-blur-sm">
-            <p className="mb-4 text-[15px] font-semibold text-white">My Progress Summary</p>
+            <p className="mb-4 text-center text-[15px] font-semibold text-white">My Progress Summary</p>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr_1.6fr]">
               <StatTile value={totals.done} label="Questionnaires done" />
               <StatTile value={totals.plans} label="Action plans built" />
               <div className="rounded-2xl bg-white/10 p-4">
-                <p className="mb-3 text-[13px] font-semibold text-white">Questionnaires per Area</p>
+                <p className="mb-3 text-center text-[13px] font-semibold text-white">Questionnaires per Area</p>
                 <div className="grid grid-cols-2 gap-2">
                   {AREAS.map((a) => (
                     <div
                       key={a.key}
-                      className="rounded-xl px-3 py-2"
+                      className="rounded-xl px-3 py-2 text-center"
                       style={{ backgroundColor: a.softBg }}
                     >
                       <p className="text-[11px] font-semibold leading-tight" style={{ color: a.softText }}>
