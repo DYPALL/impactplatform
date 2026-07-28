@@ -252,7 +252,7 @@ function Dashboard() {
 
 function StatTile({ value, label }: { value: number; label: string }) {
   return (
-    <div className="rounded-2xl bg-white/15 p-4 text-center">
+    <div className="flex flex-col justify-center rounded-2xl bg-white/15 p-4 text-center">
       <p className="text-[44px] font-extrabold leading-none text-white">{value}</p>
       <p className="mt-2 text-[13px] text-white/80">{label}</p>
     </div>
