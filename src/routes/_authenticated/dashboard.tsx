@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, User } from "lucide-react";
+import { ChevronDown, Settings, User } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { supabase } from "@/integrations/supabase/client";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
