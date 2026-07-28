@@ -25,15 +25,16 @@ export function Header() {
   const isPublic = pathname !== "/dashboard" && !pathname.startsWith("/admin");
 
   const navLinkBase =
-    "inline-flex items-center gap-2 text-[15px] font-bold transition";
+    "inline-flex items-center gap-2 rounded-full px-3 py-2 text-[15px] font-bold transition-colors duration-200";
 
   const activePill = (active: boolean) =>
     active
-      ? "rounded-full bg-[color:var(--impact-green)] px-3 py-2 text-white"
+      ? "bg-[color:var(--impact-green)] text-white"
       : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]";
 
   const linkClass = (path: string) =>
     `${navLinkBase} ${activePill(pathname === path)}`;
+
 
   return (
     <header className="w-full border-b border-[color:var(--impact-border)] bg-white">
@@ -118,7 +119,7 @@ export function Header() {
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className={`${navLinkBase} ${pathname.startsWith("/admin") ? "rounded-full bg-[color:var(--impact-orange)] px-3 py-2 text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
+                  className={`${navLinkBase} ${pathname.startsWith("/admin") ? "bg-[color:var(--impact-orange)] text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
                 >
                   <Settings size={16} />
                   Admin panel
