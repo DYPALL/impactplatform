@@ -4,9 +4,9 @@ export function MobileBottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const itemBase =
-    "flex flex-col items-center gap-1 px-2 py-1 text-[11px] font-semibold transition-colors";
+    "flex flex-col items-center justify-center gap-1 px-2 py-1 text-[10px] font-semibold leading-none whitespace-nowrap text-center transition-colors";
   const activeCls = "text-[color:var(--impact-purple)]";
-  const inactiveCls = "text-neutral-400";
+  const inactiveCls = "text-neutral-600";
   const cls = (path: string) => `${itemBase} ${pathname === path ? activeCls : inactiveCls}`;
 
   return (
