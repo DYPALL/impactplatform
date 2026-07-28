@@ -1,8 +1,8 @@
-import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, Settings, User } from "lucide-react";
+import { ChevronDown, User } from "lucide-react";
+import { Header } from "@/components/Header";
 import { supabase } from "@/integrations/supabase/client";
-import logoColor from "@/assets/logo_color_impact.png.asset.json";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -78,62 +78,11 @@ const AREAS: AreaDef[] = [
   },
 ];
 
-function TopNav({ email, isAdmin, onSignOut }: { email?: string; isAdmin: boolean; onSignOut: () => void }) {
-  const pillBase =
-    "inline-flex items-center gap-2 rounded-full px-4 py-2 text-[14px] font-semibold transition";
-  return (
-    <header className="bg-white shadow-sm">
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-5 lg:px-12">
-        <Link to="/" className="flex items-center">
-          <img src={logoColor.url} alt="IMPACT" className="h-9 w-auto" />
-        </Link>
-        <nav className="flex items-center gap-2">
-          <Link to="/" className={`${pillBase} text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-surface-muted)]`}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
-            Home
-          </Link>
-          <Link to="/dashboard" className={`${pillBase} bg-[color:var(--impact-purple)] text-white`}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-            Dashboard
-          </Link>
-          <Link to="/resource-hub" className={`${pillBase} text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-surface-muted)]`}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-            Resource Hub
-          </Link>
-          <Link to="/send-us-a-message" className={`${pillBase} text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-surface-muted)]`}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-            Send us a message
-          </Link>
-          {isAdmin && (
-            <Link
-              to="/admin"
-              title="Admin panel"
-              className={`${pillBase} bg-[color:var(--impact-orange)] text-white hover:opacity-90`}
-            >
-              <Settings size={16} />
-              Admin panel
-            </Link>
-          )}
-          <button
-            onClick={onSignOut}
-            title={email ?? "Sign out"}
-            className="ml-1 inline-flex h-10 items-center rounded-full bg-[color:var(--impact-surface-muted)] px-3 text-[13px] font-semibold text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white"
-          >
-            Sign out
-          </button>
-        </nav>
-      </div>
-    </header>
-  );
-}
 
 function Dashboard() {
   const { user } = Route.useRouteContext() as { user: { id: string; email?: string } };
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const navigate = useNavigate();
-  const router = useRouter();
 
   useEffect(() => {
     supabase
@@ -142,18 +91,7 @@ function Dashboard() {
       .eq("id", user.id)
       .maybeSingle()
       .then(({ data }) => setProfile(data as Profile | null));
-    supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .then(({ data }) => setIsAdmin((data ?? []).some((r) => r.role === "admin")));
   }, [user.id]);
-
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    router.invalidate();
-    navigate({ to: "/auth", replace: true });
-  }
 
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
 
@@ -168,7 +106,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)]">
-      <TopNav email={user.email} isAdmin={isAdmin} onSignOut={handleSignOut} />
+      <Header />
 
       {/* Hero band */}
       <section className="bg-[color:var(--impact-purple)] pb-16 pt-8">

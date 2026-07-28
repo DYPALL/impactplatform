@@ -1,13 +1,39 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Settings } from "lucide-react";
 import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 export function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      setIsAdmin(false);
+      return;
+    }
+    supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .then(({ data }) => setIsAdmin((data ?? []).some((r) => r.role === "admin")));
+  }, [user]);
+
+  const isPublic = pathname !== "/dashboard" && !pathname.startsWith("/admin");
 
   const navLinkBase =
     "inline-flex items-center gap-2 text-[15px] font-bold transition";
+
+  const activePill = (active: boolean) =>
+    active
+      ? "rounded-full bg-[color:var(--impact-green)] px-3 py-2 text-white"
+      : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]";
+
+  const linkClass = (path: string) =>
+    `${navLinkBase} ${activePill(pathname === path)}`;
 
   return (
     <header className="w-full border-b border-[color:var(--impact-border)] bg-white">
@@ -19,7 +45,7 @@ export function Header() {
         <nav className="hidden items-center gap-7 md:flex">
           <Link
             to="/"
-            className={`${navLinkBase} ${pathname === "/" ? "rounded-full bg-[color:var(--impact-green)] px-3 py-2 text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
+            className={linkClass("/")}
           >
             <svg width="16" height="18" viewBox="0 0 16 18" fill="none" aria-hidden>
               <path
@@ -40,7 +66,7 @@ export function Header() {
 
           <Link
             to="/resource-hub"
-            className={`${navLinkBase} ${pathname === "/resource-hub" ? "rounded-full bg-[color:var(--impact-green)] px-3 py-2 text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
+            className={linkClass("/resource-hub")}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
               <path
@@ -61,7 +87,7 @@ export function Header() {
 
           <Link
             to="/send-us-a-message"
-            className={`${navLinkBase} ${pathname === "/send-us-a-message" ? "rounded-full bg-[color:var(--impact-green)] px-3 py-2 text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
+            className={linkClass("/send-us-a-message")}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
               <path
@@ -73,15 +99,37 @@ export function Header() {
           </Link>
 
           {user ? (
-            <Link
-              to="/dashboard"
-              className="inline-flex h-11 items-center gap-2 rounded-full bg-[color:var(--impact-purple)] px-[18px] text-[14px] font-bold text-white transition hover:opacity-90"
-            >
-              <svg width="16" height="18" viewBox="0 0 16 18" fill="none" aria-hidden>
-                <path d="M0.872437 8.65795C0.872437 7.30418 0.872437 6.6273 1.14558 6.03216C1.41973 5.43702 1.93312 4.99739 2.96091 4.11615L3.9578 3.26182C5.81699 1.66979 6.74409 0.872284 7.85063 0.872284C8.95717 0.872284 9.88527 1.6688 11.7435 3.26082L12.7404 4.11515C13.7671 4.9964 14.2815 5.43602 14.5547 6.03116C14.8288 6.6263 14.8288 7.30319 14.8288 8.65696V12.8847C14.8288 14.7649 14.8288 15.7039 14.2446 16.2881C13.6605 16.8723 12.7214 16.8723 10.8413 16.8723H4.85998C2.97985 16.8723 2.04079 16.8723 1.45661 16.2881C0.872436 15.7039 0.872437 14.7649 0.872437 12.8847V8.65795Z" stroke="currentColor" strokeWidth="1.74455" />
-              </svg>
-              My Dashboard
-            </Link>
+            <>
+              <Link
+                to="/dashboard"
+                className={`${navLinkBase} ${pathname === "/dashboard" || pathname.startsWith("/admin") ? "rounded-full bg-[color:var(--impact-purple)] px-3 py-2 text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="7" height="9" rx="1" />
+                  <rect x="14" y="3" width="7" height="5" rx="1" />
+                  <rect x="14" y="12" width="7" height="9" rx="1" />
+                  <rect x="3" y="16" width="7" height="5" rx="1" />
+                </svg>
+                Dashboard
+              </Link>
+
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className={`${navLinkBase} ${pathname.startsWith("/admin") ? "rounded-full bg-[color:var(--impact-orange)] px-3 py-2 text-white" : "text-[color:var(--impact-ink)] hover:text-[color:var(--impact-purple)]"}`}
+                >
+                  <Settings size={16} />
+                  Admin panel
+                </Link>
+              )}
+
+              <button
+                onClick={() => signOut()}
+                className="ml-1 inline-flex h-11 items-center rounded-full bg-[color:var(--impact-surface-muted)] px-3 text-[13px] font-semibold text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white"
+              >
+                Sign out
+              </button>
+            </>
           ) : (
             <Link
               to="/auth"
@@ -99,5 +147,3 @@ export function Header() {
     </header>
   );
 }
-
-
