@@ -85,7 +85,7 @@ function TopNav({ email, isAdmin, onSignOut }: { email?: string; isAdmin: boolea
     <header className="bg-white shadow-sm">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-5 lg:px-12">
         <Link to="/" className="flex items-center">
-          <img src={logoWhite.url} alt="IMPACT" className="h-9 w-auto" />
+          <img src={logoColor.url} alt="IMPACT" className="h-9 w-auto" />
         </Link>
         <nav className="flex items-center gap-2">
           <Link to="/_authenticated/dashboard" className={`${pillBase} bg-[color:var(--impact-purple)] text-white`}>
