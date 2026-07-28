@@ -106,7 +106,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)]">
-      <TopNav email={user.email} isAdmin={isAdmin} onSignOut={handleSignOut} />
+      <Header />
 
       {/* Hero band */}
       <section className="bg-[color:var(--impact-purple)] pb-16 pt-8">
