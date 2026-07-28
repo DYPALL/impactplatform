@@ -144,6 +144,7 @@ function RootComponent() {
       <div key={pathname} className="page-transition">
         <Outlet />
       </div>
+      <MobileBottomNav />
     </QueryClientProvider>
   );
 }
