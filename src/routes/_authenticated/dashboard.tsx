@@ -121,6 +121,13 @@ function Dashboard() {
               Hi, {firstName} 👋
             </h1>
             <p className="mt-1 text-[14px] text-white/75">How do you feel today?</p>
+            <Link
+              to="/profile"
+              className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-white/30"
+            >
+              <Settings size={16} />
+              Manage profile
+            </Link>
           </div>
 
           {/* Progress summary card */}
