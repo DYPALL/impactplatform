@@ -207,7 +207,7 @@ function Dashboard() {
 
       {/* CTA guide banner */}
       <section className="mx-auto -mt-8 max-w-[1280px] px-6 lg:px-12">
-        <div className="flex flex-col items-center gap-6 overflow-hidden rounded-3xl bg-[color:var(--impact-purple)] p-6 text-white shadow-xl md:flex-row md:p-8">
+        <div className="flex flex-col items-center gap-6 overflow-hidden rounded-3xl bg-[color:var(--impact-purple)] p-8 text-white shadow-xl md:flex-row md:p-12">
           <div className="flex-1">
             <h2 className="text-[24px] font-extrabold">How to start assessing?</h2>
             <p className="mt-2 max-w-xl text-[14px] text-white/80">
