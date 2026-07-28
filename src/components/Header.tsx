@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Settings } from "lucide-react";
+import { Settings, LogOut } from "lucide-react";
 import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
