@@ -510,12 +510,17 @@ function MatrixQuestion({
       <div className="mt-3 overflow-hidden rounded-xl ring-1 ring-black/5">
         {/* Head */}
         <div
-          className="grid grid-cols-[minmax(0,1fr)_64px_64px_64px] items-center gap-2 px-6 py-3 sm:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
+          className="grid grid-cols-[minmax(0,1fr)_36px_36px_40px] items-center gap-1.5 px-3 py-2.5 sm:grid-cols-[minmax(0,1fr)_64px_64px_64px] sm:gap-2 sm:px-6 sm:py-3 lg:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
           style={{ backgroundColor: PURPLE }}
         >
-          <span className="text-[11px] font-bold uppercase tracking-wider text-white">Criteria</span>
+          <span className="min-w-0 truncate text-[10px] font-bold uppercase tracking-wide text-white sm:text-[11px] sm:tracking-wider">
+            Criteria
+          </span>
           {["Yes", "No", "N/A"].map((h) => (
-            <span key={h} className="text-center text-[11px] font-bold uppercase tracking-wider text-white">
+            <span
+              key={h}
+              className="text-center text-[10px] font-bold uppercase tracking-wide text-white sm:text-[11px] sm:tracking-wider"
+            >
               {h}
             </span>
           ))}
