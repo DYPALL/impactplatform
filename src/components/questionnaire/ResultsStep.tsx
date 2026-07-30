@@ -185,13 +185,13 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               onClick={() => setSelected((s) => (s === i ? null : i))}
-              className={`flex items-center gap-3 rounded-xl border bg-white px-3 py-2.5 text-left transition-all duration-200 cursor-pointer ${
+              className={`flex items-center gap-2.5 rounded-xl border bg-white px-2.5 py-2 text-left transition-all duration-200 cursor-pointer sm:gap-3 sm:px-3 sm:py-2.5 ${
                 isActive ? "border-[#502181] ring-1 ring-[#502181]" : "border-[#EDEAF3] hover:bg-[#F7F4FC]"
               }`}
             >
-              <Battery level={level} className="h-[22px]" />
-              <div className="min-w-0">
-                <p className="truncate text-[11px] font-extrabold leading-tight text-[#111827]">
+              <Battery level={level} className="h-[18px] sm:h-[22px]" />
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-extrabold leading-tight text-[#111827] line-clamp-2">
                   {ind.code} {ind.title}
                 </p>
                 <span className="text-[10px] font-bold" style={{ color: c }}>
@@ -202,6 +202,7 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
           );
         })}
       </div>
+
     </div>
   );
 }
