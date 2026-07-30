@@ -132,102 +132,104 @@ function Dashboard() {
 
 
   return (
-    <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)]">
-      {/* Hero band */}
-      <section className="bg-[color:var(--impact-purple)] pb-16 pt-8">
-        <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-8 px-6 lg:grid-cols-[260px_1fr] lg:px-12">
-          {/* Greeting */}
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/25 text-white">
-              <User size={38} strokeWidth={1.5} />
+    <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)] px-6 pb-16 pt-8 lg:px-12">
+      <div className="mx-auto max-w-[1280px] space-y-8">
+        {/* Hero pill */}
+        <section className="overflow-hidden rounded-[40px] bg-[color:var(--impact-purple)] p-8 lg:p-12">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]">
+            {/* Greeting */}
+            <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/25 text-white">
+                <User size={38} strokeWidth={1.5} />
+              </div>
+              <h1 className="mt-5 text-[26px] font-extrabold leading-tight text-white">
+                Hi, {firstName} 👋
+              </h1>
+              <p className="mt-1 text-[14px] text-white/75">How do you feel today?</p>
+              <Link
+                to="/profile"
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-white/30"
+              >
+                <Settings size={16} />
+                Manage profile
+              </Link>
             </div>
-            <h1 className="mt-5 text-[26px] font-extrabold leading-tight text-white">
-              Hi, {firstName} 👋
-            </h1>
-            <p className="mt-1 text-[14px] text-white/75">How do you feel today?</p>
-            <Link
-              to="/profile"
-              className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-white/30"
-            >
-              <Settings size={16} />
-              Manage profile
-            </Link>
-          </div>
 
-          {/* Progress summary card */}
-          <div className="rounded-3xl bg-white/10 p-6 backdrop-blur-sm">
-            <p className="mb-4 text-center text-[15px] font-semibold text-white">My Progress Summary</p>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr_1.6fr]">
-              <StatTile value={totals.done} label="Questionnaires done" />
-              <StatTile value={totals.plans} label="Action plans built" />
-              <div className="rounded-2xl bg-white/10 p-4">
-                <p className="mb-3 text-center text-[13px] font-semibold text-white">Questionnaires per Area</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {AREAS.map((a) => (
-                    <div
-                      key={a.key}
-                      className="rounded-xl px-3 py-2 text-center"
-                      style={{ backgroundColor: a.softBg }}
-                    >
-                      <p className="text-[11px] font-semibold leading-tight" style={{ color: a.softText }}>
-                        {a.title}
-                      </p>
-                      <p className="mt-1 text-[22px] font-extrabold" style={{ color: a.softText }}>
-                        {perArea[a.key]}
-                      </p>
-                    </div>
-                  ))}
+            {/* Progress summary card */}
+            <div className="rounded-3xl bg-white/10 p-6 backdrop-blur-sm">
+              <p className="mb-4 text-center text-[15px] font-semibold text-white">My Progress Summary</p>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr_1.6fr]">
+                <StatTile value={totals.done} label="Questionnaires done" />
+                <StatTile value={totals.plans} label="Action plans built" />
+                <div className="rounded-2xl bg-white/10 p-4">
+                  <p className="mb-3 text-center text-[13px] font-semibold text-white">Questionnaires per Area</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {AREAS.map((a) => (
+                      <div
+                        key={a.key}
+                        className="rounded-xl px-3 py-2 text-center"
+                        style={{ backgroundColor: a.softBg }}
+                      >
+                        <p className="text-[11px] font-semibold leading-tight" style={{ color: a.softText }}>
+                          {a.title}
+                        </p>
+                        <p className="mt-1 text-[22px] font-extrabold" style={{ color: a.softText }}>
+                          {perArea[a.key]}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA guide banner */}
-      <section className="mx-auto mt-10 mb-10 max-w-[1280px] px-6 lg:px-12">
-        <div className="flex flex-col items-center gap-6 overflow-hidden rounded-3xl bg-[color:var(--impact-purple)] p-8 text-white shadow-xl md:flex-row md:p-12">
-          <div className="flex-1">
-            <h2 className="text-[24px] font-extrabold">How to start assessing?</h2>
-            <p className="mt-2 max-w-xl text-[14px] text-white/80">
-              Follow our step-by-step guide to complete your first assessment and get personalized recommendations.
-            </p>
-          </div>
-          <a
-            href="/#how"
-            className="inline-flex h-12 items-center justify-center rounded-full bg-white px-6 text-[14px] font-bold text-[color:var(--impact-purple)] transition hover:bg-white/90"
-          >
-            Start the guide →
-          </a>
-          <img
-            src={ctaImg.url}
-            alt=""
-            className="hidden h-[130px] w-[220px] rounded-2xl object-cover md:block"
-          />
-        </div>
-      </section>
-
-      {/* Assessments */}
-      <section className="mx-auto max-w-[1280px] px-6 py-14 lg:px-12">
-        <h2 className="text-[32px] font-extrabold text-[color:var(--impact-purple)]">Start Your Assessment</h2>
-        <p className="mt-2 max-w-2xl text-[14px] text-[color:var(--impact-ink-muted)]">
-          Choose a thematic area to launch a self-assessment. You can revisit past questionnaires and build action plans as you go.
-        </p>
-
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {AREAS.map((a) => (
-            <AreaCard
-              key={a.key}
-              area={a}
-              items={assessments.filter((x) => x.area === a.key)}
-              expanded={!!expanded[a.key]}
-              onToggle={() => setExpanded((e) => ({ ...e, [a.key]: !e[a.key] }))}
-              onDelete={handleDelete}
+        {/* CTA guide banner */}
+        <section className="max-w-[1280px]">
+          <div className="flex flex-col items-center gap-6 overflow-hidden rounded-[40px] bg-[color:var(--impact-purple)] p-8 text-white shadow-xl md:flex-row md:p-12">
+            <div className="flex-1">
+              <h2 className="text-[24px] font-extrabold">How to start assessing?</h2>
+              <p className="mt-2 max-w-xl text-[14px] text-white/80">
+                Follow our step-by-step guide to complete your first assessment and get personalized recommendations.
+              </p>
+            </div>
+            <a
+              href="/#how"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-white px-6 text-[14px] font-bold text-[color:var(--impact-purple)] transition hover:bg-white/90"
+            >
+              Start the guide →
+            </a>
+            <img
+              src={ctaImg.url}
+              alt=""
+              className="hidden h-[130px] w-[220px] rounded-2xl object-cover md:block"
             />
-          ))}
+          </div>
+        </section>
 
-        </div>
-      </section>
+        {/* Assessments */}
+        <section className="py-6">
+          <h2 className="text-[32px] font-extrabold text-[color:var(--impact-purple)]">Start Your Assessment</h2>
+          <p className="mt-2 max-w-2xl text-[14px] text-[color:var(--impact-ink-muted)]">
+            Choose a thematic area to launch a self-assessment. You can revisit past questionnaires and build action plans as you go.
+          </p>
+
+          <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {AREAS.map((a) => (
+              <AreaCard
+                key={a.key}
+                area={a}
+                items={assessments.filter((x) => x.area === a.key)}
+                expanded={!!expanded[a.key]}
+                onToggle={() => setExpanded((e) => ({ ...e, [a.key]: !e[a.key] }))}
+                onDelete={handleDelete}
+              />
+            ))}
+
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
