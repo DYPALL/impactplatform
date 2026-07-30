@@ -32,28 +32,18 @@ const MATRIX_CRITERIA = [
   "Youth from marginalized or underrepresented groups",
 ];
 
-const SINGLE_OPTIONS = [
-  {
-    value: "always",
-    label: "Always — outreach is planned for every recruitment round",
-    detail: "Targeted actions towards underrepresented groups are part of every call for members.",
-  },
-  {
-    value: "often",
-    label: "Often — outreach happens in most recruitment rounds",
-    detail: "There is a habit of reaching out, but it is not formalised.",
-  },
-  {
-    value: "sometimes",
-    label: "Sometimes — outreach happens occasionally",
-    detail: "Actions depend on the availability of members or partners.",
-  },
-  {
-    value: "never",
-    label: "Never — there is no specific outreach",
-    detail: "Recruitment relies only on open calls and word of mouth.",
-  },
+const MATRIX_CRITERIA_2 = [
+  "a) Youth NGOs or associations",
+  "b) Student councils or school/university associations",
+  "c) Youth wings of political parties or youth branches of unions",
+  "d) Informal or grassroots youth groups (e.g. volunteer collectives, neighborhood initiatives)",
+  "e) Environmental and climate-action movements",
+  "f) Sports, arts, and cultural youth groups",
+  "g) Faith-based or community-based youth organizations",
+  "h) Youth networks representing marginalized or minority groups (e.g. LGBTQ+, ethnic minorities, migrants)",
+  "i) Other relevant groups of local interest",
 ];
+
 
 const TOTAL_STEPS = 3;
 
@@ -62,15 +52,17 @@ function QuestionnairePage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [matrix, setMatrix] = useState<Record<number, Answer>>({});
-  const [single, setSingle] = useState<string | null>(null);
+  const [matrix2, setMatrix2] = useState<Record<number, Answer>>({});
 
   const score = useMemo(() => {
     const yes = Object.values(matrix).filter((v) => v === "yes").length;
     const counted = Object.values(matrix).filter((v) => v !== "na").length || 1;
     const base = (yes / counted) * 100;
-    const bonus = single === "always" ? 15 : single === "often" ? 10 : single === "sometimes" ? 5 : 0;
-    return Math.min(100, Math.round(base * 0.85 + bonus));
-  }, [matrix, single]);
+    const yes2 = Object.values(matrix2).filter((v) => v === "yes").length;
+    const counted2 = Object.values(matrix2).filter((v) => v !== "na").length || 1;
+    const base2 = (yes2 / counted2) * 100;
+    return Math.round((base + base2) / 2);
+  }, [matrix, matrix2]);
 
   const progress = step / TOTAL_STEPS;
 
@@ -111,7 +103,17 @@ function QuestionnairePage() {
         {step === 1 && (
           <MatrixQuestion matrix={matrix} setMatrix={setMatrix} />
         )}
-        {step === 2 && <SingleQuestion value={single} onChange={setSingle} />}
+        {step === 2 && (
+          <MatrixQuestion
+            matrix={matrix2}
+            setMatrix={setMatrix2}
+            criteria={MATRIX_CRITERIA_2}
+            code="1.2"
+            title="Representation of youth groups and interests"
+            about="The LYC brings together representatives from diverse youth organizations, movements, and communities of interest, ensuring that different forms of youth participation are present as well as different thematic areas. These can include NGOs, student councils, informal collectives, arts, sports, environmental groups, faith based organizations, and independent voices. The LYC aims to reflect the range of youth groups and interests that exist in its local context, recognising that the diversity of organizations and movements may vary depending on the municipality. This ensures that the council is connected to the full range of youth activities, interests, and causes in the community, not only the identities of its members."
+            question="Does your LYC reflect the range of youth groups and interests present in your community?"
+          />
+        )}
         {step === 3 && <ResultsStep score={score} area={area} />}
 
         {/* Nav */}
@@ -191,18 +193,23 @@ function IndicatorHeader({
 function MatrixQuestion({
   matrix,
   setMatrix,
+  criteria = MATRIX_CRITERIA,
+  code = "1.1",
+  title = "Diversity of Membership",
+  about = "The LYC strives to reflect the demographic composition of the local youth population by including members representing: a diverse LYC brings together young people of different ages, genders, cultural and ethnic backgrounds, socioeconomic conditions, abilities, and geographical areas. Particular attention is given to reaching young people from underrepresented groups.",
+  question = "Does your LYC reflect the demographic composition of the local youth population?",
 }: {
   matrix: Record<number, Answer>;
   setMatrix: (fn: (m: Record<number, Answer>) => Record<number, Answer>) => void;
+  criteria?: string[];
+  code?: string;
+  title?: string;
+  about?: string;
+  question?: string;
 }) {
   return (
     <section>
-      <IndicatorHeader
-        code="1.1"
-        title="Diversity of Membership"
-        about="The LYC strives to reflect the demographic composition of the local youth population by including members representing: a diverse LYC brings together young people of different ages, genders, cultural and ethnic backgrounds, socioeconomic conditions, abilities, and geographical areas. Particular attention is given to reaching young people from underrepresented groups."
-        question="Does your LYC reflect the demographic composition of the local youth population?"
-      />
+      <IndicatorHeader code={code} title={title} about={about} question={question} />
 
       <p className="mt-6 text-[12px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
         Select those that are included in your LYC
@@ -222,7 +229,7 @@ function MatrixQuestion({
           ))}
         </div>
 
-        {MATRIX_CRITERIA.map((c, i) => (
+        {criteria.map((c, i) => (
           <div
             key={c}
             className="grid grid-cols-[minmax(0,1fr)_64px_64px_64px] items-center gap-2 px-6 py-3.5 sm:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
@@ -251,56 +258,6 @@ function MatrixQuestion({
             })}
           </div>
         ))}
-      </div>
-    </section>
-  );
-}
-
-function SingleQuestion({ value, onChange }: { value: string | null; onChange: (v: string) => void }) {
-  return (
-    <section>
-      <IndicatorHeader
-        code="1.2"
-        title="Outreach to Underrepresented Youth"
-        about="Beyond who is currently a member, the LYC actively reaches out to young people who are less likely to participate. Outreach can include partnerships with schools, social services, migrant or disability organisations, and informal youth groups."
-        question="How often does your LYC run targeted outreach towards underrepresented young people?"
-      />
-
-      <p className="mt-6 text-[12px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
-        Select one answer
-      </p>
-
-      <div className="mt-3 space-y-3">
-        {SINGLE_OPTIONS.map((o) => {
-          const checked = value === o.value;
-          return (
-            <button
-              key={o.value}
-              type="button"
-              role="radio"
-              aria-checked={checked}
-              onClick={() => onChange(o.value)}
-              className="flex w-full items-start gap-4 rounded-xl bg-white p-5 text-left ring-1 transition"
-              style={{
-                boxShadow: checked ? `0 0 0 2px ${PURPLE}` : undefined,
-                backgroundColor: checked ? "#F3EDF9" : "#FFFFFF",
-                // @ts-expect-error css var for ring color
-                "--tw-ring-color": "rgba(0,0,0,0.06)",
-              }}
-            >
-              <span
-                className="mt-[3px] grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full border-2"
-                style={{ borderColor: checked ? PURPLE : "#C9CDD4" }}
-              >
-                {checked && <span className="h-[9px] w-[9px] rounded-full" style={{ backgroundColor: PURPLE }} />}
-              </span>
-              <span className="min-w-0">
-                <span className="block text-[15px] font-semibold text-[#1f2937]">{o.label}</span>
-                <span className="mt-1 block text-[13px] text-[#6b7280]">{o.detail}</span>
-              </span>
-            </button>
-          );
-        })}
       </div>
     </section>
   );
@@ -347,7 +304,7 @@ function ResultsStep({ score, area }: { score: number; area: string }) {
             <ul className="mt-4 space-y-4">
               {[
                 { label: "1.1 Diversity of Membership", value: Math.round(score * 0.9) },
-                { label: "1.2 Outreach to Underrepresented Youth", value: Math.min(100, Math.round(score * 1.1)) },
+                { label: "1.2 Representation of youth groups and interests", value: Math.min(100, Math.round(score * 1.1)) },
               ].map((r) => (
                 <li key={r.label}>
                   <div className="flex items-center justify-between text-[13px]">
