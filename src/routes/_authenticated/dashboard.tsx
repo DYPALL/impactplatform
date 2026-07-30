@@ -79,10 +79,20 @@ const AREAS: AreaDef[] = [
 ];
 
 
+type AssessmentRow = {
+  id: string;
+  area: AreaDef["key"];
+  status: string;
+  current_step: number;
+  completed_at: string | null;
+  updated_at: string;
+};
+
 function Dashboard() {
   const { user } = Route.useRouteContext() as { user: { id: string; email?: string } };
   const [profile, setProfile] = useState<Profile | null>(null);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [assessments, setAssessments] = useState<AssessmentRow[]>([]);
 
   useEffect(() => {
     supabase
@@ -91,18 +101,29 @@ function Dashboard() {
       .eq("id", user.id)
       .maybeSingle()
       .then(({ data }) => setProfile(data as Profile | null));
+
+    supabase
+      .from("assessments")
+      .select("id, area, status, current_step, completed_at, updated_at")
+      .eq("user_id", user.id)
+      .order("updated_at", { ascending: false })
+      .then(({ data }) => setAssessments((data as AssessmentRow[]) ?? []));
   }, [user.id]);
 
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
 
-  // Real data — none until questionnaire feature ships.
-  const totals = { done: 0, plans: 0 };
+  const completed = assessments.filter((a) => a.status === "completed");
+  const totals = { done: completed.length, plans: 0 };
   const perArea: Record<AreaDef["key"], number> = {
     representativeness: 0,
     governance: 0,
     empowerment: 0,
     results: 0,
   };
+  for (const a of completed) {
+    if (a.area in perArea) perArea[a.area] += 1;
+  }
+
 
   return (
     <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)]">
