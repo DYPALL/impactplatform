@@ -175,7 +175,7 @@ function Dashboard() {
                 <StatTile value={totals.plans} label="Action plans built" />
                 <div className="rounded-2xl bg-white/10 p-3 md:p-4 lg:rounded-2xl lg:p-5">
                   <p className="mb-3 text-center text-[13px] font-semibold text-white md:mb-4 md:text-[15px] lg:text-[16px]">Questionnaires per Area</p>
-                  <div className="grid grid-cols-2 gap-3 md:grid-cols-1 lg:grid-cols-2 md:gap-4">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 md:gap-4">
                     {AREAS.map((a) => (
                       <div
                         key={a.key}
