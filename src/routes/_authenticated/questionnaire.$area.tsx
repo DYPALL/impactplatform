@@ -72,7 +72,60 @@ const SCALE_LEVELS = [
   },
 ];
 
-const TOTAL_STEPS = 4;
+const SCALE_LEVELS_14 = [
+  {
+    label: "Not at all",
+    color: "#E14B45",
+    soft: "#FDECEB",
+    text: "The LYC is largely unknown to young people or not perceived as representing them.",
+  },
+  {
+    label: "Partially",
+    color: "#E8913C",
+    soft: "#FDF1E5",
+    text: "Some young people are aware of the LYC or recognize certain members, but this is limited to specific groups or contexts.",
+  },
+  {
+    label: "Mostly",
+    color: "#E5C13F",
+    soft: "#FCF7E4",
+    text: "The LYC is generally known and recognized by young people as a relevant platform, although this recognition is not consistent across all groups.",
+  },
+  {
+    label: "Fully",
+    color: "#33A06A",
+    soft: "#E9F6EF",
+    text: "The LYC is widely recognized by young people as a credible and relevant platform that represents their views and interests.",
+  },
+];
+
+const MATRIX_CRITERIA_3 = [
+  "a) The LYC has agreed principles or guidelines on equality and non-discrimination",
+  "b) Information about how to join or apply is shared in a clear and accessible way",
+  "c) No young person is discouraged or excluded from participation due to identity, background, or personal circumstances",
+  "d) Access to membership is based on fair and transparent criteria",
+  "e) First contact with the LYC is respectful and welcoming",
+  "f) Members are treated equally in roles, responsibilities, and participation",
+  "g) The LYC reflects regularly on whether its practices create hidden barriers",
+  "h) The LYC responds appropriately when discrimination or unequal treatment occurs",
+];
+
+const MATRIX_CRITERIA_4 = [
+  "a) Meeting spaces are physically accessible, including for young people with disabilities",
+  "b) Online or hybrid participation options are available when needed",
+  "c) Support is provided to reduce transport or financial barriers where possible",
+  "d) Meeting times and formats consider young people’s school, work, and personal responsibilities",
+  "e) Communication uses clear and youth-friendly language",
+  "f) Information and documents are shared in advance and in accessible formats",
+  "g) Adjustments or support are provided for participants with specific needs",
+  "h) Digital tools used are accessible and easy to use",
+  "i) Accessibility conditions are reviewed and adapted based on feedback",
+];
+
+const EQUALITY_ABOUT =
+  "The LYC adopts and applies principles and practices that promote equality and non-discrimination, ensuring that all young people have fair opportunities to participate, regardless of their background, identity, or personal circumstances. This includes both formal aspects, such as clear and fair rules for access and participation, and informal aspects, such as the culture, behaviours, and dynamics within the LYC. The LYC aims to create an environment where diversity is respected, participation is encouraged, and all members feel safe, valued, and able to contribute without fear of exclusion, bias, or discrimination.";
+
+const TOTAL_STEPS = 7;
 
 function QuestionnairePage() {
   const { area } = Route.useParams();
@@ -80,20 +133,31 @@ function QuestionnairePage() {
   const [step, setStep] = useState(1);
   const [matrix, setMatrix] = useState<Record<number, Answer>>({});
   const [matrix2, setMatrix2] = useState<Record<number, Answer>>({});
+  const [matrix3, setMatrix3] = useState<Record<number, Answer>>({});
+  const [matrix4, setMatrix4] = useState<Record<number, Answer>>({});
   const [scale, setScale] = useState(0);
   const [scaleNA, setScaleNA] = useState(false);
+  const [scale14, setScale14] = useState(0);
+  const [scale14NA, setScale14NA] = useState(false);
 
   const score = useMemo(() => {
-    const yes = Object.values(matrix).filter((v) => v === "yes").length;
-    const counted = Object.values(matrix).filter((v) => v !== "na").length || 1;
-    const base = (yes / counted) * 100;
-    const yes2 = Object.values(matrix2).filter((v) => v === "yes").length;
-    const counted2 = Object.values(matrix2).filter((v) => v !== "na").length || 1;
-    const base2 = (yes2 / counted2) * 100;
-    const base3 = scaleNA ? null : (scale / (SCALE_LEVELS.length - 1)) * 100;
-    const parts = base3 === null ? [base, base2] : [base, base2, base3];
+    const ratio = (m: Record<number, Answer>) => {
+      const vals = Object.values(m);
+      const counted = vals.filter((v) => v !== "na").length;
+      if (!counted) return null;
+      return (vals.filter((v) => v === "yes").length / counted) * 100;
+    };
+    const parts = [
+      ratio(matrix),
+      ratio(matrix2),
+      scaleNA ? null : (scale / (SCALE_LEVELS.length - 1)) * 100,
+      scale14NA ? null : (scale14 / (SCALE_LEVELS_14.length - 1)) * 100,
+      ratio(matrix3),
+      ratio(matrix4),
+    ].filter((v): v is number => v !== null);
+    if (!parts.length) return 0;
     return Math.round(parts.reduce((a, b) => a + b, 0) / parts.length);
-  }, [matrix, matrix2, scale, scaleNA]);
+  }, [matrix, matrix2, matrix3, matrix4, scale, scaleNA, scale14, scale14NA]);
 
   const progress = step / TOTAL_STEPS;
 
