@@ -140,26 +140,25 @@ function QuestionnairePage() {
   const [scale14, setScale14] = useState(0);
   const [scale14NA, setScale14NA] = useState(false);
 
-  const score = useMemo(() => {
+  const percentages = useMemo(() => {
     const ratio = (m: Record<number, Answer>) => {
       const vals = Object.values(m);
       const counted = vals.filter((v) => v !== "na").length;
-      if (!counted) return null;
+      if (!counted) return 0;
       return (vals.filter((v) => v === "yes").length / counted) * 100;
     };
-    const parts = [
+    return [
       ratio(matrix),
       ratio(matrix2),
-      scaleNA ? null : (scale / (SCALE_LEVELS.length - 1)) * 100,
-      scale14NA ? null : (scale14 / (SCALE_LEVELS_14.length - 1)) * 100,
+      scaleNA ? 0 : (scale / (SCALE_LEVELS.length - 1)) * 100,
+      scale14NA ? 0 : (scale14 / (SCALE_LEVELS_14.length - 1)) * 100,
       ratio(matrix3),
       ratio(matrix4),
-    ].filter((v): v is number => v !== null);
-    if (!parts.length) return 0;
-    return Math.round(parts.reduce((a, b) => a + b, 0) / parts.length);
+    ];
   }, [matrix, matrix2, matrix3, matrix4, scale, scaleNA, scale14, scale14NA]);
 
   const progress = step / TOTAL_STEPS;
+
 
   return (
     <div className="min-h-screen bg-[#FAFAFB]">
