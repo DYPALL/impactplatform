@@ -584,6 +584,9 @@ function ResultsStep({ score, area }: { score: number; area: string }) {
                 { label: "1.1 Diversity of Membership", value: Math.round(score * 0.9) },
                 { label: "1.2 Representation of youth groups and interests", value: Math.min(100, Math.round(score * 1.1)) },
                 { label: "1.3 Outreach and Consultation", value: Math.min(100, Math.round(score * 0.95)) },
+                { label: "1.4 Legitimacy", value: Math.min(100, Math.round(score * 1.05)) },
+                { label: "1.5 Equality and non-discrimination", value: Math.round(score * 0.92) },
+                { label: "1.6 Accessibility and participation conditions", value: Math.min(100, Math.round(score * 0.98)) },
               ].map((r) => (
                 <li key={r.label}>
                   <div className="flex items-center justify-between text-[13px]">
