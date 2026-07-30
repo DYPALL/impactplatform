@@ -529,10 +529,10 @@ function MatrixQuestion({
         {criteria.map((c, i) => (
           <div
             key={c}
-            className="grid grid-cols-[minmax(0,1fr)_64px_64px_64px] items-center gap-2 px-6 py-3.5 sm:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
+            className="grid grid-cols-[minmax(0,1fr)_36px_36px_40px] items-center gap-1.5 px-3 py-3 sm:grid-cols-[minmax(0,1fr)_64px_64px_64px] sm:gap-2 sm:px-6 sm:py-3.5 lg:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
             style={{ backgroundColor: i % 2 === 0 ? "#F3EDF9" : "#FFFFFF" }}
           >
-            <span className="text-[14px] leading-snug text-[#1f2937]">{c}</span>
+            <span className="min-w-0 text-[13px] leading-snug text-[#1f2937] sm:text-[14px]">{c}</span>
             {(["yes", "no", "na"] as Answer[]).map((v) => {
               const checked = matrix[i] === v;
               return (
