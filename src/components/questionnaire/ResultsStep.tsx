@@ -258,17 +258,17 @@ function IndicatorCard({
   const [checked, setChecked] = useState<Record<number, boolean>>({});
 
   return (
-    <article className="rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+    <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
+      <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
         <div className="min-w-0">
-          <h3 className="text-[16px] font-extrabold text-[#111827]">
+          <h3 className="text-[15px] font-extrabold text-[#111827] sm:text-[16px]">
             {content.code} {content.title}
           </h3>
           <p className="mt-1 text-[12px] text-[#6b7280]">{content.question}</p>
         </div>
         <div className="flex items-center gap-3">
           <LevelPill level={result.level} />
-          <Battery level={result.level} />
+          <Battery level={result.level} className="h-[28px] sm:h-[38px]" />
         </div>
       </div>
 
