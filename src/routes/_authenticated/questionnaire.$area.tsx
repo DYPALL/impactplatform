@@ -348,9 +348,7 @@ function SliderQuestion({
         <div className="relative h-[44px]">
           {/* Visible coloured track segments — each is a large drop target */}
           <div className="absolute left-0 right-0 top-1/2 flex h-[14px] w-full -translate-y-1/2 overflow-hidden rounded-full">
-            {SCALE_LEVELS.map((l, i) => {
-              const selected = value === i;
-              return (
+            {SCALE_LEVELS.map((l, i) => (
                 <button
                   key={l.label}
                   type="button"
@@ -361,14 +359,8 @@ function SliderQuestion({
                 >
                   {/* Larger invisible click area */}
                   <span className="absolute inset-x-0 -top-[15px] -bottom-[15px] block" />
-                  {/* Selection outline */}
-                  <span
-                    className="pointer-events-none absolute inset-y-0 left-0 right-0 ring-2 ring-white/0 transition"
-                    style={{ right: i === last ? 0 : -1, boxShadow: selected ? `inset 0 0 0 2px rgba(255,255,255,0.55)` : "none" }}
-                  />
                 </button>
-              );
-            })}
+              ))}
           </div>
 
           {/* Thumb */}
