@@ -313,8 +313,19 @@ function SliderQuestion({
   na: boolean;
   onToggleNa: () => void;
 }) {
-  const level = SCALE_LEVELS[value];
+  const [rawValue, setRawValue] = useState(value);
   const last = SCALE_LEVELS.length - 1;
+  const rounded = Math.max(0, Math.min(last, Math.round(rawValue)));
+  const level = SCALE_LEVELS[rounded];
+
+  useEffect(() => {
+    setRawValue(value);
+  }, [value]);
+
+  const snap = () => {
+    setRawValue(rounded);
+    onChange(rounded);
+  };
 
   return (
     <section>
@@ -355,8 +366,8 @@ function SliderQuestion({
 
           {/* Thumb */}
           <div
-            className="pointer-events-none absolute top-1/2 grid h-[30px] w-[30px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-lg bg-white shadow-[0_2px_8px_rgba(0,0,0,0.18)] transition-all duration-200"
-            style={{ left: `${((value + 0.5) / SCALE_LEVELS.length) * 100}%`, color: level.color }}
+            className="pointer-events-none absolute top-1/2 grid h-[34px] w-[34px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-xl bg-white shadow-[0_3px_12px_rgba(0,0,0,0.22)] transition-all duration-300 ease-out"
+            style={{ left: `${((rawValue + 0.5) / SCALE_LEVELS.length) * 100}%`, color: level.color }}
           >
             <Play size={13} fill="currentColor" strokeWidth={0} />
           </div>
@@ -365,11 +376,17 @@ function SliderQuestion({
             type="range"
             min={0}
             max={last}
-            step={1}
-            value={value}
-            onChange={(e) => onChange(Number(e.target.value))}
+            step={0.01}
+            value={rawValue}
+            onChange={(e) => {
+              setRawValue(Number(e.target.value));
+              onChange(Math.round(Number(e.target.value)));
+            }}
+            onPointerUp={snap}
+            onMouseUp={snap}
+            onTouchEnd={snap}
             aria-label="Level of outreach and consultation"
-            className="absolute inset-x-0 top-1/2 h-[34px] w-full -translate-y-1/2 cursor-pointer opacity-0"
+            className="absolute inset-x-0 top-1/2 h-[44px] w-full -translate-y-1/2 cursor-pointer opacity-0"
           />
         </div>
 
@@ -378,9 +395,12 @@ function SliderQuestion({
             <button
               key={l.label}
               type="button"
-              onClick={() => onChange(i)}
+              onClick={() => {
+                setRawValue(i);
+                onChange(i);
+              }}
               className="flex-1 text-center text-[14px] font-semibold transition"
-              style={{ color: i === value ? l.color : "#9ca3af" }}
+              style={{ color: i === rounded ? l.color : "#9ca3af" }}
             >
               {l.label}
             </button>
@@ -388,7 +408,7 @@ function SliderQuestion({
         </div>
 
         <div
-          className="mt-10 rounded-2xl border p-6"
+          className="mt-10 rounded-2xl border p-6 transition-colors duration-300"
           style={{ backgroundColor: level.soft, borderColor: level.color }}
         >
           <p className="text-[12px] font-bold uppercase tracking-wide" style={{ color: level.color }}>
@@ -400,6 +420,7 @@ function SliderQuestion({
     </section>
   );
 }
+
 
 function ResultsStep({ score, area }: { score: number; area: string }) {
   const level = score >= 75 ? "Advanced" : score >= 45 ? "Developing" : "Emerging";
