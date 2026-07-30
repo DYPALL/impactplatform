@@ -220,7 +220,45 @@ function QuestionnairePage() {
             }}
           />
         )}
-        {step === 4 && <ResultsStep score={score} area={area} />}
+        {step === 4 && (
+          <SliderQuestion
+            value={scale14}
+            onChange={setScale14}
+            na={scale14NA}
+            onSkip={() => {
+              setScale14NA(true);
+              setStep((s) => s + 1);
+            }}
+            levels={SCALE_LEVELS_14}
+            code="1.4"
+            title="Legitimacy"
+            about={EQUALITY_ABOUT}
+            question="To what extent is your LYC recognized by young people as a legitimate platform for representing their views and interests?"
+          />
+        )}
+        {step === 5 && (
+          <MatrixQuestion
+            matrix={matrix3}
+            setMatrix={setMatrix3}
+            criteria={MATRIX_CRITERIA_3}
+            code="1.5"
+            title="Equality and non-discrimination"
+            about={EQUALITY_ABOUT}
+            question="Does your LYC ensure fair and non-discriminatory access to participation and membership?"
+          />
+        )}
+        {step === 6 && (
+          <MatrixQuestion
+            matrix={matrix4}
+            setMatrix={setMatrix4}
+            criteria={MATRIX_CRITERIA_4}
+            code="1.6"
+            title="Accessibility and participation conditions"
+            about="The LYC provides practical conditions that enable all young people to participate effectively in its activities. This includes ensuring that meetings, communication, and participation formats are accessible in terms of physical space, timing, language, and digital tools. The LYC aims to reduce practical barriers to participation by adapting formats and providing support where needed, so that young people can engage in ways that fit their circumstances."
+            question="Does your LYC provide accessible conditions that enable all young people to participate?"
+          />
+        )}
+        {step === TOTAL_STEPS && <ResultsStep score={score} area={area} />}
 
         {/* Nav */}
         <div className="mt-10 flex items-center justify-between">
