@@ -75,7 +75,7 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
     <div className="grid items-center gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
       {/* Chart */}
       <div className="mx-auto w-full max-w-[320px]">
-        <svg viewBox="0 0 320 320" className="block w-full" role="img" aria-label="Indicator breakdown chart">
+        <svg viewBox="-20 -20 360 360" className="block w-full" role="img" aria-label="Indicator breakdown chart">
           {/* rings */}
           {[1, 2, 3, 4].map((step) => (
             <circle
