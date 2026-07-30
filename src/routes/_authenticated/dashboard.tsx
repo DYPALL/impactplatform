@@ -349,7 +349,16 @@ function AreaCard({
                         Continue
                       </Link>
                     )}
+                    <button
+                      type="button"
+                      aria-label={`Delete assessment ${idx + 1}`}
+                      onClick={() => onDelete(it.id)}
+                      className="rounded-full p-2 text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-red-600"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
+
                 </li>
               ))}
             </ul>
