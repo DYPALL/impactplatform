@@ -179,10 +179,10 @@ function Dashboard() {
                     {AREAS.map((a) => (
                       <div
                         key={a.key}
-                        className="rounded-2xl px-3 py-2.5 text-center md:px-4 md:py-3.5 lg:px-5 lg:py-4"
+                        className="min-w-0 overflow-hidden rounded-2xl px-3 py-2.5 text-center md:px-4 md:py-3.5 lg:px-5 lg:py-4"
                         style={{ backgroundColor: a.softBg }}
                       >
-                        <p className="text-[11px] font-semibold leading-tight md:text-[13px] lg:text-[14px]" style={{ color: a.softText }}>
+                        <p className="break-words text-[11px] font-semibold leading-tight md:text-[13px] lg:text-[14px]" style={{ color: a.softText }}>
                           {a.title}
                         </p>
                         <p className="mt-1.5 text-[24px] font-extrabold md:mt-2 md:text-[28px] lg:text-[32px]" style={{ color: a.softText }}>
