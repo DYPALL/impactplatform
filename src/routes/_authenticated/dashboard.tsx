@@ -281,51 +281,82 @@ function AreaCard({
       </button>
 
       {expanded && (
-        <div className="mt-3 rounded-2xl border border-dashed border-black/10 bg-[color:var(--impact-surface-muted,#f4f7f7)] p-4">
+        <div className="mt-3 overflow-hidden rounded-2xl ring-1 ring-black/5">
+          <div
+            className="flex items-center justify-between gap-3 px-4 py-3"
+            style={{ backgroundColor: area.softBg }}
+          >
+            <span
+              className="inline-flex items-center rounded-full border px-3 py-1 text-[12px] font-bold"
+              style={{ borderColor: area.softText, color: area.softText }}
+            >
+              Completed questionnaires ({items.filter((i) => i.status === "completed").length})
+            </span>
+          </div>
+
           {items.length === 0 ? (
-            <p className="p-1 text-center text-[13px] text-[color:var(--impact-ink-muted)]">
+            <p className="bg-white p-4 text-center text-[13px] text-[color:var(--impact-ink-muted)]">
               There are no questionnaires done on this area yet.
             </p>
           ) : (
-            <ul className="space-y-2">
-              {items.map((it) => (
+            <ul className="divide-y divide-black/5 bg-white">
+              {items.map((it, idx) => (
                 <li
                   key={it.id}
-                  className="flex items-center justify-between gap-3 rounded-xl bg-white px-4 py-3 ring-1 ring-black/5"
+                  className="flex flex-wrap items-center justify-between gap-3 px-4 py-4"
                 >
                   <div className="min-w-0">
-                    <p className="text-[13px] font-bold text-[color:var(--impact-ink)]">
-                      {it.status === "completed" ? "Completed" : `In progress — question ${it.current_step}`}
+                    <p className="text-[15px] font-extrabold text-[color:var(--impact-ink)]">
+                      Assessment {idx + 1}
                     </p>
                     <p className="text-[12px] text-[color:var(--impact-ink-muted)]">
-                      {new Date(it.completed_at ?? it.updated_at).toLocaleDateString()}
+                      Last updated:{" "}
+                      {new Date(it.completed_at ?? it.updated_at).toLocaleString(undefined, {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
                     </p>
                   </div>
-                  {it.status === "completed" ? (
-                    <Link
-                      to="/results/$id"
-                      params={{ id: it.id }}
-                      className="shrink-0 rounded-full px-4 py-2 text-[12px] font-bold text-white transition hover:opacity-90"
-                      style={{ backgroundColor: area.color }}
-                    >
-                      See results
-                    </Link>
-                  ) : (
-                    <Link
-                      to="/questionnaire/$area"
-                      params={{ area: area.key }}
-                      className="shrink-0 rounded-full border-2 px-4 py-2 text-[12px] font-bold transition"
-                      style={{ borderColor: area.color, color: area.color }}
-                    >
-                      Continue
-                    </Link>
-                  )}
+                  <div className="flex shrink-0 items-center gap-2">
+                    {it.status === "completed" ? (
+                      <>
+                        <Link
+                          to="/results/$id"
+                          params={{ id: it.id }}
+                          className="rounded-full border-2 px-4 py-2 text-[12px] font-bold transition hover:opacity-80"
+                          style={{ borderColor: area.color, color: area.color }}
+                        >
+                          See results
+                        </Link>
+                        <button
+                          type="button"
+                          className="rounded-full px-4 py-2 text-[12px] font-bold text-white transition hover:opacity-90"
+                          style={{ backgroundColor: area.color }}
+                        >
+                          + New action plan
+                        </button>
+                      </>
+                    ) : (
+                      <Link
+                        to="/questionnaire/$area"
+                        params={{ area: area.key }}
+                        className="rounded-full border-2 px-4 py-2 text-[12px] font-bold transition"
+                        style={{ borderColor: area.color, color: area.color }}
+                      >
+                        Continue
+                      </Link>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
           )}
         </div>
       )}
+
 
     </article>
   );
