@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      assessments: {
+        Row: {
+          answers: Json
+          area: Database["public"]["Enums"]["resource_area"]
+          completed_at: string | null
+          created_at: string
+          current_step: number
+          id: string
+          percentages: Json
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          area: Database["public"]["Enums"]["resource_area"]
+          completed_at?: string | null
+          created_at?: string
+          current_step?: number
+          id?: string
+          percentages?: Json
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          area?: Database["public"]["Enums"]["resource_area"]
+          completed_at?: string | null
+          created_at?: string
+          current_step?: number
+          id?: string
+          percentages?: Json
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       community_feedback: {
         Row: {
           area: Database["public"]["Enums"]["resource_area"]

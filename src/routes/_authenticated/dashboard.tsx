@@ -79,10 +79,20 @@ const AREAS: AreaDef[] = [
 ];
 
 
+type AssessmentRow = {
+  id: string;
+  area: AreaDef["key"];
+  status: string;
+  current_step: number;
+  completed_at: string | null;
+  updated_at: string;
+};
+
 function Dashboard() {
   const { user } = Route.useRouteContext() as { user: { id: string; email?: string } };
   const [profile, setProfile] = useState<Profile | null>(null);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [assessments, setAssessments] = useState<AssessmentRow[]>([]);
 
   useEffect(() => {
     supabase
@@ -91,18 +101,29 @@ function Dashboard() {
       .eq("id", user.id)
       .maybeSingle()
       .then(({ data }) => setProfile(data as Profile | null));
+
+    supabase
+      .from("assessments")
+      .select("id, area, status, current_step, completed_at, updated_at")
+      .eq("user_id", user.id)
+      .order("updated_at", { ascending: false })
+      .then(({ data }) => setAssessments((data as AssessmentRow[]) ?? []));
   }, [user.id]);
 
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
 
-  // Real data — none until questionnaire feature ships.
-  const totals = { done: 0, plans: 0 };
+  const completed = assessments.filter((a) => a.status === "completed");
+  const totals = { done: completed.length, plans: 0 };
   const perArea: Record<AreaDef["key"], number> = {
     representativeness: 0,
     governance: 0,
     empowerment: 0,
     results: 0,
   };
+  for (const a of completed) {
+    if (a.area in perArea) perArea[a.area] += 1;
+  }
+
 
   return (
     <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)]">
@@ -192,10 +213,12 @@ function Dashboard() {
             <AreaCard
               key={a.key}
               area={a}
+              items={assessments.filter((x) => x.area === a.key)}
               expanded={!!expanded[a.key]}
               onToggle={() => setExpanded((e) => ({ ...e, [a.key]: !e[a.key] }))}
             />
           ))}
+
         </div>
       </section>
     </div>
@@ -213,13 +236,16 @@ function StatTile({ value, label }: { value: number; label: string }) {
 
 function AreaCard({
   area,
+  items,
   expanded,
   onToggle,
 }: {
   area: AreaDef;
+  items: AssessmentRow[];
   expanded: boolean;
   onToggle: () => void;
 }) {
+
   return (
     <article className="rounded-3xl bg-white p-7 shadow-[0_2px_10px_rgba(0,0,0,0.04)] ring-1 ring-black/5">
       <span
@@ -255,10 +281,52 @@ function AreaCard({
       </button>
 
       {expanded && (
-        <div className="mt-3 rounded-2xl border border-dashed border-black/10 bg-[color:var(--impact-surface-muted,#f4f7f7)] p-5 text-center text-[13px] text-[color:var(--impact-ink-muted)]">
-          There are no questionnaires done on this area yet.
+        <div className="mt-3 rounded-2xl border border-dashed border-black/10 bg-[color:var(--impact-surface-muted,#f4f7f7)] p-4">
+          {items.length === 0 ? (
+            <p className="p-1 text-center text-[13px] text-[color:var(--impact-ink-muted)]">
+              There are no questionnaires done on this area yet.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {items.map((it) => (
+                <li
+                  key={it.id}
+                  className="flex items-center justify-between gap-3 rounded-xl bg-white px-4 py-3 ring-1 ring-black/5"
+                >
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-bold text-[color:var(--impact-ink)]">
+                      {it.status === "completed" ? "Completed" : `In progress — question ${it.current_step}`}
+                    </p>
+                    <p className="text-[12px] text-[color:var(--impact-ink-muted)]">
+                      {new Date(it.completed_at ?? it.updated_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  {it.status === "completed" ? (
+                    <Link
+                      to="/results/$id"
+                      params={{ id: it.id }}
+                      className="shrink-0 rounded-full px-4 py-2 text-[12px] font-bold text-white transition hover:opacity-90"
+                      style={{ backgroundColor: area.color }}
+                    >
+                      See results
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/questionnaire/$area"
+                      params={{ area: area.key }}
+                      className="shrink-0 rounded-full border-2 px-4 py-2 text-[12px] font-bold transition"
+                      style={{ borderColor: area.color, color: area.color }}
+                    >
+                      Continue
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
+
     </article>
   );
 }
