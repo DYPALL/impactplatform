@@ -242,14 +242,6 @@ function Dashboard() {
   );
 }
 
-function StatTile({ value, label }: { value: number; label: string }) {
-  return (
-    <div className="flex flex-col justify-center rounded-xl bg-white/15 p-3 text-center lg:rounded-2xl lg:p-4">
-      <p className="text-[34px] font-extrabold leading-none text-white lg:text-[44px]">{value}</p>
-      <p className="mt-1 text-[12px] text-white/80 lg:mt-2 lg:text-[13px]">{label}</p>
-    </div>
-  );
-}
 
 function AreaCard({
   area,
