@@ -56,11 +56,7 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
   const cx = 160;
   const cy = 160;
   const inner = 26;
-  const maxR = 132;
-  const avg =
-    results.length > 0
-      ? results.reduce((s, r) => s + (r.level + 1), 0) / results.length
-      : 0;
+  const maxR = 116;
 
   return (
     <div className="grid items-center gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
@@ -90,17 +86,27 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
             const r = inner + ((level + 1) / 4) * (maxR - inner);
             const from = -90 + i * 60 + 2;
             const to = -30 + i * 60 - 2;
-            const [lx, ly] = polar(cx, cy, inner + (maxR - inner) * 1.14, -60 + i * 60);
+            const color = LEVELS[level].color;
+            const [lx, ly] = polar(cx, cy, maxR + 26, -60 + i * 60);
             return (
               <g key={ind.code}>
-                <path d={sectorPath(cx, cy, r, from, to)} fill={LEVELS[level].color} opacity={0.92} />
+                <path d={sectorPath(cx, cy, r, from, to)} fill={color} opacity={0.92} />
                 <path d={sectorPath(cx, cy, r, from, to)} fill="none" stroke="#fff" strokeWidth="1.5" />
+                {/* code chip */}
+                <rect
+                  x={lx - 17}
+                  y={ly - 10}
+                  width={34}
+                  height={20}
+                  rx={10}
+                  fill={color}
+                />
                 <text
                   x={lx}
-                  y={ly}
+                  y={ly + 0.5}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="fill-[#6b7280] text-[11px] font-bold"
+                  className="fill-white text-[11px] font-extrabold"
                 >
                   {ind.code}
                 </text>
@@ -109,14 +115,9 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
           })}
           {/* center */}
           <circle cx={cx} cy={cy} r={inner - 4} fill="#fff" />
-          <text x={cx} y={cy - 5} textAnchor="middle" className="fill-[#111827] text-[15px] font-extrabold">
-            {avg.toFixed(1)}
-          </text>
-          <text x={cx} y={cy + 9} textAnchor="middle" className="fill-[#9ca3af] text-[8px] font-bold">
-            AVG /4
-          </text>
         </svg>
       </div>
+
 
       {/* Legend */}
       <div className="grid gap-2 sm:grid-cols-2">
