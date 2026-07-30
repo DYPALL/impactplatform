@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, Settings, User } from "lucide-react";
+import { ChevronDown, Settings, Trash2, User } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
@@ -110,6 +110,12 @@ function Dashboard() {
       .then(({ data }) => setAssessments((data as AssessmentRow[]) ?? []));
   }, [user.id]);
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Delete this assessment? This cannot be undone.")) return;
+    const { error } = await supabase.from("assessments").delete().eq("id", id);
+    if (!error) setAssessments((rows) => rows.filter((r) => r.id !== id));
+  };
+
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
 
   const completed = assessments.filter((a) => a.status === "completed");
@@ -216,6 +222,7 @@ function Dashboard() {
               items={assessments.filter((x) => x.area === a.key)}
               expanded={!!expanded[a.key]}
               onToggle={() => setExpanded((e) => ({ ...e, [a.key]: !e[a.key] }))}
+              onDelete={handleDelete}
             />
           ))}
 
@@ -239,11 +246,13 @@ function AreaCard({
   items,
   expanded,
   onToggle,
+  onDelete,
 }: {
   area: AreaDef;
   items: AssessmentRow[];
   expanded: boolean;
   onToggle: () => void;
+  onDelete: (id: string) => void;
 }) {
 
   return (
@@ -265,8 +274,9 @@ function AreaCard({
         className="mt-5 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-[14px] font-bold text-white transition hover:opacity-90"
         style={{ backgroundColor: area.color }}
       >
-        Start a New Questionnaire
+        Start a new assessment
       </Link>
+
 
       <button
         type="button"
@@ -349,7 +359,16 @@ function AreaCard({
                         Continue
                       </Link>
                     )}
+                    <button
+                      type="button"
+                      aria-label={`Delete assessment ${idx + 1}`}
+                      onClick={() => onDelete(it.id)}
+                      className="rounded-full p-2 text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-red-600"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
+
                 </li>
               ))}
             </ul>
