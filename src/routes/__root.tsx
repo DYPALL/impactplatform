@@ -142,13 +142,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!pathname.startsWith("/auth") && <Header />}
+      {!pathname.startsWith("/auth") && !pathname.startsWith("/questionnaire") && <Header />}
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <div key={pathname} className="page-transition">
         <Outlet />
       </div>
 
-      <MobileBottomNav />
+      {!pathname.startsWith("/questionnaire") && <MobileBottomNav />}
     </QueryClientProvider>
   );
 }

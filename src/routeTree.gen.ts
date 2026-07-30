@@ -18,6 +18,7 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedQuestionnaireAreaRouteImport } from './routes/_authenticated/questionnaire.$area'
 import { Route as AuthenticatedAdminResourcesNewRouteImport } from './routes/_authenticated/admin/resources.new'
 import { Route as AuthenticatedAdminResourcesIdEditRouteImport } from './routes/_authenticated/admin/resources.$id.edit'
 
@@ -65,6 +66,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedQuestionnaireAreaRoute =
+  AuthenticatedQuestionnaireAreaRouteImport.update({
+    id: '/questionnaire/$area',
+    path: '/questionnaire/$area',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminResourcesNewRoute =
   AuthenticatedAdminResourcesNewRouteImport.update({
     id: '/resources/new',
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/questionnaire/$area': typeof AuthenticatedQuestionnaireAreaRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
   '/admin/resources/$id/edit': typeof AuthenticatedAdminResourcesIdEditRoute
@@ -97,6 +105,7 @@ export interface FileRoutesByTo {
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/questionnaire/$area': typeof AuthenticatedQuestionnaireAreaRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
   '/admin/resources/$id/edit': typeof AuthenticatedAdminResourcesIdEditRoute
@@ -111,6 +120,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/questionnaire/$area': typeof AuthenticatedQuestionnaireAreaRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
   '/_authenticated/admin/resources/$id/edit': typeof AuthenticatedAdminResourcesIdEditRoute
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/profile'
+    | '/questionnaire/$area'
     | '/admin/'
     | '/admin/resources/new'
     | '/admin/resources/$id/edit'
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/send-us-a-message'
     | '/dashboard'
     | '/profile'
+    | '/questionnaire/$area'
     | '/admin'
     | '/admin/resources/new'
     | '/admin/resources/$id/edit'
@@ -149,6 +161,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
+    | '/_authenticated/questionnaire/$area'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/resources/new'
     | '/_authenticated/admin/resources/$id/edit'
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/questionnaire/$area': {
+      id: '/_authenticated/questionnaire/$area'
+      path: '/questionnaire/$area'
+      fullPath: '/questionnaire/$area'
+      preLoaderRoute: typeof AuthenticatedQuestionnaireAreaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/resources/new': {
       id: '/_authenticated/admin/resources/new'
       path: '/resources/new'
@@ -267,12 +287,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedQuestionnaireAreaRoute: typeof AuthenticatedQuestionnaireAreaRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedQuestionnaireAreaRoute: AuthenticatedQuestionnaireAreaRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

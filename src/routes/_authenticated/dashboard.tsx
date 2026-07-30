@@ -233,13 +233,14 @@ function AreaCard({
         {area.description}
       </p>
 
-      <button
-        type="button"
+      <Link
+        to="/questionnaire/$area"
+        params={{ area: area.key }}
         className="mt-5 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-[14px] font-bold text-white transition hover:opacity-90"
         style={{ backgroundColor: area.color }}
       >
         Start a New Questionnaire
-      </button>
+      </Link>
 
       <button
         type="button"
