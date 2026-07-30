@@ -5,6 +5,8 @@ import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
+const adminCache: { userId: string | null; value: boolean } = { userId: null, value: false };
+
 export function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user, signOut } = useAuth();
