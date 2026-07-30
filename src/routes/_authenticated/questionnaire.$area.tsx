@@ -182,7 +182,7 @@ function QuestionnairePage() {
 
           <div className="ml-auto flex min-w-0 items-center gap-4">
             <span className="hidden whitespace-nowrap text-[13px] text-white/85 sm:inline">
-              {step < TOTAL_STEPS ? `Question ${step} of ${TOTAL_STEPS - 1}` : "Results"}
+              {step < TOTAL_STEPS ? `Question ${step} of ${TOTAL_STEPS - 1}` : "Assessment Complete"}
             </span>
             <div className="h-[7px] w-[120px] overflow-hidden rounded-full bg-white/25 sm:w-[240px]">
               <div
