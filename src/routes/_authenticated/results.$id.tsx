@@ -48,19 +48,22 @@ function SavedResultsPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFB]">
       <header className="sticky top-0 z-40" style={{ backgroundColor: PURPLE }}>
-        <div className="mx-auto flex h-[72px] max-w-[1440px] items-center gap-4 px-6 lg:px-10">
+        <div className="mx-auto grid h-[60px] max-w-[1440px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 md:h-[72px] md:px-6 lg:px-10">
           <Link
             to="/dashboard"
-            className="flex shrink-0 items-center gap-3 text-[15px] font-semibold text-white transition hover:opacity-80"
+            className="flex min-w-0 items-center gap-2 text-[14px] font-semibold text-white transition hover:opacity-80 md:gap-3 md:text-[15px]"
           >
-            <ArrowLeft size={20} />
-            <span>Back to Dashboard</span>
+            <ArrowLeft size={20} className="shrink-0" />
+            <span className="truncate">
+              <span className="md:hidden">Dashboard</span>
+              <span className="hidden md:inline">Back to Dashboard</span>
+            </span>
           </Link>
-          <span className="ml-auto text-[13px] text-white/85">Saved results</span>
+          <span className="shrink-0 text-[12px] text-white/85 md:text-[13px]">Saved results</span>
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1240px] px-5 pb-20 pt-10 lg:px-10">
+      <main className="mx-auto max-w-[1240px] px-4 pb-32 pt-6 md:px-5 md:pt-10 lg:px-10 lg:pb-20">
         {missing && (
           <p className="rounded-2xl bg-white p-6 text-[14px] text-[#6b7280] ring-1 ring-black/5">
             This assessment could not be found.
