@@ -52,6 +52,19 @@ function sectorPath(cx: number, cy: number, r: number, from: number, to: number)
   return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z`;
 }
 
+function trianglePoints(cx: number, cy: number, r: number, deg: number) {
+  const rad = (deg * Math.PI) / 180;
+  const rad120 = (120 * Math.PI) / 180;
+  const rad240 = (240 * Math.PI) / 180;
+  const x = cx + r * Math.cos(rad);
+  const y = cy + r * Math.sin(rad);
+  const x1 = cx + r * Math.cos(rad + rad120);
+  const y1 = cy + r * Math.sin(rad + rad120);
+  const x2 = cx + r * Math.cos(rad - rad120);
+  const y2 = cy + r * Math.sin(rad - rad120);
+  return `${x},${y} ${x1},${y1} ${x2},${y2}`;
+}
+
 function RoseChart({ results }: { results: IndicatorResult[] }) {
   const cx = 160;
   const cy = 160;
@@ -71,42 +84,46 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
               cy={cy}
               r={inner + (step / 4) * (maxR - inner)}
               fill="none"
-              stroke="#EDEAF3"
-              strokeWidth={step === 4 ? 1.5 : 1}
+              stroke="#E3DBF0"
+              strokeWidth={1}
+              strokeDasharray="4 4"
             />
           ))}
           {/* spokes */}
           {INDICATOR_CONTENT.map((ind, i) => {
             const [x, y] = polar(cx, cy, maxR, -90 + i * 60);
-            return <line key={ind.code} x1={cx} y1={cy} x2={x} y2={y} stroke="#F1EEF7" strokeWidth="1" />;
+            return (
+              <line
+                key={ind.code}
+                x1={cx}
+                y1={cy}
+                x2={x}
+                y2={y}
+                stroke="#E3DBF0"
+                strokeWidth="1"
+                strokeDasharray="4 4"
+              />
+            );
           })}
           {/* sectors */}
           {INDICATOR_CONTENT.map((ind, i) => {
             const level = results[i]?.level ?? 0;
             const r = inner + ((level + 1) / 4) * (maxR - inner);
-            const from = -90 + i * 60 + 2;
-            const to = -30 + i * 60 - 2;
+            const from = -90 + i * 60;
+            const to = -30 + i * 60;
             const color = LEVELS[level].color;
-            const [lx, ly] = polar(cx, cy, maxR + 26, -60 + i * 60);
+            const [tx, ty] = polar(cx, cy, maxR + 30, -60 + i * 60);
             return (
               <g key={ind.code}>
-                <path d={sectorPath(cx, cy, r, from, to)} fill={color} opacity={0.92} />
-                <path d={sectorPath(cx, cy, r, from, to)} fill="none" stroke="#fff" strokeWidth="1.5" />
-                {/* code chip */}
-                <rect
-                  x={lx - 17}
-                  y={ly - 10}
-                  width={34}
-                  height={20}
-                  rx={10}
-                  fill={color}
-                />
+                <path d={sectorPath(cx, cy, r, from, to)} fill={color} opacity={0.6} />
+                {/* purple triangle code badge */}
+                <polygon points={trianglePoints(tx, ty, 18, -60 + i * 60)} fill={PURPLE} />
                 <text
-                  x={lx}
-                  y={ly + 0.5}
+                  x={tx}
+                  y={ty + 1}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="fill-white text-[11px] font-extrabold"
+                  className="fill-white text-[10px] font-extrabold"
                 >
                   {ind.code}
                 </text>
