@@ -313,19 +313,8 @@ function SliderQuestion({
   na: boolean;
   onToggleNa: () => void;
 }) {
-  const [rawValue, setRawValue] = useState(value);
   const last = SCALE_LEVELS.length - 1;
-  const rounded = Math.max(0, Math.min(last, Math.round(rawValue)));
-  const level = SCALE_LEVELS[rounded];
-
-  useEffect(() => {
-    setRawValue(value);
-  }, [value]);
-
-  const snap = () => {
-    setRawValue(rounded);
-    onChange(rounded);
-  };
+  const level = SCALE_LEVELS[value];
 
   return (
     <section>
@@ -356,18 +345,36 @@ function SliderQuestion({
       </p>
 
       <div className={`mt-14 ${na ? "pointer-events-none opacity-40" : ""}`}>
-        <div className="relative">
-          {/* Track segments */}
-          <div className="flex h-[14px] w-full overflow-hidden rounded-full">
-            {SCALE_LEVELS.map((l) => (
-              <span key={l.label} className="h-full flex-1" style={{ backgroundColor: l.color }} />
-            ))}
+        <div className="relative h-[44px]">
+          {/* Visible coloured track segments — each is a large drop target */}
+          <div className="absolute left-0 right-0 top-1/2 flex h-[14px] w-full -translate-y-1/2 overflow-hidden rounded-full">
+            {SCALE_LEVELS.map((l, i) => {
+              const selected = value === i;
+              return (
+                <button
+                  key={l.label}
+                  type="button"
+                  aria-label={`Select level: ${l.label}`}
+                  onClick={() => onChange(i)}
+                  className="group relative flex-1 cursor-pointer transition focus:outline-none"
+                  style={{ backgroundColor: l.color }}
+                >
+                  {/* Larger invisible click area */}
+                  <span className="absolute inset-x-0 -top-[15px] -bottom-[15px] block" />
+                  {/* Selection outline */}
+                  <span
+                    className="pointer-events-none absolute inset-y-0 left-0 right-0 ring-2 ring-white/0 transition"
+                    style={{ right: i === last ? 0 : -1, boxShadow: selected ? `inset 0 0 0 2px rgba(255,255,255,0.55)` : "none" }}
+                  />
+                </button>
+              );
+            })}
           </div>
 
           {/* Thumb */}
           <div
             className="pointer-events-none absolute top-1/2 grid h-[34px] w-[34px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-xl bg-white shadow-[0_3px_12px_rgba(0,0,0,0.22)] transition-all duration-300 ease-out"
-            style={{ left: `${((rawValue + 0.5) / SCALE_LEVELS.length) * 100}%`, color: level.color }}
+            style={{ left: `${((value + 0.5) / SCALE_LEVELS.length) * 100}%`, color: level.color }}
           >
             <Play size={13} fill="currentColor" strokeWidth={0} />
           </div>
@@ -376,17 +383,11 @@ function SliderQuestion({
             type="range"
             min={0}
             max={last}
-            step={0.01}
-            value={rawValue}
-            onChange={(e) => {
-              setRawValue(Number(e.target.value));
-              onChange(Math.round(Number(e.target.value)));
-            }}
-            onPointerUp={snap}
-            onMouseUp={snap}
-            onTouchEnd={snap}
+            step={1}
+            value={value}
+            onChange={(e) => onChange(Number(e.target.value))}
             aria-label="Level of outreach and consultation"
-            className="absolute inset-x-0 top-1/2 h-[44px] w-full -translate-y-1/2 cursor-pointer opacity-0"
+            className="absolute inset-0 w-full cursor-pointer opacity-0"
           />
         </div>
 
@@ -395,12 +396,9 @@ function SliderQuestion({
             <button
               key={l.label}
               type="button"
-              onClick={() => {
-                setRawValue(i);
-                onChange(i);
-              }}
+              onClick={() => onChange(i)}
               className="flex-1 text-center text-[14px] font-semibold transition"
-              style={{ color: i === rounded ? l.color : "#9ca3af" }}
+              style={{ color: i === value ? l.color : "#9ca3af" }}
             >
               {l.label}
             </button>
