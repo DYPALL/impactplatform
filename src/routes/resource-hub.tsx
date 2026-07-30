@@ -24,6 +24,8 @@ type ResourceRow = {
   title: string;
   description: string;
   url: string | null;
+  image_url: string | null;
+
   resource_type: "publication" | "video" | "template" | "session_outline" | "document";
   area: "representativeness" | "governance" | "empowerment" | "results" | "general";
 };
