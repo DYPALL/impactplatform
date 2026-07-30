@@ -216,6 +216,7 @@ function Dashboard() {
               items={assessments.filter((x) => x.area === a.key)}
               expanded={!!expanded[a.key]}
               onToggle={() => setExpanded((e) => ({ ...e, [a.key]: !e[a.key] }))}
+              onDelete={handleDelete}
             />
           ))}
 
