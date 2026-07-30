@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Info, Play, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, Info, Play } from "lucide-react";
+import { ResultsStep } from "@/components/questionnaire/ResultsStep";
 
 export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
   head: () => ({
@@ -531,89 +532,3 @@ function SliderQuestion({
   );
 }
 
-
-function ResultsStep({ score, area }: { score: number; area: string }) {
-  const level = score >= 75 ? "Advanced" : score >= 45 ? "Developing" : "Emerging";
-  const tint = score >= 75 ? TEAL : score >= 45 ? ORANGE : PURPLE;
-
-  return (
-    <section>
-      <h1 className="text-[30px] font-extrabold leading-tight" style={{ color: PURPLE }}>
-        Your results — Area 1
-      </h1>
-      <p className="mt-2 text-[15px] text-[#6b7280]">
-        Mock scoring preview for the <span className="font-semibold">{area.replace(/-/g, " ")}</span> area. The final score
-        matrix will replace these values.
-      </p>
-
-      <div className="mt-8 grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
-        <div className="rounded-3xl bg-white p-8 text-center shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
-          <div
-            className="mx-auto grid h-[168px] w-[168px] place-items-center rounded-full"
-            style={{ background: `conic-gradient(${tint} ${score * 3.6}deg, #ECECF1 0deg)` }}
-          >
-            <div className="grid h-[132px] w-[132px] place-items-center rounded-full bg-white">
-              <div>
-                <p className="text-[40px] font-extrabold leading-none" style={{ color: tint }}>
-                  {score}
-                </p>
-                <p className="text-[12px] text-[#6b7280]">out of 100</p>
-              </div>
-            </div>
-          </div>
-          <p className="mt-5 text-[12px] font-bold uppercase tracking-wide text-[#6b7280]">Maturity level</p>
-          <p className="text-[22px] font-extrabold" style={{ color: tint }}>
-            {level}
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          <div className="rounded-3xl bg-white p-7 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
-            <h2 className="text-[17px] font-extrabold text-[#111827]">Indicator breakdown</h2>
-            <ul className="mt-4 space-y-4">
-              {[
-                { label: "1.1 Diversity of Membership", value: Math.round(score * 0.9) },
-                { label: "1.2 Representation of youth groups and interests", value: Math.min(100, Math.round(score * 1.1)) },
-                { label: "1.3 Outreach and Consultation", value: Math.min(100, Math.round(score * 0.95)) },
-                { label: "1.4 Legitimacy", value: Math.min(100, Math.round(score * 1.05)) },
-                { label: "1.5 Equality and non-discrimination", value: Math.round(score * 0.92) },
-                { label: "1.6 Accessibility and participation conditions", value: Math.min(100, Math.round(score * 0.98)) },
-              ].map((r) => (
-                <li key={r.label}>
-                  <div className="flex items-center justify-between text-[13px]">
-                    <span className="font-semibold text-[#1f2937]">{r.label}</span>
-                    <span className="font-bold" style={{ color: PURPLE }}>
-                      {r.value}%
-                    </span>
-                  </div>
-                  <div className="mt-2 h-[8px] overflow-hidden rounded-full bg-[#ECECF1]">
-                    <div className="h-full rounded-full" style={{ width: `${r.value}%`, backgroundColor: PURPLE }} />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="rounded-3xl bg-white p-7 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
-            <h2 className="text-[17px] font-extrabold text-[#111827]">Suggested next steps</h2>
-            <ul className="mt-4 space-y-3">
-              {[
-                "Map which youth groups are currently missing from your council.",
-                "Partner with at least one organisation working with underrepresented youth.",
-                "Set a simple outreach plan for the next recruitment round.",
-              ].map((t) => (
-                <li key={t} className="flex items-start gap-3 text-[14px] text-[#374151]">
-                  <Check size={16} className="mt-[3px] shrink-0" style={{ color: TEAL }} />
-                  {t}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-5 flex items-center gap-2 text-[12px] text-[#9ca3af]">
-              <RotateCcw size={13} /> Results are not saved yet — scoring logic comes with the score matrix.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
