@@ -135,45 +135,48 @@ function Dashboard() {
     <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)] px-6 pb-16 pt-8 lg:px-12">
       <div className="mx-auto max-w-[1280px] space-y-8">
         {/* Hero pill */}
-        <section className="overflow-hidden rounded-[40px] bg-[color:var(--impact-purple)] p-8 lg:p-12">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]">
+        <section className="overflow-hidden rounded-[40px] bg-[color:var(--impact-purple)] p-5 md:p-8 lg:p-12">
+          <div className="grid grid-cols-1 gap-5 md:gap-8 lg:grid-cols-[260px_1fr]">
             {/* Greeting */}
-            <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/25 text-white">
-                <User size={38} strokeWidth={1.5} />
+            <div className="flex flex-row items-center gap-4 text-left lg:flex-col lg:items-center lg:text-center">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-white/25 text-white lg:h-24 lg:w-24">
+                <User size={30} strokeWidth={1.5} className="lg:h-[38px] lg:w-[38px]" />
               </div>
-              <h1 className="mt-5 text-[26px] font-extrabold leading-tight text-white">
-                Hi, {firstName} 👋
-              </h1>
-              <p className="mt-1 text-[14px] text-white/75">How do you feel today?</p>
+              <div>
+                <h1 className="text-[22px] font-extrabold leading-tight text-white lg:text-[26px]">
+                  Hi, {firstName} 👋
+                </h1>
+                <p className="mt-0.5 text-[13px] text-white/75">How do you feel today?</p>
+              </div>
               <Link
                 to="/profile"
-                className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-white/30"
+                className="ml-auto inline-flex shrink-0 items-center gap-2 rounded-full bg-white/20 px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-white/30 lg:ml-0 lg:mt-5 lg:px-4 lg:py-2 lg:text-[13px]"
               >
-                <Settings size={16} />
-                Manage profile
+                <Settings size={14} />
+                <span className="hidden sm:inline">Manage profile</span>
+                <span className="sm:hidden">Profile</span>
               </Link>
             </div>
 
             {/* Progress summary card */}
-            <div className="rounded-3xl bg-white/10 p-6 backdrop-blur-sm">
-              <p className="mb-4 text-center text-[15px] font-semibold text-white">My Progress Summary</p>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr_1.6fr]">
+            <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm lg:rounded-3xl lg:p-6">
+              <p className="mb-3 text-center text-[14px] font-semibold text-white lg:mb-4 lg:text-[15px]">My Progress Summary</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1.6fr]">
                 <StatTile value={totals.done} label="Questionnaires done" />
                 <StatTile value={totals.plans} label="Action plans built" />
-                <div className="rounded-2xl bg-white/10 p-4">
-                  <p className="mb-3 text-center text-[13px] font-semibold text-white">Questionnaires per Area</p>
+                <div className="rounded-xl bg-white/10 p-3 lg:rounded-2xl lg:p-4">
+                  <p className="mb-2 text-center text-[12px] font-semibold text-white lg:mb-3 lg:text-[13px]">Questionnaires per Area</p>
                   <div className="grid grid-cols-2 gap-2">
                     {AREAS.map((a) => (
                       <div
                         key={a.key}
-                        className="rounded-xl px-3 py-2 text-center"
+                        className="rounded-xl px-2 py-1.5 text-center lg:px-3 lg:py-2"
                         style={{ backgroundColor: a.softBg }}
                       >
-                        <p className="text-[11px] font-semibold leading-tight" style={{ color: a.softText }}>
+                        <p className="text-[10px] font-semibold leading-tight lg:text-[11px]" style={{ color: a.softText }}>
                           {a.title}
                         </p>
-                        <p className="mt-1 text-[22px] font-extrabold" style={{ color: a.softText }}>
+                        <p className="mt-1 text-[20px] font-extrabold lg:text-[22px]" style={{ color: a.softText }}>
                           {perArea[a.key]}
                         </p>
                       </div>
