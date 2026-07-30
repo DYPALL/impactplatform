@@ -356,7 +356,7 @@ function SliderQuestion({
           {/* Thumb */}
           <div
             className="pointer-events-none absolute top-1/2 grid h-[30px] w-[30px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-lg bg-white shadow-[0_2px_8px_rgba(0,0,0,0.18)] transition-all duration-200"
-            style={{ left: `calc(${(value / last) * 100}% * 0.88 + 6%)`, color: level.color }}
+            style={{ left: `${((value + 0.5) / SCALE_LEVELS.length) * 100}%`, color: level.color }}
           >
             <Play size={13} fill="currentColor" strokeWidth={0} />
           </div>
