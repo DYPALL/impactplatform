@@ -236,13 +236,16 @@ function StatTile({ value, label }: { value: number; label: string }) {
 
 function AreaCard({
   area,
+  items,
   expanded,
   onToggle,
 }: {
   area: AreaDef;
+  items: AssessmentRow[];
   expanded: boolean;
   onToggle: () => void;
 }) {
+
   return (
     <article className="rounded-3xl bg-white p-7 shadow-[0_2px_10px_rgba(0,0,0,0.04)] ring-1 ring-black/5">
       <span
