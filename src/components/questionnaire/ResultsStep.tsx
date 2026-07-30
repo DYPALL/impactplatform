@@ -13,21 +13,22 @@ export type IndicatorResult = { pct: number; level: LevelKey };
 function Battery({ level }: { level: LevelKey }) {
   const color = LEVELS[level].color;
   return (
-    <span className="flex items-center gap-1.5">
+    <span className="flex items-center gap-2">
       <span
-        className="flex h-[22px] w-[86px] items-center gap-[3px] rounded-[5px] border-2 bg-white p-[3px]"
+        className="flex h-[34px] w-[132px] items-center gap-[5px] rounded-[8px] border-[3px] bg-white p-[4px]"
         style={{ borderColor: color }}
       >
         {[0, 1, 2, 3].map((i) => (
           <span
             key={i}
-            className="h-full flex-1 rounded-[2px] transition-colors"
+            className="h-full flex-1 rounded-[3px] transition-colors"
             style={{ backgroundColor: i <= level ? color : "transparent" }}
           />
         ))}
       </span>
-      <span className="h-[9px] w-[3px] rounded-r-sm" style={{ backgroundColor: color }} />
+      <span className="h-[14px] w-[5px] rounded-r-sm" style={{ backgroundColor: color }} />
     </span>
+
   );
 }
 

@@ -38,10 +38,11 @@ export const INDICATOR_CONTENT: IndicatorContent[] = [
       3: "Your LYC reflects the diversity of local youth, showing that inclusive recruitment and engagement mechanisms are in place. This gives your council a strong foundation for credibility and influence. Keep this momentum going and continue to welcome new voices.",
     },
     reflection: [
-      "Which groups of young people in your municipality are least present in your council today, and why?",
-      "What does your current recruitment process unintentionally make harder for some young people?",
-      "Who could help you reach the young people you are not reaching now?",
+      "How do you maintain ongoing relationships with the youth groups and movements represented?",
+      "How do you stay informed about new or emerging youth initiatives?",
+      "What practices help ensure that no single interest or group dominates the council's work?",
     ],
+
     actions: [
       "Map the local youth population, considering age, gender, cultural background, socioeconomic situation, geography, abilities, and life situations.",
       "Identify which types of young people are underrepresented or missing from your LYC.",
