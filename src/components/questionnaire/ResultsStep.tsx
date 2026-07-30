@@ -70,12 +70,21 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
   const cy = 160;
   const inner = 26;
   const maxR = 116;
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [selected, setSelected] = useState<number | null>(null);
+  const active = selected ?? hovered;
 
   return (
     <div className="grid items-center gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
       {/* Chart */}
       <div className="mx-auto w-full max-w-[320px]">
-        <svg viewBox="-20 -20 360 360" className="block w-full" role="img" aria-label="Indicator breakdown chart">
+        <svg
+          viewBox="-20 -20 360 360"
+          className="block w-full"
+          role="img"
+          aria-label="Indicator breakdown chart"
+          onMouseLeave={() => setHovered(null)}
+        >
           {/* rings */}
           {[1, 2, 3, 4].map((step) => (
             <circle
@@ -108,21 +117,43 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
           {/* sectors */}
           {INDICATOR_CONTENT.map((ind, i) => {
             const level = results[i]?.level ?? 0;
-            const r = inner + ((level + 1) / 4) * (maxR - inner);
+            const baseR = inner + ((level + 1) / 4) * (maxR - inner);
+            const isActive = active === i;
+            const isDimmed = active !== null && active !== i;
+            const r = isActive ? baseR + 10 : baseR;
             const from = -90 + i * 60;
             const to = -30 + i * 60;
             const color = LEVELS[level].color;
             const [tx, ty] = polar(cx, cy, maxR + 30, -60 + i * 60);
             return (
-              <g key={ind.code}>
-                <path d={sectorPath(cx, cy, r, from, to)} fill={color} opacity={0.6} />
+              <g
+                key={ind.code}
+                className="cursor-pointer transition-opacity duration-200"
+                onMouseEnter={() => setHovered(i)}
+                onClick={() => setSelected((s) => (s === i ? null : i))}
+                style={{ opacity: isDimmed ? 0.35 : 1 }}
+              >
+                <path
+                  d={sectorPath(cx, cy, r, from, to)}
+                  fill={color}
+                  opacity={isActive ? 0.95 : 0.6}
+                />
+                {isActive && (
+                  <path
+                    d={sectorPath(cx, cy, r, from, to)}
+                    fill="none"
+                    stroke="#fff"
+                    strokeWidth={2}
+                  />
+                )}
                 {/* rounded triangle code badge in level color */}
                 <polygon
-                  points={trianglePoints(tx, ty, 18, -60 + i * 60)}
+                  points={trianglePoints(tx, ty, isActive ? 21 : 18, -60 + i * 60)}
                   fill={color}
                   stroke={color}
                   strokeWidth={5}
                   strokeLinejoin="round"
+                  opacity={isActive ? 1 : 0.75}
                 />
                 <text
                   x={tx}
@@ -141,16 +172,22 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
         </svg>
       </div>
 
-
       {/* Legend */}
       <div className="grid gap-2 sm:grid-cols-2">
         {INDICATOR_CONTENT.map((ind, i) => {
           const level = results[i]?.level ?? 0;
           const c = LEVELS[level].color;
+          const isActive = active === i;
           return (
-            <div
+            <button
               key={ind.code}
-              className="flex items-center gap-3 rounded-xl border border-[#EDEAF3] bg-white px-3 py-2.5"
+              type="button"
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => setSelected((s) => (s === i ? null : i))}
+              className={`flex items-center gap-3 rounded-xl border bg-white px-3 py-2.5 text-left transition-all duration-200 cursor-pointer ${
+                isActive ? "border-[#502181] ring-1 ring-[#502181]" : "border-[#EDEAF3] hover:bg-[#F7F4FC]"
+              }`}
             >
               <Battery level={level} className="h-[22px]" />
               <div className="min-w-0">
@@ -161,7 +198,7 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
                   {LEVELS[level].label}
                 </span>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>
