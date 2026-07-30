@@ -16,12 +16,12 @@ export type IndicatorResult = { pct: number; level: LevelKey };
 
 const BATTERY_IMG = [batteryNotAtAll, batteryPartially, batteryMostly, batteryFully];
 
-function Battery({ level }: { level: LevelKey }) {
+function Battery({ level, className }: { level: LevelKey; className?: string }) {
   return (
     <img
       src={BATTERY_IMG[level].url}
       alt={`Performance level: ${LEVELS[level].label}`}
-      className="h-[38px] w-auto shrink-0"
+      className={`w-auto shrink-0 ${className ?? "h-[38px]"}`}
     />
   );
 }
@@ -75,7 +75,7 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
     <div className="grid items-center gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
       {/* Chart */}
       <div className="mx-auto w-full max-w-[320px]">
-        <svg viewBox="0 0 320 320" className="block w-full" role="img" aria-label="Indicator breakdown chart">
+        <svg viewBox="-20 -20 360 360" className="block w-full" role="img" aria-label="Indicator breakdown chart">
           {/* rings */}
           {[1, 2, 3, 4].map((step) => (
             <circle
@@ -150,25 +150,16 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
           return (
             <div
               key={ind.code}
-              className="flex items-start gap-2.5 rounded-xl border border-[#EDEAF3] bg-white px-3 py-2.5"
+              className="flex items-center gap-3 rounded-xl border border-[#EDEAF3] bg-white px-3 py-2.5"
             >
-              <span className="mt-[3px] h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: c }} />
+              <Battery level={level} className="h-[22px]" />
               <div className="min-w-0">
                 <p className="truncate text-[11px] font-extrabold leading-tight text-[#111827]">
                   {ind.code} {ind.title}
                 </p>
-                <div className="mt-1.5 flex items-center gap-2">
-                  <span className="h-[5px] w-16 overflow-hidden rounded-full bg-[#F1EEF7]">
-                    <span
-                      className="block h-full rounded-full"
-                      style={{ width: `${((level + 1) / 4) * 100}%`, backgroundColor: c }}
-                    />
-                  </span>
-                  <span className="text-[10px] font-bold" style={{ color: c }}>
-                    {LEVELS[level].label}
-                  </span>
-
-                </div>
+                <span className="text-[10px] font-bold" style={{ color: c }}>
+                  {LEVELS[level].label}
+                </span>
               </div>
             </div>
           );
