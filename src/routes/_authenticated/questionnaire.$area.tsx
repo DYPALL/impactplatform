@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Info, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Info, Pencil, Play, RotateCcw } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
   head: () => ({
@@ -45,7 +45,34 @@ const MATRIX_CRITERIA_2 = [
 ];
 
 
-const TOTAL_STEPS = 3;
+const SCALE_LEVELS = [
+  {
+    label: "Not at all",
+    color: "#E14B45",
+    soft: "#FDECEB",
+    text: "No systematic outreach or consultation with young people outside the LYC.",
+  },
+  {
+    label: "Partially",
+    color: "#E8913C",
+    soft: "#FDF1E5",
+    text: "Some young people are consulted occasionally, but engagement is irregular.",
+  },
+  {
+    label: "Mostly",
+    color: "#E5C13F",
+    soft: "#FCF7E4",
+    text: "Outreach and consultation take place regularly, but some groups remain less involved or feedback is not consistently used.",
+  },
+  {
+    label: "Fully",
+    color: "#33A06A",
+    soft: "#E9F6EF",
+    text: "A broad range of young people are regularly consulted, and their input informs priorities, decisions, and activities.",
+  },
+];
+
+const TOTAL_STEPS = 4;
 
 function QuestionnairePage() {
   const { area } = Route.useParams();
@@ -53,6 +80,8 @@ function QuestionnairePage() {
   const [step, setStep] = useState(1);
   const [matrix, setMatrix] = useState<Record<number, Answer>>({});
   const [matrix2, setMatrix2] = useState<Record<number, Answer>>({});
+  const [scale, setScale] = useState(0);
+  const [scaleNA, setScaleNA] = useState(false);
 
   const score = useMemo(() => {
     const yes = Object.values(matrix).filter((v) => v === "yes").length;
@@ -61,8 +90,10 @@ function QuestionnairePage() {
     const yes2 = Object.values(matrix2).filter((v) => v === "yes").length;
     const counted2 = Object.values(matrix2).filter((v) => v !== "na").length || 1;
     const base2 = (yes2 / counted2) * 100;
-    return Math.round((base + base2) / 2);
-  }, [matrix, matrix2]);
+    const base3 = scaleNA ? null : (scale / (SCALE_LEVELS.length - 1)) * 100;
+    const parts = base3 === null ? [base, base2] : [base, base2, base3];
+    return Math.round(parts.reduce((a, b) => a + b, 0) / parts.length);
+  }, [matrix, matrix2, scale, scaleNA]);
 
   const progress = step / TOTAL_STEPS;
 
@@ -114,7 +145,10 @@ function QuestionnairePage() {
             question="Does your LYC reflect the range of youth groups and interests present in your community?"
           />
         )}
-        {step === 3 && <ResultsStep score={score} area={area} />}
+        {step === 3 && (
+          <SliderQuestion value={scale} onChange={setScale} na={scaleNA} onToggleNa={() => setScaleNA((v) => !v)} />
+        )}
+        {step === 4 && <ResultsStep score={score} area={area} />}
 
         {/* Nav */}
         <div className="mt-10 flex items-center justify-between">
@@ -161,17 +195,22 @@ function IndicatorHeader({
   title,
   about,
   question,
+  action,
 }: {
   code: string;
   title: string;
   about: string;
   question: string;
+  action?: React.ReactNode;
 }) {
   return (
     <>
-      <h1 className="text-[30px] font-extrabold leading-tight" style={{ color: PURPLE }}>
-        {code} {title}
-      </h1>
+      <div className="flex items-start justify-between gap-4">
+        <h1 className="text-[30px] font-extrabold leading-tight" style={{ color: PURPLE }}>
+          {code} {title}
+        </h1>
+        {action}
+      </div>
 
       <div className="mt-6 rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
         <div className="flex items-start gap-3">
@@ -263,6 +302,105 @@ function MatrixQuestion({
   );
 }
 
+function SliderQuestion({
+  value,
+  onChange,
+  na,
+  onToggleNa,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  na: boolean;
+  onToggleNa: () => void;
+}) {
+  const level = SCALE_LEVELS[value];
+  const last = SCALE_LEVELS.length - 1;
+
+  return (
+    <section>
+      <IndicatorHeader
+        code="1.3"
+        title="Outreach and Consultation"
+        about="The LYC actively engages young people beyond its membership by seeking input, perspectives, and feedback from a wider group of young people. Effective outreach involves understanding which groups are not currently engaged and creating opportunities for them to contribute. This can include working with schools, community organizations, informal youth groups, and other local networks. The LYC establishes clear and accessible ways for young people to share their views, contribute to discussions, and influence priorities, ensuring that its work reflects the broader needs and experiences of young people in the community."
+        question="To what extent does your LYC engage and consult young people beyond its membership?"
+        action={
+          <button
+            type="button"
+            onClick={onToggleNa}
+            aria-pressed={na}
+            className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 px-4 py-2 text-[13px] font-bold transition"
+            style={{
+              borderColor: PURPLE,
+              color: na ? "#FFFFFF" : PURPLE,
+              backgroundColor: na ? PURPLE : "transparent",
+            }}
+          >
+            <Pencil size={14} /> Not Applicable
+          </button>
+        }
+      />
+
+      <p className="mt-8 text-[12px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
+        Use the slider to choose what fits best for your case
+      </p>
+
+      <div className={`mt-14 ${na ? "pointer-events-none opacity-40" : ""}`}>
+        <div className="relative">
+          {/* Track segments */}
+          <div className="flex h-[14px] w-full overflow-hidden rounded-full">
+            {SCALE_LEVELS.map((l) => (
+              <span key={l.label} className="h-full flex-1" style={{ backgroundColor: l.color }} />
+            ))}
+          </div>
+
+          {/* Thumb */}
+          <div
+            className="pointer-events-none absolute top-1/2 grid h-[30px] w-[30px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-lg bg-white shadow-[0_2px_8px_rgba(0,0,0,0.18)] transition-all duration-200"
+            style={{ left: `${((value + 0.5) / SCALE_LEVELS.length) * 100}%`, color: level.color }}
+          >
+            <Play size={13} fill="currentColor" strokeWidth={0} />
+          </div>
+
+          <input
+            type="range"
+            min={0}
+            max={last}
+            step={1}
+            value={value}
+            onChange={(e) => onChange(Number(e.target.value))}
+            aria-label="Level of outreach and consultation"
+            className="absolute inset-x-0 top-1/2 h-[34px] w-full -translate-y-1/2 cursor-pointer opacity-0"
+          />
+        </div>
+
+        <div className="mt-6 flex">
+          {SCALE_LEVELS.map((l, i) => (
+            <button
+              key={l.label}
+              type="button"
+              onClick={() => onChange(i)}
+              className="flex-1 text-center text-[14px] font-semibold transition"
+              style={{ color: i === value ? l.color : "#9ca3af" }}
+            >
+              {l.label}
+            </button>
+          ))}
+        </div>
+
+        <div
+          className="mt-10 rounded-2xl border p-6"
+          style={{ backgroundColor: level.soft, borderColor: level.color }}
+        >
+          <p className="text-[12px] font-bold uppercase tracking-wide" style={{ color: level.color }}>
+            Selected level: {level.label}
+          </p>
+          <p className="mt-2 text-[15px] leading-relaxed text-[#1f2937]">{level.text}</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ResultsStep({ score, area }: { score: number; area: string }) {
   const level = score >= 75 ? "Advanced" : score >= 45 ? "Developing" : "Emerging";
   const tint = score >= 75 ? TEAL : score >= 45 ? ORANGE : PURPLE;
@@ -305,6 +443,7 @@ function ResultsStep({ score, area }: { score: number; area: string }) {
               {[
                 { label: "1.1 Diversity of Membership", value: Math.round(score * 0.9) },
                 { label: "1.2 Representation of youth groups and interests", value: Math.min(100, Math.round(score * 1.1)) },
+                { label: "1.3 Outreach and Consultation", value: Math.min(100, Math.round(score * 0.95)) },
               ].map((r) => (
                 <li key={r.label}>
                   <div className="flex items-center justify-between text-[13px]">
