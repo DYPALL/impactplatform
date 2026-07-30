@@ -136,7 +136,7 @@ function Dashboard() {
       <div className="mx-auto max-w-[1280px] space-y-8">
         {/* Hero pill */}
         <section className="overflow-hidden rounded-[40px] bg-[color:var(--impact-purple)] p-5 md:p-8 lg:p-12">
-          <div className="grid grid-cols-1 gap-5 md:gap-8 lg:grid-cols-[260px_1fr]">
+          <div className="grid grid-cols-1 gap-5 md:gap-8 xl:grid-cols-[260px_1fr]">
             {/* Greeting */}
             <div className="flex items-start gap-4 text-left lg:flex-col lg:items-center lg:text-center">
               <div className="flex flex-col items-center gap-2">
