@@ -5,21 +5,33 @@ import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
+const adminCache: { userId: string | null; value: boolean } = { userId: null, value: false };
+
 export function Header() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { user, signOut } = useAuth();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(() => adminCache.value);
 
   useEffect(() => {
     if (!user) {
+      adminCache.value = false;
       setIsAdmin(false);
+      return;
+    }
+    if (adminCache.userId === user.id) {
+      setIsAdmin(adminCache.value);
       return;
     }
     supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", user.id)
-      .then(({ data }) => setIsAdmin((data ?? []).some((r) => r.role === "admin")));
+      .then(({ data }) => {
+        const admin = (data ?? []).some((r) => r.role === "admin");
+        adminCache.userId = user.id;
+        adminCache.value = admin;
+        setIsAdmin(admin);
+      });
   }, [user]);
 
   const isPublic = pathname !== "/dashboard" && !pathname.startsWith("/admin");

@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Save, User } from "lucide-react";
-import { Header } from "@/components/Header";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/profile")({
@@ -85,8 +84,6 @@ function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)]">
-      <Header />
-
       <section className="bg-[color:var(--impact-purple)] pb-12 pt-8">
         <div className="mx-auto flex max-w-[1280px] flex-col items-center px-6 text-center lg:px-12">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/25 text-white">

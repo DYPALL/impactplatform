@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Polygon } from "@/components/Polygon";
 import { supabase } from "@/integrations/supabase/client";
@@ -174,8 +173,6 @@ function ResourceHubPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
-
       <main>
         {/* Hero */}
         <section className="relative w-full overflow-hidden bg-[color:var(--impact-purple)]">
