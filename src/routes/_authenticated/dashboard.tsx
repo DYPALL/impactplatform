@@ -213,10 +213,12 @@ function Dashboard() {
             <AreaCard
               key={a.key}
               area={a}
+              items={assessments.filter((x) => x.area === a.key)}
               expanded={!!expanded[a.key]}
               onToggle={() => setExpanded((e) => ({ ...e, [a.key]: !e[a.key] }))}
             />
           ))}
+
         </div>
       </section>
     </div>
