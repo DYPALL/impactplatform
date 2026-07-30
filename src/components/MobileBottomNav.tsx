@@ -6,18 +6,18 @@ export function MobileBottomNav() {
   const { user } = useAuth();
 
   const itemBase =
-    "flex flex-col items-center justify-center gap-1 px-2 py-1 text-[10px] font-semibold leading-none whitespace-nowrap text-center transition-colors";
+    "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1 py-1 text-[9.5px] font-semibold leading-tight text-center transition-colors";
   const activeCls = "text-[color:var(--impact-purple)]";
   const inactiveCls = "text-neutral-600";
   const cls = (path: string) => `${itemBase} ${pathname === path ? activeCls : inactiveCls}`;
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-4 z-[100] flex justify-center px-4 md:hidden"
+      className="fixed inset-x-0 bottom-3 z-[100] flex justify-center px-3 md:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       aria-label="Mobile navigation"
     >
-      <div className="flex items-center gap-4 rounded-full border border-white/50 bg-white/80 px-5 py-3 shadow-[0_10px_30px_-10px_rgba(80,33,129,0.35)] backdrop-blur-xl">
+      <div className="flex w-full max-w-[430px] items-center justify-between gap-1 rounded-full border border-white/50 bg-white/80 px-2 py-2.5 shadow-[0_10px_30px_-10px_rgba(80,33,129,0.35)] backdrop-blur-xl">
         <Link to="/" className={cls("/")}>
           <svg width="22" height="22" viewBox="0 0 16 18" fill="none" aria-hidden>
             <path d="M0.872437 8.65795C0.872437 7.30418 0.872437 6.6273 1.14558 6.03216C1.41973 5.43702 1.93312 4.99739 2.96091 4.11615L3.9578 3.26182C5.81699 1.66979 6.74409 0.872284 7.85063 0.872284C8.95717 0.872284 9.88527 1.6688 11.7435 3.26082L12.7404 4.11515C13.7671 4.9964 14.2815 5.43602 14.5547 6.03116C14.8288 6.6263 14.8288 7.30319 14.8288 8.65696V12.8847C14.8288 14.7649 14.8288 15.7039 14.2446 16.2881C13.6605 16.8723 12.7214 16.8723 10.8413 16.8723H4.85998C2.97985 16.8723 2.04079 16.8723 1.45661 16.2881C0.872436 15.7039 0.872437 14.7649 0.872437 12.8847V8.65795Z" stroke="currentColor" strokeWidth="1.6" />
