@@ -116,8 +116,14 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
             return (
               <g key={ind.code}>
                 <path d={sectorPath(cx, cy, r, from, to)} fill={color} opacity={0.6} />
-                {/* purple triangle code badge */}
-                <polygon points={trianglePoints(tx, ty, 18, -60 + i * 60)} fill={PURPLE} />
+                {/* rounded triangle code badge in level color */}
+                <polygon
+                  points={trianglePoints(tx, ty, 18, -60 + i * 60)}
+                  fill={color}
+                  stroke={color}
+                  strokeWidth={5}
+                  strokeLinejoin="round"
+                />
                 <text
                   x={tx}
                   y={ty + 1}
