@@ -110,6 +110,12 @@ function Dashboard() {
       .then(({ data }) => setAssessments((data as AssessmentRow[]) ?? []));
   }, [user.id]);
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Delete this assessment? This cannot be undone.")) return;
+    const { error } = await supabase.from("assessments").delete().eq("id", id);
+    if (!error) setAssessments((rows) => rows.filter((r) => r.id !== id));
+  };
+
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
 
   const completed = assessments.filter((a) => a.status === "completed");
