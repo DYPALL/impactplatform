@@ -477,7 +477,7 @@ function SliderQuestion({
         <div className="relative h-[44px]">
           {/* Visible coloured track segments — each is a large drop target */}
           <div className="absolute left-0 right-0 top-1/2 flex h-[14px] w-full -translate-y-1/2 overflow-hidden rounded-full">
-            {SCALE_LEVELS.map((l, i) => (
+            {levels.map((l, i) => (
                 <button
                   key={l.label}
                   type="button"
@@ -495,7 +495,7 @@ function SliderQuestion({
           {/* Thumb */}
           <div
             className="pointer-events-none absolute top-1/2 grid h-[34px] w-[34px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-xl bg-white shadow-[0_3px_12px_rgba(0,0,0,0.22)] transition-all duration-300 ease-out"
-            style={{ left: `${((value + 0.5) / SCALE_LEVELS.length) * 100}%`, color: level.color }}
+            style={{ left: `${((value + 0.5) / levels.length) * 100}%`, color: level.color }}
           >
             <Play size={13} fill="currentColor" strokeWidth={0} />
           </div>
@@ -513,7 +513,7 @@ function SliderQuestion({
         </div>
 
         <div className="mt-6 flex">
-          {SCALE_LEVELS.map((l, i) => (
+          {levels.map((l, i) => (
             <button
               key={l.label}
               type="button"
