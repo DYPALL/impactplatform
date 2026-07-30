@@ -75,12 +75,12 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
   const active = selected ?? hovered;
 
   return (
-    <div className="grid items-center gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+    <div className="grid items-center gap-6 md:gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
       {/* Chart */}
-      <div className="mx-auto w-full max-w-[320px]">
+      <div className="mx-auto w-full max-w-[260px] sm:max-w-[320px]">
         <svg
-          viewBox="-20 -20 360 360"
-          className="block w-full"
+          viewBox="-24 -24 368 368"
+          className="block w-full overflow-visible"
           role="img"
           aria-label="Indicator breakdown chart"
           onMouseLeave={() => setHovered(null)}
@@ -185,13 +185,13 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               onClick={() => setSelected((s) => (s === i ? null : i))}
-              className={`flex items-center gap-3 rounded-xl border bg-white px-3 py-2.5 text-left transition-all duration-200 cursor-pointer ${
+              className={`flex items-center gap-2.5 rounded-xl border bg-white px-2.5 py-2 text-left transition-all duration-200 cursor-pointer sm:gap-3 sm:px-3 sm:py-2.5 ${
                 isActive ? "border-[#502181] ring-1 ring-[#502181]" : "border-[#EDEAF3] hover:bg-[#F7F4FC]"
               }`}
             >
-              <Battery level={level} className="h-[22px]" />
-              <div className="min-w-0">
-                <p className="truncate text-[11px] font-extrabold leading-tight text-[#111827]">
+              <Battery level={level} className="h-[18px] sm:h-[22px]" />
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-extrabold leading-tight text-[#111827] line-clamp-2">
                   {ind.code} {ind.title}
                 </p>
                 <span className="text-[10px] font-bold" style={{ color: c }}>
@@ -202,6 +202,7 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
           );
         })}
       </div>
+
     </div>
   );
 }
@@ -257,17 +258,17 @@ function IndicatorCard({
   const [checked, setChecked] = useState<Record<number, boolean>>({});
 
   return (
-    <article className="rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+    <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
+      <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
         <div className="min-w-0">
-          <h3 className="text-[16px] font-extrabold text-[#111827]">
+          <h3 className="text-[15px] font-extrabold text-[#111827] sm:text-[16px]">
             {content.code} {content.title}
           </h3>
           <p className="mt-1 text-[12px] text-[#6b7280]">{content.question}</p>
         </div>
         <div className="flex items-center gap-3">
           <LevelPill level={result.level} />
-          <Battery level={result.level} />
+          <Battery level={result.level} className="h-[28px] sm:h-[38px]" />
         </div>
       </div>
 
@@ -380,15 +381,15 @@ export function ResultsStep({ percentages }: { percentages: number[] }) {
       </div>
 
       {/* Results overview */}
-      <div className="mt-7 rounded-2xl border border-[#E3DBF0] bg-[#F7F4FC] p-7">
+      <div className="mt-7 rounded-2xl border border-[#E3DBF0] bg-[#F7F4FC] p-4 sm:p-7">
         <h2 className="text-[17px] font-extrabold text-[#111827]">Results Overview</h2>
         <p className="mt-1 text-[12px] text-[#6b7280]">A quick snapshot of your performance across all indicators</p>
 
-        <div className="mt-5 rounded-xl bg-white p-4 ring-1 ring-black/5">
+        <div className="mt-5 rounded-xl bg-white p-3 ring-1 ring-black/5 sm:p-4">
           <RoseChart results={results} />
         </div>
 
-        <div className="mt-6 rounded-xl p-6" style={{ backgroundColor: PURPLE }}>
+        <div className="mt-6 rounded-xl p-5 sm:p-6" style={{ backgroundColor: PURPLE }}>
           <p className="text-[14px] font-extrabold text-white">Where to focus next</p>
           <p className="mt-1.5 text-[12px] leading-relaxed text-white/80">
             You're performing well in {best}, but should prioritize improving {weakest.join(", ")}.
