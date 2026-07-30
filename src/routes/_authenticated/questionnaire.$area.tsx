@@ -72,7 +72,60 @@ const SCALE_LEVELS = [
   },
 ];
 
-const TOTAL_STEPS = 4;
+const SCALE_LEVELS_14 = [
+  {
+    label: "Not at all",
+    color: "#E14B45",
+    soft: "#FDECEB",
+    text: "The LYC is largely unknown to young people or not perceived as representing them.",
+  },
+  {
+    label: "Partially",
+    color: "#E8913C",
+    soft: "#FDF1E5",
+    text: "Some young people are aware of the LYC or recognize certain members, but this is limited to specific groups or contexts.",
+  },
+  {
+    label: "Mostly",
+    color: "#E5C13F",
+    soft: "#FCF7E4",
+    text: "The LYC is generally known and recognized by young people as a relevant platform, although this recognition is not consistent across all groups.",
+  },
+  {
+    label: "Fully",
+    color: "#33A06A",
+    soft: "#E9F6EF",
+    text: "The LYC is widely recognized by young people as a credible and relevant platform that represents their views and interests.",
+  },
+];
+
+const MATRIX_CRITERIA_3 = [
+  "a) The LYC has agreed principles or guidelines on equality and non-discrimination",
+  "b) Information about how to join or apply is shared in a clear and accessible way",
+  "c) No young person is discouraged or excluded from participation due to identity, background, or personal circumstances",
+  "d) Access to membership is based on fair and transparent criteria",
+  "e) First contact with the LYC is respectful and welcoming",
+  "f) Members are treated equally in roles, responsibilities, and participation",
+  "g) The LYC reflects regularly on whether its practices create hidden barriers",
+  "h) The LYC responds appropriately when discrimination or unequal treatment occurs",
+];
+
+const MATRIX_CRITERIA_4 = [
+  "a) Meeting spaces are physically accessible, including for young people with disabilities",
+  "b) Online or hybrid participation options are available when needed",
+  "c) Support is provided to reduce transport or financial barriers where possible",
+  "d) Meeting times and formats consider young people’s school, work, and personal responsibilities",
+  "e) Communication uses clear and youth-friendly language",
+  "f) Information and documents are shared in advance and in accessible formats",
+  "g) Adjustments or support are provided for participants with specific needs",
+  "h) Digital tools used are accessible and easy to use",
+  "i) Accessibility conditions are reviewed and adapted based on feedback",
+];
+
+const EQUALITY_ABOUT =
+  "The LYC adopts and applies principles and practices that promote equality and non-discrimination, ensuring that all young people have fair opportunities to participate, regardless of their background, identity, or personal circumstances. This includes both formal aspects, such as clear and fair rules for access and participation, and informal aspects, such as the culture, behaviours, and dynamics within the LYC. The LYC aims to create an environment where diversity is respected, participation is encouraged, and all members feel safe, valued, and able to contribute without fear of exclusion, bias, or discrimination.";
+
+const TOTAL_STEPS = 7;
 
 function QuestionnairePage() {
   const { area } = Route.useParams();
@@ -80,20 +133,31 @@ function QuestionnairePage() {
   const [step, setStep] = useState(1);
   const [matrix, setMatrix] = useState<Record<number, Answer>>({});
   const [matrix2, setMatrix2] = useState<Record<number, Answer>>({});
+  const [matrix3, setMatrix3] = useState<Record<number, Answer>>({});
+  const [matrix4, setMatrix4] = useState<Record<number, Answer>>({});
   const [scale, setScale] = useState(0);
   const [scaleNA, setScaleNA] = useState(false);
+  const [scale14, setScale14] = useState(0);
+  const [scale14NA, setScale14NA] = useState(false);
 
   const score = useMemo(() => {
-    const yes = Object.values(matrix).filter((v) => v === "yes").length;
-    const counted = Object.values(matrix).filter((v) => v !== "na").length || 1;
-    const base = (yes / counted) * 100;
-    const yes2 = Object.values(matrix2).filter((v) => v === "yes").length;
-    const counted2 = Object.values(matrix2).filter((v) => v !== "na").length || 1;
-    const base2 = (yes2 / counted2) * 100;
-    const base3 = scaleNA ? null : (scale / (SCALE_LEVELS.length - 1)) * 100;
-    const parts = base3 === null ? [base, base2] : [base, base2, base3];
+    const ratio = (m: Record<number, Answer>) => {
+      const vals = Object.values(m);
+      const counted = vals.filter((v) => v !== "na").length;
+      if (!counted) return null;
+      return (vals.filter((v) => v === "yes").length / counted) * 100;
+    };
+    const parts = [
+      ratio(matrix),
+      ratio(matrix2),
+      scaleNA ? null : (scale / (SCALE_LEVELS.length - 1)) * 100,
+      scale14NA ? null : (scale14 / (SCALE_LEVELS_14.length - 1)) * 100,
+      ratio(matrix3),
+      ratio(matrix4),
+    ].filter((v): v is number => v !== null);
+    if (!parts.length) return 0;
     return Math.round(parts.reduce((a, b) => a + b, 0) / parts.length);
-  }, [matrix, matrix2, scale, scaleNA]);
+  }, [matrix, matrix2, matrix3, matrix4, scale, scaleNA, scale14, scale14NA]);
 
   const progress = step / TOTAL_STEPS;
 
@@ -156,7 +220,45 @@ function QuestionnairePage() {
             }}
           />
         )}
-        {step === 4 && <ResultsStep score={score} area={area} />}
+        {step === 4 && (
+          <SliderQuestion
+            value={scale14}
+            onChange={setScale14}
+            na={scale14NA}
+            onSkip={() => {
+              setScale14NA(true);
+              setStep((s) => s + 1);
+            }}
+            levels={SCALE_LEVELS_14}
+            code="1.4"
+            title="Legitimacy"
+            about={EQUALITY_ABOUT}
+            question="To what extent is your LYC recognized by young people as a legitimate platform for representing their views and interests?"
+          />
+        )}
+        {step === 5 && (
+          <MatrixQuestion
+            matrix={matrix3}
+            setMatrix={setMatrix3}
+            criteria={MATRIX_CRITERIA_3}
+            code="1.5"
+            title="Equality and non-discrimination"
+            about={EQUALITY_ABOUT}
+            question="Does your LYC ensure fair and non-discriminatory access to participation and membership?"
+          />
+        )}
+        {step === 6 && (
+          <MatrixQuestion
+            matrix={matrix4}
+            setMatrix={setMatrix4}
+            criteria={MATRIX_CRITERIA_4}
+            code="1.6"
+            title="Accessibility and participation conditions"
+            about="The LYC provides practical conditions that enable all young people to participate effectively in its activities. This includes ensuring that meetings, communication, and participation formats are accessible in terms of physical space, timing, language, and digital tools. The LYC aims to reduce practical barriers to participation by adapting formats and providing support where needed, so that young people can engage in ways that fit their circumstances."
+            question="Does your LYC provide accessible conditions that enable all young people to participate?"
+          />
+        )}
+        {step === TOTAL_STEPS && <ResultsStep score={score} area={area} />}
 
         {/* Nav */}
         <div className="mt-10 flex items-center justify-between">
@@ -326,22 +428,32 @@ function SliderQuestion({
   onChange,
   na,
   onSkip,
+  levels = SCALE_LEVELS,
+  code = "1.3",
+  title = "Outreach and Consultation",
+  about = "The LYC actively engages young people beyond its membership by seeking input, perspectives, and feedback from a wider group of young people. Effective outreach involves understanding which groups are not currently engaged and creating opportunities for them to contribute. This can include working with schools, community organizations, informal youth groups, and other local networks. The LYC establishes clear and accessible ways for young people to share their views, contribute to discussions, and influence priorities, ensuring that its work reflects the broader needs and experiences of young people in the community.",
+  question = "To what extent does your LYC engage and consult young people beyond its membership?",
 }: {
   value: number;
   onChange: (v: number) => void;
   na: boolean;
   onSkip: () => void;
+  levels?: typeof SCALE_LEVELS;
+  code?: string;
+  title?: string;
+  about?: string;
+  question?: string;
 }) {
-  const last = SCALE_LEVELS.length - 1;
-  const level = SCALE_LEVELS[value];
+  const last = levels.length - 1;
+  const level = levels[value];
 
   return (
     <section>
       <IndicatorHeader
-        code="1.3"
-        title="Outreach and Consultation"
-        about="The LYC actively engages young people beyond its membership by seeking input, perspectives, and feedback from a wider group of young people. Effective outreach involves understanding which groups are not currently engaged and creating opportunities for them to contribute. This can include working with schools, community organizations, informal youth groups, and other local networks. The LYC establishes clear and accessible ways for young people to share their views, contribute to discussions, and influence priorities, ensuring that its work reflects the broader needs and experiences of young people in the community."
-        question="To what extent does your LYC engage and consult young people beyond its membership?"
+        code={code}
+        title={title}
+        about={about}
+        question={question}
         action={
           <button
             type="button"
@@ -365,7 +477,7 @@ function SliderQuestion({
         <div className="relative h-[44px]">
           {/* Visible coloured track segments — each is a large drop target */}
           <div className="absolute left-0 right-0 top-1/2 flex h-[14px] w-full -translate-y-1/2 overflow-hidden rounded-full">
-            {SCALE_LEVELS.map((l, i) => (
+            {levels.map((l, i) => (
                 <button
                   key={l.label}
                   type="button"
@@ -383,7 +495,7 @@ function SliderQuestion({
           {/* Thumb */}
           <div
             className="pointer-events-none absolute top-1/2 grid h-[34px] w-[34px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-xl bg-white shadow-[0_3px_12px_rgba(0,0,0,0.22)] transition-all duration-300 ease-out"
-            style={{ left: `${((value + 0.5) / SCALE_LEVELS.length) * 100}%`, color: level.color }}
+            style={{ left: `${((value + 0.5) / levels.length) * 100}%`, color: level.color }}
           >
             <Play size={13} fill="currentColor" strokeWidth={0} />
           </div>
@@ -401,7 +513,7 @@ function SliderQuestion({
         </div>
 
         <div className="mt-6 flex">
-          {SCALE_LEVELS.map((l, i) => (
+          {levels.map((l, i) => (
             <button
               key={l.label}
               type="button"
@@ -472,6 +584,9 @@ function ResultsStep({ score, area }: { score: number; area: string }) {
                 { label: "1.1 Diversity of Membership", value: Math.round(score * 0.9) },
                 { label: "1.2 Representation of youth groups and interests", value: Math.min(100, Math.round(score * 1.1)) },
                 { label: "1.3 Outreach and Consultation", value: Math.min(100, Math.round(score * 0.95)) },
+                { label: "1.4 Legitimacy", value: Math.min(100, Math.round(score * 1.05)) },
+                { label: "1.5 Equality and non-discrimination", value: Math.round(score * 0.92) },
+                { label: "1.6 Accessibility and participation conditions", value: Math.min(100, Math.round(score * 0.98)) },
               ].map((r) => (
                 <li key={r.label}>
                   <div className="flex items-center justify-between text-[13px]">
