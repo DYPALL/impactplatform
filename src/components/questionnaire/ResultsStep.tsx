@@ -75,12 +75,12 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
   const active = selected ?? hovered;
 
   return (
-    <div className="grid items-center gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+    <div className="grid items-center gap-6 md:gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
       {/* Chart */}
-      <div className="mx-auto w-full max-w-[320px]">
+      <div className="mx-auto w-full max-w-[260px] sm:max-w-[320px]">
         <svg
-          viewBox="-20 -20 360 360"
-          className="block w-full"
+          viewBox="-24 -24 368 368"
+          className="block w-full overflow-visible"
           role="img"
           aria-label="Indicator breakdown chart"
           onMouseLeave={() => setHovered(null)}
