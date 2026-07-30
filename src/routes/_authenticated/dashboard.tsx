@@ -170,7 +170,7 @@ function Dashboard() {
             {/* Progress summary card */}
             <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm md:p-5 lg:rounded-3xl lg:p-6">
               <p className="mb-3 text-center text-[13px] font-semibold text-white md:mb-4 md:text-[15px] lg:text-[16px]">My Progress Summary</p>
-              <div className="grid grid-cols-1 gap-3 xl:grid-cols-[1fr_1fr_2fr]">
+              <div className="grid grid-cols-1 gap-3 xl:grid-cols-[1fr_1fr_2.2fr]">
                 <StatTile value={totals.done} label="Questionnaires done" />
                 <StatTile value={totals.plans} label="Action plans built" />
                 <div className="rounded-2xl bg-white/10 p-3 md:p-4 lg:rounded-2xl lg:p-5">
