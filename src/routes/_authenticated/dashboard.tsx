@@ -138,19 +138,20 @@ function Dashboard() {
         <section className="overflow-hidden rounded-[40px] bg-[color:var(--impact-purple)] p-5 md:p-8 lg:p-12">
           <div className="grid grid-cols-1 gap-5 md:gap-8 lg:grid-cols-[260px_1fr]">
             {/* Greeting */}
-            <div className="flex flex-row items-center gap-4 text-left lg:flex-col lg:items-center lg:text-center">
+            <div className="flex items-start gap-4 text-left lg:flex-col lg:items-center lg:text-center">
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-white/25 text-white lg:h-24 lg:w-24">
                 <User size={30} strokeWidth={1.5} className="lg:h-[38px] lg:w-[38px]" />
               </div>
-              <div>
+              <div className="min-w-0 flex-1">
                 <h1 className="text-[22px] font-extrabold leading-tight text-white lg:text-[26px]">
-                  Hi, {firstName} 👋
+                  <span className="block">Hi,</span>
+                  <span className="block">{firstName} 👋</span>
                 </h1>
-                <p className="mt-0.5 text-[13px] text-white/75">How do you feel today?</p>
+                <p className="mt-1 text-[13px] text-white/75">How do you feel today?</p>
               </div>
               <Link
                 to="/profile"
-                className="ml-auto inline-flex shrink-0 items-center gap-2 rounded-full bg-white/20 px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-white/30 lg:ml-0 lg:mt-5 lg:px-4 lg:py-2 lg:text-[13px]"
+                className="inline-flex shrink-0 items-center gap-2 self-center rounded-full bg-white/20 px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-white/30 lg:mt-5 lg:px-4 lg:py-2 lg:text-[13px]"
               >
                 <Settings size={14} />
                 <span className="hidden sm:inline">Manage profile</span>
