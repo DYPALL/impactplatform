@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Info, Play } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { ResultsStep } from "@/components/questionnaire/ResultsStep";
+
 
 export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
   head: () => ({
