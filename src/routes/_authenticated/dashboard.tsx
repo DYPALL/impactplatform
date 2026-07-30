@@ -182,7 +182,7 @@ function Dashboard() {
                         className="min-w-0 overflow-hidden rounded-2xl px-1.5 py-2.5 text-center sm:px-2 md:px-3 md:py-3.5 lg:px-4 lg:py-4"
                         style={{ backgroundColor: a.softBg }}
                       >
-                        <p className="line-clamp-2 break-words text-balance text-[10px] font-semibold leading-tight sm:text-[11px] md:text-[12px] lg:text-[13px]" style={{ color: a.softText }}>
+                        <p className="line-clamp-2 text-balance text-[10px] font-semibold leading-tight sm:text-[11px] md:text-[12px] xl:text-[12px]" style={{ color: a.softText }}>
                           {a.title}
                         </p>
                         <p className="mt-1.5 text-[24px] font-extrabold md:mt-2 md:text-[28px] lg:text-[32px]" style={{ color: a.softText }}>
