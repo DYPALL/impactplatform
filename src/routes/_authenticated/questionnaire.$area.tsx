@@ -146,7 +146,15 @@ function QuestionnairePage() {
           />
         )}
         {step === 3 && (
-          <SliderQuestion value={scale} onChange={setScale} na={scaleNA} onToggleNa={() => setScaleNA((v) => !v)} />
+          <SliderQuestion
+            value={scale}
+            onChange={setScale}
+            na={scaleNA}
+            onSkip={() => {
+              setScaleNA(true);
+              setStep((s) => s + 1);
+            }}
+          />
         )}
         {step === 4 && <ResultsStep score={score} area={area} />}
 
