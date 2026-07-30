@@ -381,15 +381,15 @@ export function ResultsStep({ percentages }: { percentages: number[] }) {
       </div>
 
       {/* Results overview */}
-      <div className="mt-7 rounded-2xl border border-[#E3DBF0] bg-[#F7F4FC] p-7">
+      <div className="mt-7 rounded-2xl border border-[#E3DBF0] bg-[#F7F4FC] p-4 sm:p-7">
         <h2 className="text-[17px] font-extrabold text-[#111827]">Results Overview</h2>
         <p className="mt-1 text-[12px] text-[#6b7280]">A quick snapshot of your performance across all indicators</p>
 
-        <div className="mt-5 rounded-xl bg-white p-4 ring-1 ring-black/5">
+        <div className="mt-5 rounded-xl bg-white p-3 ring-1 ring-black/5 sm:p-4">
           <RoseChart results={results} />
         </div>
 
-        <div className="mt-6 rounded-xl p-6" style={{ backgroundColor: PURPLE }}>
+        <div className="mt-6 rounded-xl p-5 sm:p-6" style={{ backgroundColor: PURPLE }}>
           <p className="text-[14px] font-extrabold text-white">Where to focus next</p>
           <p className="mt-1.5 text-[12px] leading-relaxed text-white/80">
             You're performing well in {best}, but should prioritize improving {weakest.join(", ")}.
