@@ -162,7 +162,7 @@ function ResourceHubPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("resources")
-        .select("id,title,description,url,resource_type,area")
+        .select("id,title,description,url,image_url,resource_type,area")
         .eq("published", true)
         .order("created_at", { ascending: false });
       if (error) throw error;
