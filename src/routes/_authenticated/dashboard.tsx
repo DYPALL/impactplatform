@@ -136,7 +136,7 @@ function Dashboard() {
       <div className="mx-auto max-w-[1280px] space-y-8">
         {/* Hero pill */}
         <section className="overflow-hidden rounded-[40px] bg-[color:var(--impact-purple)] p-5 md:p-8 lg:p-12">
-          <div className="grid grid-cols-1 gap-5 md:gap-8 xl:grid-cols-[260px_1fr]">
+          <div className="grid grid-cols-1 gap-5 md:gap-8 lg:grid-cols-[260px_1fr]">
             {/* Greeting */}
             <div className="flex items-start gap-4 text-left lg:flex-col lg:items-center lg:text-center">
               <div className="flex flex-col items-center gap-2">
@@ -170,19 +170,19 @@ function Dashboard() {
             {/* Progress summary card */}
             <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm md:p-5 lg:rounded-3xl lg:p-6">
               <p className="mb-3 text-center text-[13px] font-semibold text-white md:mb-4 md:text-[15px] lg:text-[16px]">My Progress Summary</p>
-              <div className="grid grid-cols-1 gap-3 xl:grid-cols-[1fr_1fr_2.2fr]">
+              <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1fr_1.6fr]">
                 <StatTile value={totals.done} label="Questionnaires done" />
                 <StatTile value={totals.plans} label="Action plans built" />
                 <div className="rounded-2xl bg-white/10 p-3 md:p-4 lg:rounded-2xl lg:p-5">
                   <p className="mb-3 text-center text-[13px] font-semibold text-white md:mb-4 md:text-[15px] lg:text-[16px]">Questionnaires per Area</p>
-                  <div className="grid grid-cols-1 gap-3 xl:grid-cols-2 md:gap-4">
+                  <div className="grid grid-cols-2 gap-3 md:gap-4">
                     {AREAS.map((a) => (
                       <div
                         key={a.key}
-                        className="min-w-0 overflow-hidden rounded-2xl px-1.5 py-2.5 text-center sm:px-2 md:px-3 md:py-3.5 lg:px-4 lg:py-4"
+                        className="rounded-2xl px-3 py-2.5 text-center md:px-4 md:py-3.5 lg:px-5 lg:py-4"
                         style={{ backgroundColor: a.softBg }}
                       >
-                        <p className="line-clamp-2 text-[10px] font-semibold leading-tight sm:text-[11px] md:text-[12px] xl:text-[11px]" style={{ color: a.softText }}>
+                        <p className="text-[11px] font-semibold leading-tight md:text-[13px] lg:text-[14px]" style={{ color: a.softText }}>
                           {a.title}
                         </p>
                         <p className="mt-1.5 text-[24px] font-extrabold md:mt-2 md:text-[28px] lg:text-[32px]" style={{ color: a.softText }}>
