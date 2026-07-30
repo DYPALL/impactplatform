@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Info, Pencil, Play, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Info, Play, RotateCcw } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
   head: () => ({
@@ -146,7 +146,15 @@ function QuestionnairePage() {
           />
         )}
         {step === 3 && (
-          <SliderQuestion value={scale} onChange={setScale} na={scaleNA} onToggleNa={() => setScaleNA((v) => !v)} />
+          <SliderQuestion
+            value={scale}
+            onChange={setScale}
+            na={scaleNA}
+            onSkip={() => {
+              setScaleNA(true);
+              setStep((s) => s + 1);
+            }}
+          />
         )}
         {step === 4 && <ResultsStep score={score} area={area} />}
 
@@ -302,16 +310,27 @@ function MatrixQuestion({
   );
 }
 
+function NaIcon({ size = 14, className }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 14 14" className={className} fill="none">
+      <rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <text x="7" y="9.25" textAnchor="middle" fontSize="5.5" fontWeight="700" fill="currentColor">
+        N/A
+      </text>
+    </svg>
+  );
+}
+
 function SliderQuestion({
   value,
   onChange,
   na,
-  onToggleNa,
+  onSkip,
 }: {
   value: number;
   onChange: (v: number) => void;
   na: boolean;
-  onToggleNa: () => void;
+  onSkip: () => void;
 }) {
   const last = SCALE_LEVELS.length - 1;
   const level = SCALE_LEVELS[value];
@@ -326,16 +345,14 @@ function SliderQuestion({
         action={
           <button
             type="button"
-            onClick={onToggleNa}
-            aria-pressed={na}
+            onClick={onSkip}
             className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 px-4 py-2 text-[13px] font-bold transition"
             style={{
               borderColor: PURPLE,
-              color: na ? "#FFFFFF" : PURPLE,
-              backgroundColor: na ? PURPLE : "transparent",
+              color: PURPLE,
             }}
           >
-            <Pencil size={14} /> Not Applicable
+            <NaIcon size={14} /> Not Applicable
           </button>
         }
       />
