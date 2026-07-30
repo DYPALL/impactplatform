@@ -142,8 +142,9 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
                     />
                   </span>
                   <span className="text-[10px] font-bold" style={{ color: c }}>
-                    {level + 1}/4 · {LEVELS[level].label}
+                    {LEVELS[level].label}
                   </span>
+
                 </div>
               </div>
             </div>
