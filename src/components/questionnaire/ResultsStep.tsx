@@ -16,12 +16,12 @@ export type IndicatorResult = { pct: number; level: LevelKey };
 
 const BATTERY_IMG = [batteryNotAtAll, batteryPartially, batteryMostly, batteryFully];
 
-function Battery({ level }: { level: LevelKey }) {
+function Battery({ level, className }: { level: LevelKey; className?: string }) {
   return (
     <img
       src={BATTERY_IMG[level].url}
       alt={`Performance level: ${LEVELS[level].label}`}
-      className="h-[38px] w-auto shrink-0"
+      className={`w-auto shrink-0 ${className ?? "h-[38px]"}`}
     />
   );
 }
