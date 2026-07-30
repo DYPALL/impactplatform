@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Info, Play } from "lucide-react";
 import { ResultsStep } from "@/components/questionnaire/ResultsStep";
@@ -16,8 +16,6 @@ export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
 });
 
 const PURPLE = "#502181";
-const TEAL = "#219c9e";
-const ORANGE = "#f4a261";
 
 type Answer = "yes" | "no" | "na";
 
@@ -129,8 +127,6 @@ const EQUALITY_ABOUT =
 const TOTAL_STEPS = 7;
 
 function QuestionnairePage() {
-  const { area } = Route.useParams();
-  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [matrix, setMatrix] = useState<Record<number, Answer>>({});
   const [matrix2, setMatrix2] = useState<Record<number, Answer>>({});
