@@ -239,11 +239,13 @@ function AreaCard({
   items,
   expanded,
   onToggle,
+  onDelete,
 }: {
   area: AreaDef;
   items: AssessmentRow[];
   expanded: boolean;
   onToggle: () => void;
+  onDelete: (id: string) => void;
 }) {
 
   return (
@@ -265,8 +267,9 @@ function AreaCard({
         className="mt-5 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-[14px] font-bold text-white transition hover:opacity-90"
         style={{ backgroundColor: area.color }}
       >
-        Start a New Questionnaire
+        Start a new assessment
       </Link>
+
 
       <button
         type="button"
