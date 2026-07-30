@@ -127,6 +127,8 @@ const EQUALITY_ABOUT =
 const TOTAL_STEPS = 7;
 
 function QuestionnairePage() {
+  const { area } = Route.useParams();
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [matrix, setMatrix] = useState<Record<number, Answer>>({});
   const [matrix2, setMatrix2] = useState<Record<number, Answer>>({});
@@ -134,8 +136,45 @@ function QuestionnairePage() {
   const [matrix4, setMatrix4] = useState<Record<number, Answer>>({});
   const [scale, setScale] = useState(0);
   const [scaleNA, setScaleNA] = useState(false);
+  const [scaleTouched, setScaleTouched] = useState(false);
   const [scale14, setScale14] = useState(0);
   const [scale14NA, setScale14NA] = useState(false);
+  const [scale14Touched, setScale14Touched] = useState(false);
+  const [assessmentId, setAssessmentId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Resume the latest unfinished assessment for this area
+  useEffect(() => {
+    let active = true;
+    supabase
+      .from("assessments")
+      .select("id, current_step, answers")
+      .eq("area", area)
+      .eq("status", "in_progress")
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!active || !data) return;
+        const a = (data.answers ?? {}) as Record<string, unknown>;
+        setAssessmentId(data.id);
+        setStep(Math.min(Math.max(data.current_step ?? 1, 1), TOTAL_STEPS - 1));
+        setMatrix((a.matrix as Record<number, Answer>) ?? {});
+        setMatrix2((a.matrix2 as Record<number, Answer>) ?? {});
+        setMatrix3((a.matrix3 as Record<number, Answer>) ?? {});
+        setMatrix4((a.matrix4 as Record<number, Answer>) ?? {});
+        setScale((a.scale as number) ?? 0);
+        setScaleNA(Boolean(a.scaleNA));
+        setScaleTouched(Boolean(a.scaleTouched));
+        setScale14((a.scale14 as number) ?? 0);
+        setScale14NA(Boolean(a.scale14NA));
+        setScale14Touched(Boolean(a.scale14Touched));
+      });
+    return () => {
+      active = false;
+    };
+  }, [area]);
 
   const percentages = useMemo(() => {
     const ratio = (m: Record<number, Answer>) => {
@@ -154,6 +193,92 @@ function QuestionnairePage() {
     ];
   }, [matrix, matrix2, matrix3, matrix4, scale, scaleNA, scale14, scale14NA]);
 
+  const answersPayload = useMemo(
+    () => ({
+      matrix,
+      matrix2,
+      matrix3,
+      matrix4,
+      scale,
+      scaleNA,
+      scaleTouched,
+      scale14,
+      scale14NA,
+      scale14Touched,
+    }),
+    [matrix, matrix2, matrix3, matrix4, scale, scaleNA, scaleTouched, scale14, scale14NA, scale14Touched],
+  );
+
+  const persist = async (opts: { step: number; completed?: boolean }) => {
+    setSaving(true);
+    const { data: userRes } = await supabase.auth.getUser();
+    const userId = userRes.user?.id;
+    if (!userId) {
+      setSaving(false);
+      return null;
+    }
+    const payload = {
+      user_id: userId,
+      area: area as "representativeness" | "governance" | "empowerment" | "results" | "general",
+      status: opts.completed ? "completed" : "in_progress",
+      current_step: opts.step,
+      answers: answersPayload,
+      percentages,
+      completed_at: opts.completed ? new Date().toISOString() : null,
+    };
+    let id = assessmentId;
+    if (id) {
+      await supabase.from("assessments").update(payload).eq("id", id);
+    } else {
+      const { data } = await supabase.from("assessments").insert(payload).select("id").maybeSingle();
+      id = data?.id ?? null;
+      setAssessmentId(id);
+    }
+    setSaving(false);
+    return id;
+  };
+
+  const answeredCount = (m: Record<number, Answer>) => Object.keys(m).length;
+
+  const canAdvance = () => {
+    switch (step) {
+      case 1:
+        return answeredCount(matrix) > 0;
+      case 2:
+        return answeredCount(matrix2) > 0;
+      case 3:
+        return scaleNA || scaleTouched;
+      case 4:
+        return scale14NA || scale14Touched;
+      case 5:
+        return answeredCount(matrix3) > 0;
+      case 6:
+        return answeredCount(matrix4) > 0;
+      default:
+        return true;
+    }
+  };
+
+  const handleNext = async () => {
+    if (!canAdvance()) {
+      setError(
+        step === 3 || step === 4
+          ? "Please choose a level on the slider, or mark this indicator as Not Applicable."
+          : "Please answer at least one criterion before continuing.",
+      );
+      return;
+    }
+    setError(null);
+    const next = step + 1;
+    await persist({ step: next, completed: next === TOTAL_STEPS });
+    setStep(next);
+  };
+
+  const handleSaveAndQuit = async () => {
+    await persist({ step });
+    navigate({ to: "/dashboard" });
+  };
+
   const progress = step / TOTAL_STEPS;
 
 
@@ -169,12 +294,14 @@ function QuestionnairePage() {
             <ArrowLeft size={20} />
             <span className="hidden sm:inline">Back to Dashboard</span>
           </Link>
-          <Link
-            to="/dashboard"
-            className="shrink-0 rounded-full border border-white/70 px-4 py-1.5 text-[13px] font-bold text-white transition hover:bg-white/10"
+          <button
+            type="button"
+            onClick={handleSaveAndQuit}
+            disabled={saving}
+            className="shrink-0 rounded-full border border-white/70 px-4 py-1.5 text-[13px] font-bold text-white transition hover:bg-white/10 disabled:opacity-60"
           >
-            Save &amp; Quit
-          </Link>
+            {saving ? "Saving…" : "Save & Quit"}
+          </button>
 
           <div className="ml-auto flex min-w-0 items-center gap-4">
             <span className="hidden whitespace-nowrap text-[13px] text-white/85 sm:inline">
@@ -208,10 +335,17 @@ function QuestionnairePage() {
         {step === 3 && (
           <SliderQuestion
             value={scale}
-            onChange={setScale}
+            onChange={(v) => {
+              setScale(v);
+              setScaleTouched(true);
+              setScaleNA(false);
+              setError(null);
+            }}
             na={scaleNA}
-            onSkip={() => {
+            onSkip={async () => {
               setScaleNA(true);
+              setError(null);
+              await persist({ step: step + 1 });
               setStep((s) => s + 1);
             }}
           />
@@ -219,10 +353,17 @@ function QuestionnairePage() {
         {step === 4 && (
           <SliderQuestion
             value={scale14}
-            onChange={setScale14}
+            onChange={(v) => {
+              setScale14(v);
+              setScale14Touched(true);
+              setScale14NA(false);
+              setError(null);
+            }}
             na={scale14NA}
-            onSkip={() => {
+            onSkip={async () => {
               setScale14NA(true);
+              setError(null);
+              await persist({ step: step + 1 });
               setStep((s) => s + 1);
             }}
             levels={SCALE_LEVELS_14}
@@ -258,28 +399,39 @@ function QuestionnairePage() {
 
         {/* Nav */}
         {step < TOTAL_STEPS && (
-          <div className="mt-10 flex items-center justify-between">
-            {step > 1 ? (
+          <div className="mt-10">
+            {error && (
+              <p className="mb-4 rounded-xl bg-[#FDECEB] px-4 py-3 text-[13px] font-semibold text-[#B3382F]">
+                {error}
+              </p>
+            )}
+            <div className="flex items-center justify-between">
+              {step > 1 ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setError(null);
+                    setStep((s) => s - 1);
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 text-[14px] font-bold transition hover:bg-[#502181]/5"
+                  style={{ borderColor: PURPLE, color: PURPLE }}
+                >
+                  <ArrowLeft size={16} /> Previous
+                </button>
+              ) : (
+                <span />
+              )}
+
               <button
                 type="button"
-                onClick={() => setStep((s) => s - 1)}
-                className="inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 text-[14px] font-bold transition hover:bg-[#502181]/5"
-                style={{ borderColor: PURPLE, color: PURPLE }}
+                onClick={handleNext}
+                disabled={saving}
+                className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-[14px] font-bold text-white transition hover:opacity-90 disabled:opacity-60"
+                style={{ backgroundColor: PURPLE }}
               >
-                <ArrowLeft size={16} /> Previous
+                {step === TOTAL_STEPS - 1 ? "See results" : "Next"} <ArrowRight size={16} />
               </button>
-            ) : (
-              <span />
-            )}
-
-            <button
-              type="button"
-              onClick={() => setStep((s) => s + 1)}
-              className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-[14px] font-bold text-white transition hover:opacity-90"
-              style={{ backgroundColor: PURPLE }}
-            >
-              {step === TOTAL_STEPS - 1 ? "See results" : "Next"} <ArrowRight size={16} />
-            </button>
+            </div>
           </div>
         )}
 
@@ -287,6 +439,7 @@ function QuestionnairePage() {
     </div>
   );
 }
+
 
 function IndicatorHeader({
   code,
