@@ -428,22 +428,32 @@ function SliderQuestion({
   onChange,
   na,
   onSkip,
+  levels = SCALE_LEVELS,
+  code = "1.3",
+  title = "Outreach and Consultation",
+  about = "The LYC actively engages young people beyond its membership by seeking input, perspectives, and feedback from a wider group of young people. Effective outreach involves understanding which groups are not currently engaged and creating opportunities for them to contribute. This can include working with schools, community organizations, informal youth groups, and other local networks. The LYC establishes clear and accessible ways for young people to share their views, contribute to discussions, and influence priorities, ensuring that its work reflects the broader needs and experiences of young people in the community.",
+  question = "To what extent does your LYC engage and consult young people beyond its membership?",
 }: {
   value: number;
   onChange: (v: number) => void;
   na: boolean;
   onSkip: () => void;
+  levels?: typeof SCALE_LEVELS;
+  code?: string;
+  title?: string;
+  about?: string;
+  question?: string;
 }) {
-  const last = SCALE_LEVELS.length - 1;
-  const level = SCALE_LEVELS[value];
+  const last = levels.length - 1;
+  const level = levels[value];
 
   return (
     <section>
       <IndicatorHeader
-        code="1.3"
-        title="Outreach and Consultation"
-        about="The LYC actively engages young people beyond its membership by seeking input, perspectives, and feedback from a wider group of young people. Effective outreach involves understanding which groups are not currently engaged and creating opportunities for them to contribute. This can include working with schools, community organizations, informal youth groups, and other local networks. The LYC establishes clear and accessible ways for young people to share their views, contribute to discussions, and influence priorities, ensuring that its work reflects the broader needs and experiences of young people in the community."
-        question="To what extent does your LYC engage and consult young people beyond its membership?"
+        code={code}
+        title={title}
+        about={about}
+        question={question}
         action={
           <button
             type="button"
