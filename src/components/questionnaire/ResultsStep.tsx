@@ -56,78 +56,99 @@ function sectorPath(cx: number, cy: number, r: number, from: number, to: number)
   return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z`;
 }
 
-const LABEL_POS: { style: React.CSSProperties }[] = [
-  { style: { top: "2%", left: "53%" } },
-  { style: { top: "42%", left: "62%" } },
-  { style: { top: "78%", left: "53%" } },
-  { style: { top: "78%", right: "53%" } },
-  { style: { top: "42%", right: "62%" } },
-  { style: { top: "2%", right: "53%" } },
-];
-
 function RoseChart({ results }: { results: IndicatorResult[] }) {
-  const cx = 200;
-  const cy = 150;
-  const inner = 22;
-  const maxR = 112;
+  const cx = 160;
+  const cy = 160;
+  const inner = 26;
+  const maxR = 132;
+  const avg =
+    results.length > 0
+      ? results.reduce((s, r) => s + (r.level + 1), 0) / results.length
+      : 0;
 
   return (
-    <div className="relative mx-auto w-full max-w-[820px] py-2">
-      <svg viewBox="0 0 400 300" className="mx-auto block w-full max-w-[420px]" role="img" aria-label="Indicator breakdown chart">
-        {[0.35, 0.6, 0.85, 1].map((f) => (
-          <circle key={f} cx={cx} cy={cy} r={maxR * f} fill="none" stroke="#E9E6F0" strokeWidth="1" />
-        ))}
-        {INDICATOR_CONTENT.map((ind, i) => {
-          const level = results[i]?.level ?? 0;
-          const r = inner + ((level + 1) / 4) * (maxR - inner);
-          const from = -90 + i * 60 + 1.5;
-          const to = -30 + i * 60 - 1.5;
-          return (
-            <path
-              key={ind.code}
-              d={sectorPath(cx, cy, r, from, to)}
-              fill={LEVELS[level].color}
-              opacity={0.9}
+    <div className="grid items-center gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+      {/* Chart */}
+      <div className="mx-auto w-full max-w-[320px]">
+        <svg viewBox="0 0 320 320" className="block w-full" role="img" aria-label="Indicator breakdown chart">
+          {/* rings */}
+          {[1, 2, 3, 4].map((step) => (
+            <circle
+              key={step}
+              cx={cx}
+              cy={cy}
+              r={inner + (step / 4) * (maxR - inner)}
+              fill="none"
+              stroke="#EDEAF3"
+              strokeWidth={step === 4 ? 1.5 : 1}
             />
-          );
-        })}
-        <circle cx={cx} cy={cy} r="7" fill="#fff" stroke="#D8D3E4" strokeWidth="1.5" />
-      </svg>
+          ))}
+          {/* spokes */}
+          {INDICATOR_CONTENT.map((ind, i) => {
+            const [x, y] = polar(cx, cy, maxR, -90 + i * 60);
+            return <line key={ind.code} x1={cx} y1={cy} x2={x} y2={y} stroke="#F1EEF7" strokeWidth="1" />;
+          })}
+          {/* sectors */}
+          {INDICATOR_CONTENT.map((ind, i) => {
+            const level = results[i]?.level ?? 0;
+            const r = inner + ((level + 1) / 4) * (maxR - inner);
+            const from = -90 + i * 60 + 2;
+            const to = -30 + i * 60 - 2;
+            const [lx, ly] = polar(cx, cy, inner + (maxR - inner) * 1.14, -60 + i * 60);
+            return (
+              <g key={ind.code}>
+                <path d={sectorPath(cx, cy, r, from, to)} fill={LEVELS[level].color} opacity={0.92} />
+                <path d={sectorPath(cx, cy, r, from, to)} fill="none" stroke="#fff" strokeWidth="1.5" />
+                <text
+                  x={lx}
+                  y={ly}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="fill-[#6b7280] text-[11px] font-bold"
+                >
+                  {ind.code}
+                </text>
+              </g>
+            );
+          })}
+          {/* center */}
+          <circle cx={cx} cy={cy} r={inner - 4} fill="#fff" />
+          <text x={cx} y={cy - 5} textAnchor="middle" className="fill-[#111827] text-[15px] font-extrabold">
+            {avg.toFixed(1)}
+          </text>
+          <text x={cx} y={cy + 9} textAnchor="middle" className="fill-[#9ca3af] text-[8px] font-bold">
+            AVG /4
+          </text>
+        </svg>
+      </div>
 
-      {INDICATOR_CONTENT.map((ind, i) => {
-        const level = results[i]?.level ?? 0;
-        return (
-          <div
-            key={ind.code}
-            className="absolute hidden w-[168px] rounded-lg border bg-white px-2.5 py-1.5 shadow-[0_1px_4px_rgba(0,0,0,0.06)] md:block"
-            style={{ ...LABEL_POS[i].style, borderColor: LEVELS[level].color }}
-          >
-            <p className="text-[10px] font-extrabold leading-tight text-[#111827]">
-              {ind.code} {ind.title}
-            </p>
-            <p className="mt-0.5 flex items-center gap-1 text-[9px] font-semibold" style={{ color: LEVELS[level].color }}>
-              <span className="h-[5px] w-[5px] rounded-full" style={{ backgroundColor: LEVELS[level].color }} />
-              {level + 1}/4 · {LEVELS[level].label}
-            </p>
-          </div>
-        );
-      })}
-
-      <div className="mt-4 grid grid-cols-2 gap-2 md:hidden">
+      {/* Legend */}
+      <div className="grid gap-2 sm:grid-cols-2">
         {INDICATOR_CONTENT.map((ind, i) => {
           const level = results[i]?.level ?? 0;
+          const c = LEVELS[level].color;
           return (
             <div
               key={ind.code}
-              className="rounded-lg border bg-white px-2.5 py-1.5"
-              style={{ borderColor: LEVELS[level].color }}
+              className="flex items-start gap-2.5 rounded-xl border border-[#EDEAF3] bg-white px-3 py-2.5"
             >
-              <p className="text-[10px] font-extrabold leading-tight text-[#111827]">
-                {ind.code} {ind.title}
-              </p>
-              <p className="mt-0.5 text-[9px] font-semibold" style={{ color: LEVELS[level].color }}>
-                {level + 1}/4 · {LEVELS[level].label}
-              </p>
+              <span className="mt-[3px] h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: c }} />
+              <div className="min-w-0">
+                <p className="truncate text-[11px] font-extrabold leading-tight text-[#111827]">
+                  {ind.code} {ind.title}
+                </p>
+                <div className="mt-1.5 flex items-center gap-2">
+                  <span className="h-[5px] w-16 overflow-hidden rounded-full bg-[#F1EEF7]">
+                    <span
+                      className="block h-full rounded-full"
+                      style={{ width: `${((level + 1) / 4) * 100}%`, backgroundColor: c }}
+                    />
+                  </span>
+                  <span className="text-[10px] font-bold" style={{ color: c }}>
+                    {level + 1}/4 · {LEVELS[level].label}
+                  </span>
+                </div>
+              </div>
             </div>
           );
         })}
@@ -135,6 +156,7 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
     </div>
   );
 }
+
 
 /* -------------------------------- Flip card --------------------------------- */
 
