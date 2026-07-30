@@ -150,25 +150,16 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
           return (
             <div
               key={ind.code}
-              className="flex items-start gap-2.5 rounded-xl border border-[#EDEAF3] bg-white px-3 py-2.5"
+              className="flex items-center gap-3 rounded-xl border border-[#EDEAF3] bg-white px-3 py-2.5"
             >
-              <span className="mt-[3px] h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: c }} />
+              <Battery level={level} className="h-[22px]" />
               <div className="min-w-0">
                 <p className="truncate text-[11px] font-extrabold leading-tight text-[#111827]">
                   {ind.code} {ind.title}
                 </p>
-                <div className="mt-1.5 flex items-center gap-2">
-                  <span className="h-[5px] w-16 overflow-hidden rounded-full bg-[#F1EEF7]">
-                    <span
-                      className="block h-full rounded-full"
-                      style={{ width: `${((level + 1) / 4) * 100}%`, backgroundColor: c }}
-                    />
-                  </span>
-                  <span className="text-[10px] font-bold" style={{ color: c }}>
-                    {LEVELS[level].label}
-                  </span>
-
-                </div>
+                <span className="text-[10px] font-bold" style={{ color: c }}>
+                  {LEVELS[level].label}
+                </span>
               </div>
             </div>
           );
