@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ChevronDown, Settings, User } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { Header } from "@/components/Header";
 import { supabase } from "@/integrations/supabase/client";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 
@@ -107,8 +106,6 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)]">
-      <Header />
-
       {/* Hero band */}
       <section className="bg-[color:var(--impact-purple)] pb-16 pt-8">
         <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-8 px-6 lg:grid-cols-[260px_1fr] lg:px-12">

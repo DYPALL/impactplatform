@@ -9,7 +9,6 @@ import dypallLogo from "@/assets/DYPALL-logo.png.asset.json";
 import bataljongLogo from "@/assets/Bataljong-logo.png.asset.json";
 import fundacioLogo from "@/assets/Fundacio-logo.png.asset.json";
 import nuvaLogo from "@/assets/Nuva-logo.png.asset.json";
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Polygon } from "@/components/Polygon";
 
@@ -281,7 +280,6 @@ function Consortium() {
 function Landing() {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
       <main>
         <Hero />
         <HowItWorks />
