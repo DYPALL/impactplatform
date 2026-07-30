@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Info, Pencil, Play, RotateCcw } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
