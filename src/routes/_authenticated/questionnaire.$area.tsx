@@ -257,24 +257,24 @@ function QuestionnairePage() {
             question="Does your LYC provide accessible conditions that enable all young people to participate?"
           />
         )}
-        {step === TOTAL_STEPS && <ResultsStep score={score} area={area} />}
+        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} />}
 
         {/* Nav */}
-        <div className="mt-10 flex items-center justify-between">
-          {step > 1 ? (
-            <button
-              type="button"
-              onClick={() => setStep((s) => s - 1)}
-              className="inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 text-[14px] font-bold transition hover:bg-[#502181]/5"
-              style={{ borderColor: PURPLE, color: PURPLE }}
-            >
-              <ArrowLeft size={16} /> Previous
-            </button>
-          ) : (
-            <span />
-          )}
+        {step < TOTAL_STEPS && (
+          <div className="mt-10 flex items-center justify-between">
+            {step > 1 ? (
+              <button
+                type="button"
+                onClick={() => setStep((s) => s - 1)}
+                className="inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 text-[14px] font-bold transition hover:bg-[#502181]/5"
+                style={{ borderColor: PURPLE, color: PURPLE }}
+              >
+                <ArrowLeft size={16} /> Previous
+              </button>
+            ) : (
+              <span />
+            )}
 
-          {step < TOTAL_STEPS ? (
             <button
               type="button"
               onClick={() => setStep((s) => s + 1)}
@@ -283,17 +283,9 @@ function QuestionnairePage() {
             >
               {step === TOTAL_STEPS - 1 ? "See results" : "Next"} <ArrowRight size={16} />
             </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => navigate({ to: "/dashboard" })}
-              className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-[14px] font-bold text-white transition hover:opacity-90"
-              style={{ backgroundColor: PURPLE }}
-            >
-              Back to my assessments <ArrowRight size={16} />
-            </button>
-          )}
-        </div>
+          </div>
+        )}
+
       </main>
     </div>
   );
