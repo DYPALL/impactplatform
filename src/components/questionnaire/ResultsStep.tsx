@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, Info, ListChecks, RefreshCw } from "lucide-react";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
+import batteryNotAtAll from "@/assets/battery-not-at-all.png.asset.json";
+import batteryPartially from "@/assets/battery-partially.png.asset.json";
+import batteryMostly from "@/assets/battery-mostly.png.asset.json";
+import batteryFully from "@/assets/battery-fully.png.asset.json";
 import { INDICATOR_CONTENT, LEVELS, levelFromPct, type IndicatorContent, type LevelKey } from "./results-data";
 
 const PURPLE = "#502181";
@@ -10,27 +14,18 @@ export type IndicatorResult = { pct: number; level: LevelKey };
 
 /* ---------------------------------- Battery --------------------------------- */
 
-function Battery({ level }: { level: LevelKey }) {
-  const color = LEVELS[level].color;
-  return (
-    <span className="flex items-center gap-2">
-      <span
-        className="flex h-[34px] w-[132px] items-center gap-[5px] rounded-[8px] border-[3px] bg-white p-[4px]"
-        style={{ borderColor: color }}
-      >
-        {[0, 1, 2, 3].map((i) => (
-          <span
-            key={i}
-            className="h-full flex-1 rounded-[3px] transition-colors"
-            style={{ backgroundColor: i <= level ? color : "transparent" }}
-          />
-        ))}
-      </span>
-      <span className="h-[14px] w-[5px] rounded-r-sm" style={{ backgroundColor: color }} />
-    </span>
+const BATTERY_IMG = [batteryNotAtAll, batteryPartially, batteryMostly, batteryFully];
 
+function Battery({ level }: { level: LevelKey }) {
+  return (
+    <img
+      src={BATTERY_IMG[level].url}
+      alt={`Performance level: ${LEVELS[level].label}`}
+      className="h-[38px] w-auto shrink-0"
+    />
   );
 }
+
 
 function LevelPill({ level }: { level: LevelKey }) {
   const l = LEVELS[level];
