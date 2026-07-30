@@ -13,7 +13,7 @@ export function MobileBottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-3 z-[100] flex justify-center px-3 md:hidden"
+      className="fixed inset-x-0 bottom-3 z-[100] flex justify-center px-3 lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       aria-label="Mobile navigation"
     >

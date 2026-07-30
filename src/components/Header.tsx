@@ -58,7 +58,7 @@ export function Header() {
         {user && (
           <button
             onClick={() => signOut()}
-            className="absolute right-4 top-1/2 -translate-y-1/2 inline-flex items-center gap-1.5 rounded-full bg-[color:var(--impact-surface-muted)] px-3 py-2 text-[13px] font-semibold text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white md:hidden"
+            className="absolute right-4 top-1/2 -translate-y-1/2 inline-flex items-center gap-1.5 rounded-full bg-[color:var(--impact-surface-muted)] px-3 py-2 text-[13px] font-semibold text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white lg:hidden"
             aria-label="Sign out"
           >
             <LogOut size={16} />
@@ -66,7 +66,7 @@ export function Header() {
           </button>
         )}
 
-        <nav className="hidden flex-1 items-center justify-end md:flex">
+        <nav className="hidden flex-1 items-center justify-end lg:flex">
           <div className="flex items-center gap-7">
             <Link
               to="/"
