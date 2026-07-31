@@ -118,15 +118,15 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
   const style = typeStyle[resource.resource_type];
   return (
     <article className="flex flex-col overflow-hidden rounded-[16px] border border-[#e5e7eb] bg-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.05)]">
-      <div className="relative flex h-[220px] w-full items-center justify-center overflow-hidden" style={{ backgroundColor: style.bg }}>
+      <div className="relative flex min-h-[220px] w-full items-center justify-center overflow-hidden" style={{ backgroundColor: style.bg }}>
         {resource.image_url ? (
-          <img src={resource.image_url} alt={resource.title} loading="lazy" className="h-full w-full object-cover" />
+          <img src={resource.image_url} alt={resource.title} loading="lazy" className="mx-auto h-auto max-h-[280px] w-full object-contain" />
         ) : (
-          <>
+          <div className="flex h-[220px] items-center justify-center">
             {style.icon === "publication" && <PublicationIcon />}
             {style.icon === "video" && <VideoIcon />}
             {style.icon === "file" && <FileIcon />}
-          </>
+          </div>
         )}
       </div>
 
