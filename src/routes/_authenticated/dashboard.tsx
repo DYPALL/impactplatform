@@ -162,12 +162,7 @@ function Dashboard() {
   const completed = assessments.filter((a) => a.status === "completed");
   const inProgress = assessments.filter((a) => a.status !== "completed");
 
-  const openGuide = () => {
-    setGuideOpen(true);
-    requestAnimationFrame(() =>
-      guideRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
-    );
-  };
+  const openGuide = () => setGuideModalOpen(true);
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] lg:flex">
