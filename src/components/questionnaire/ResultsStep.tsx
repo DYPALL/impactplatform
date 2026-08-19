@@ -317,28 +317,50 @@ function IndicatorCard({
           </div>
 
           <div>
-            <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
-              <ListChecks size={15} style={{ color: PURPLE }} /> Recommended Action Steps
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
+                <ListChecks size={15} style={{ color: PURPLE }} /> Recommended Action Steps
+              </p>
+              <span className="text-[11px] font-semibold" style={{ color: PURPLE }}>
+                {Object.values(checked).filter(Boolean).length}/3 selected
+              </span>
+            </div>
+            <p className="mt-1.5 text-[12px] text-[#6b7280]">
+              Selected steps will form your custom Action Plan.
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
               <ul className="space-y-1">
-                {content.actions.map((a, i) => (
-                  <li key={a}>
-                    <label className="flex cursor-pointer items-start gap-3 rounded-lg px-2 py-2 transition hover:bg-white">
-                      <input
-                        type="checkbox"
-                        checked={!!checked[i]}
-                        onChange={() => setChecked((c) => ({ ...c, [i]: !c[i] }))}
-                        className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer rounded-[3px] border-2 border-[#C9CDD4] accent-[#502181]"
-                      />
-                      <span
-                        className={`text-[12px] leading-snug ${checked[i] ? "text-[#9ca3af] line-through" : "text-[#374151]"}`}
+                {content.actions.map((a, i) => {
+                  const selectedCount = Object.values(checked).filter(Boolean).length;
+                  const atLimit = !checked[i] && selectedCount >= 3;
+                  return (
+                    <li key={a}>
+                      <label
+                        className={`flex items-start gap-3 rounded-lg px-2 py-2 transition ${atLimit ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:bg-white"}`}
                       >
-                        {a}
-                      </span>
-                    </label>
-                  </li>
-                ))}
+                        <input
+                          type="checkbox"
+                          checked={!!checked[i]}
+                          disabled={atLimit}
+                          onChange={() =>
+                            setChecked((c) => {
+                              if (c[i]) return { ...c, [i]: false };
+                              const count = Object.values(c).filter(Boolean).length;
+                              if (count >= 3) return c;
+                              return { ...c, [i]: true };
+                            })
+                          }
+                          className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer rounded-[3px] border-2 border-[#C9CDD4] accent-[#502181] disabled:cursor-not-allowed"
+                        />
+                        <span
+                          className={`text-[12px] leading-snug ${checked[i] ? "text-[#9ca3af] line-through" : "text-[#374151]"}`}
+                        >
+                          {a}
+                        </span>
+                      </label>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
