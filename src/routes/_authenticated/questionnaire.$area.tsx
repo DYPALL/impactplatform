@@ -137,6 +137,7 @@ const TOTAL_STEPS = 7;
 
 function QuestionnairePage() {
   const { area } = Route.useParams();
+  const { id: routeId } = Route.useSearch();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [matrix, setMatrix] = useState<Record<number, Answer>>({});
@@ -150,40 +151,54 @@ function QuestionnairePage() {
   const [scale14NA, setScale14NA] = useState(false);
   const [scale14Touched, setScale14Touched] = useState(false);
   const [assessmentId, setAssessmentId] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Resume the latest unfinished assessment for this area
+  // Resume a specific assessment (?id=) or the latest unfinished one for this area
   useEffect(() => {
     let active = true;
-    supabase
-      .from("assessments")
-      .select("id, current_step, answers")
-      .eq("area", area as ResourceArea)
-      .eq("status", "in_progress")
-      .order("updated_at", { ascending: false })
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (!active || !data) return;
-        const a = (data.answers ?? {}) as Record<string, unknown>;
-        setAssessmentId(data.id);
-        setStep(Math.min(Math.max(data.current_step ?? 1, 1), TOTAL_STEPS - 1));
-        setMatrix((a.matrix as Record<number, Answer>) ?? {});
-        setMatrix2((a.matrix2 as Record<number, Answer>) ?? {});
-        setMatrix3((a.matrix3 as Record<number, Answer>) ?? {});
-        setMatrix4((a.matrix4 as Record<number, Answer>) ?? {});
-        setScale((a.scale as number) ?? 0);
-        setScaleNA(Boolean(a.scaleNA));
-        setScaleTouched(Boolean(a.scaleTouched));
-        setScale14((a.scale14 as number) ?? 0);
-        setScale14NA(Boolean(a.scale14NA));
-        setScale14Touched(Boolean(a.scale14Touched));
-      });
+    const query = routeId
+      ? supabase
+          .from("assessments")
+          .select("id, current_step, answers, status")
+          .eq("id", routeId)
+          .maybeSingle()
+      : supabase
+          .from("assessments")
+          .select("id, current_step, answers, status")
+          .eq("area", area as ResourceArea)
+          .eq("status", "in_progress")
+          .order("updated_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+    query.then(({ data }) => {
+      if (!active || !data) return;
+      const a = (data.answers ?? {}) as Record<string, unknown>;
+      setAssessmentId(data.id);
+      setIsEditing(data.status === "completed");
+      setStep(
+        data.status === "completed"
+          ? 1
+          : Math.min(Math.max(data.current_step ?? 1, 1), TOTAL_STEPS - 1),
+      );
+      setMatrix((a.matrix as Record<number, Answer>) ?? {});
+      setMatrix2((a.matrix2 as Record<number, Answer>) ?? {});
+      setMatrix3((a.matrix3 as Record<number, Answer>) ?? {});
+      setMatrix4((a.matrix4 as Record<number, Answer>) ?? {});
+      setScale((a.scale as number) ?? 0);
+      setScaleNA(Boolean(a.scaleNA));
+      setScaleTouched(Boolean(a.scaleTouched));
+      setScale14((a.scale14 as number) ?? 0);
+      setScale14NA(Boolean(a.scale14NA));
+      setScale14Touched(Boolean(a.scale14Touched));
+    });
     return () => {
       active = false;
     };
-  }, [area]);
+  }, [area, routeId]);
+
 
   const percentages = useMemo(() => {
     const ratio = (m: Record<number, Answer>) => {
