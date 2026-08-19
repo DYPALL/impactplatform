@@ -358,8 +358,8 @@ function AuthPage() {
 }
 
 function Field({
-  name, label, type = "text", placeholder, autoComplete,
-}: { name: string; label: string; type?: string; placeholder?: string; autoComplete?: string }) {
+  name, label, type = "text", placeholder, autoComplete, required = true,
+}: { name: string; label: string; type?: string; placeholder?: string; autoComplete?: string; required?: boolean }) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-[13px] font-bold text-[color:var(--impact-ink)]">{label}</span>
@@ -368,7 +368,7 @@ function Field({
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        required
+        required={required}
         className="w-full rounded-lg border border-black/15 bg-white px-3.5 py-2.5 text-[14px] text-[color:var(--impact-ink)] outline-none placeholder:text-[color:var(--impact-ink)]/30 focus:border-[color:var(--impact-purple)] focus:ring-2 focus:ring-[color:var(--impact-purple)]/20"
       />
     </label>
