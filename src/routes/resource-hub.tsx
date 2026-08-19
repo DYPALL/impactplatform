@@ -124,6 +124,16 @@ function ArrowRight({ color = "#502181" }: { color?: string }) {
   );
 }
 
+function SortIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M3 6H21" stroke="#502181" strokeWidth="2" strokeLinecap="round" />
+      <path d="M7 12H17" stroke="#502181" strokeWidth="2" strokeLinecap="round" />
+      <path d="M11 18H13" stroke="#502181" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function ResourceCard({ resource }: { resource: ResourceRow }) {
   const style = typeStyle[resource.resource_type];
   const year = resource.publication_date ? new Date(resource.publication_date).getFullYear() : null;
