@@ -107,6 +107,7 @@ export function ResourceForm({ mode, resourceId }: { mode: "create" | "edit"; re
     const payload = {
       title: title.trim(),
       description: description.trim(),
+      author: author.trim() || null,
       image_url: imageUrl,
       area,
       resource_type: type,
