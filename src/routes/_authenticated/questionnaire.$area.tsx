@@ -614,6 +614,16 @@ function SliderQuestion({
     <section>
       <IndicatorHeader code={code} title={title} about={about} question={question} />
 
+      <div className="mt-4 flex justify-end">
+        <button
+          type="button"
+          onClick={onSkip}
+          className="inline-flex items-center gap-2 rounded-full border border-[#d1d5db] bg-white px-4 py-2 text-[13px] font-semibold text-[#6b7280] transition hover:border-[#502181] hover:text-[#502181]"
+        >
+          Skip this question
+        </button>
+      </div>
+
       <p className="mt-8 text-[12px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
         Use the slider to choose what fits best for your case
       </p>
@@ -677,16 +687,6 @@ function SliderQuestion({
               {l.label}
             </button>
           ))}
-        </div>
-
-        <div className="mt-3 flex justify-end">
-          <button
-            type="button"
-            onClick={onSkip}
-            className="inline-flex items-center gap-2 rounded-full border border-[#d1d5db] bg-white px-4 py-2 text-[13px] font-semibold text-[#6b7280] transition hover:border-[#502181] hover:text-[#502181]"
-          >
-            Skip this question
-          </button>
         </div>
 
         <div
