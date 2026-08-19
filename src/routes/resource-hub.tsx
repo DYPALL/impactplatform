@@ -126,6 +126,12 @@ function ArrowRight({ color = "#502181" }: { color?: string }) {
 
 function ResourceCard({ resource }: { resource: ResourceRow }) {
   const style = typeStyle[resource.resource_type];
+  const year = resource.publication_date ? new Date(resource.publication_date).getFullYear() : null;
+  const metaParts = [
+    resource.author,
+    year ? `Published ${year}` : null,
+  ].filter(Boolean);
+
   return (
     <article className="flex flex-col overflow-hidden rounded-[16px] border border-[#e5e7eb] bg-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.05)]">
       <div className="relative flex min-h-[220px] w-full items-center justify-center overflow-hidden" style={{ backgroundColor: style.bg }}>
@@ -140,22 +146,31 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-[10px] p-[20px]">
+      <div className="flex flex-1 flex-col gap-[12px] p-[20px]">
         <span className="w-fit rounded-full border border-[#e5e7eb] bg-[#eee] px-[10px] py-[6px] text-[12px] font-bold text-[#444]">
           {typeLabel[resource.resource_type]}
         </span>
-        <h3 className="text-[18px] font-bold text-[#111827]">{resource.title}</h3>
-        <p className="flex-1 text-[14px] leading-[1.6] text-[#6b7280]">{resource.description}</p>
+        <h3 className="text-[18px] font-bold leading-[1.3] text-[#111827]">{resource.title}</h3>
+        {metaParts.length > 0 && (
+          <p className="text-[13px] font-semibold text-[color:var(--impact-purple)]">
+            {metaParts.join(" · ")}
+          </p>
+        )}
+        <p className="flex-1 text-[14px] leading-[1.7] text-[#6b7280]">{resource.description}</p>
         {resource.url ? (
-          <a href={resource.url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1.5">
-            <span className="text-[14px] font-bold text-[color:var(--impact-purple)] underline">View Resource</span>
-            <ArrowRight />
+          <a
+            href={resource.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 inline-flex w-fit items-center gap-2 rounded-lg bg-[color:var(--impact-purple)] px-4 py-2.5 text-[14px] font-bold text-white shadow-[0_4px_12px_-4px_rgba(80,33,129,0.35)] transition hover:opacity-90"
+          >
+            Open Resource
+            <ArrowRight color="#ffffff" />
           </a>
         ) : (
-          <div className="mt-2 inline-flex items-center gap-1.5 opacity-60">
-            <span className="text-[14px] font-bold text-[color:var(--impact-purple)] underline">View Resource</span>
-            <ArrowRight />
-          </div>
+          <span className="mt-1 inline-flex w-fit items-center gap-2 rounded-lg border border-[#e5e7eb] bg-[#f9fafb] px-4 py-2.5 text-[14px] font-bold text-[#9ca3af]">
+            No link available
+          </span>
         )}
       </div>
     </article>
