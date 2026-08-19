@@ -181,13 +181,14 @@ function ResourceHubPage() {
   const [search, setSearch] = useState("");
   const [area, setArea] = useState<AreaKey>("all");
   const [type, setType] = useState<TypeKey>("all");
+  const [sort, setSort] = useState<SortKey>("year_desc");
 
   const { data: resources = [], isLoading } = useQuery({
     queryKey: ["resources"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("resources")
-        .select("id,title,description,url,image_url,resource_type,area")
+        .select("id,title,description,url,image_url,author,publication_date,resource_type,area")
         .eq("published", true)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -197,13 +198,28 @@ function ResourceHubPage() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return resources.filter((r) => {
+    const list = resources.filter((r) => {
       if (area !== "all" && r.area !== area) return false;
       if (type !== "all" && r.resource_type !== type) return false;
       if (q && !`${r.title} ${r.description}`.toLowerCase().includes(q)) return false;
       return true;
     });
-  }, [resources, search, area, type]);
+
+    const dateValue = (r: ResourceRow) => (r.publication_date ? new Date(r.publication_date).getTime() : 0);
+
+    switch (sort) {
+      case "year_desc":
+        return [...list].sort((a, b) => dateValue(b) - dateValue(a) || a.title.localeCompare(b.title));
+      case "year_asc":
+        return [...list].sort((a, b) => dateValue(a) - dateValue(b) || a.title.localeCompare(b.title));
+      case "title_asc":
+        return [...list].sort((a, b) => a.title.localeCompare(b.title));
+      case "title_desc":
+        return [...list].sort((a, b) => b.title.localeCompare(a.title));
+      default:
+        return list;
+    }
+  }, [resources, search, area, type, sort]);
 
   return (
     <div className="min-h-screen bg-white">
