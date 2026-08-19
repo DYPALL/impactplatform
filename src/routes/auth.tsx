@@ -25,10 +25,10 @@ const signInSchema = z.object({
 
 const signUpSchema = signInSchema.extend({
   full_name: z.string().trim().min(1, "Required").max(100),
-  council_name: z.string().trim().min(1, "Required").max(120),
   country: z.string().trim().min(1, "Required").max(80),
   city: z.string().trim().min(1, "Required").max(80),
-  council_role: z.string().trim().min(1, "Required").max(80),
+  council_name: z.string().trim().max(120).optional(),
+  council_role: z.string().trim().max(80).optional(),
 });
 
 /* ---------- Header (mirrors landing) ---------- */
