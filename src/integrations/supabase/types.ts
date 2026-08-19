@@ -122,6 +122,7 @@ export type Database = {
       resources: {
         Row: {
           area: Database["public"]["Enums"]["resource_area"]
+          author: string | null
           created_at: string
           description: string
           id: string
@@ -136,6 +137,7 @@ export type Database = {
         }
         Insert: {
           area?: Database["public"]["Enums"]["resource_area"]
+          author?: string | null
           created_at?: string
           description?: string
           id?: string
@@ -150,6 +152,7 @@ export type Database = {
         }
         Update: {
           area?: Database["public"]["Enums"]["resource_area"]
+          author?: string | null
           created_at?: string
           description?: string
           id?: string
