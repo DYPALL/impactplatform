@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Info, Play } from "lucide-react";
+import { ArrowLeft, ArrowRight, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { ResultsStep } from "@/components/questionnaire/ResultsStep";
@@ -507,7 +507,7 @@ function IndicatorHeader({
         </div>
       </div>
 
-      <p className="mt-7 border-b border-black/10 pb-5 text-[17px] text-[#6b7280]">{question}</p>
+      <p className="mt-7 border-b border-black/10 pb-5 text-[22px] font-bold text-[#111827]">{question}</p>
     </>
   );
 }
@@ -585,16 +585,6 @@ function MatrixQuestion({
   );
 }
 
-function NaIcon({ size = 14, className }: { size?: number; className?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 14 14" className={className} fill="none">
-      <rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
-      <text x="7" y="9.25" textAnchor="middle" fontSize="5.5" fontWeight="700" fill="currentColor">
-        N/A
-      </text>
-    </svg>
-  );
-}
 
 function SliderQuestion({
   value,
@@ -622,25 +612,7 @@ function SliderQuestion({
 
   return (
     <section>
-      <IndicatorHeader
-        code={code}
-        title={title}
-        about={about}
-        question={question}
-        action={
-          <button
-            type="button"
-            onClick={onSkip}
-            className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 px-4 py-2 text-[13px] font-bold transition"
-            style={{
-              borderColor: PURPLE,
-              color: PURPLE,
-            }}
-          >
-            <NaIcon size={14} /> Not Applicable
-          </button>
-        }
-      />
+      <IndicatorHeader code={code} title={title} about={about} question={question} />
 
       <p className="mt-8 text-[12px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
         Use the slider to choose what fits best for your case
@@ -667,10 +639,18 @@ function SliderQuestion({
 
           {/* Thumb */}
           <div
-            className="pointer-events-none absolute top-1/2 grid h-[34px] w-[34px] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-xl bg-white shadow-[0_3px_12px_rgba(0,0,0,0.22)] transition-all duration-300 ease-out"
+            className="pointer-events-none absolute top-1/2 grid h-[36px] w-[28px] -translate-x-1/2 -translate-y-[42%] place-items-center transition-all duration-300 ease-out"
             style={{ left: `${((value + 0.5) / levels.length) * 100}%`, color: level.color }}
           >
-            <Play size={13} fill="currentColor" strokeWidth={0} />
+            <svg width="28" height="36" viewBox="0 0 28 36" fill="none" aria-hidden="true">
+              <path
+                d="M14 34.5C14 34.5 26 20.5 26 13C26 6.37 20.63 1 14 1C7.37 1 2 6.37 2 13C2 20.5 14 34.5 14 34.5Z"
+                fill="currentColor"
+                stroke="white"
+                strokeWidth="2.5"
+              />
+              <circle cx="14" cy="13" r="4.5" fill="white" />
+            </svg>
           </div>
 
           <input
@@ -697,6 +677,16 @@ function SliderQuestion({
               {l.label}
             </button>
           ))}
+        </div>
+
+        <div className="mt-3 flex justify-end">
+          <button
+            type="button"
+            onClick={onSkip}
+            className="inline-flex items-center gap-2 rounded-full border border-[#d1d5db] bg-white px-4 py-2 text-[13px] font-semibold text-[#6b7280] transition hover:border-[#502181] hover:text-[#502181]"
+          >
+            Skip this question
+          </button>
         </div>
 
         <div
