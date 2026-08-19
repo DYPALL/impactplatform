@@ -654,7 +654,7 @@ function SliderQuestion({
           >
             <svg width="32" height="40" viewBox="0 0 32 40" fill="none" aria-hidden="true">
               <rect x="2" y="4" width="28" height="28" rx="8" fill="white" stroke="#E5E7EB" strokeWidth="1.5" />
-              <path d="M9 11L16 21L23 11Z" fill={PURPLE} />
+              <path d="M9 13L16 23L23 13Z" fill={PURPLE} />
             </svg>
           </div>
 
