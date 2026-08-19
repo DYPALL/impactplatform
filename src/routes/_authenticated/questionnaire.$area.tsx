@@ -653,14 +653,8 @@ function SliderQuestion({
             style={{ left: `${((value + 0.5) / levels.length) * 100}%`, color: level.color }}
           >
             <svg width="28" height="36" viewBox="0 0 28 36" fill="none" aria-hidden="true">
-              <rect x="2" y="6" width="24" height="24" rx="6" fill="currentColor" stroke="white" strokeWidth="2.5" />
-              <path
-                d="M10 16L14 20L18 16"
-                stroke="white"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <rect x="1" y="5" width="26" height="26" rx="7" fill="currentColor" stroke="white" strokeWidth="2.5" />
+              <path d="M9 13L14 20L19 13Z" fill="white" />
             </svg>
           </div>
 
