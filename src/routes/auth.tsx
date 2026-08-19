@@ -25,10 +25,10 @@ const signInSchema = z.object({
 
 const signUpSchema = signInSchema.extend({
   full_name: z.string().trim().min(1, "Required").max(100),
-  council_name: z.string().trim().min(1, "Required").max(120),
   country: z.string().trim().min(1, "Required").max(80),
   city: z.string().trim().min(1, "Required").max(80),
-  council_role: z.string().trim().min(1, "Required").max(80),
+  council_name: z.string().trim().max(120).optional(),
+  council_role: z.string().trim().max(80).optional(),
 });
 
 /* ---------- Header (mirrors landing) ---------- */
@@ -274,13 +274,13 @@ function AuthPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {mode === "signup" && (
                 <>
-                  <Field name="full_name" label="Full name" />
-                  <Field name="council_name" label="Local Youth Council" />
+                  <Field name="full_name" label="Full name *" />
+                  <Field name="council_name" label="Local Youth Council" required={false} />
                   <div className="grid grid-cols-2 gap-3">
-                    <Field name="country" label="Country" />
-                    <Field name="city" label="City" />
+                    <Field name="country" label="Country *" />
+                    <Field name="city" label="City *" />
                   </div>
-                  <Field name="council_role" label="Role in council" placeholder="Member, coordinator…" />
+                  <Field name="council_role" label="Role" placeholder="Member, coordinator…" required={false} />
                 </>
               )}
 
@@ -358,8 +358,8 @@ function AuthPage() {
 }
 
 function Field({
-  name, label, type = "text", placeholder, autoComplete,
-}: { name: string; label: string; type?: string; placeholder?: string; autoComplete?: string }) {
+  name, label, type = "text", placeholder, autoComplete, required = true,
+}: { name: string; label: string; type?: string; placeholder?: string; autoComplete?: string; required?: boolean }) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-[13px] font-bold text-[color:var(--impact-ink)]">{label}</span>
@@ -368,7 +368,7 @@ function Field({
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        required
+        required={required}
         className="w-full rounded-lg border border-black/15 bg-white px-3.5 py-2.5 text-[14px] text-[color:var(--impact-ink)] outline-none placeholder:text-[color:var(--impact-ink)]/30 focus:border-[color:var(--impact-purple)] focus:ring-2 focus:ring-[color:var(--impact-purple)]/20"
       />
     </label>
