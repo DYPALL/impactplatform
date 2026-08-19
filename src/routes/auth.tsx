@@ -274,13 +274,13 @@ function AuthPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {mode === "signup" && (
                 <>
-                  <Field name="full_name" label="Full name" />
-                  <Field name="council_name" label="Local Youth Council" />
+                  <Field name="full_name" label="Full name *" />
+                  <Field name="council_name" label="Local Youth Council" required={false} />
                   <div className="grid grid-cols-2 gap-3">
-                    <Field name="country" label="Country" />
-                    <Field name="city" label="City" />
+                    <Field name="country" label="Country *" />
+                    <Field name="city" label="City *" />
                   </div>
-                  <Field name="council_role" label="Role in council" placeholder="Member, coordinator…" />
+                  <Field name="council_role" label="Role" placeholder="Member, coordinator…" required={false} />
                 </>
               )}
 
