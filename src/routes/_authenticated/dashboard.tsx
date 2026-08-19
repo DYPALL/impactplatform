@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Settings, Trash2, User } from "lucide-react";
+import { ChevronDown, LogOut, Settings, Trash2, User } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
 import logoWhite from "@/assets/IMPACT_Logo_white.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -125,6 +126,8 @@ function Dashboard() {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [assessments, setAssessments] = useState<AssessmentRow[]>([]);
   const [guideOpen, setGuideOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const { signOut } = useAuth();
   const guideRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -141,6 +144,12 @@ function Dashboard() {
       .eq("user_id", user.id)
       .order("updated_at", { ascending: false })
       .then(({ data }) => setAssessments((data as AssessmentRow[]) ?? []));
+
+    supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .then(({ data }) => setIsAdmin((data ?? []).some((r) => r.role === "admin")));
   }, [user.id]);
 
   const handleDelete = async (id: string) => {
