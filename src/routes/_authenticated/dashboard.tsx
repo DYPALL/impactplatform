@@ -108,7 +108,7 @@ function Dashboard() {
   useEffect(() => {
     supabase
       .from("profiles")
-      .select("full_name, council_name, country, city, council_role")
+      .select("full_name, council_name, country, city, council_role, avatar_url")
       .eq("id", user.id)
       .maybeSingle()
       .then(({ data }) => setProfile(data as Profile | null));
