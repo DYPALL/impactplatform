@@ -36,23 +36,20 @@ function polar(cx: number, cy: number, r: number, deg: number) {
   return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
 }
 
-function sectorPath(cx: number, cy: number, r: number, from: number, to: number) {
-  const [x1, y1] = polar(cx, cy, r, from);
-  const [x2, y2] = polar(cx, cy, r, to);
-  return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z`;
-}
-
-function trianglePoints(cx: number, cy: number, r: number, deg: number) {
-  const rad = (deg * Math.PI) / 180;
-  const rad120 = (120 * Math.PI) / 180;
-  const rad240 = (240 * Math.PI) / 180;
-  const x = cx + r * Math.cos(rad);
-  const y = cy + r * Math.sin(rad);
-  const x1 = cx + r * Math.cos(rad + rad120);
-  const y1 = cy + r * Math.sin(rad + rad120);
-  const x2 = cx + r * Math.cos(rad - rad120);
-  const y2 = cy + r * Math.sin(rad - rad120);
-  return `${x},${y} ${x1},${y1} ${x2},${y2}`;
+function annularSectorPath(
+  cx: number,
+  cy: number,
+  rInner: number,
+  rOuter: number,
+  from: number,
+  to: number
+) {
+  const [x1, y1] = polar(cx, cy, rInner, from);
+  const [x2, y2] = polar(cx, cy, rOuter, from);
+  const [x3, y3] = polar(cx, cy, rOuter, to);
+  const [x4, y4] = polar(cx, cy, rInner, to);
+  const largeArc = Math.abs(to - from) > 180 ? 1 : 0;
+  return `M ${x1} ${y1} L ${x2} ${y2} A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${x3} ${y3} L ${x4} ${y4} A ${rInner} ${rInner} 0 ${largeArc} 0 ${x1} ${y1} Z`;
 }
 
 function RoseChart({ results }: { results: IndicatorResult[] }) {
@@ -104,18 +101,29 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
               />
             );
           })}
-          {/* sectors with gaps for a wifi-signal look */}
+          {/* wifi-signal sectors: even angular gaps + radial white space between bands */}
           {INDICATOR_CONTENT.map((ind, i) => {
             const level = results[i]?.level ?? 0;
-            const baseR = inner + ((level + 1) / 4) * (maxR - inner);
             const isActive = active === i;
             const isDimmed = active !== null && active !== i;
-            const r = isActive ? baseR + 10 : baseR;
-            const gap = 8; // degrees of white space between sectors
+            const gap = 10; // even degrees of white space between sectors
             const from = -90 + i * 60 + gap / 2;
             const to = -30 + i * 60 - gap / 2;
             const color = LEVELS[level].color;
             const [tx, ty] = polar(cx, cy, maxR + 30, -60 + i * 60);
+
+            const bandCount = 4;
+            const bandGap = 5;
+            const available = maxR - inner - (bandCount - 1) * bandGap;
+            const bandThickness = available / bandCount;
+            const activeBoost = isActive ? 5 : 0;
+            const bands = Array.from({ length: bandCount }, (_, b) => {
+              const r0 = inner + b * (bandThickness + bandGap);
+              const r1 = r0 + bandThickness + activeBoost;
+              return { r0, r1 };
+            });
+            const filledBands = level + 1; // 1..4
+
             return (
               <g
                 key={ind.code}
@@ -124,14 +132,24 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
                 onClick={() => setSelected((s) => (s === i ? null : i))}
                 style={{ opacity: isDimmed ? 0.35 : 1 }}
               >
-                <path
-                  d={sectorPath(cx, cy, r, from, to)}
-                  fill={color}
-                  opacity={isActive ? 0.95 : 0.6}
-                />
+                {bands.map(({ r0, r1 }, b) => (
+                  <path
+                    key={b}
+                    d={annularSectorPath(cx, cy, r0, b < filledBands ? r1 : r0, from, to)}
+                    fill={b < filledBands ? color : "transparent"}
+                    opacity={b < filledBands ? (isActive ? 0.95 : 0.6) : 0}
+                  />
+                ))}
                 {isActive && (
                   <path
-                    d={sectorPath(cx, cy, r, from, to)}
+                    d={annularSectorPath(
+                      cx,
+                      cy,
+                      bands[filledBands - 1].r0,
+                      bands[filledBands - 1].r1,
+                      from,
+                      to
+                    )}
                     fill="none"
                     stroke="#fff"
                     strokeWidth={2}
