@@ -33,6 +33,7 @@ export function ResourceForm({ mode, resourceId }: { mode: "create" | "edit"; re
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [author, setAuthor] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [area, setArea] = useState<ResourceArea | "">("");
   const [type, setType] = useState<ResourceType | "">("");
