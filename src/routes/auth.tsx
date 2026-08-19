@@ -148,14 +148,14 @@ function AuthPage() {
     }
   }
 
-  async function handleGoogle() {
+  async function handleOAuth(provider: "google" | "apple") {
     setError(null);
     setBusy(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
+      const result = await lovable.auth.signInWithOAuth(provider, {
         redirect_uri: window.location.origin,
       });
-      if (result.error) { setError(result.error.message || "Google sign-in failed"); return; }
+      if (result.error) { setError(result.error.message || "Social log-in failed"); return; }
       if (result.redirected) return;
       router.invalidate();
       navigate({ to: "/dashboard", replace: true });
@@ -238,7 +238,7 @@ function AuthPage() {
             {/* Google */}
             <button
               type="button"
-              onClick={handleGoogle}
+              onClick={() => handleOAuth("google")}
               disabled={busy}
               className="mt-6 flex w-full items-center justify-center gap-3 rounded-full border border-black/15 bg-white py-3 text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:bg-black/5 disabled:opacity-50"
             >
@@ -249,6 +249,19 @@ function AuthPage() {
                 <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.6l6.2 5.2C41.4 35.5 44 30.2 44 24c0-1.3-.1-2.4-.4-3.5z"/>
               </svg>
               Log-in with Google
+            </button>
+
+            {/* Apple */}
+            <button
+              type="button"
+              onClick={() => handleOAuth("apple")}
+              disabled={busy}
+              className="mt-3 flex w-full items-center justify-center gap-3 rounded-full border border-black/15 bg-white py-3 text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:bg-black/5 disabled:opacity-50"
+            >
+              <svg width="18" height="18" viewBox="0 0 384 512" fill="currentColor" aria-hidden>
+                <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+              </svg>
+              Log-in with Apple
             </button>
 
             {/* Divider */}
