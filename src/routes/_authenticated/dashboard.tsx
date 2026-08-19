@@ -255,7 +255,28 @@ function Dashboard() {
             </ul>
           )}
         </div>
+
+        <div className="hidden border-t border-black/5 px-7 py-6 lg:block">
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="mb-2 flex items-center gap-2 rounded-2xl px-3 py-3 text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:bg-black/5"
+            >
+              <Settings size={16} />
+              Admin panel
+            </Link>
+          )}
+          <button
+            type="button"
+            onClick={() => signOut()}
+            className="flex w-full items-center gap-2 rounded-2xl px-3 py-3 text-[14px] font-bold text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-[color:var(--impact-purple)]"
+          >
+            <LogOut size={16} />
+            Sign out
+          </button>
+        </div>
       </aside>
+
 
       {/* Main */}
       <main className="min-w-0 flex-1 px-5 pb-24 pt-8 lg:px-12 lg:pb-16 lg:pt-10">
