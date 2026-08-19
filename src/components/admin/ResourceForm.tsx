@@ -33,6 +33,7 @@ export function ResourceForm({ mode, resourceId }: { mode: "create" | "edit"; re
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [author, setAuthor] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [area, setArea] = useState<ResourceArea | "">("");
   const [type, setType] = useState<ResourceType | "">("");
@@ -51,6 +52,7 @@ export function ResourceForm({ mode, resourceId }: { mode: "create" | "edit"; re
       if (data) {
         setTitle(data.title);
         setDescription(data.description);
+        setAuthor(data.author ?? "");
         setImageUrl(data.image_url);
         setArea(data.area as ResourceArea);
         setType(data.resource_type as ResourceType);
@@ -105,6 +107,7 @@ export function ResourceForm({ mode, resourceId }: { mode: "create" | "edit"; re
     const payload = {
       title: title.trim(),
       description: description.trim(),
+      author: author.trim() || null,
       image_url: imageUrl,
       area,
       resource_type: type,
@@ -175,6 +178,17 @@ export function ResourceForm({ mode, resourceId }: { mode: "create" | "edit"; re
               maxLength={2000}
               required
               className={inputClass + " resize-y"}
+            />
+          </div>
+
+          <div>
+            <label className={labelClass}>Author / Organisation</label>
+            <input
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              placeholder="e.g. Council of Europe, DYPALL Network"
+              className={inputClass}
+              maxLength={200}
             />
           </div>
 

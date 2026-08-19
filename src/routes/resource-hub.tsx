@@ -25,6 +25,8 @@ type ResourceRow = {
   description: string;
   url: string | null;
   image_url: string | null;
+  author: string | null;
+  publication_date: string | null;
 
   resource_type: "publication" | "video" | "template" | "session_outline" | "document";
   area: "representativeness" | "governance" | "empowerment" | "results" | "general";
@@ -32,6 +34,7 @@ type ResourceRow = {
 
 type AreaKey = "all" | ResourceRow["area"];
 type TypeKey = "all" | ResourceRow["resource_type"];
+type SortKey = "year_desc" | "year_asc" | "title_asc" | "title_desc";
 
 const areaFilters: { key: AreaKey; label: string; color: string }[] = [
   { key: "all", label: "All", color: "#502181" },
@@ -48,6 +51,13 @@ const typeFilters: { key: TypeKey; label: string }[] = [
   { key: "template", label: "Templates" },
   { key: "session_outline", label: "Session Outlines" },
   { key: "document", label: "Documents" },
+];
+
+const sortOptions: { key: SortKey; label: string }[] = [
+  { key: "year_desc", label: "Publication Year: Newest to Oldest" },
+  { key: "year_asc", label: "Publication Year: Oldest to Newest" },
+  { key: "title_asc", label: "Alphabetical: A – Z" },
+  { key: "title_desc", label: "Alphabetical: Z – A" },
 ];
 
 const typeLabel: Record<ResourceRow["resource_type"], string> = {
@@ -114,8 +124,24 @@ function ArrowRight({ color = "#502181" }: { color?: string }) {
   );
 }
 
+function SortIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M3 6H21" stroke="#502181" strokeWidth="2" strokeLinecap="round" />
+      <path d="M7 12H17" stroke="#502181" strokeWidth="2" strokeLinecap="round" />
+      <path d="M11 18H13" stroke="#502181" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function ResourceCard({ resource }: { resource: ResourceRow }) {
   const style = typeStyle[resource.resource_type];
+  const year = resource.publication_date ? new Date(resource.publication_date).getFullYear() : null;
+  const metaParts = [
+    resource.author,
+    year ? `Published ${year}` : null,
+  ].filter(Boolean);
+
   return (
     <article className="flex flex-col overflow-hidden rounded-[16px] border border-[#e5e7eb] bg-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.05)]">
       <div className="relative flex min-h-[220px] w-full items-center justify-center overflow-hidden" style={{ backgroundColor: style.bg }}>
@@ -130,22 +156,31 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-[10px] p-[20px]">
+      <div className="flex flex-1 flex-col gap-[12px] p-[20px]">
         <span className="w-fit rounded-full border border-[#e5e7eb] bg-[#eee] px-[10px] py-[6px] text-[12px] font-bold text-[#444]">
           {typeLabel[resource.resource_type]}
         </span>
-        <h3 className="text-[18px] font-bold text-[#111827]">{resource.title}</h3>
-        <p className="flex-1 text-[14px] leading-[1.6] text-[#6b7280]">{resource.description}</p>
+        <h3 className="text-[18px] font-bold leading-[1.3] text-[#111827]">{resource.title}</h3>
+        {metaParts.length > 0 && (
+          <p className="text-[13px] font-semibold text-[color:var(--impact-purple)]">
+            {metaParts.join(" · ")}
+          </p>
+        )}
+        <p className="flex-1 text-[14px] leading-[1.7] text-[#6b7280]">{resource.description}</p>
         {resource.url ? (
-          <a href={resource.url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1.5">
-            <span className="text-[14px] font-bold text-[color:var(--impact-purple)] underline">View Resource</span>
-            <ArrowRight />
+          <a
+            href={resource.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1 inline-flex w-fit items-center gap-2 rounded-lg bg-[color:var(--impact-purple)] px-4 py-2.5 text-[14px] font-bold text-white shadow-[0_4px_12px_-4px_rgba(80,33,129,0.35)] transition hover:opacity-90"
+          >
+            Open Resource
+            <ArrowRight color="#ffffff" />
           </a>
         ) : (
-          <div className="mt-2 inline-flex items-center gap-1.5 opacity-60">
-            <span className="text-[14px] font-bold text-[color:var(--impact-purple)] underline">View Resource</span>
-            <ArrowRight />
-          </div>
+          <span className="mt-1 inline-flex w-fit items-center gap-2 rounded-lg border border-[#e5e7eb] bg-[#f9fafb] px-4 py-2.5 text-[14px] font-bold text-[#9ca3af]">
+            No link available
+          </span>
         )}
       </div>
     </article>
@@ -156,13 +191,14 @@ function ResourceHubPage() {
   const [search, setSearch] = useState("");
   const [area, setArea] = useState<AreaKey>("all");
   const [type, setType] = useState<TypeKey>("all");
+  const [sort, setSort] = useState<SortKey>("year_desc");
 
   const { data: resources = [], isLoading } = useQuery({
     queryKey: ["resources"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("resources")
-        .select("id,title,description,url,image_url,resource_type,area")
+        .select("id,title,description,url,image_url,author,publication_date,resource_type,area")
         .eq("published", true)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -172,13 +208,28 @@ function ResourceHubPage() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return resources.filter((r) => {
+    const list = resources.filter((r) => {
       if (area !== "all" && r.area !== area) return false;
       if (type !== "all" && r.resource_type !== type) return false;
       if (q && !`${r.title} ${r.description}`.toLowerCase().includes(q)) return false;
       return true;
     });
-  }, [resources, search, area, type]);
+
+    const dateValue = (r: ResourceRow) => (r.publication_date ? new Date(r.publication_date).getTime() : 0);
+
+    switch (sort) {
+      case "year_desc":
+        return [...list].sort((a, b) => dateValue(b) - dateValue(a) || a.title.localeCompare(b.title));
+      case "year_asc":
+        return [...list].sort((a, b) => dateValue(a) - dateValue(b) || a.title.localeCompare(b.title));
+      case "title_asc":
+        return [...list].sort((a, b) => a.title.localeCompare(b.title));
+      case "title_desc":
+        return [...list].sort((a, b) => b.title.localeCompare(a.title));
+      default:
+        return list;
+    }
+  }, [resources, search, area, type, sort]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -255,6 +306,28 @@ function ResourceHubPage() {
                   </button>
                 );
               })}
+            </div>
+
+            <div className="flex flex-col gap-3 border-t border-[#f1f2f4] pt-4 sm:flex-row sm:items-center sm:justify-between">
+              <span className="text-[13px] font-semibold text-[#6b7280]">
+                {filtered.length} resource{filtered.length === 1 ? "" : "s"} found
+              </span>
+              <div className="flex items-center gap-2 rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                <SortIcon />
+                <label htmlFor="sort" className="text-[13px] font-bold text-[#111827]">Sort by</label>
+                <select
+                  id="sort"
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as SortKey)}
+                  className="bg-transparent text-[13px] font-medium text-[#374151] outline-none"
+                >
+                  {sortOptions.map((o) => (
+                    <option key={o.key} value={o.key}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
         </section>
