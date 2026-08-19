@@ -225,9 +225,9 @@ function Dashboard() {
             Quick Links
           </h2>
           <nav className="mt-4 space-y-2">
-            <QuickLink to="/" label="Home" tint="#EDE4F6" dot="var(--impact-purple)" />
-            <QuickLink to="/resource-hub" label="Resource Hub" tint="#DCEFEF" dot="var(--impact-green)" />
-            <QuickLink to="/send-us-a-message" label="Send us a message" tint="#FCE7F0" dot="var(--impact-pink)" />
+            <QuickLink to="/" label="Home" tint="#EDE4F6" dot="var(--impact-purple)" icon="home" />
+            <QuickLink to="/resource-hub" label="Resource Hub" tint="#DCEFEF" dot="var(--impact-green)" icon="resource-hub" />
+            <QuickLink to="/send-us-a-message" label="Send us a message" tint="#FCE7F0" dot="var(--impact-pink)" icon="message" />
           </nav>
         </div>
 
