@@ -155,7 +155,7 @@ function QuestionnairePage() {
     supabase
       .from("assessments")
       .select("id, current_step, answers")
-      .eq("area", area)
+      .eq("area", area as ResourceArea)
       .eq("status", "in_progress")
       .order("updated_at", { ascending: false })
       .limit(1)
