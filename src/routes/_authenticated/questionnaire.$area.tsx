@@ -330,9 +330,15 @@ function QuestionnairePage() {
           </button>
 
           <div className="ml-auto flex min-w-0 items-center gap-4">
+            {isEditing && (
+              <span className="hidden whitespace-nowrap rounded-full bg-white/20 px-3 py-1 text-[12px] font-bold text-white md:inline">
+                Editing completed assessment
+              </span>
+            )}
             <span className="hidden whitespace-nowrap text-[13px] text-white/85 sm:inline">
               {step < TOTAL_STEPS ? `Question ${step} of ${TOTAL_STEPS - 1}` : "Assessment Complete"}
             </span>
+
             <div className="h-[7px] w-[120px] overflow-hidden rounded-full bg-white/25 sm:w-[240px]">
               <div
                 className="h-full rounded-full bg-white transition-all duration-300"
