@@ -36,23 +36,20 @@ function polar(cx: number, cy: number, r: number, deg: number) {
   return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
 }
 
-function sectorPath(cx: number, cy: number, r: number, from: number, to: number) {
-  const [x1, y1] = polar(cx, cy, r, from);
-  const [x2, y2] = polar(cx, cy, r, to);
-  return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z`;
-}
-
-function trianglePoints(cx: number, cy: number, r: number, deg: number) {
-  const rad = (deg * Math.PI) / 180;
-  const rad120 = (120 * Math.PI) / 180;
-  const rad240 = (240 * Math.PI) / 180;
-  const x = cx + r * Math.cos(rad);
-  const y = cy + r * Math.sin(rad);
-  const x1 = cx + r * Math.cos(rad + rad120);
-  const y1 = cy + r * Math.sin(rad + rad120);
-  const x2 = cx + r * Math.cos(rad - rad120);
-  const y2 = cy + r * Math.sin(rad - rad120);
-  return `${x},${y} ${x1},${y1} ${x2},${y2}`;
+function annularSectorPath(
+  cx: number,
+  cy: number,
+  rInner: number,
+  rOuter: number,
+  from: number,
+  to: number
+) {
+  const [x1, y1] = polar(cx, cy, rInner, from);
+  const [x2, y2] = polar(cx, cy, rOuter, from);
+  const [x3, y3] = polar(cx, cy, rOuter, to);
+  const [x4, y4] = polar(cx, cy, rInner, to);
+  const largeArc = Math.abs(to - from) > 180 ? 1 : 0;
+  return `M ${x1} ${y1} L ${x2} ${y2} A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${x3} ${y3} L ${x4} ${y4} A ${rInner} ${rInner} 0 ${largeArc} 0 ${x1} ${y1} Z`;
 }
 
 function RoseChart({ results }: { results: IndicatorResult[] }) {
