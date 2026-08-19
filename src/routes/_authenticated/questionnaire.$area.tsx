@@ -241,15 +241,17 @@ function QuestionnairePage() {
       setSaving(false);
       return null;
     }
+    const done = opts.completed || isEditing;
     const payload = {
       user_id: userId,
       area: area as "representativeness" | "governance" | "empowerment" | "results" | "general",
-      status: opts.completed ? "completed" : "in_progress",
+      status: done ? "completed" : "in_progress",
       current_step: opts.step,
       answers: answersPayload,
       percentages,
-      completed_at: opts.completed ? new Date().toISOString() : null,
+      completed_at: done ? new Date().toISOString() : null,
     };
+
     let id = assessmentId;
     if (id) {
       await supabase.from("assessments").update(payload).eq("id", id);
