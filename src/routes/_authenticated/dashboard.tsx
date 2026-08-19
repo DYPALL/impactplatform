@@ -78,6 +78,33 @@ const AREAS: AreaDef[] = [
   },
 ];
 
+const GUIDE_STEPS: { n: number; title: string; body: string; color: string }[] = [
+  {
+    n: 1,
+    title: "Create your account",
+    body: "Your council's results, action plans and reflections are stored securely in one place.",
+    color: "var(--impact-purple)",
+  },
+  {
+    n: 2,
+    title: "Pick a focus area",
+    body: "Choose one of the IMPACT thematic areas below to start with, or work through them all.",
+    color: "var(--impact-orange)",
+  },
+  {
+    n: 3,
+    title: "Answer the questionnaire",
+    body: "It takes 15–30 minutes and you can save your progress and quit at any point.",
+    color: "var(--impact-green)",
+  },
+  {
+    n: 4,
+    title: "Review your results",
+    body: "Get a visual scoreboard and reflection prompts — edit your answers anytime to update them.",
+    color: "var(--impact-pink)",
+  },
+];
+
 
 type AssessmentRow = {
   id: string;
