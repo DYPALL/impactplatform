@@ -157,9 +157,14 @@ function Dashboard() {
           </div>
 
           <div className="mt-7 flex flex-col items-center text-center lg:mt-8">
-            <div className="flex h-[86px] w-[86px] items-center justify-center rounded-full bg-[#E6DCF2] text-[color:var(--impact-purple)]">
-              <User size={38} strokeWidth={1.6} />
+            <div className="flex h-[86px] w-[86px] items-center justify-center overflow-hidden rounded-full bg-[#E6DCF2] text-[color:var(--impact-purple)]">
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt="Profile picture" className="h-full w-full object-cover" />
+              ) : (
+                <User size={38} strokeWidth={1.6} />
+              )}
             </div>
+
             <h1 className="mt-4 text-[20px] font-extrabold leading-tight text-white">
               Welcome back, {firstName}!
             </h1>
