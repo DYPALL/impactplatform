@@ -400,24 +400,28 @@ function AreaCard({
                         >
                           See results
                         </Link>
-                        <button
-                          type="button"
+                        <Link
+                          to="/questionnaire/$area"
+                          params={{ area: area.key }}
+                          search={{ id: it.id }}
                           className="rounded-full px-4 py-2 text-[12px] font-bold text-white transition hover:opacity-90"
                           style={{ backgroundColor: area.color }}
                         >
-                          + New action plan
-                        </button>
+                          Edit answers
+                        </Link>
                       </>
                     ) : (
                       <Link
                         to="/questionnaire/$area"
                         params={{ area: area.key }}
+                        search={{ id: it.id }}
                         className="rounded-full border-2 px-4 py-2 text-[12px] font-bold transition"
                         style={{ borderColor: area.color, color: area.color }}
                       >
                         Continue
                       </Link>
                     )}
+
                     <button
                       type="button"
                       aria-label={`Delete assessment ${idx + 1}`}
