@@ -294,60 +294,11 @@ function Dashboard() {
             questionnaires and build action plans as you go.
           </p>
 
-          {/* Beginner guide */}
-          <div ref={guideRef} className="scroll-mt-6">
-            {guideOpen && (
-              <section className="mt-8 rounded-[32px] bg-white p-6 shadow-[0_2px_14px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-8">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <span className="inline-flex items-center rounded-full bg-[#EDE4F6] px-3 py-1 text-[11px] font-bold tracking-wide text-[color:var(--impact-purple)]">
-                      BEGINNER GUIDE
-                    </span>
-                    <h3 className="mt-3 text-[24px] font-extrabold leading-tight text-[color:var(--impact-purple)]">
-                      How to start assessing?
-                    </h3>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setGuideOpen(false)}
-                    className="rounded-full px-3 py-1 text-[13px] font-bold text-[color:var(--impact-ink-muted)] hover:bg-black/5"
-                  >
-                    Hide
-                  </button>
-                </div>
+          <OnboardingGuideModal
+            open={guideModalOpen}
+            onClose={() => setGuideModalOpen(false)}
+          />
 
-                <ol className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                  {GUIDE_STEPS.map((s) => (
-                    <li key={s.n} className="rounded-3xl bg-[#F4F5F7] p-5">
-                      <div className="flex items-center gap-3">
-                        <div className="relative h-[40px] w-[44px] shrink-0">
-                          <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
-                            <path
-                              d="M50,8 L90,80 L10,80 Z"
-                              fill={s.color}
-                              stroke={s.color}
-                              strokeWidth="10"
-                              strokeLinejoin="round"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                          <span className="absolute inset-0 flex items-center justify-center pt-1 text-[15px] font-bold text-white">
-                            {s.n}
-                          </span>
-                        </div>
-                        <h4 className="text-[15px] font-bold leading-tight text-[color:var(--impact-ink)]">
-                          {s.title}
-                        </h4>
-                      </div>
-                      <p className="mt-3 text-[13px] leading-relaxed text-[color:var(--impact-ink-muted)]">
-                        {s.body}
-                      </p>
-                    </li>
-                  ))}
-                </ol>
-              </section>
-            )}
-          </div>
 
           <div className="mt-8 space-y-6">
             {AREAS.map((a) => (
