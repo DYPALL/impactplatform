@@ -104,15 +104,16 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
               />
             );
           })}
-          {/* sectors */}
+          {/* sectors with gaps for a wifi-signal look */}
           {INDICATOR_CONTENT.map((ind, i) => {
             const level = results[i]?.level ?? 0;
             const baseR = inner + ((level + 1) / 4) * (maxR - inner);
             const isActive = active === i;
             const isDimmed = active !== null && active !== i;
             const r = isActive ? baseR + 10 : baseR;
-            const from = -90 + i * 60;
-            const to = -30 + i * 60;
+            const gap = 8; // degrees of white space between sectors
+            const from = -90 + i * 60 + gap / 2;
+            const to = -30 + i * 60 - gap / 2;
             const color = LEVELS[level].color;
             const [tx, ty] = polar(cx, cy, maxR + 30, -60 + i * 60);
             return (
@@ -136,21 +137,13 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
                     strokeWidth={2}
                   />
                 )}
-                {/* rounded triangle code badge in level color */}
-                <polygon
-                  points={trianglePoints(tx, ty, isActive ? 21 : 18, -60 + i * 60)}
-                  fill={color}
-                  stroke={color}
-                  strokeWidth={5}
-                  strokeLinejoin="round"
-                  opacity={isActive ? 1 : 0.75}
-                />
+                {/* code label without triangle badge */}
                 <text
                   x={tx}
                   y={ty + 1}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="fill-white text-[10px] font-extrabold"
+                  className="fill-[#502181] text-[11px] font-extrabold"
                 >
                   {ind.code}
                 </text>
