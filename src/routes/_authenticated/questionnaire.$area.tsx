@@ -507,7 +507,7 @@ function IndicatorHeader({
         </div>
       </div>
 
-      <p className="mt-7 border-b border-black/10 pb-5 text-[17px] text-[#6b7280]">{question}</p>
+      <p className="mt-7 border-b border-black/10 pb-5 text-[22px] font-bold text-[#111827]">{question}</p>
     </>
   );
 }
@@ -622,25 +622,7 @@ function SliderQuestion({
 
   return (
     <section>
-      <IndicatorHeader
-        code={code}
-        title={title}
-        about={about}
-        question={question}
-        action={
-          <button
-            type="button"
-            onClick={onSkip}
-            className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 px-4 py-2 text-[13px] font-bold transition"
-            style={{
-              borderColor: PURPLE,
-              color: PURPLE,
-            }}
-          >
-            <NaIcon size={14} /> Not Applicable
-          </button>
-        }
-      />
+      <IndicatorHeader code={code} title={title} about={about} question={question} />
 
       <p className="mt-8 text-[12px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
         Use the slider to choose what fits best for your case
