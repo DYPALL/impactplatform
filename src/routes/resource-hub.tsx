@@ -25,6 +25,8 @@ type ResourceRow = {
   description: string;
   url: string | null;
   image_url: string | null;
+  author: string | null;
+  publication_date: string | null;
 
   resource_type: "publication" | "video" | "template" | "session_outline" | "document";
   area: "representativeness" | "governance" | "empowerment" | "results" | "general";
@@ -32,6 +34,7 @@ type ResourceRow = {
 
 type AreaKey = "all" | ResourceRow["area"];
 type TypeKey = "all" | ResourceRow["resource_type"];
+type SortKey = "year_desc" | "year_asc" | "title_asc" | "title_desc";
 
 const areaFilters: { key: AreaKey; label: string; color: string }[] = [
   { key: "all", label: "All", color: "#502181" },
