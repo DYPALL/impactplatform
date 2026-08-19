@@ -153,6 +153,10 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
                     />
                   ) : null
                 )}
+                {/* invisible hover target covering the full sector */}
+                <path d={annularSectorPath(cx, cy, inner, maxR, base + 4, base + 56)} fill="transparent" />
+
+
 
                 {/* code label without triangle badge */}
                 <text
