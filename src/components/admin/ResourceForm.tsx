@@ -182,6 +182,17 @@ export function ResourceForm({ mode, resourceId }: { mode: "create" | "edit"; re
           </div>
 
           <div>
+            <label className={labelClass}>Author / Organisation</label>
+            <input
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              placeholder="e.g. Council of Europe, DYPALL Network"
+              className={inputClass}
+              maxLength={200}
+            />
+          </div>
+
+          <div>
             <label className={labelClass}>Featured Resource Image</label>
             <div
               onClick={() => fileInputRef.current?.click()}
