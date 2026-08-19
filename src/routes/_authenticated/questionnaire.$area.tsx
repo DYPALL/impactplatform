@@ -9,6 +9,9 @@ type ResourceArea = Database["public"]["Enums"]["resource_area"];
 
 
 export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
+  validateSearch: (search: Record<string, unknown>): { id?: string } => ({
+    id: typeof search['id'] === "string" ? (search['id'] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Questionnaire — IMPACT" },
@@ -19,6 +22,7 @@ export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
   }),
   component: QuestionnairePage,
 });
+
 
 const PURPLE = "#502181";
 
@@ -133,6 +137,7 @@ const TOTAL_STEPS = 7;
 
 function QuestionnairePage() {
   const { area } = Route.useParams();
+  const { id: routeId } = Route.useSearch();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [matrix, setMatrix] = useState<Record<number, Answer>>({});
@@ -146,40 +151,54 @@ function QuestionnairePage() {
   const [scale14NA, setScale14NA] = useState(false);
   const [scale14Touched, setScale14Touched] = useState(false);
   const [assessmentId, setAssessmentId] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Resume the latest unfinished assessment for this area
+  // Resume a specific assessment (?id=) or the latest unfinished one for this area
   useEffect(() => {
     let active = true;
-    supabase
-      .from("assessments")
-      .select("id, current_step, answers")
-      .eq("area", area as ResourceArea)
-      .eq("status", "in_progress")
-      .order("updated_at", { ascending: false })
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (!active || !data) return;
-        const a = (data.answers ?? {}) as Record<string, unknown>;
-        setAssessmentId(data.id);
-        setStep(Math.min(Math.max(data.current_step ?? 1, 1), TOTAL_STEPS - 1));
-        setMatrix((a.matrix as Record<number, Answer>) ?? {});
-        setMatrix2((a.matrix2 as Record<number, Answer>) ?? {});
-        setMatrix3((a.matrix3 as Record<number, Answer>) ?? {});
-        setMatrix4((a.matrix4 as Record<number, Answer>) ?? {});
-        setScale((a.scale as number) ?? 0);
-        setScaleNA(Boolean(a.scaleNA));
-        setScaleTouched(Boolean(a.scaleTouched));
-        setScale14((a.scale14 as number) ?? 0);
-        setScale14NA(Boolean(a.scale14NA));
-        setScale14Touched(Boolean(a.scale14Touched));
-      });
+    const query = routeId
+      ? supabase
+          .from("assessments")
+          .select("id, current_step, answers, status")
+          .eq("id", routeId)
+          .maybeSingle()
+      : supabase
+          .from("assessments")
+          .select("id, current_step, answers, status")
+          .eq("area", area as ResourceArea)
+          .eq("status", "in_progress")
+          .order("updated_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+    query.then(({ data }) => {
+      if (!active || !data) return;
+      const a = (data.answers ?? {}) as Record<string, unknown>;
+      setAssessmentId(data.id);
+      setIsEditing(data.status === "completed");
+      setStep(
+        data.status === "completed"
+          ? 1
+          : Math.min(Math.max(data.current_step ?? 1, 1), TOTAL_STEPS - 1),
+      );
+      setMatrix((a.matrix as Record<number, Answer>) ?? {});
+      setMatrix2((a.matrix2 as Record<number, Answer>) ?? {});
+      setMatrix3((a.matrix3 as Record<number, Answer>) ?? {});
+      setMatrix4((a.matrix4 as Record<number, Answer>) ?? {});
+      setScale((a.scale as number) ?? 0);
+      setScaleNA(Boolean(a.scaleNA));
+      setScaleTouched(Boolean(a.scaleTouched));
+      setScale14((a.scale14 as number) ?? 0);
+      setScale14NA(Boolean(a.scale14NA));
+      setScale14Touched(Boolean(a.scale14Touched));
+    });
     return () => {
       active = false;
     };
-  }, [area]);
+  }, [area, routeId]);
+
 
   const percentages = useMemo(() => {
     const ratio = (m: Record<number, Answer>) => {
@@ -222,15 +241,17 @@ function QuestionnairePage() {
       setSaving(false);
       return null;
     }
+    const done = opts.completed || isEditing;
     const payload = {
       user_id: userId,
       area: area as "representativeness" | "governance" | "empowerment" | "results" | "general",
-      status: opts.completed ? "completed" : "in_progress",
+      status: done ? "completed" : "in_progress",
       current_step: opts.step,
       answers: answersPayload,
       percentages,
-      completed_at: opts.completed ? new Date().toISOString() : null,
+      completed_at: done ? new Date().toISOString() : null,
     };
+
     let id = assessmentId;
     if (id) {
       await supabase.from("assessments").update(payload).eq("id", id);
@@ -309,9 +330,15 @@ function QuestionnairePage() {
           </button>
 
           <div className="ml-auto flex min-w-0 items-center gap-4">
+            {isEditing && (
+              <span className="hidden whitespace-nowrap rounded-full bg-white/20 px-3 py-1 text-[12px] font-bold text-white md:inline">
+                Editing completed assessment
+              </span>
+            )}
             <span className="hidden whitespace-nowrap text-[13px] text-white/85 sm:inline">
               {step < TOTAL_STEPS ? `Question ${step} of ${TOTAL_STEPS - 1}` : "Assessment Complete"}
             </span>
+
             <div className="h-[7px] w-[120px] overflow-hidden rounded-full bg-white/25 sm:w-[240px]">
               <div
                 className="h-full rounded-full bg-white transition-all duration-300"

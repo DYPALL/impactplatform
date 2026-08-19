@@ -78,6 +78,33 @@ const AREAS: AreaDef[] = [
   },
 ];
 
+const GUIDE_STEPS: { n: number; title: string; body: string; color: string }[] = [
+  {
+    n: 1,
+    title: "Create your account",
+    body: "Your council's results, action plans and reflections are stored securely in one place.",
+    color: "var(--impact-purple)",
+  },
+  {
+    n: 2,
+    title: "Pick a focus area",
+    body: "Choose one of the IMPACT thematic areas below to start with, or work through them all.",
+    color: "var(--impact-orange)",
+  },
+  {
+    n: 3,
+    title: "Answer the questionnaire",
+    body: "It takes 15–30 minutes and you can save your progress and quit at any point.",
+    color: "var(--impact-green)",
+  },
+  {
+    n: 4,
+    title: "Review your results",
+    body: "Get a visual scoreboard and reflection prompts — edit your answers anytime to update them.",
+    color: "var(--impact-pink)",
+  },
+];
+
 
 type AssessmentRow = {
   id: string;
@@ -119,106 +146,132 @@ function Dashboard() {
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
 
   const completed = assessments.filter((a) => a.status === "completed");
-  const totals = { done: completed.length, plans: 0 };
-  const perArea: Record<AreaDef["key"], number> = {
-    representativeness: 0,
-    governance: 0,
-    empowerment: 0,
-    results: 0,
-  };
-  for (const a of completed) {
-    if (a.area in perArea) perArea[a.area] += 1;
-  }
+  const totals = { done: completed.length };
 
+
+
+
+  const inProgress = assessments.filter((a) => a.status !== "completed");
 
   return (
     <div className="min-h-screen bg-[color:var(--impact-surface-muted,#f4f7f7)] px-6 pb-16 pt-8 lg:px-12">
       <div className="mx-auto max-w-[1280px] space-y-8">
-        {/* Hero pill */}
-        <section className="overflow-hidden rounded-[40px] bg-[color:var(--impact-purple)] p-5 md:p-8 lg:p-12">
-          <div className="grid grid-cols-1 gap-5 md:gap-8 lg:grid-cols-[260px_1fr]">
-            {/* Greeting */}
-            <div className="flex items-start gap-4 text-left lg:flex-col lg:items-center lg:text-center">
-              <div className="flex flex-col items-center gap-2">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-white/25 text-white lg:h-24 lg:w-24">
-                  <User size={30} strokeWidth={1.5} className="lg:h-[38px] lg:w-[38px]" />
-                </div>
-                <Link
-                  to="/profile"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white/20 px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-white/30 lg:hidden"
-                >
-                  <Settings size={14} />
-                  <span>Profile</span>
-                </Link>
-              </div>
-              <div className="min-w-0 flex-1">
-                <h1 className="whitespace-nowrap text-[22px] font-extrabold leading-tight text-white lg:text-[26px]">
-                  Hi, {firstName} 👋
-                </h1>
-                <p className="mt-1 text-[13px] text-white/75">How do you feel today?</p>
-              </div>
-              <Link
-                to="/profile"
-                className="hidden shrink-0 items-center gap-2 self-center rounded-full bg-white/20 px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-white/30 lg:mt-5 lg:inline-flex lg:px-4 lg:py-2 lg:text-[13px]"
-              >
-                <Settings size={14} />
-                <span className="hidden sm:inline">Manage profile</span>
-                <span className="sm:hidden">Profile</span>
-              </Link>
+        {/* Greeting strip */}
+        <section className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[color:var(--impact-purple)]/10 text-[color:var(--impact-purple)]">
+              <User size={22} strokeWidth={1.75} />
             </div>
-
-            {/* Progress summary card */}
-            <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm md:p-5 lg:rounded-3xl lg:p-6">
-              <p className="mb-3 text-center text-[13px] font-semibold text-white md:mb-4 md:text-[15px] lg:text-[16px]">My Progress Summary</p>
-              <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1fr_1.6fr]">
-                <StatTile value={totals.done} label="Questionnaires done" />
-                <StatTile value={totals.plans} label="Action plans built" />
-                <div className="rounded-2xl bg-white/10 p-3 md:p-4 lg:rounded-2xl lg:p-5">
-                  <p className="mb-3 text-center text-[13px] font-semibold text-white md:mb-4 md:text-[15px] lg:text-[16px]">Questionnaires per Area</p>
-                  <div className="grid grid-cols-2 gap-3 md:gap-4">
-                    {AREAS.map((a) => (
-                      <div
-                        key={a.key}
-                        className="rounded-2xl px-3 py-2.5 text-center md:px-4 md:py-3.5 lg:px-5 lg:py-4"
-                        style={{ backgroundColor: a.softBg }}
-                      >
-                        <p className="text-[11px] font-semibold leading-tight md:text-[13px] lg:text-[14px]" style={{ color: a.softText }}>
-                          {a.title}
-                        </p>
-                        <p className="mt-1.5 text-[24px] font-extrabold md:mt-2 md:text-[28px] lg:text-[32px]" style={{ color: a.softText }}>
-                          {perArea[a.key]}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA guide banner */}
-        <section className="max-w-[1280px]">
-          <div className="flex flex-col items-center gap-6 overflow-hidden rounded-[40px] bg-[color:var(--impact-purple)] p-8 text-white shadow-xl md:flex-row md:p-12">
-            <div className="flex-1">
-              <h2 className="text-[24px] font-extrabold">How to start assessing?</h2>
-              <p className="mt-2 max-w-xl text-[14px] text-white/80">
-                Follow our step-by-step guide to complete your first assessment and get personalized recommendations.
+            <div className="min-w-0">
+              <h1 className="whitespace-nowrap text-[22px] font-extrabold leading-tight text-[color:var(--impact-purple)]">
+                Hi, {firstName} 👋
+              </h1>
+              <p className="text-[13px] text-[color:var(--impact-ink-muted)]">
+                {totals.done} completed · {inProgress.length} in progress
               </p>
             </div>
-            <a
-              href="/#how"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-white px-6 text-[14px] font-bold text-[color:var(--impact-purple)] transition hover:bg-white/90"
-            >
-              Start the guide →
-            </a>
+          </div>
+          <Link
+            to="/profile"
+            className="inline-flex items-center gap-2 rounded-full border-2 border-[color:var(--impact-purple)] px-4 py-2 text-[13px] font-bold text-[color:var(--impact-purple)] transition hover:bg-[color:var(--impact-purple)]/5"
+          >
+            <Settings size={14} />
+            Manage profile
+          </Link>
+        </section>
+
+        {/* How to start assessing — beginner guide */}
+        <section className="overflow-hidden rounded-[40px] bg-white p-6 shadow-[0_2px_14px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-10">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center">
+            <div className="flex-1">
+              <span className="inline-flex items-center rounded-full bg-[#EDE4F6] px-3 py-1 text-[11px] font-bold tracking-wide text-[color:var(--impact-purple)]">
+                BEGINNER GUIDE
+              </span>
+              <h2 className="mt-3 text-[26px] font-extrabold leading-tight text-[color:var(--impact-purple)] md:text-[32px]">
+                How to start assessing?
+              </h2>
+              <p className="mt-2 max-w-xl text-[14px] leading-relaxed text-[color:var(--impact-ink-muted)]">
+                Four simple steps to measure your Local Youth Council's impact, reflect together as a
+                team, and turn results into concrete action. You can pause any questionnaire and pick
+                it up later.
+              </p>
+            </div>
             <img
               src={ctaImg.url}
               alt=""
-              className="hidden h-[130px] w-[220px] rounded-2xl object-cover md:block"
+              className="hidden h-[150px] w-[240px] shrink-0 rounded-3xl object-cover md:block"
             />
           </div>
+
+          <ol className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {GUIDE_STEPS.map((s) => (
+              <li
+                key={s.n}
+                className="rounded-3xl bg-[color:var(--impact-surface-muted,#f4f7f7)] p-5"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="relative h-[40px] w-[44px] shrink-0">
+                    <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+                      <path
+                        d="M50,8 L90,80 L10,80 Z"
+                        fill={s.color}
+                        stroke={s.color}
+                        strokeWidth="10"
+                        strokeLinejoin="round"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <span className="absolute inset-0 flex items-center justify-center pt-1 text-[15px] font-bold text-white">
+                      {s.n}
+                    </span>
+                  </div>
+                  <h3 className="text-[15px] font-bold leading-tight text-[color:var(--impact-ink)]">
+                    {s.title}
+                  </h3>
+                </div>
+                <p className="mt-3 text-[13px] leading-relaxed text-[color:var(--impact-ink-muted)]">
+                  {s.body}
+                </p>
+              </li>
+            ))}
+          </ol>
         </section>
+
+        {/* Continue where you left off */}
+        {inProgress.length > 0 && (
+          <section className="rounded-3xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)] ring-1 ring-black/5">
+            <h2 className="text-[18px] font-extrabold text-[color:var(--impact-purple)]">
+              Continue where you left off
+            </h2>
+            <ul className="mt-4 divide-y divide-black/5">
+              {inProgress.map((it) => {
+                const a = AREAS.find((x) => x.key === it.area);
+                return (
+                  <li key={it.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                    <div className="min-w-0">
+                      <p className="text-[14px] font-bold text-[color:var(--impact-ink)]">
+                        {a?.title ?? it.area}
+                      </p>
+                      <p className="text-[12px] text-[color:var(--impact-ink-muted)]">
+                        Paused at question {Math.max(it.current_step, 1)} ·{" "}
+                        {new Date(it.updated_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <Link
+                      to="/questionnaire/$area"
+                      params={{ area: it.area }}
+                      search={{ id: it.id }}
+                      className="rounded-full px-5 py-2 text-[13px] font-bold text-white transition hover:opacity-90"
+                      style={{ backgroundColor: a?.color ?? "var(--impact-purple)" }}
+                    >
+                      Resume
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
 
         {/* Assessments */}
         <section className="py-6">
@@ -246,14 +299,6 @@ function Dashboard() {
   );
 }
 
-function StatTile({ value, label }: { value: number; label: string }) {
-  return (
-    <div className="flex flex-col justify-center rounded-xl bg-white/15 p-3 text-center lg:rounded-2xl lg:p-4">
-      <p className="text-[34px] font-extrabold leading-none text-white lg:text-[44px]">{value}</p>
-      <p className="mt-1 text-[12px] text-white/80 lg:mt-2 lg:text-[13px]">{label}</p>
-    </div>
-  );
-}
 
 function AreaCard({
   area,
@@ -355,24 +400,28 @@ function AreaCard({
                         >
                           See results
                         </Link>
-                        <button
-                          type="button"
+                        <Link
+                          to="/questionnaire/$area"
+                          params={{ area: area.key }}
+                          search={{ id: it.id }}
                           className="rounded-full px-4 py-2 text-[12px] font-bold text-white transition hover:opacity-90"
                           style={{ backgroundColor: area.color }}
                         >
-                          + New action plan
-                        </button>
+                          Edit answers
+                        </Link>
                       </>
                     ) : (
                       <Link
                         to="/questionnaire/$area"
                         params={{ area: area.key }}
+                        search={{ id: it.id }}
                         className="rounded-full border-2 px-4 py-2 text-[12px] font-bold transition"
                         style={{ borderColor: area.color, color: area.color }}
                       >
                         Continue
                       </Link>
                     )}
+
                     <button
                       type="button"
                       aria-label={`Delete assessment ${idx + 1}`}
