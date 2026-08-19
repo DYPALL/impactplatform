@@ -689,16 +689,6 @@ function SliderQuestion({
           ))}
         </div>
 
-        <div className="mt-3 flex justify-end">
-          <button
-            type="button"
-            onClick={onSkip}
-            className="inline-flex items-center gap-2 rounded-full border border-[#d1d5db] bg-white px-4 py-2 text-[13px] font-semibold text-[#6b7280] transition hover:border-[#502181] hover:text-[#502181]"
-          >
-            Skip this question
-          </button>
-        </div>
-
         <div
           className="mt-10 rounded-2xl border p-6 transition-colors duration-300"
           style={{ backgroundColor: level.soft, borderColor: level.color }}
