@@ -649,12 +649,12 @@ function SliderQuestion({
 
           {/* Thumb */}
           <div
-            className="pointer-events-none absolute top-1/2 flex h-[36px] w-[28px] -translate-x-1/2 -translate-y-[58%] items-start justify-center transition-all duration-300 ease-out"
-            style={{ left: `${((value + 0.5) / levels.length) * 100}%`, color: level.color }}
+            className="pointer-events-none absolute top-1/2 flex h-[36px] w-[28px] -translate-x-1/2 -translate-y-[58%] items-start justify-center drop-shadow-lg transition-all duration-300 ease-out"
+            style={{ left: `${((value + 0.5) / levels.length) * 100}%` }}
           >
             <svg width="28" height="36" viewBox="0 0 28 36" fill="none" aria-hidden="true">
-              <rect x="1" y="5" width="26" height="26" rx="7" fill="currentColor" stroke="white" strokeWidth="2.5" />
-              <path d="M9 13L14 20L19 13Z" fill="white" />
+              <rect x="1" y="5" width="26" height="26" rx="7" fill="white" stroke="#E5E7EB" strokeWidth="1.5" />
+              <path d="M10 12L14 18L18 12Z" fill={PURPLE} />
             </svg>
           </div>
 
