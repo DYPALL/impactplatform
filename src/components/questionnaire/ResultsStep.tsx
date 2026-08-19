@@ -2,29 +2,19 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, Info, ListChecks, RefreshCw } from "lucide-react";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
-import batteryNotAtAll from "@/assets/battery-not-at-all.png.asset.json";
-import batteryPartially from "@/assets/battery-partially.png.asset.json";
-import batteryMostly from "@/assets/battery-mostly.png.asset.json";
-import batteryFully from "@/assets/battery-fully.png.asset.json";
 import { INDICATOR_CONTENT, LEVELS, levelFromPct, type IndicatorContent, type LevelKey } from "./results-data";
+import { ScoreMeter } from "./ScoreMeter";
 
 const PURPLE = "#502181";
 
 export type IndicatorResult = { pct: number; level: LevelKey };
 
-/* ---------------------------------- Battery --------------------------------- */
-
-const BATTERY_IMG = [batteryNotAtAll, batteryPartially, batteryMostly, batteryFully];
+/* ------------------------------- Score meter ------------------------------- */
 
 function Battery({ level, className }: { level: LevelKey; className?: string }) {
-  return (
-    <img
-      src={BATTERY_IMG[level].url}
-      alt={`Performance level: ${LEVELS[level].label}`}
-      className={`w-auto shrink-0 ${className ?? "h-[38px]"}`}
-    />
-  );
+  return <ScoreMeter level={level} className={className} />;
 }
+
 
 
 function LevelPill({ level }: { level: LevelKey }) {
