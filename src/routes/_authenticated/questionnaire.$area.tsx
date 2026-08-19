@@ -2,7 +2,10 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Info, Play } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { ResultsStep } from "@/components/questionnaire/ResultsStep";
+
+type ResourceArea = Database["public"]["Enums"]["resource_area"];
 
 
 export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
@@ -152,7 +155,7 @@ function QuestionnairePage() {
     supabase
       .from("assessments")
       .select("id, current_step, answers")
-      .eq("area", area)
+      .eq("area", area as ResourceArea)
       .eq("status", "in_progress")
       .order("updated_at", { ascending: false })
       .limit(1)

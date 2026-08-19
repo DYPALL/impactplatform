@@ -239,10 +239,10 @@ function CtaBanner() {
 }
 
 const partners = [
-  { name: "DYPALL Network", logo: dypallLogo.url },
-  { name: "Bataljong", logo: bataljongLogo.url },
-  { name: "Fundació Ferrer i Guàrdia", logo: fundacioLogo.url },
-  { name: "Nuva", logo: nuvaLogo.url },
+  { name: "DYPALL Network", logo: dypallLogo.url, url: "https://dypall.com/" },
+  { name: "Bataljong", logo: bataljongLogo.url, url: "https://bataljong.be/" },
+  { name: "Fundació Ferrer i Guàrdia", logo: fundacioLogo.url, url: "https://www.ferrerguardia.org/" },
+  { name: "Nuva", logo: nuvaLogo.url, url: "https://nuva.fi/en/" },
 ];
 
 function Consortium() {
@@ -260,16 +260,20 @@ function Consortium() {
         </div>
         <div className="mt-7 grid grid-cols-2 gap-6 md:grid-cols-4">
           {partners.map((p) => (
-            <div
+            <a
               key={p.name}
-              className="flex h-[120px] items-center justify-center rounded-lg border border-[color:var(--impact-border)] bg-white px-6 shadow-[0_4px_6px_rgba(0,0,0,0.04)]"
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit ${p.name} website`}
+              className="flex h-[120px] items-center justify-center rounded-lg border border-[color:var(--impact-border)] bg-white px-6 shadow-[0_4px_6px_rgba(0,0,0,0.04)] transition hover:shadow-[0_8px_16px_rgba(0,0,0,0.08)] hover:scale-[1.02]"
             >
               <img
                 src={p.logo}
                 alt={`${p.name} logo`}
                 className="max-h-[80px] max-w-full object-contain"
               />
-            </div>
+            </a>
           ))}
         </div>
       </div>
