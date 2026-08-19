@@ -88,33 +88,42 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           city: string | null
           council_name: string | null
           council_role: string | null
           country: string | null
           created_at: string
+          first_name: string | null
           full_name: string | null
           id: string
+          surname: string | null
           updated_at: string
         }
         Insert: {
+          avatar_url?: string | null
           city?: string | null
           council_name?: string | null
           council_role?: string | null
           country?: string | null
           created_at?: string
+          first_name?: string | null
           full_name?: string | null
           id: string
+          surname?: string | null
           updated_at?: string
         }
         Update: {
+          avatar_url?: string | null
           city?: string | null
           council_name?: string | null
           council_role?: string | null
           country?: string | null
           created_at?: string
+          first_name?: string | null
           full_name?: string | null
           id?: string
+          surname?: string | null
           updated_at?: string
         }
         Relationships: []
