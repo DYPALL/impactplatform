@@ -9,6 +9,9 @@ type ResourceArea = Database["public"]["Enums"]["resource_area"];
 
 
 export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
+  validateSearch: (search: Record<string, unknown>): { id?: string } => ({
+    id: typeof search['id'] === "string" ? (search['id'] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Questionnaire — IMPACT" },
@@ -19,6 +22,7 @@ export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
   }),
   component: QuestionnairePage,
 });
+
 
 const PURPLE = "#502181";
 
