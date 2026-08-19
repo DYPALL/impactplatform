@@ -52,6 +52,7 @@ export function ResourceForm({ mode, resourceId }: { mode: "create" | "edit"; re
       if (data) {
         setTitle(data.title);
         setDescription(data.description);
+        setAuthor(data.author ?? "");
         setImageUrl(data.image_url);
         setArea(data.area as ResourceArea);
         setType(data.resource_type as ResourceType);
