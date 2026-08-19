@@ -9,10 +9,10 @@ import cofundLogo from "@/assets/cofund-eu-white.png.asset.json";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — IMPACT" },
-      { name: "description", content: "Sign in or register to save your IMPACT youth council assessments." },
-      { property: "og:title", content: "Sign in — IMPACT" },
-      { property: "og:description", content: "Sign in or register to save your IMPACT youth council assessments." },
+      { title: "Log-in — IMPACT" },
+      { name: "description", content: "Log-in or Sign-up to save your IMPACT youth council assessments." },
+      { property: "og:title", content: "Log-in — IMPACT" },
+      { property: "og:description", content: "Log-in or Sign-up to save your IMPACT youth council assessments." },
     ],
   }),
   component: AuthPage,
@@ -57,7 +57,7 @@ function Header() {
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
-            Log in / Sign up
+            Log-in / Sign-up
           </Link>
         </nav>
       </div>
@@ -160,7 +160,7 @@ function AuthPage() {
       router.invalidate();
       navigate({ to: "/dashboard", replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Sign-in failed");
+      setError(err instanceof Error ? err.message : "Log-in failed");
     } finally {
       setBusy(false);
     }
@@ -189,12 +189,12 @@ function AuthPage() {
 
           <div className="relative z-10 max-w-[420px]">
             <h1 className="text-[44px] font-extrabold leading-[1.05] tracking-tight lg:text-[52px]">
-              {mode === "signin" ? "Sign in to continue" : "Register your council"}
+              {mode === "signin" ? "Log-in to continue" : "Sign-up your council"}
             </h1>
             <p className="mt-5 text-[15px] leading-relaxed text-white/85">
               {mode === "signin"
-                ? "If you don't have an account, you must register before proceeding."
-                : "Create an account for your Local Youth Council to save assessments and revisit results anytime."}
+                ? "If you don't have an account, you must sign-up before proceeding."
+                : "Sign-up your Local Youth Council to save assessments and revisit results anytime."}
             </p>
           </div>
 
@@ -220,7 +220,7 @@ function AuthPage() {
                     : "text-[color:var(--impact-ink)]/60 hover:text-[color:var(--impact-ink)]"
                 }`}
               >
-                Sign In
+                Log-in
               </button>
               <button
                 type="button"
@@ -231,7 +231,7 @@ function AuthPage() {
                     : "text-[color:var(--impact-ink)]/60 hover:text-[color:var(--impact-ink)]"
                 }`}
               >
-                Register
+                Sign-up
               </button>
             </div>
 
@@ -248,7 +248,7 @@ function AuthPage() {
                 <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 34.9 26.7 36 24 36c-5.2 0-9.7-3.3-11.3-8l-6.5 5C9.6 39.6 16.3 44 24 44z"/>
                 <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.6l6.2 5.2C41.4 35.5 44 30.2 44 24c0-1.3-.1-2.4-.4-3.5z"/>
               </svg>
-              Sign in with Google
+              Log-in with Google
             </button>
 
             {/* Divider */}
@@ -323,7 +323,7 @@ function AuthPage() {
                 disabled={busy}
                 className="mt-2 w-full rounded-full bg-[color:var(--impact-purple)] py-3 text-[14px] font-bold text-white transition hover:opacity-90 disabled:opacity-50"
               >
-                {busy ? "Please wait…" : mode === "signin" ? "Sign In" : "Create account"}
+                {busy ? "Please wait…" : mode === "signin" ? "Log-in" : "Sign-up"}
               </button>
 
               <p className="pt-1 text-center text-[13px] text-[color:var(--impact-ink)]/70">
@@ -333,7 +333,7 @@ function AuthPage() {
                   onClick={() => { setError(null); setMode(mode === "signin" ? "signup" : "signin"); }}
                   className="font-bold text-[color:var(--impact-teal,#219c9e)] hover:underline"
                 >
-                  {mode === "signin" ? "Register" : "Sign In"}
+                  {mode === "signin" ? "Sign-up" : "Log-in"}
                 </button>
               </p>
             </form>
