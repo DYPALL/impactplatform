@@ -119,16 +119,9 @@ function Dashboard() {
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
 
   const completed = assessments.filter((a) => a.status === "completed");
-  const totals = { done: completed.length, plans: 0 };
-  const perArea: Record<AreaDef["key"], number> = {
-    representativeness: 0,
-    governance: 0,
-    empowerment: 0,
-    results: 0,
-  };
-  for (const a of completed) {
-    if (a.area in perArea) perArea[a.area] += 1;
-  }
+  const totals = { done: completed.length };
+
+
 
 
   const inProgress = assessments.filter((a) => a.status !== "completed");
