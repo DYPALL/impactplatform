@@ -5,6 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import logoWhite from "@/assets/IMPACT_Logo_white.png.asset.json";
+import OnboardingGuideModal from "@/components/OnboardingGuideModal";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -125,7 +126,7 @@ function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [assessments, setAssessments] = useState<AssessmentRow[]>([]);
-  const [guideOpen, setGuideOpen] = useState(false);
+  const [guideModalOpen, setGuideModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const { signOut } = useAuth();
   const guideRef = useRef<HTMLDivElement | null>(null);
