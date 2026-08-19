@@ -53,6 +53,13 @@ const typeFilters: { key: TypeKey; label: string }[] = [
   { key: "document", label: "Documents" },
 ];
 
+const sortOptions: { key: SortKey; label: string }[] = [
+  { key: "year_desc", label: "Publication Year: Newest to Oldest" },
+  { key: "year_asc", label: "Publication Year: Oldest to Newest" },
+  { key: "title_asc", label: "Alphabetical: A – Z" },
+  { key: "title_desc", label: "Alphabetical: Z – A" },
+];
+
 const typeLabel: Record<ResourceRow["resource_type"], string> = {
   publication: "Publication",
   video: "Video",
