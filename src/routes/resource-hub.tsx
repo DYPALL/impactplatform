@@ -307,6 +307,28 @@ function ResourceHubPage() {
                 );
               })}
             </div>
+
+            <div className="flex flex-col gap-3 border-t border-[#f1f2f4] pt-4 sm:flex-row sm:items-center sm:justify-between">
+              <span className="text-[13px] font-semibold text-[#6b7280]">
+                {filtered.length} resource{filtered.length === 1 ? "" : "s"} found
+              </span>
+              <div className="flex items-center gap-2 rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                <SortIcon />
+                <label htmlFor="sort" className="text-[13px] font-bold text-[#111827]">Sort by</label>
+                <select
+                  id="sort"
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as SortKey)}
+                  className="bg-transparent text-[13px] font-medium text-[#374151] outline-none"
+                >
+                  {sortOptions.map((o) => (
+                    <option key={o.key} value={o.key}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
         </section>
 
