@@ -101,28 +101,37 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
               />
             );
           })}
-          {/* wifi-signal sectors: even angular gaps + radial white space between bands */}
+          {/* wifi-signal sectors: constant-pixel gaps so edges stay parallel */}
           {INDICATOR_CONTENT.map((ind, i) => {
             const level = results[i]?.level ?? 0;
             const isActive = active === i;
             const isDimmed = active !== null && active !== i;
-            const gap = 10; // even degrees of white space between sectors
-            const from = -90 + i * 60 + gap / 2;
-            const to = -30 + i * 60 - gap / 2;
             const color = LEVELS[level].color;
             const [tx, ty] = polar(cx, cy, maxR + 30, -60 + i * 60);
 
             const bandCount = 4;
-            const bandGap = 5;
+            const bandGap = 6;
+            const gapPx = 9; // constant white space between sectors, in px
             const available = maxR - inner - (bandCount - 1) * bandGap;
             const bandThickness = available / bandCount;
-            const activeBoost = isActive ? 5 : 0;
             const bands = Array.from({ length: bandCount }, (_, b) => {
               const r0 = inner + b * (bandThickness + bandGap);
-              const r1 = r0 + bandThickness + activeBoost;
-              return { r0, r1 };
+              const r1 = r0 + bandThickness;
+              // angular half-gap that keeps the pixel gap constant at this radius
+              const halfGapInner = ((gapPx / 2 / r0) * 180) / Math.PI;
+              const halfGapOuter = ((gapPx / 2 / r1) * 180) / Math.PI;
+              return { r0, r1, halfGapInner, halfGapOuter };
             });
             const filledBands = level + 1; // 1..4
+            const base = -90 + i * 60;
+
+            const bandPath = (b: { r0: number; r1: number; halfGapInner: number; halfGapOuter: number }) => {
+              const [x1, y1] = polar(cx, cy, b.r0, base + b.halfGapInner);
+              const [x2, y2] = polar(cx, cy, b.r1, base + b.halfGapOuter);
+              const [x3, y3] = polar(cx, cy, b.r1, base + 60 - b.halfGapOuter);
+              const [x4, y4] = polar(cx, cy, b.r0, base + 60 - b.halfGapInner);
+              return `M ${x1} ${y1} L ${x2} ${y2} A ${b.r1} ${b.r1} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${b.r0} ${b.r0} 0 0 0 ${x1} ${y1} Z`;
+            };
 
             return (
               <g
@@ -132,29 +141,19 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
                 onClick={() => setSelected((s) => (s === i ? null : i))}
                 style={{ opacity: isDimmed ? 0.35 : 1 }}
               >
-                {bands.map(({ r0, r1 }, b) => (
-                  <path
-                    key={b}
-                    d={annularSectorPath(cx, cy, r0, b < filledBands ? r1 : r0, from, to)}
-                    fill={b < filledBands ? color : "transparent"}
-                    opacity={b < filledBands ? (isActive ? 0.95 : 0.6) : 0}
-                  />
-                ))}
-                {isActive && (
-                  <path
-                    d={annularSectorPath(
-                      cx,
-                      cy,
-                      bands[filledBands - 1].r0,
-                      bands[filledBands - 1].r1,
-                      from,
-                      to
-                    )}
-                    fill="none"
-                    stroke="#fff"
-                    strokeWidth={2}
-                  />
+                {bands.map((b, idx) =>
+                  idx < filledBands ? (
+                    <path
+                      key={idx}
+                      d={bandPath(b)}
+                      fill={color}
+                      opacity={isActive ? 1 : 0.6}
+                      stroke={isActive ? "#fff" : "none"}
+                      strokeWidth={isActive ? 1.5 : 0}
+                    />
+                  ) : null
                 )}
+
                 {/* code label without triangle badge */}
                 <text
                   x={tx}
