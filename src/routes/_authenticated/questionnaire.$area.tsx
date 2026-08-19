@@ -568,11 +568,11 @@ function MatrixQuestion({
                     aria-checked={checked}
                     aria-label={`${c} — ${v}`}
                     onClick={() => setMatrix((m) => ({ ...m, [i]: v }))}
-                    className="grid h-[18px] w-[18px] place-items-center rounded-full border-2 transition"
+                    className="flex h-[20px] w-[20px] items-center justify-center rounded-full border-2 transition"
                     style={{ borderColor: checked ? PURPLE : "#C9CDD4" }}
                   >
                     {checked && (
-                      <span className="h-[9px] w-[9px] rounded-full" style={{ backgroundColor: PURPLE }} />
+                      <span className="h-[10px] w-[10px] rounded-full" style={{ backgroundColor: PURPLE }} />
                     )}
                   </button>
                 </span>
@@ -649,17 +649,18 @@ function SliderQuestion({
 
           {/* Thumb */}
           <div
-            className="pointer-events-none absolute top-1/2 grid h-[36px] w-[28px] -translate-x-1/2 -translate-y-[58%] place-items-center transition-all duration-300 ease-out"
+            className="pointer-events-none absolute top-1/2 flex h-[36px] w-[28px] -translate-x-1/2 -translate-y-[58%] items-start justify-center transition-all duration-300 ease-out"
             style={{ left: `${((value + 0.5) / levels.length) * 100}%`, color: level.color }}
           >
             <svg width="28" height="36" viewBox="0 0 28 36" fill="none" aria-hidden="true">
+              <rect x="2" y="6" width="24" height="24" rx="6" fill="currentColor" stroke="white" strokeWidth="2.5" />
               <path
-                d="M14 34.5C20.5 34.5 26 29 26 21C26 13.5 14 1 14 1C14 1 2 13.5 2 21C2 29 7.5 34.5 14 34.5Z"
-                fill="currentColor"
+                d="M10 16L14 20L18 16"
                 stroke="white"
                 strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
-              <circle cx="14" cy="21" r="4.5" fill="white" />
             </svg>
           </div>
 
