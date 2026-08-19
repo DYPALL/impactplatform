@@ -568,11 +568,11 @@ function MatrixQuestion({
                     aria-checked={checked}
                     aria-label={`${c} — ${v}`}
                     onClick={() => setMatrix((m) => ({ ...m, [i]: v }))}
-                    className="grid h-[18px] w-[18px] place-items-center rounded-full border-2 transition"
+                    className="flex h-[20px] w-[20px] items-center justify-center rounded-full border-2 transition"
                     style={{ borderColor: checked ? PURPLE : "#C9CDD4" }}
                   >
                     {checked && (
-                      <span className="h-[9px] w-[9px] rounded-full" style={{ backgroundColor: PURPLE }} />
+                      <span className="h-[10px] w-[10px] rounded-full" style={{ backgroundColor: PURPLE }} />
                     )}
                   </button>
                 </span>
