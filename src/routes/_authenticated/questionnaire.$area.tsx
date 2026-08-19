@@ -585,16 +585,6 @@ function MatrixQuestion({
   );
 }
 
-function NaIcon({ size = 14, className }: { size?: number; className?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 14 14" className={className} fill="none">
-      <rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
-      <text x="7" y="9.25" textAnchor="middle" fontSize="5.5" fontWeight="700" fill="currentColor">
-        N/A
-      </text>
-    </svg>
-  );
-}
 
 function SliderQuestion({
   value,
