@@ -25,7 +25,9 @@ type Profile = {
   country: string | null;
   city: string | null;
   council_role: string | null;
+  avatar_url: string | null;
 };
+
 
 type AreaDef = {
   key: "representativeness" | "governance" | "empowerment" | "results";
