@@ -147,13 +147,23 @@ function Dashboard() {
         <div className="bg-[color:var(--impact-purple)] px-7 pb-8 pt-7 lg:rounded-none">
           <div className="flex items-center justify-between">
             <img src={logoWhite.url} alt="IMPACT" className="h-7 w-auto" />
-            <Link
-              to="/profile"
-              aria-label="Manage profile"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white transition hover:bg-white/25"
-            >
-              <Settings size={17} />
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                to="/profile"
+                aria-label="Manage profile"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white transition hover:bg-white/25"
+              >
+                <Settings size={17} />
+              </Link>
+              <button
+                type="button"
+                onClick={() => signOut()}
+                aria-label="Sign out"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white transition hover:bg-white/25 lg:hidden"
+              >
+                <LogOut size={17} />
+              </button>
+            </div>
           </div>
 
           <div className="mt-7 flex flex-col items-center text-center lg:mt-8">
