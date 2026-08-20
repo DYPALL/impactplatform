@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, Info, ListChecks, RefreshCw } from "lucide-react";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
-import { INDICATOR_CONTENT, LEVELS, levelFromPct, type IndicatorContent, type LevelKey } from "./results-data";
+import { LEVELS, levelFromPct, type LevelKey } from "./results-data";
+import { AREAS, type QIndicator } from "./content";
 import { ScoreMeter } from "./ScoreMeter";
 
 const PURPLE = "#502181";
@@ -52,7 +53,8 @@ function annularSectorPath(
   return `M ${x1} ${y1} L ${x2} ${y2} A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${x3} ${y3} L ${x4} ${y4} A ${rInner} ${rInner} 0 ${largeArc} 0 ${x1} ${y1} Z`;
 }
 
-function RoseChart({ results }: { results: IndicatorResult[] }) {
+function RoseChart({ results, indicators }: { results: IndicatorResult[]; indicators: QIndicator[] }) {
+  const step = 360 / indicators.length;
   const cx = 160;
   const cy = 160;
   const inner = 26;
@@ -86,8 +88,8 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
             />
           ))}
           {/* spokes */}
-          {INDICATOR_CONTENT.map((ind, i) => {
-            const [x, y] = polar(cx, cy, maxR, -90 + i * 60);
+          {indicators.map((ind, i) => {
+            const [x, y] = polar(cx, cy, maxR, -90 + i * step);
             return (
               <line
                 key={ind.code}
@@ -102,12 +104,12 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
             );
           })}
           {/* wifi-signal sectors: constant-pixel gaps so edges stay parallel */}
-          {INDICATOR_CONTENT.map((ind, i) => {
+          {indicators.map((ind, i) => {
             const level = results[i]?.level ?? 0;
             const isActive = active === i;
             const isDimmed = active !== null && active !== i;
             const color = LEVELS[level].color;
-            const [tx, ty] = polar(cx, cy, maxR + 30, -60 + i * 60);
+            const [tx, ty] = polar(cx, cy, maxR + 30, -90 + step / 2 + i * step);
 
             const bandCount = 4;
             const bandGap = 6;
@@ -123,13 +125,13 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
               return { r0, r1, halfGapInner, halfGapOuter };
             });
             const filledBands = level + 1; // 1..4
-            const base = -90 + i * 60;
+            const base = -90 + i * step;
 
             const bandPath = (b: { r0: number; r1: number; halfGapInner: number; halfGapOuter: number }) => {
               const [x1, y1] = polar(cx, cy, b.r0, base + b.halfGapInner);
               const [x2, y2] = polar(cx, cy, b.r1, base + b.halfGapOuter);
-              const [x3, y3] = polar(cx, cy, b.r1, base + 60 - b.halfGapOuter);
-              const [x4, y4] = polar(cx, cy, b.r0, base + 60 - b.halfGapInner);
+              const [x3, y3] = polar(cx, cy, b.r1, base + step - b.halfGapOuter);
+              const [x4, y4] = polar(cx, cy, b.r0, base + step - b.halfGapInner);
               return `M ${x1} ${y1} L ${x2} ${y2} A ${b.r1} ${b.r1} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${b.r0} ${b.r0} 0 0 0 ${x1} ${y1} Z`;
             };
 
@@ -154,7 +156,7 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
                   ) : null
                 )}
                 {/* invisible hover target covering the full sector */}
-                <path d={annularSectorPath(cx, cy, inner, maxR, base + 4, base + 56)} fill="transparent" />
+                <path d={annularSectorPath(cx, cy, inner, maxR, base + 4, base + step - 4)} fill="transparent" />
 
 
 
@@ -178,7 +180,7 @@ function RoseChart({ results }: { results: IndicatorResult[] }) {
 
       {/* Legend */}
       <div className="grid gap-2 sm:grid-cols-2">
-        {INDICATOR_CONTENT.map((ind, i) => {
+        {indicators.map((ind, i) => {
           const level = results[i]?.level ?? 0;
           const c = LEVELS[level].color;
           const isActive = active === i;
@@ -254,7 +256,7 @@ function IndicatorCard({
   result,
   defaultOpen,
 }: {
-  content: IndicatorContent;
+  content: QIndicator;
   result: IndicatorResult;
   defaultOpen?: boolean;
 }) {
@@ -313,7 +315,7 @@ function IndicatorCard({
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
               <div className="grid gap-4 sm:grid-cols-3">
-                {content.reflection.map((q, i) => (
+                {(content.reflection[result.level] ?? []).map((q, i) => (
                   <FlipCard key={q} index={i} text={q} />
                 ))}
               </div>
@@ -376,15 +378,18 @@ function IndicatorCard({
 
 /* --------------------------------- Results ---------------------------------- */
 
-export function ResultsStep({ percentages }: { percentages: number[] }) {
-  const results: IndicatorResult[] = INDICATOR_CONTENT.map((_, i) => {
+export function ResultsStep({ percentages, areaKey = "representativeness" }: { percentages: number[]; areaKey?: string }) {
+  const area = AREAS[areaKey] ?? AREAS["representativeness"]!;
+  const indicators = area.indicators;
+  const areaNumber = indicators[0]?.code.split(".")[0] ?? "1";
+  const results: IndicatorResult[] = indicators.map((_, i) => {
     const pct = percentages[i] ?? 0;
     return { pct, level: levelFromPct(pct) };
   });
 
   const sorted = [...results.map((r, i) => ({ ...r, i }))].sort((a, b) => a.pct - b.pct);
-  const best = INDICATOR_CONTENT[sorted[sorted.length - 1].i].title;
-  const weakest = sorted.slice(0, 3).map((r) => INDICATOR_CONTENT[r.i].title);
+  const best = indicators[sorted[sorted.length - 1]!.i]!.title;
+  const weakest = sorted.slice(0, 3).map((r) => indicators[r.i]!.title);
 
   return (
     <section>
@@ -394,15 +399,14 @@ export function ResultsStep({ percentages }: { percentages: number[] }) {
           className="inline-block rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white"
           style={{ backgroundColor: PURPLE }}
         >
-          Area 1
+          Area {areaNumber}
         </span>
         <h1 className="mt-3 text-[26px] font-extrabold leading-tight" style={{ color: PURPLE }}>
-          Representativeness and Inclusion
+          {area.name}
         </h1>
         <p className="mt-2 max-w-[900px] text-[13px] leading-relaxed text-[#4b5563]">
-          Who is part of the LYC, how representative it is of local youth, and how inclusive and accessible participation
-          is for all. Below you will find detailed feedback, interactive reflection questions, and recommended immediate
-          action steps to support your local council's growth.
+          {area.question} Below you will find detailed feedback, interactive reflection questions, and recommended
+          immediate action steps to support your local council's growth.
         </p>
       </div>
 
@@ -412,7 +416,7 @@ export function ResultsStep({ percentages }: { percentages: number[] }) {
         <p className="mt-1 text-[12px] text-[#6b7280]">A quick snapshot of your performance across all indicators</p>
 
         <div className="mt-5 rounded-xl bg-white p-3 ring-1 ring-black/5 sm:p-4">
-          <RoseChart results={results} />
+          <RoseChart results={results} indicators={indicators} />
         </div>
 
         <div className="mt-6 rounded-xl p-5 sm:p-6" style={{ backgroundColor: PURPLE }}>
@@ -431,8 +435,8 @@ export function ResultsStep({ percentages }: { percentages: number[] }) {
         </p>
 
         <div className="mt-5 space-y-5">
-          {INDICATOR_CONTENT.map((c, i) => (
-            <IndicatorCard key={c.code} content={c} result={results[i]} defaultOpen={i === 0} />
+          {indicators.map((c, i) => (
+            <IndicatorCard key={c.code} content={c} result={results[i]!} defaultOpen={i === 0} />
           ))}
         </div>
       </div>
