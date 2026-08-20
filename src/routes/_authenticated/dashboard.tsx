@@ -209,7 +209,7 @@ function Dashboard() {
           <h2 className="mt-8 text-[16px] font-extrabold text-[color:var(--impact-ink)]">
             Quick Links
           </h2>
-          <nav className="mt-4 space-y-2">
+          <nav className="mt-4 grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-2">
             <QuickLink to="/" label="Home" tint="#EDE4F6" dot="var(--impact-purple)" icon="home" />
             <QuickLink to="/resource-hub" label="Resource Hub" tint="#DCEFEF" dot="var(--impact-green)" icon="resource-hub" />
             <QuickLink to="/send-us-a-message" label="Send us a message" tint="#FCE7F0" dot="var(--impact-pink)" icon="message" />
@@ -369,7 +369,7 @@ function QuickLink({
   return (
     <Link
       to={to}
-      className="flex items-center gap-3 rounded-2xl px-3 py-3 text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:brightness-95"
+      className="flex items-center justify-center gap-3 rounded-2xl px-3 py-3 text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:brightness-95 lg:justify-start"
       style={{ backgroundColor: tint }}
     >
       <span
@@ -378,7 +378,7 @@ function QuickLink({
       >
         {iconSvg[icon]}
       </span>
-      {label}
+      <span className="hidden lg:inline">{label}</span>
     </Link>
   );
 }
