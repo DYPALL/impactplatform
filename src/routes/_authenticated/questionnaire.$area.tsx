@@ -108,21 +108,24 @@ function QuestionnairePage() {
     };
   }, [area, routeId, TOTAL_STEPS]);
 
+  // A value of -1 marks an indicator the user skipped ("not applicable").
   const percentages = useMemo(
     () =>
       indicators.map((ind, i) => {
         if (ind.type === "matrix") {
           const vals = Object.values(matrix[i] ?? {});
           const counted = vals.filter((v) => v !== "na").length;
-          if (!counted) return 0;
+          if (!counted) return vals.length ? -1 : 0;
           return (vals.filter((v) => v === "yes").length / counted) * 100;
         }
         const s = scale[i];
-        if (!s || s.na) return 0;
+        if (s?.na) return -1;
+        if (!s) return 0;
         return (s.value / Math.max(ind.levels.length - 1, 1)) * 100;
       }),
     [indicators, matrix, scale],
   );
+
 
   const answersPayload = useMemo(() => ({ answersByIndicator: { matrix, scale } }), [matrix, scale]);
 

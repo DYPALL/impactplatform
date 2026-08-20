@@ -8,7 +8,10 @@ import { AreaThemeProvider, themeForArea, useAreaTheme } from "./theme";
 import { ScoreMeter } from "./ScoreMeter";
 
 
-export type IndicatorResult = { pct: number; level: LevelKey };
+export type IndicatorResult = { pct: number; level: LevelKey; na?: boolean };
+
+const NA_GREY = "#9ca3af";
+
 
 /* ------------------------------- Score meter ------------------------------- */
 
@@ -106,10 +109,12 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
           })}
           {/* wifi-signal sectors: constant-pixel gaps so edges stay parallel */}
           {indicators.map((ind, i) => {
+            const isNa = Boolean(results[i]?.na);
             const level = results[i]?.level ?? 0;
             const isActive = active === i;
             const isDimmed = active !== null && active !== i;
-            const color = LEVELS[level].color;
+            const color = isNa ? NA_GREY : LEVELS[level].color;
+
             const [tx, ty] = polar(cx, cy, maxR + 30, -90 + step / 2 + i * step);
 
             const bandCount = 4;
@@ -125,7 +130,7 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
               const halfGapOuter = ((gapPx / 2 / r1) * 180) / Math.PI;
               return { r0, r1, halfGapInner, halfGapOuter };
             });
-            const filledBands = level + 1; // 1..4
+            const filledBands = isNa ? 1 : level + 1; // 1..4
             const base = -90 + i * step;
 
             const bandPath = (b: { r0: number; r1: number; halfGapInner: number; halfGapOuter: number }) => {
@@ -183,8 +188,9 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
       {/* Legend */}
       <div className="grid gap-2 sm:grid-cols-2">
         {indicators.map((ind, i) => {
+          const isNa = Boolean(results[i]?.na);
           const level = results[i]?.level ?? 0;
-          const c = LEVELS[level].color;
+          const c = isNa ? NA_GREY : LEVELS[level].color;
           const isActive = active === i;
           return (
             <button
@@ -198,17 +204,24 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
                 isActive ? "ring-1" : "border-[#EDEAF3] hover:bg-black/[0.02]"
               }`}
             >
-              <Battery level={level} className="h-[18px] sm:h-[22px]" />
+              {isNa ? (
+                <span className="flex h-[18px] w-[34px] shrink-0 items-center justify-center rounded-md bg-[#F1F1F4] text-[9px] font-extrabold text-[#6b7280] sm:h-[22px]">
+                  N/A
+                </span>
+              ) : (
+                <Battery level={level} className="h-[18px] sm:h-[22px]" />
+              )}
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] font-extrabold leading-tight text-[#111827] line-clamp-2">
                   {ind.code} {ind.title}
                 </p>
                 <span className="text-[10px] font-bold" style={{ color: c }}>
-                  {LEVELS[level].label}
+                  {isNa ? "Not applicable" : LEVELS[level].label}
                 </span>
               </div>
             </button>
           );
+
         })}
       </div>
 
@@ -272,6 +285,30 @@ function IndicatorCard({
 
   const isOpen = alwaysOpen || open;
 
+  if (result.na) {
+    return (
+      <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
+          <div className="min-w-0">
+            <h3 className="text-[15px] font-extrabold text-[#111827] sm:text-[16px]">
+              {content.code} {content.title}
+            </h3>
+            <p className="mt-1 text-[12px] text-[#6b7280]">{content.question}</p>
+          </div>
+          <span className="rounded-full bg-[#F1F1F4] px-3 py-1 text-[11px] font-bold text-[#6b7280]">
+            Not applicable
+          </span>
+        </div>
+        <div className="mt-5 rounded-xl bg-[#F6F6F8] p-5">
+          <p className="text-[13px] leading-relaxed text-[#374151]">
+            You marked this indicator as not applicable to your Local Youth Council, so it was skipped and is not
+            scored in this assessment. You can revisit it at any time by editing your assessment.
+          </p>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
@@ -293,6 +330,7 @@ function IndicatorCard({
         </p>
         <p className="mt-1.5 text-[13px] leading-relaxed text-[#374151]">{content.feedback[result.level]}</p>
       </div>
+
 
       <button
         type="button"
@@ -396,13 +434,17 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
   const areaNumber = indicators[0]?.code.split(".")[0] ?? "1";
   const theme = themeForArea(areaKey);
   const results: IndicatorResult[] = indicators.map((_, i) => {
-    const pct = percentages[i] ?? 0;
-    return { pct, level: levelFromPct(pct) };
+    const raw = percentages[i] ?? 0;
+    const na = raw < 0;
+    const pct = na ? 0 : raw;
+    return { pct, level: levelFromPct(pct), na };
   });
 
-  const sorted = [...results.map((r, i) => ({ ...r, i }))].sort((a, b) => a.pct - b.pct);
-  const best = indicators[sorted[sorted.length - 1]!.i]!.title;
+  const scored = results.map((r, i) => ({ ...r, i })).filter((r) => !r.na);
+  const sorted = [...scored].sort((a, b) => a.pct - b.pct);
+  const best = sorted.length ? indicators[sorted[sorted.length - 1]!.i]!.title : null;
   const weakest = sorted.slice(0, 3).map((r) => indicators[r.i]!.title);
+
 
   return (
     <AreaThemeProvider areaKey={areaKey}>
@@ -436,9 +478,12 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
         <div className="mt-6 rounded-xl p-5 sm:p-6" style={{ backgroundColor: theme.accent }}>
           <p className="text-[14px] font-extrabold text-white">Where to focus next</p>
           <p className="mt-1.5 text-[12px] leading-relaxed text-white/80">
-            You're performing well in {best}, but should prioritize improving {weakest.join(", ")}.
+            {best
+              ? `You're performing well in ${best}, but should prioritize improving ${weakest.join(", ")}.`
+              : "All indicators in this area were marked as not applicable, so there is nothing to score yet."}
           </p>
         </div>
+
       </div>
 
       {/* Indicator cards */}
