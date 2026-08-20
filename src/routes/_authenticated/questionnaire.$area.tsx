@@ -115,7 +115,13 @@ function QuestionnairePage() {
         if (ind.type === "matrix") {
           const vals = Object.values(matrix[i] ?? {});
           const counted = vals.filter((v) => v !== "na").length;
-          if (!counted) return vals.length ? -1 : 0;
+          // Only a fully N/A matrix (every criterion answered and all marked N/A)
+          // makes the whole indicator "not applicable". Partial N/A rows are just
+          // excluded from the score.
+          if (!counted) {
+            const allNa = vals.length > 0 && vals.length === ind.criteria.length;
+            return allNa ? -1 : 0;
+          }
           return (vals.filter((v) => v === "yes").length / counted) * 100;
         }
         const s = scale[i];
