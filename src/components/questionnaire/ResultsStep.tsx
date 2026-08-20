@@ -434,13 +434,17 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
   const areaNumber = indicators[0]?.code.split(".")[0] ?? "1";
   const theme = themeForArea(areaKey);
   const results: IndicatorResult[] = indicators.map((_, i) => {
-    const pct = percentages[i] ?? 0;
-    return { pct, level: levelFromPct(pct) };
+    const raw = percentages[i] ?? 0;
+    const na = raw < 0;
+    const pct = na ? 0 : raw;
+    return { pct, level: levelFromPct(pct), na };
   });
 
-  const sorted = [...results.map((r, i) => ({ ...r, i }))].sort((a, b) => a.pct - b.pct);
-  const best = indicators[sorted[sorted.length - 1]!.i]!.title;
+  const scored = results.map((r, i) => ({ ...r, i })).filter((r) => !r.na);
+  const sorted = [...scored].sort((a, b) => a.pct - b.pct);
+  const best = sorted.length ? indicators[sorted[sorted.length - 1]!.i]!.title : null;
   const weakest = sorted.slice(0, 3).map((r) => indicators[r.i]!.title);
+
 
   return (
     <AreaThemeProvider areaKey={areaKey}>
