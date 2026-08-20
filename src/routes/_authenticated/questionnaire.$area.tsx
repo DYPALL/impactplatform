@@ -159,11 +159,19 @@ function QuestionnairePage() {
 
   const current: QIndicator | undefined = indicators[step - 1];
 
+  // Slider questions default to "Not at all" (value 0) so the user can simply tap Next.
+  useEffect(() => {
+    if (current?.type === "slider" && scale[step - 1] === undefined) {
+      setScale((prev) => ({ ...prev, [step - 1]: { value: 0, na: false, touched: true } }));
+    }
+  }, [current, step]);
+
   const canAdvance = () => {
     if (!current) return true;
     if (current.type === "matrix") return Object.keys(matrix[step - 1] ?? {}).length > 0;
     const s = scale[step - 1];
-    return Boolean(s && (s.na || s.touched));
+    // Slider questions default to value 0 ("Not at all"), so any numeric value is valid.
+    return Boolean(s && (s.na || typeof s.value === "number"));
   };
 
   const handleNext = async () => {
