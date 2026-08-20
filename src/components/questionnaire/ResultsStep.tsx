@@ -259,14 +259,18 @@ function IndicatorCard({
   content,
   result,
   defaultOpen,
+  alwaysOpen,
 }: {
   content: QIndicator;
   result: IndicatorResult;
   defaultOpen?: boolean;
+  alwaysOpen?: boolean;
 }) {
   const theme = useAreaTheme();
-  const [open, setOpen] = useState(!!defaultOpen);
+  const [open, setOpen] = useState(alwaysOpen || !!defaultOpen);
   const [checked, setChecked] = useState<Record<number, boolean>>({});
+
+  const isOpen = alwaysOpen || open;
 
   return (
     <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
@@ -292,16 +296,18 @@ function IndicatorCard({
 
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        className="mt-4 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-semibold transition "
+        onClick={() => {
+          if (!alwaysOpen) setOpen((o) => !o);
+        }}
+        aria-expanded={isOpen}
+        className={`mt-4 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-semibold transition ${alwaysOpen ? "cursor-default opacity-80" : ""}`}
         style={{ borderColor: "#D8D3E4", color: "#111827" }}
       >
         Read more about this indicator
-        <ChevronDown size={13} className={`transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown size={13} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
-      {open && (
+      {isOpen && (
         <div className="mt-6 space-y-7">
           <div>
             <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
