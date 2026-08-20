@@ -549,22 +549,25 @@ function SliderQuestion({
                 type="button"
                 aria-label={`Select level: ${l.label}`}
                 onClick={() => onChange(i)}
-                className="group relative flex-1 cursor-pointer transition focus:outline-none"
-                style={{ backgroundColor: LEVEL_STYLE[i]?.color ?? "#ccc" }}
-              >
-                <span className="absolute inset-x-0 -top-[15px] -bottom-[15px] block" />
-              </button>
+                className="relative flex-1 cursor-pointer focus:outline-none"
+                style={{
+                  backgroundColor: LEVEL_STYLE[i]?.color ?? "#ccc",
+                  WebkitTapHighlightColor: "transparent",
+                }}
+              />
             ))}
           </div>
 
           {/* Thumb */}
           <div
-            className="pointer-events-none absolute top-1/2 flex h-[40px] w-[32px] -translate-x-1/2 -translate-y-[45%] items-start justify-center drop-shadow-xl transition-all duration-300 ease-out"
-            style={{ left: `${((value + 0.5) / levels.length) * 100}%` }}
+            className="pointer-events-none absolute top-1/2 flex h-[28px] w-[28px] -translate-x-1/2 -translate-y-1/2 transform-gpu items-center justify-center rounded-[8px] border border-[#E5E7EB] bg-white transition-[left] duration-200 ease-out"
+            style={{
+              left: `${((value + 0.5) / levels.length) * 100}%`,
+              boxShadow: "0 6px 14px rgba(0,0,0,0.16)",
+            }}
           >
-            <svg width="32" height="40" viewBox="0 0 32 40" fill="none" aria-hidden="true">
-              <rect x="2" y="4" width="28" height="28" rx="8" fill="white" stroke="#E5E7EB" strokeWidth="1.5" />
-              <path d="M9 13L16 23L23 13Z" fill={theme.accent} />
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" aria-hidden="true">
+              <path d="M0 0L16 0L8 10Z" fill={theme.accent} />
             </svg>
           </div>
 
