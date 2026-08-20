@@ -519,7 +519,28 @@ function SliderQuestion({
       </p>
 
       <div className={`mt-14 ${na ? "pointer-events-none opacity-40" : ""}`}>
-        <div className="relative h-[44px]">
+        <div
+          className="relative h-[44px] touch-none select-none"
+          onPointerDown={(e) => {
+            (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+            const rect = e.currentTarget.getBoundingClientRect();
+            const idx = Math.min(
+              last,
+              Math.max(0, Math.floor(((e.clientX - rect.left) / rect.width) * levels.length)),
+            );
+            if (idx !== value) onChange(idx);
+          }}
+          onPointerMove={(e) => {
+            if (e.buttons === 0 && e.pointerType === "mouse") return;
+            if (!(e.currentTarget as HTMLElement).hasPointerCapture(e.pointerId)) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const idx = Math.min(
+              last,
+              Math.max(0, Math.floor(((e.clientX - rect.left) / rect.width) * levels.length)),
+            );
+            if (idx !== value) onChange(idx);
+          }}
+        >
           {/* Visible coloured track segments — each is a large drop target */}
           <div className="absolute left-0 right-0 top-1/2 flex h-[14px] w-full -translate-y-1/2 overflow-hidden rounded-full">
             {levels.map((l, i) => (
