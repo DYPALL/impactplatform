@@ -23,13 +23,14 @@ const PURPLE = "#502181";
 function SavedResultsPage() {
   const { id } = Route.useParams();
   const [percentages, setPercentages] = useState<number[] | null>(null);
+  const [areaKey, setAreaKey] = useState<string>("representativeness");
   const [missing, setMissing] = useState(false);
 
   useEffect(() => {
     let active = true;
     supabase
       .from("assessments")
-      .select("percentages, completed_at")
+      .select("percentages, area, completed_at")
       .eq("id", id)
       .maybeSingle()
       .then(({ data }) => {
@@ -38,7 +39,9 @@ function SavedResultsPage() {
           setMissing(true);
           return;
         }
-        setPercentages((data.percentages as number[]) ?? []);
+        const raw = Array.isArray(data.percentages) ? (data.percentages as unknown[]) : [];
+        setAreaKey((data.area as string) ?? "representativeness");
+        setPercentages(raw.map((v) => (typeof v === "number" && Number.isFinite(v) ? v : 0)));
       });
     return () => {
       active = false;
@@ -69,7 +72,7 @@ function SavedResultsPage() {
             This assessment could not be found.
           </p>
         )}
-        {percentages && <ResultsStep percentages={percentages} />}
+        {percentages && <ResultsStep percentages={percentages} areaKey={areaKey} />}
       </main>
     </div>
   );
