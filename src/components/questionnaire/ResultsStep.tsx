@@ -478,9 +478,12 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
         <div className="mt-6 rounded-xl p-5 sm:p-6" style={{ backgroundColor: theme.accent }}>
           <p className="text-[14px] font-extrabold text-white">Where to focus next</p>
           <p className="mt-1.5 text-[12px] leading-relaxed text-white/80">
-            You're performing well in {best}, but should prioritize improving {weakest.join(", ")}.
+            {best
+              ? `You're performing well in ${best}, but should prioritize improving ${weakest.join(", ")}.`
+              : "All indicators in this area were marked as not applicable, so there is nothing to score yet."}
           </p>
         </div>
+
       </div>
 
       {/* Indicator cards */}
