@@ -450,7 +450,7 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
 
         <div className="mt-5 space-y-5">
           {indicators.map((c, i) => (
-            <IndicatorCard key={c.code} content={c} result={results[i]!} defaultOpen={i === 0} />
+            <IndicatorCard key={c.code} content={c} result={results[i]!} defaultOpen={i === 0} alwaysOpen={i === 0} />
           ))}
         </div>
       </div>
