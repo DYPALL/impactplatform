@@ -188,8 +188,9 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
       {/* Legend */}
       <div className="grid gap-2 sm:grid-cols-2">
         {indicators.map((ind, i) => {
+          const isNa = Boolean(results[i]?.na);
           const level = results[i]?.level ?? 0;
-          const c = LEVELS[level].color;
+          const c = isNa ? NA_GREY : LEVELS[level].color;
           const isActive = active === i;
           return (
             <button
@@ -203,17 +204,24 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
                 isActive ? "ring-1" : "border-[#EDEAF3] hover:bg-black/[0.02]"
               }`}
             >
-              <Battery level={level} className="h-[18px] sm:h-[22px]" />
+              {isNa ? (
+                <span className="flex h-[18px] w-[34px] shrink-0 items-center justify-center rounded-md bg-[#F1F1F4] text-[9px] font-extrabold text-[#6b7280] sm:h-[22px]">
+                  N/A
+                </span>
+              ) : (
+                <Battery level={level} className="h-[18px] sm:h-[22px]" />
+              )}
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] font-extrabold leading-tight text-[#111827] line-clamp-2">
                   {ind.code} {ind.title}
                 </p>
                 <span className="text-[10px] font-bold" style={{ color: c }}>
-                  {LEVELS[level].label}
+                  {isNa ? "Not applicable" : LEVELS[level].label}
                 </span>
               </div>
             </button>
           );
+
         })}
       </div>
 
