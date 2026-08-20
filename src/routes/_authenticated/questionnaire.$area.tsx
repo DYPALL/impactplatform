@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { ResultsStep } from "@/components/questionnaire/ResultsStep";
 import { AREAS, type QIndicator } from "@/components/questionnaire/content";
+import { AreaThemeProvider, themeForArea, useAreaTheme } from "@/components/questionnaire/theme";
 
 type ResourceArea = Database["public"]["Enums"]["resource_area"];
 
@@ -23,7 +24,6 @@ export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
   component: QuestionnairePage,
 });
 
-const PURPLE = "#502181";
 
 type Answer = "yes" | "no" | "na";
 
@@ -66,6 +66,8 @@ function QuestionnairePage() {
   const areaContent = AREAS[area] ?? AREAS["representativeness"]!;
   const indicators = areaContent.indicators;
   const TOTAL_STEPS = indicators.length + 1;
+
+  const theme = themeForArea(areaContent.key);
 
   const [step, setStep] = useState(1);
   const [matrix, setMatrix] = useState<MatrixState>({});
@@ -187,9 +189,10 @@ function QuestionnairePage() {
   const progress = step / TOTAL_STEPS;
 
   return (
+    <AreaThemeProvider areaKey={areaContent.key}>
     <div className="min-h-screen bg-[#FAFAFB]">
       {/* Top bar */}
-      <header className="sticky top-0 z-40" style={{ backgroundColor: PURPLE }}>
+      <header className="sticky top-0 z-40" style={{ backgroundColor: theme.accent }}>
         <div className="mx-auto flex h-[72px] max-w-[1440px] items-center gap-4 px-6 lg:px-10">
           <Link
             to="/dashboard"
@@ -274,8 +277,8 @@ function QuestionnairePage() {
                     setError(null);
                     setStep((s) => s - 1);
                   }}
-                  className="inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 text-[14px] font-bold transition hover:bg-[#502181]/5"
-                  style={{ borderColor: PURPLE, color: PURPLE }}
+                  className="inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 text-[14px] font-bold transition "
+                  style={{ borderColor: theme.accent, color: theme.accent, backgroundColor: "transparent" }}
                 >
                   <ArrowLeft size={16} /> Previous
                 </button>
@@ -288,7 +291,7 @@ function QuestionnairePage() {
                 onClick={handleNext}
                 disabled={saving}
                 className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-[14px] font-bold text-white transition hover:opacity-90 disabled:opacity-60"
-                style={{ backgroundColor: PURPLE }}
+                style={{ backgroundColor: theme.accent }}
               >
                 {step === TOTAL_STEPS - 1 ? "See results" : "Next"} <ArrowRight size={16} />
               </button>
@@ -297,6 +300,7 @@ function QuestionnairePage() {
         )}
       </main>
     </div>
+    </AreaThemeProvider>
   );
 }
 
@@ -313,10 +317,11 @@ function IndicatorHeader({
   question: string;
   action?: React.ReactNode;
 }) {
+  const theme = useAreaTheme();
   return (
     <>
       <div className="flex items-start justify-between gap-4">
-        <h1 className="text-[30px] font-extrabold leading-tight" style={{ color: PURPLE }}>
+        <h1 className="text-[30px] font-extrabold leading-tight" style={{ color: theme.accent }}>
           {code} {title}
         </h1>
         {action}
@@ -324,10 +329,10 @@ function IndicatorHeader({
 
       <div className="mt-6 rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
         <div className="flex items-start gap-3">
-          <Info size={18} className="mt-[3px] shrink-0" style={{ color: PURPLE }} />
+          <Info size={18} className="mt-[3px] shrink-0" style={{ color: theme.accent }} />
           <div className="min-w-0">
             <h2 className="text-[16px] font-extrabold text-[#111827]">About This Indicator</h2>
-            <p className="mt-2 text-[14px] leading-[1.65]" style={{ color: PURPLE }}>
+            <p className="mt-2 text-[14px] leading-[1.65]" style={{ color: theme.accent }}>
               {about}
             </p>
           </div>
@@ -348,6 +353,7 @@ function MatrixQuestion({
   answers: Record<number, Answer>;
   setAnswers: (fn: (m: Record<number, Answer>) => Record<number, Answer>) => void;
 }) {
+  const theme = useAreaTheme();
   return (
     <section>
       <IndicatorHeader
@@ -357,7 +363,7 @@ function MatrixQuestion({
         question={indicator.question}
       />
 
-      <p className="mt-6 text-[12px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
+      <p className="mt-6 text-[12px] font-bold uppercase tracking-wide" style={{ color: theme.accent }}>
         Select those that are included in your LYC
       </p>
 
@@ -365,7 +371,7 @@ function MatrixQuestion({
         {/* Head */}
         <div
           className="grid grid-cols-[minmax(0,1fr)_64px_64px_64px] items-center gap-2 px-6 py-3 sm:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
-          style={{ backgroundColor: PURPLE }}
+          style={{ backgroundColor: theme.accent }}
         >
           <span className="text-[11px] font-bold uppercase tracking-wider text-white">Criteria</span>
           {["Yes", "No", "N/A"].map((h) => (
@@ -379,7 +385,7 @@ function MatrixQuestion({
           <div
             key={c}
             className="grid grid-cols-[minmax(0,1fr)_64px_64px_64px] items-center gap-2 px-6 py-3.5 sm:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
-            style={{ backgroundColor: i % 2 === 0 ? "#F3EDF9" : "#FFFFFF" }}
+            style={{ backgroundColor: i % 2 === 0 ? theme.row : "#FFFFFF" }}
           >
             <span className="text-[14px] leading-snug text-[#1f2937]">{c}</span>
             {(["yes", "no", "na"] as Answer[]).map((v) => {
@@ -393,10 +399,10 @@ function MatrixQuestion({
                     aria-label={`${c} — ${v}`}
                     onClick={() => setAnswers((m) => ({ ...m, [i]: v }))}
                     className="flex h-[20px] w-[20px] items-center justify-center rounded-full border-2 transition"
-                    style={{ borderColor: checked ? PURPLE : "#C9CDD4" }}
+                    style={{ borderColor: checked ? theme.accent : "#C9CDD4" }}
                   >
                     {checked && (
-                      <span className="h-[10px] w-[10px] rounded-full" style={{ backgroundColor: PURPLE }} />
+                      <span className="h-[10px] w-[10px] rounded-full" style={{ backgroundColor: theme.accent }} />
                     )}
                   </button>
                 </span>
@@ -422,6 +428,7 @@ function SliderQuestion({
   na: boolean;
   onSkip: () => void;
 }) {
+  const theme = useAreaTheme();
   const levels = indicator.levels;
   const last = levels.length - 1;
   const level = levels[Math.min(value, last)]!;
@@ -440,13 +447,13 @@ function SliderQuestion({
         <button
           type="button"
           onClick={onSkip}
-          className="inline-flex items-center gap-2 rounded-full border border-[#d1d5db] bg-white px-4 py-2 text-[13px] font-semibold text-[#6b7280] transition hover:border-[#502181] hover:text-[#502181]"
+          className="inline-flex items-center gap-2 rounded-full border border-[#d1d5db] bg-white px-4 py-2 text-[13px] font-semibold text-[#6b7280] transition hover:opacity-80"
         >
           Skip this question
         </button>
       </div>
 
-      <p className="mt-8 text-[12px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
+      <p className="mt-8 text-[12px] font-bold uppercase tracking-wide" style={{ color: theme.accent }}>
         Use the slider to choose what fits best for your case
       </p>
 
@@ -475,7 +482,7 @@ function SliderQuestion({
           >
             <svg width="32" height="40" viewBox="0 0 32 40" fill="none" aria-hidden="true">
               <rect x="2" y="4" width="28" height="28" rx="8" fill="white" stroke="#E5E7EB" strokeWidth="1.5" />
-              <path d="M9 13L16 23L23 13Z" fill={PURPLE} />
+              <path d="M9 13L16 23L23 13Z" fill={theme.accent} />
             </svg>
           </div>
 
