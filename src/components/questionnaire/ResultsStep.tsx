@@ -168,7 +168,7 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
                   textAnchor="middle"
                   dominantBaseline="middle"
                   className="text-[11px] font-extrabold"
-                  fill={theme.accent}
+                  fill="#111827"
                 >
                   {ind.code}
                 </text>
