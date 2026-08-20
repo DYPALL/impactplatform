@@ -130,7 +130,7 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
               const halfGapOuter = ((gapPx / 2 / r1) * 180) / Math.PI;
               return { r0, r1, halfGapInner, halfGapOuter };
             });
-            const filledBands = level + 1; // 1..4
+            const filledBands = isNa ? 1 : level + 1; // 1..4
             const base = -90 + i * step;
 
             const bandPath = (b: { r0: number; r1: number; halfGapInner: number; halfGapOuter: number }) => {
