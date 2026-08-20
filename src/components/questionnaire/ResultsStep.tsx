@@ -8,7 +8,10 @@ import { AreaThemeProvider, themeForArea, useAreaTheme } from "./theme";
 import { ScoreMeter } from "./ScoreMeter";
 
 
-export type IndicatorResult = { pct: number; level: LevelKey };
+export type IndicatorResult = { pct: number; level: LevelKey; na?: boolean };
+
+const NA_GREY = "#9ca3af";
+
 
 /* ------------------------------- Score meter ------------------------------- */
 
