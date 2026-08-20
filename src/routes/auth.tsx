@@ -201,7 +201,10 @@ function AuthPage() {
           <div className="absolute bottom-8 left-8 right-8 hidden lg:left-[80px] lg:right-[80px] lg:block xl:left-[120px] xl:right-[120px]">
             <img src={cofundLogo.url} alt="Co-funded by the European Union" className="h-10 w-auto" />
             <p className="mt-4 max-w-[440px] text-[11px] leading-relaxed text-white/70">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+              IMPACT is co-funded by the European Union. This platform is
+              designed as a standalone digital resource to empower Local Youth
+              Council stakeholders with self-assessment, improvement guidelines
+              and planning tools — scalable and ready to grow with your needs.
             </p>
           </div>
         </aside>

@@ -49,8 +49,9 @@ function ContactPage() {
               Send us a message
             </h1>
             <p className="mt-3 max-w-[760px] text-[18px] leading-[1.6] text-white/80">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua.
+              Have a question about the platform, want to share feedback, or
+              explore partnership opportunities? Reach out to the IMPACT
+              consortium and we will get back to you as soon as possible.
             </p>
           </div>
         </section>
@@ -74,8 +75,9 @@ function ContactPage() {
             </div>
 
             <p className="mb-8 text-[15px] leading-[1.6] text-[#6b7280]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua.
+              Fill in the form below with your details and message. Whether you
+              need support, have a suggestion, or simply want to learn more
+              about IMPACT, we are here to help.
             </p>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -88,7 +90,7 @@ function ContactPage() {
                   name="name"
                   value={form.name}
                   onChange={handleChange}
-                  placeholder="Lorem ipsum"
+                  placeholder="Your full name"
                   className="h-[52px] rounded-[12px] border border-[#e5e7eb] px-4 text-[15px] text-[#111827] placeholder-[#9ca3af] outline-none focus:border-[color:var(--impact-purple)]"
                 />
               </div>
@@ -102,7 +104,7 @@ function ContactPage() {
                   name="email"
                   value={form.email}
                   onChange={handleChange}
-                  placeholder="lorem@ipsum.com"
+                  placeholder="you@example.com"
                   className="h-[52px] rounded-[12px] border border-[#e5e7eb] px-4 text-[15px] text-[#111827] placeholder-[#9ca3af] outline-none focus:border-[color:var(--impact-orange)]"
                 />
               </div>
@@ -116,7 +118,7 @@ function ContactPage() {
                   name="organisation"
                   value={form.organisation}
                   onChange={handleChange}
-                  placeholder="Lorem ipsum"
+                  placeholder="Your organisation or institution"
                   className="h-[52px] rounded-[12px] border border-[#e5e7eb] px-4 text-[15px] text-[#111827] placeholder-[#9ca3af] outline-none focus:border-[color:var(--impact-pink)]"
                 />
               </div>
@@ -129,7 +131,7 @@ function ContactPage() {
                   name="message"
                   value={form.message}
                   onChange={handleChange}
-                  placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                  placeholder="Write your message here..."
                   rows={5}
                   className="rounded-[12px] border border-[#e5e7eb] p-4 text-[15px] text-[#111827] placeholder-[#9ca3af] outline-none focus:border-[color:var(--impact-green)]"
                 />

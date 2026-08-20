@@ -9,10 +9,10 @@ export function Footer() {
         <div>
           <img src={whiteLogoAsset.url} alt="IMPACT logo" className="h-8 w-auto" />
           <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            IMPACT is a digital resource for Local Youth Council stakeholders.
+            Assess the quality of your council, get tailored improvement ideas,
+            and explore a public knowledge hub designed to help youth
+            participation grow stronger across Europe.
           </p>
           <img
             src={cofundLogo.url}
