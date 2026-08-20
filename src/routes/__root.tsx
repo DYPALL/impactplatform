@@ -148,7 +148,7 @@ function RootComponent() {
         <Outlet />
       </div>
 
-      {!pathname.startsWith("/questionnaire") && <MobileBottomNav />}
+      {!pathname.startsWith("/questionnaire") && !pathname.startsWith("/dashboard") && <MobileBottomNav />}
     </QueryClientProvider>
   );
 }
