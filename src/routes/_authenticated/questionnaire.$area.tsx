@@ -332,7 +332,7 @@ function IndicatorHeader({
           <Info size={18} className="mt-[3px] shrink-0" style={{ color: theme.accent }} />
           <div className="min-w-0">
             <h2 className="text-[16px] font-extrabold text-[#111827]">About This Indicator</h2>
-            <p className="mt-2 text-[14px] leading-[1.65]" style={{ color: theme.accent }}>
+            <p className="mt-2 text-[14px] leading-[1.65] text-[#111827]">
               {about}
             </p>
           </div>
