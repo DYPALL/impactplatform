@@ -308,7 +308,7 @@ function IndicatorCard({
               <Info size={15} style={{ color: theme.accent }} /> About This Indicator
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
-              <p className="text-[12px] leading-relaxed" style={{ color: theme.accent }}>
+              <p className="text-[12px] leading-relaxed text-[#374151]">
                 {content.about}
               </p>
             </div>
