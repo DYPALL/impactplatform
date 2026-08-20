@@ -284,7 +284,7 @@ function IndicatorCard({
       </div>
 
       <div className="mt-5 border-t border-black/5 pt-4">
-        <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: theme.accent }}>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[#111827]">
           Assessment feedback
         </p>
         <p className="mt-1.5 text-[13px] leading-relaxed text-[#374151]">{content.feedback[result.level]}</p>
@@ -295,7 +295,7 @@ function IndicatorCard({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         className="mt-4 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-semibold transition "
-        style={{ borderColor: "#D8D3E4", color: theme.accent }}
+        style={{ borderColor: "#D8D3E4", color: "#111827" }}
       >
         Read more about this indicator
         <ChevronDown size={13} className={`transition-transform ${open ? "rotate-180" : ""}`} />
