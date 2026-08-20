@@ -576,7 +576,7 @@ function SliderQuestion({
             value={value}
             onChange={(e) => onChange(Number(e.target.value))}
             aria-label={`Level for ${indicator.title}`}
-            className="absolute inset-0 w-full cursor-pointer opacity-0"
+            className="pointer-events-none absolute inset-0 w-full opacity-0"
           />
         </div>
 
