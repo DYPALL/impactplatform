@@ -255,66 +255,73 @@ function ResourceHubPage() {
         </section>
 
         {/* Search and filters */}
-        <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-[120px]">
-          <div className="flex h-[56px] items-center gap-3 rounded-[16px] border border-[#e5e7eb] px-4">
+        <section className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 sm:py-12 lg:px-[120px]">
+          <div className="flex h-[48px] items-center gap-3 rounded-[12px] border border-[#e5e7eb] bg-white px-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] sm:h-[56px] sm:rounded-[16px] sm:px-4">
             <SearchIcon />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by keyword..."
-              className="flex-1 bg-transparent text-[15px] text-[#111827] placeholder-[#9ca3af] outline-none"
+              className="flex-1 bg-transparent text-[14px] text-[#111827] placeholder-[#9ca3af] outline-none sm:text-[15px]"
             />
           </div>
 
-          <div className="mt-5 flex flex-col gap-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="text-[14px] font-bold text-[#111827]">Area</span>
-              {areaFilters.map((f) => {
-                const active = area === f.key;
-                return (
-                  <button
-                    key={f.key}
-                    onClick={() => setArea(f.key)}
-                    className="rounded-full px-[14px] py-[10px] text-[14px] font-bold transition"
-                    style={
-                      active
-                        ? { backgroundColor: f.color, color: "#ffffff", boxShadow: "0 0 0 3px rgba(0,0,0,0.08)" }
-                        : { backgroundColor: `${f.color}22`, color: f.color }
-                    }
-                  >
-                    {f.label}
-                  </button>
-                );
-              })}
+          <div className="mt-5 flex flex-col gap-4 sm:mt-6 sm:gap-5">
+            <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+              <span className="text-[13px] font-bold text-[#111827] sm:text-[14px]">Area</span>
+              <div className="flex flex-wrap gap-2 sm:gap-3">
+                {areaFilters.map((f) => {
+                  const active = area === f.key;
+                  return (
+                    <button
+                      key={f.key}
+                      onClick={() => setArea(f.key)}
+                      className="rounded-full px-3 py-2 text-[13px] font-bold transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
+                      style={
+                        active
+                          ? { backgroundColor: f.color, color: "#ffffff", boxShadow: "0 0 0 3px rgba(0,0,0,0.08)" }
+                          : { backgroundColor: `${f.color}22`, color: f.color }
+                      }
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="text-[14px] font-bold text-[#111827]">Type</span>
-              {typeFilters.map((f) => {
-                const active = type === f.key;
-                return (
-                  <button
-                    key={f.key}
-                    onClick={() => setType(f.key)}
-                    className={
-                      active
-                        ? "rounded-full bg-[#502181] px-[14px] py-[10px] text-[14px] font-bold text-white transition"
-                        : "rounded-full border border-[#e5e7eb] bg-[#f3f4f6] px-[14px] py-[10px] text-[14px] font-bold text-[#6b7280] transition hover:bg-[#e5e7eb]"
-                    }
-                  >
-                    {f.label}
-                  </button>
-                );
-              })}
+
+            <div className="flex flex-col gap-2.5 border-t border-[#f1f2f4] pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 sm:border-t-0 sm:pt-0">
+              <span className="text-[13px] font-bold text-[#111827] sm:text-[14px]">Type</span>
+              <div className="flex flex-wrap gap-2 sm:gap-3">
+                {typeFilters.map((f) => {
+                  const active = type === f.key;
+                  return (
+                    <button
+                      key={f.key}
+                      onClick={() => setType(f.key)}
+                      className={
+                        active
+                          ? "rounded-full bg-[#502181] px-3 py-2 text-[13px] font-bold text-white transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
+                          : "rounded-full border border-[#e5e7eb] bg-[#f3f4f6] px-3 py-2 text-[13px] font-bold text-[#6b7280] transition hover:bg-[#e5e7eb] sm:px-[14px] sm:py-[10px] sm:text-[14px]"
+                      }
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="flex flex-col gap-3 border-t border-[#f1f2f4] pt-4 sm:flex-row sm:items-center sm:justify-between">
               <span className="text-[13px] font-semibold text-[#6b7280]">
                 {filtered.length} resource{filtered.length === 1 ? "" : "s"} found
               </span>
-              <div className="flex items-center gap-2 rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-                <SortIcon />
-                <label htmlFor="sort" className="text-[13px] font-bold text-[#111827]">Sort by</label>
+              <div className="flex w-full items-center justify-between gap-2 rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.04)] sm:w-auto">
+                <div className="flex items-center gap-2">
+                  <SortIcon />
+                  <label htmlFor="sort" className="text-[13px] font-bold text-[#111827]">Sort by</label>
+                </div>
                 <select
                   id="sort"
                   value={sort}
