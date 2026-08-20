@@ -108,13 +108,6 @@ function QuestionnairePage() {
     };
   }, [area, routeId, TOTAL_STEPS]);
 
-  // Slider questions default to "Not at all" (value 0) so the user can simply tap Next.
-  useEffect(() => {
-    if (current?.type === "slider" && scale[step - 1] === undefined) {
-      setScale((prev) => ({ ...prev, [step - 1]: { value: 0, na: false, touched: true } }));
-    }
-  }, [current, step]);
-
   const percentages = useMemo(
     () =>
       indicators.map((ind, i) => {
