@@ -369,7 +369,7 @@ function QuickLink({
   return (
     <Link
       to={to}
-      className="flex items-center gap-3 rounded-2xl px-3 py-3 text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:brightness-95"
+      className="flex items-center justify-center gap-3 rounded-2xl px-3 py-3 text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:brightness-95 lg:justify-start"
       style={{ backgroundColor: tint }}
     >
       <span
@@ -378,7 +378,7 @@ function QuickLink({
       >
         {iconSvg[icon]}
       </span>
-      {label}
+      <span className="hidden lg:inline">{label}</span>
     </Link>
   );
 }
