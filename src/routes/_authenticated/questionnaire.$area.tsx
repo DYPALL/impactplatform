@@ -538,7 +538,7 @@ function SliderQuestion({
 
           {/* Thumb */}
           <div
-            className="pointer-events-none absolute top-1/2 flex h-[40px] w-[32px] -translate-x-1/2 -translate-y-[58%] items-start justify-center drop-shadow-xl transition-all duration-300 ease-out"
+            className="pointer-events-none absolute top-1/2 flex h-[40px] w-[32px] -translate-x-1/2 -translate-y-1/2 items-start justify-center drop-shadow-xl transition-all duration-300 ease-out"
             style={{ left: `${((value + 0.5) / levels.length) * 100}%` }}
           >
             <svg width="32" height="40" viewBox="0 0 32 40" fill="none" aria-hidden="true">
