@@ -4,9 +4,9 @@ import { ArrowLeft, ArrowRight, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { ResultsStep } from "@/components/questionnaire/ResultsStep";
+import { AREAS, type QIndicator } from "@/components/questionnaire/content";
 
 type ResourceArea = Database["public"]["Enums"]["resource_area"];
-
 
 export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
   validateSearch: (search: Record<string, unknown>): { id?: string } => ({
@@ -23,133 +23,53 @@ export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
   component: QuestionnairePage,
 });
 
-
 const PURPLE = "#502181";
 
 type Answer = "yes" | "no" | "na";
 
-const MATRIX_CRITERIA = [
-  "Different age groups",
-  "Gender diversity",
-  "Cultural and ethnic diversity, including religion, language, or migration background",
-  "A range of socioeconomic backgrounds",
-  "Sexual diversity, inclusion of LGBTQ+ youth",
-  "Young people with disabilities or specific access needs",
-  "Different geographical areas of the municipality",
-  "Young people in different life situations (e.g., studying, working, seeking employment, or with family responsibilities)",
-  "Youth from marginalized or underrepresented groups",
+const LEVEL_STYLE = [
+  { color: "#E14B45", soft: "#FDECEB" },
+  { color: "#E8913C", soft: "#FDF1E5" },
+  { color: "#E5C13F", soft: "#FCF7E4" },
+  { color: "#33A06A", soft: "#E9F6EF" },
 ];
 
-const MATRIX_CRITERIA_2 = [
-  "a) Youth NGOs or associations",
-  "b) Student councils or school/university associations",
-  "c) Youth wings of political parties or youth branches of unions",
-  "d) Informal or grassroots youth groups (e.g. volunteer collectives, neighborhood initiatives)",
-  "e) Environmental and climate-action movements",
-  "f) Sports, arts, and cultural youth groups",
-  "g) Faith-based or community-based youth organizations",
-  "h) Youth networks representing marginalized or minority groups (e.g. LGBTQ+, ethnic minorities, migrants)",
-  "i) Other relevant groups of local interest",
-];
+type MatrixState = Record<number, Record<number, Answer>>;
+type ScaleState = Record<number, { value: number; na: boolean; touched: boolean }>;
 
-
-const SCALE_LEVELS = [
-  {
-    label: "Not at all",
-    color: "#E14B45",
-    soft: "#FDECEB",
-    text: "No systematic outreach or consultation with young people outside the LYC.",
-  },
-  {
-    label: "Partially",
-    color: "#E8913C",
-    soft: "#FDF1E5",
-    text: "Some young people are consulted occasionally, but engagement is irregular.",
-  },
-  {
-    label: "Mostly",
-    color: "#E5C13F",
-    soft: "#FCF7E4",
-    text: "Outreach and consultation take place regularly, but some groups remain less involved or feedback is not consistently used.",
-  },
-  {
-    label: "Fully",
-    color: "#33A06A",
-    soft: "#E9F6EF",
-    text: "A broad range of young people are regularly consulted, and their input informs priorities, decisions, and activities.",
-  },
-];
-
-const SCALE_LEVELS_14 = [
-  {
-    label: "Not at all",
-    color: "#E14B45",
-    soft: "#FDECEB",
-    text: "The LYC is largely unknown to young people or not perceived as representing them.",
-  },
-  {
-    label: "Partially",
-    color: "#E8913C",
-    soft: "#FDF1E5",
-    text: "Some young people are aware of the LYC or recognize certain members, but this is limited to specific groups or contexts.",
-  },
-  {
-    label: "Mostly",
-    color: "#E5C13F",
-    soft: "#FCF7E4",
-    text: "The LYC is generally known and recognized by young people as a relevant platform, although this recognition is not consistent across all groups.",
-  },
-  {
-    label: "Fully",
-    color: "#33A06A",
-    soft: "#E9F6EF",
-    text: "The LYC is widely recognized by young people as a credible and relevant platform that represents their views and interests.",
-  },
-];
-
-const MATRIX_CRITERIA_3 = [
-  "a) The LYC has agreed principles or guidelines on equality and non-discrimination",
-  "b) Information about how to join or apply is shared in a clear and accessible way",
-  "c) No young person is discouraged or excluded from participation due to identity, background, or personal circumstances",
-  "d) Access to membership is based on fair and transparent criteria",
-  "e) First contact with the LYC is respectful and welcoming",
-  "f) Members are treated equally in roles, responsibilities, and participation",
-  "g) The LYC reflects regularly on whether its practices create hidden barriers",
-  "h) The LYC responds appropriately when discrimination or unequal treatment occurs",
-];
-
-const MATRIX_CRITERIA_4 = [
-  "a) Meeting spaces are physically accessible, including for young people with disabilities",
-  "b) Online or hybrid participation options are available when needed",
-  "c) Support is provided to reduce transport or financial barriers where possible",
-  "d) Meeting times and formats consider young people’s school, work, and personal responsibilities",
-  "e) Communication uses clear and youth-friendly language",
-  "f) Information and documents are shared in advance and in accessible formats",
-  "g) Adjustments or support are provided for participants with specific needs",
-  "h) Digital tools used are accessible and easy to use",
-  "i) Accessibility conditions are reviewed and adapted based on feedback",
-];
-
-const EQUALITY_ABOUT =
-  "The LYC adopts and applies principles and practices that promote equality and non-discrimination, ensuring that all young people have fair opportunities to participate, regardless of their background, identity, or personal circumstances. This includes both formal aspects, such as clear and fair rules for access and participation, and informal aspects, such as the culture, behaviours, and dynamics within the LYC. The LYC aims to create an environment where diversity is respected, participation is encouraged, and all members feel safe, valued, and able to contribute without fear of exclusion, bias, or discrimination.";
-
-const TOTAL_STEPS = 7;
+/** Old area-1 payloads used named keys — map them onto indicator indexes. */
+function migrateLegacy(a: Record<string, unknown>): { matrix: MatrixState; scale: ScaleState } {
+  if (a['answersByIndicator']) {
+    const v = a['answersByIndicator'] as { matrix?: MatrixState; scale?: ScaleState };
+    return { matrix: v.matrix ?? {}, scale: v.scale ?? {} };
+  }
+  const matrix: MatrixState = {};
+  const scale: ScaleState = {};
+  const legacyMatrix: Record<string, number> = { matrix: 0, matrix2: 1, matrix3: 4, matrix4: 5 };
+  for (const [k, idx] of Object.entries(legacyMatrix)) {
+    if (a[k]) matrix[idx] = a[k] as Record<number, Answer>;
+  }
+  if (a['scaleTouched'] !== undefined || a['scale'] !== undefined) {
+    scale[2] = { value: (a['scale'] as number) ?? 0, na: Boolean(a['scaleNA']), touched: Boolean(a['scaleTouched']) };
+  }
+  if (a['scale14Touched'] !== undefined || a['scale14'] !== undefined) {
+    scale[3] = { value: (a['scale14'] as number) ?? 0, na: Boolean(a['scale14NA']), touched: Boolean(a['scale14Touched']) };
+  }
+  return { matrix, scale };
+}
 
 function QuestionnairePage() {
   const { area } = Route.useParams();
   const { id: routeId } = Route.useSearch();
   const navigate = useNavigate();
+
+  const areaContent = AREAS[area] ?? AREAS["representativeness"]!;
+  const indicators = areaContent.indicators;
+  const TOTAL_STEPS = indicators.length + 1;
+
   const [step, setStep] = useState(1);
-  const [matrix, setMatrix] = useState<Record<number, Answer>>({});
-  const [matrix2, setMatrix2] = useState<Record<number, Answer>>({});
-  const [matrix3, setMatrix3] = useState<Record<number, Answer>>({});
-  const [matrix4, setMatrix4] = useState<Record<number, Answer>>({});
-  const [scale, setScale] = useState(0);
-  const [scaleNA, setScaleNA] = useState(false);
-  const [scaleTouched, setScaleTouched] = useState(false);
-  const [scale14, setScale14] = useState(0);
-  const [scale14NA, setScale14NA] = useState(false);
-  const [scale14Touched, setScale14Touched] = useState(false);
+  const [matrix, setMatrix] = useState<MatrixState>({});
+  const [scale, setScale] = useState<ScaleState>({});
   const [assessmentId, setAssessmentId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -159,11 +79,7 @@ function QuestionnairePage() {
   useEffect(() => {
     let active = true;
     const query = routeId
-      ? supabase
-          .from("assessments")
-          .select("id, current_step, answers, status")
-          .eq("id", routeId)
-          .maybeSingle()
+      ? supabase.from("assessments").select("id, current_step, answers, status").eq("id", routeId).maybeSingle()
       : supabase
           .from("assessments")
           .select("id, current_step, answers, status")
@@ -176,62 +92,37 @@ function QuestionnairePage() {
     query.then(({ data }) => {
       if (!active || !data) return;
       const a = (data.answers ?? {}) as Record<string, unknown>;
+      const migrated = migrateLegacy(a);
       setAssessmentId(data.id);
       setIsEditing(data.status === "completed");
       setStep(
-        data.status === "completed"
-          ? 1
-          : Math.min(Math.max(data.current_step ?? 1, 1), TOTAL_STEPS - 1),
+        data.status === "completed" ? 1 : Math.min(Math.max(data.current_step ?? 1, 1), TOTAL_STEPS - 1),
       );
-      setMatrix((a.matrix as Record<number, Answer>) ?? {});
-      setMatrix2((a.matrix2 as Record<number, Answer>) ?? {});
-      setMatrix3((a.matrix3 as Record<number, Answer>) ?? {});
-      setMatrix4((a.matrix4 as Record<number, Answer>) ?? {});
-      setScale((a.scale as number) ?? 0);
-      setScaleNA(Boolean(a.scaleNA));
-      setScaleTouched(Boolean(a.scaleTouched));
-      setScale14((a.scale14 as number) ?? 0);
-      setScale14NA(Boolean(a.scale14NA));
-      setScale14Touched(Boolean(a.scale14Touched));
+      setMatrix(migrated.matrix);
+      setScale(migrated.scale);
     });
     return () => {
       active = false;
     };
-  }, [area, routeId]);
+  }, [area, routeId, TOTAL_STEPS]);
 
-
-  const percentages = useMemo(() => {
-    const ratio = (m: Record<number, Answer>) => {
-      const vals = Object.values(m);
-      const counted = vals.filter((v) => v !== "na").length;
-      if (!counted) return 0;
-      return (vals.filter((v) => v === "yes").length / counted) * 100;
-    };
-    return [
-      ratio(matrix),
-      ratio(matrix2),
-      scaleNA ? 0 : (scale / (SCALE_LEVELS.length - 1)) * 100,
-      scale14NA ? 0 : (scale14 / (SCALE_LEVELS_14.length - 1)) * 100,
-      ratio(matrix3),
-      ratio(matrix4),
-    ];
-  }, [matrix, matrix2, matrix3, matrix4, scale, scaleNA, scale14, scale14NA]);
-
-  const answersPayload = useMemo(
-    () => ({
-      matrix,
-      matrix2,
-      matrix3,
-      matrix4,
-      scale,
-      scaleNA,
-      scaleTouched,
-      scale14,
-      scale14NA,
-      scale14Touched,
-    }),
-    [matrix, matrix2, matrix3, matrix4, scale, scaleNA, scaleTouched, scale14, scale14NA, scale14Touched],
+  const percentages = useMemo(
+    () =>
+      indicators.map((ind, i) => {
+        if (ind.type === "matrix") {
+          const vals = Object.values(matrix[i] ?? {});
+          const counted = vals.filter((v) => v !== "na").length;
+          if (!counted) return 0;
+          return (vals.filter((v) => v === "yes").length / counted) * 100;
+        }
+        const s = scale[i];
+        if (!s || s.na) return 0;
+        return (s.value / Math.max(ind.levels.length - 1, 1)) * 100;
+      }),
+    [indicators, matrix, scale],
   );
+
+  const answersPayload = useMemo(() => ({ answersByIndicator: { matrix, scale } }), [matrix, scale]);
 
   const persist = async (opts: { step: number; completed?: boolean }) => {
     setSaving(true);
@@ -264,32 +155,20 @@ function QuestionnairePage() {
     return id;
   };
 
-  const answeredCount = (m: Record<number, Answer>) => Object.keys(m).length;
+  const current: QIndicator | undefined = indicators[step - 1];
 
   const canAdvance = () => {
-    switch (step) {
-      case 1:
-        return answeredCount(matrix) > 0;
-      case 2:
-        return answeredCount(matrix2) > 0;
-      case 3:
-        return scaleNA || scaleTouched;
-      case 4:
-        return scale14NA || scale14Touched;
-      case 5:
-        return answeredCount(matrix3) > 0;
-      case 6:
-        return answeredCount(matrix4) > 0;
-      default:
-        return true;
-    }
+    if (!current) return true;
+    if (current.type === "matrix") return Object.keys(matrix[step - 1] ?? {}).length > 0;
+    const s = scale[step - 1];
+    return Boolean(s && (s.na || s.touched));
   };
 
   const handleNext = async () => {
     if (!canAdvance()) {
       setError(
-        step === 3 || step === 4
-          ? "Please choose a level on the slider, or mark this indicator as Not Applicable."
+        current?.type === "slider"
+          ? "Please choose a level on the slider, or skip this question."
           : "Please answer at least one criterion before continuing.",
       );
       return;
@@ -306,7 +185,6 @@ function QuestionnairePage() {
   };
 
   const progress = step / TOTAL_STEPS;
-
 
   return (
     <div className="min-h-screen bg-[#FAFAFB]">
@@ -350,84 +228,35 @@ function QuestionnairePage() {
       </header>
 
       <main className="mx-auto max-w-[1240px] px-5 pb-20 pt-10 lg:px-10">
-        {step === 1 && (
-          <MatrixQuestion matrix={matrix} setMatrix={setMatrix} />
-        )}
-        {step === 2 && (
+        {current && current.type === "matrix" && (
           <MatrixQuestion
-            matrix={matrix2}
-            setMatrix={setMatrix2}
-            criteria={MATRIX_CRITERIA_2}
-            code="1.2"
-            title="Representation of youth groups and interests"
-            about="The LYC brings together representatives from diverse youth organizations, movements, and communities of interest, ensuring that different forms of youth participation are present as well as different thematic areas. These can include NGOs, student councils, informal collectives, arts, sports, environmental groups, faith based organizations, and independent voices. The LYC aims to reflect the range of youth groups and interests that exist in its local context, recognising that the diversity of organizations and movements may vary depending on the municipality. This ensures that the council is connected to the full range of youth activities, interests, and causes in the community, not only the identities of its members."
-            question="Does your LYC reflect the range of youth groups and interests present in your community?"
+            key={current.code}
+            indicator={current}
+            answers={matrix[step - 1] ?? {}}
+            setAnswers={(fn) =>
+              setMatrix((m) => ({ ...m, [step - 1]: fn(m[step - 1] ?? {}) }))
+            }
           />
         )}
-        {step === 3 && (
+        {current && current.type === "slider" && (
           <SliderQuestion
-            value={scale}
+            key={current.code}
+            indicator={current}
+            value={scale[step - 1]?.value ?? 0}
+            na={Boolean(scale[step - 1]?.na)}
             onChange={(v) => {
-              setScale(v);
-              setScaleTouched(true);
-              setScaleNA(false);
+              setScale((s) => ({ ...s, [step - 1]: { value: v, na: false, touched: true } }));
               setError(null);
             }}
-            na={scaleNA}
             onSkip={async () => {
-              setScaleNA(true);
+              setScale((s) => ({ ...s, [step - 1]: { value: 0, na: true, touched: false } }));
               setError(null);
               await persist({ step: step + 1 });
               setStep((s) => s + 1);
             }}
           />
         )}
-        {step === 4 && (
-          <SliderQuestion
-            value={scale14}
-            onChange={(v) => {
-              setScale14(v);
-              setScale14Touched(true);
-              setScale14NA(false);
-              setError(null);
-            }}
-            na={scale14NA}
-            onSkip={async () => {
-              setScale14NA(true);
-              setError(null);
-              await persist({ step: step + 1 });
-              setStep((s) => s + 1);
-            }}
-            levels={SCALE_LEVELS_14}
-            code="1.4"
-            title="Legitimacy"
-            about={EQUALITY_ABOUT}
-            question="To what extent is your LYC recognized by young people as a legitimate platform for representing their views and interests?"
-          />
-        )}
-        {step === 5 && (
-          <MatrixQuestion
-            matrix={matrix3}
-            setMatrix={setMatrix3}
-            criteria={MATRIX_CRITERIA_3}
-            code="1.5"
-            title="Equality and non-discrimination"
-            about={EQUALITY_ABOUT}
-            question="Does your LYC ensure fair and non-discriminatory access to participation and membership?"
-          />
-        )}
-        {step === 6 && (
-          <MatrixQuestion
-            matrix={matrix4}
-            setMatrix={setMatrix4}
-            criteria={MATRIX_CRITERIA_4}
-            code="1.6"
-            title="Accessibility and participation conditions"
-            about="The LYC provides practical conditions that enable all young people to participate effectively in its activities. This includes ensuring that meetings, communication, and participation formats are accessible in terms of physical space, timing, language, and digital tools. The LYC aims to reduce practical barriers to participation by adapting formats and providing support where needed, so that young people can engage in ways that fit their circumstances."
-            question="Does your LYC provide accessible conditions that enable all young people to participate?"
-          />
-        )}
-        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} />}
+        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} areaKey={areaContent.key} />}
 
         {/* Nav */}
         {step < TOTAL_STEPS && (
@@ -466,12 +295,10 @@ function QuestionnairePage() {
             </div>
           </div>
         )}
-
       </main>
     </div>
   );
 }
-
 
 function IndicatorHeader({
   code,
@@ -513,25 +340,22 @@ function IndicatorHeader({
 }
 
 function MatrixQuestion({
-  matrix,
-  setMatrix,
-  criteria = MATRIX_CRITERIA,
-  code = "1.1",
-  title = "Diversity of Membership",
-  about = "The LYC strives to reflect the demographic composition of the local youth population by including members representing: a diverse LYC brings together young people of different ages, genders, cultural and ethnic backgrounds, socioeconomic conditions, abilities, and geographical areas. Particular attention is given to reaching young people from underrepresented groups.",
-  question = "Does your LYC reflect the demographic composition of the local youth population?",
+  indicator,
+  answers,
+  setAnswers,
 }: {
-  matrix: Record<number, Answer>;
-  setMatrix: (fn: (m: Record<number, Answer>) => Record<number, Answer>) => void;
-  criteria?: string[];
-  code?: string;
-  title?: string;
-  about?: string;
-  question?: string;
+  indicator: QIndicator;
+  answers: Record<number, Answer>;
+  setAnswers: (fn: (m: Record<number, Answer>) => Record<number, Answer>) => void;
 }) {
   return (
     <section>
-      <IndicatorHeader code={code} title={title} about={about} question={question} />
+      <IndicatorHeader
+        code={indicator.code}
+        title={indicator.title}
+        about={indicator.about}
+        question={indicator.question}
+      />
 
       <p className="mt-6 text-[12px] font-bold uppercase tracking-wide" style={{ color: PURPLE }}>
         Select those that are included in your LYC
@@ -551,7 +375,7 @@ function MatrixQuestion({
           ))}
         </div>
 
-        {criteria.map((c, i) => (
+        {indicator.criteria.map((c, i) => (
           <div
             key={c}
             className="grid grid-cols-[minmax(0,1fr)_64px_64px_64px] items-center gap-2 px-6 py-3.5 sm:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
@@ -559,7 +383,7 @@ function MatrixQuestion({
           >
             <span className="text-[14px] leading-snug text-[#1f2937]">{c}</span>
             {(["yes", "no", "na"] as Answer[]).map((v) => {
-              const checked = matrix[i] === v;
+              const checked = answers[i] === v;
               return (
                 <span key={v} className="flex justify-center">
                   <button
@@ -567,7 +391,7 @@ function MatrixQuestion({
                     role="radio"
                     aria-checked={checked}
                     aria-label={`${c} — ${v}`}
-                    onClick={() => setMatrix((m) => ({ ...m, [i]: v }))}
+                    onClick={() => setAnswers((m) => ({ ...m, [i]: v }))}
                     className="flex h-[20px] w-[20px] items-center justify-center rounded-full border-2 transition"
                     style={{ borderColor: checked ? PURPLE : "#C9CDD4" }}
                   >
@@ -585,34 +409,32 @@ function MatrixQuestion({
   );
 }
 
-
 function SliderQuestion({
+  indicator,
   value,
   onChange,
   na,
   onSkip,
-  levels = SCALE_LEVELS,
-  code = "1.3",
-  title = "Outreach and Consultation",
-  about = "The LYC actively engages young people beyond its membership by seeking input, perspectives, and feedback from a wider group of young people. Effective outreach involves understanding which groups are not currently engaged and creating opportunities for them to contribute. This can include working with schools, community organizations, informal youth groups, and other local networks. The LYC establishes clear and accessible ways for young people to share their views, contribute to discussions, and influence priorities, ensuring that its work reflects the broader needs and experiences of young people in the community.",
-  question = "To what extent does your LYC engage and consult young people beyond its membership?",
 }: {
+  indicator: QIndicator;
   value: number;
   onChange: (v: number) => void;
   na: boolean;
   onSkip: () => void;
-  levels?: typeof SCALE_LEVELS;
-  code?: string;
-  title?: string;
-  about?: string;
-  question?: string;
 }) {
+  const levels = indicator.levels;
   const last = levels.length - 1;
-  const level = levels[value];
+  const level = levels[Math.min(value, last)]!;
+  const style = LEVEL_STYLE[Math.min(value, LEVEL_STYLE.length - 1)]!;
 
   return (
     <section>
-      <IndicatorHeader code={code} title={title} about={about} question={question} />
+      <IndicatorHeader
+        code={indicator.code}
+        title={indicator.title}
+        about={indicator.about}
+        question={indicator.question}
+      />
 
       <div className="mt-4 flex justify-end">
         <button
@@ -633,18 +455,17 @@ function SliderQuestion({
           {/* Visible coloured track segments — each is a large drop target */}
           <div className="absolute left-0 right-0 top-1/2 flex h-[14px] w-full -translate-y-1/2 overflow-hidden rounded-full">
             {levels.map((l, i) => (
-                <button
-                  key={l.label}
-                  type="button"
-                  aria-label={`Select level: ${l.label}`}
-                  onClick={() => onChange(i)}
-                  className="group relative flex-1 cursor-pointer transition focus:outline-none"
-                  style={{ backgroundColor: l.color }}
-                >
-                  {/* Larger invisible click area */}
-                  <span className="absolute inset-x-0 -top-[15px] -bottom-[15px] block" />
-                </button>
-              ))}
+              <button
+                key={l.label}
+                type="button"
+                aria-label={`Select level: ${l.label}`}
+                onClick={() => onChange(i)}
+                className="group relative flex-1 cursor-pointer transition focus:outline-none"
+                style={{ backgroundColor: LEVEL_STYLE[i]?.color ?? "#ccc" }}
+              >
+                <span className="absolute inset-x-0 -top-[15px] -bottom-[15px] block" />
+              </button>
+            ))}
           </div>
 
           {/* Thumb */}
@@ -665,7 +486,7 @@ function SliderQuestion({
             step={1}
             value={value}
             onChange={(e) => onChange(Number(e.target.value))}
-            aria-label="Level of outreach and consultation"
+            aria-label={`Level for ${indicator.title}`}
             className="absolute inset-0 w-full cursor-pointer opacity-0"
           />
         </div>
@@ -677,7 +498,7 @@ function SliderQuestion({
               type="button"
               onClick={() => onChange(i)}
               className="flex-1 text-center text-[14px] font-semibold transition"
-              style={{ color: i === value ? l.color : "#9ca3af" }}
+              style={{ color: i === value ? LEVEL_STYLE[i]?.color : "#9ca3af" }}
             >
               {l.label}
             </button>
@@ -686,9 +507,9 @@ function SliderQuestion({
 
         <div
           className="mt-10 rounded-2xl border p-6 transition-colors duration-300"
-          style={{ backgroundColor: level.soft, borderColor: level.color }}
+          style={{ backgroundColor: style.soft, borderColor: style.color }}
         >
-          <p className="text-[12px] font-bold uppercase tracking-wide" style={{ color: level.color }}>
+          <p className="text-[12px] font-bold uppercase tracking-wide" style={{ color: style.color }}>
             Selected level: {level.label}
           </p>
           <p className="mt-2 text-[15px] leading-relaxed text-[#1f2937]">{level.text}</p>
@@ -697,4 +518,3 @@ function SliderQuestion({
     </section>
   );
 }
-
