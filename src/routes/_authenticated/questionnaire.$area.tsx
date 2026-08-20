@@ -321,25 +321,25 @@ function IndicatorHeader({
   return (
     <>
       <div className="flex items-start justify-between gap-4">
-        <h1 className="text-[30px] font-extrabold leading-tight" style={{ color: theme.accent }}>
+        <h1 className="text-[22px] font-extrabold leading-tight sm:text-[30px]" style={{ color: theme.accent }}>
           {code} {title}
         </h1>
         {action}
       </div>
 
-      <div className="mt-6 rounded-2xl bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
+      <div className="mt-4 rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:mt-6 sm:p-6">
         <div className="flex items-start gap-3">
           <Info size={18} className="mt-[3px] shrink-0" style={{ color: theme.accent }} />
           <div className="min-w-0">
-            <h2 className="text-[16px] font-extrabold text-[#111827]">About This Indicator</h2>
-            <p className="mt-2 text-[14px] leading-[1.65] text-[#111827]">
+            <h2 className="text-[15px] font-extrabold text-[#111827] sm:text-[16px]">About This Indicator</h2>
+            <p className="mt-2 text-[13px] leading-[1.6] text-[#111827] sm:text-[14px] sm:leading-[1.65]">
               {about}
             </p>
           </div>
         </div>
       </div>
 
-      <p className="mt-7 border-b border-black/10 pb-5 text-[22px] font-bold text-[#111827]">{question}</p>
+      <p className="mt-5 border-b border-black/10 pb-4 text-[18px] font-bold text-[#111827] sm:mt-7 sm:pb-5 sm:text-[22px]">{question}</p>
     </>
   );
 }
@@ -363,14 +363,15 @@ function MatrixQuestion({
         question={indicator.question}
       />
 
-      <p className="mt-6 text-[12px] font-bold uppercase tracking-wide" style={{ color: theme.accent }}>
+      <p className="mt-5 text-[11px] font-bold uppercase tracking-wide sm:mt-6 sm:text-[12px]" style={{ color: theme.accent }}>
         Select those that are included in your LYC
       </p>
 
-      <div className="mt-3 overflow-hidden rounded-xl ring-1 ring-black/5">
+      {/* Desktop table */}
+      <div className="mt-3 hidden overflow-hidden rounded-xl ring-1 ring-black/5 sm:block">
         {/* Head */}
         <div
-          className="grid grid-cols-[minmax(0,1fr)_64px_64px_64px] items-center gap-2 px-6 py-3 sm:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
+          className="grid grid-cols-[minmax(0,1fr)_100px_100px_100px] items-center gap-2 px-6 py-3"
           style={{ backgroundColor: theme.accent }}
         >
           <span className="text-[11px] font-bold uppercase tracking-wider text-white">Criteria</span>
@@ -384,7 +385,7 @@ function MatrixQuestion({
         {indicator.criteria.map((c, i) => (
           <div
             key={c}
-            className="grid grid-cols-[minmax(0,1fr)_64px_64px_64px] items-center gap-2 px-6 py-3.5 sm:grid-cols-[minmax(0,1fr)_100px_100px_100px]"
+            className="grid grid-cols-[minmax(0,1fr)_100px_100px_100px] items-center gap-2 px-6 py-3.5"
             style={{ backgroundColor: i % 2 === 0 ? theme.row : "#FFFFFF" }}
           >
             <span className="text-[14px] leading-snug text-[#1f2937]">{c}</span>
@@ -398,7 +399,7 @@ function MatrixQuestion({
                     aria-checked={checked}
                     aria-label={`${c} — ${v}`}
                     onClick={() => setAnswers((m) => ({ ...m, [i]: v }))}
-                    className="flex h-[20px] w-[20px] items-center justify-center rounded-full border-2 transition"
+                    className="flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 transition"
                     style={{ borderColor: checked ? theme.accent : "#C9CDD4" }}
                   >
                     {checked && (
@@ -408,6 +409,46 @@ function MatrixQuestion({
                 </span>
               );
             })}
+          </div>
+        ))}
+      </div>
+
+      {/* Mobile stacked cards */}
+      <div className="mt-3 space-y-3 sm:hidden">
+        {indicator.criteria.map((c, i) => (
+          <div
+            key={c}
+            className="rounded-xl bg-white p-3 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5"
+            style={{ backgroundColor: i % 2 === 0 ? theme.row : "#FFFFFF" }}
+          >
+            <p className="text-[13px] font-semibold leading-snug text-[#1f2937]">{c}</p>
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              {([
+                { key: "yes", label: "Yes" },
+                { key: "no", label: "No" },
+                { key: "na", label: "N/A" },
+              ] as { key: Answer; label: string }[]).map(({ key, label }) => {
+                const checked = answers[i] === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    role="radio"
+                    aria-checked={checked}
+                    aria-label={`${c} — ${label}`}
+                    onClick={() => setAnswers((m) => ({ ...m, [i]: key }))}
+                    className="rounded-lg py-2 text-[13px] font-bold transition"
+                    style={{
+                      backgroundColor: checked ? theme.accent : "#FFFFFF",
+                      color: checked ? "#FFFFFF" : "#6b7280",
+                      border: `2px solid ${checked ? theme.accent : "#e5e7eb"}`,
+                    }}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         ))}
       </div>
