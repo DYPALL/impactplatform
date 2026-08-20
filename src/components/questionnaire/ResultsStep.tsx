@@ -4,9 +4,9 @@ import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, Info, ListChecks, Refre
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import { LEVELS, levelFromPct, type LevelKey } from "./results-data";
 import { AREAS, type QIndicator } from "./content";
+import { AreaThemeProvider, themeForArea, useAreaTheme } from "./theme";
 import { ScoreMeter } from "./ScoreMeter";
 
-const PURPLE = "#502181";
 
 export type IndicatorResult = { pct: number; level: LevelKey };
 
@@ -54,6 +54,7 @@ function annularSectorPath(
 }
 
 function RoseChart({ results, indicators }: { results: IndicatorResult[]; indicators: QIndicator[] }) {
+  const theme = useAreaTheme();
   const step = 360 / indicators.length;
   const cx = 160;
   const cy = 160;
@@ -82,7 +83,7 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
               cy={cy}
               r={inner + (step / 4) * (maxR - inner)}
               fill="none"
-              stroke="#E3DBF0"
+              stroke={theme.border}
               strokeWidth={1}
               strokeDasharray="4 4"
             />
@@ -97,7 +98,7 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
                 y1={cy}
                 x2={x}
                 y2={y}
-                stroke="#E3DBF0"
+                stroke={theme.border}
                 strokeWidth="1"
                 strokeDasharray="4 4"
               />
@@ -166,7 +167,8 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
                   y={ty + 1}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="fill-[#502181] text-[11px] font-extrabold"
+                  className="text-[11px] font-extrabold"
+                  fill={theme.accent}
                 >
                   {ind.code}
                 </text>
@@ -191,8 +193,9 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               onClick={() => setSelected((s) => (s === i ? null : i))}
+              style={isActive ? { borderColor: theme.accent, boxShadow: `0 0 0 1px ${theme.accent}` } : undefined}
               className={`flex items-center gap-2.5 rounded-xl border bg-white px-2.5 py-2 text-left transition-all duration-200 cursor-pointer sm:gap-3 sm:px-3 sm:py-2.5 ${
-                isActive ? "border-[#502181] ring-1 ring-[#502181]" : "border-[#EDEAF3] hover:bg-[#F7F4FC]"
+                isActive ? "ring-1" : "border-[#EDEAF3] hover:bg-black/[0.02]"
               }`}
             >
               <Battery level={level} className="h-[18px] sm:h-[22px]" />
@@ -217,6 +220,7 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
 /* -------------------------------- Flip card --------------------------------- */
 
 function FlipCard({ index, text }: { index: number; text: string }) {
+  const theme = useAreaTheme();
   const [flipped, setFlipped] = useState(false);
   return (
     <button
@@ -231,7 +235,7 @@ function FlipCard({ index, text }: { index: number; text: string }) {
       >
         <div
           className="absolute inset-0 flex flex-col justify-between rounded-xl p-4 text-white"
-          style={{ backfaceVisibility: "hidden", backgroundColor: PURPLE }}
+          style={{ backfaceVisibility: "hidden", backgroundColor: theme.accent }}
         >
           <p className="text-[15px] font-extrabold uppercase tracking-wide">Question {index + 1}</p>
           <p className="flex items-center gap-2 text-[10px] font-semibold text-white/80">
@@ -240,7 +244,7 @@ function FlipCard({ index, text }: { index: number; text: string }) {
         </div>
         <div
           className="absolute inset-0 flex items-center rounded-xl border-2 bg-white p-4"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", borderColor: PURPLE }}
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", borderColor: theme.accent }}
         >
           <p className="text-[12px] leading-snug text-[#1f2937]">{text}</p>
         </div>
@@ -260,6 +264,7 @@ function IndicatorCard({
   result: IndicatorResult;
   defaultOpen?: boolean;
 }) {
+  const theme = useAreaTheme();
   const [open, setOpen] = useState(!!defaultOpen);
   const [checked, setChecked] = useState<Record<number, boolean>>({});
 
@@ -279,7 +284,7 @@ function IndicatorCard({
       </div>
 
       <div className="mt-5 border-t border-black/5 pt-4">
-        <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: PURPLE }}>
+        <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: theme.accent }}>
           Assessment feedback
         </p>
         <p className="mt-1.5 text-[13px] leading-relaxed text-[#374151]">{content.feedback[result.level]}</p>
@@ -289,8 +294,8 @@ function IndicatorCard({
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="mt-4 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-semibold transition hover:bg-[#502181]/5"
-        style={{ borderColor: "#D8D3E4", color: PURPLE }}
+        className="mt-4 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-semibold transition "
+        style={{ borderColor: "#D8D3E4", color: theme.accent }}
       >
         Read more about this indicator
         <ChevronDown size={13} className={`transition-transform ${open ? "rotate-180" : ""}`} />
@@ -300,10 +305,10 @@ function IndicatorCard({
         <div className="mt-6 space-y-7">
           <div>
             <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
-              <Info size={15} style={{ color: PURPLE }} /> About This Indicator
+              <Info size={15} style={{ color: theme.accent }} /> About This Indicator
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
-              <p className="text-[12px] leading-relaxed" style={{ color: PURPLE }}>
+              <p className="text-[12px] leading-relaxed" style={{ color: theme.accent }}>
                 {content.about}
               </p>
             </div>
@@ -311,7 +316,7 @@ function IndicatorCard({
 
           <div>
             <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
-              <CircleHelp size={15} style={{ color: PURPLE }} /> Reflection Questions
+              <CircleHelp size={15} style={{ color: theme.accent }} /> Reflection Questions
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
               <div className="grid gap-4 sm:grid-cols-3">
@@ -325,9 +330,9 @@ function IndicatorCard({
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
-                <ListChecks size={15} style={{ color: PURPLE }} /> Recommended Action Steps
+                <ListChecks size={15} style={{ color: theme.accent }} /> Recommended Action Steps
               </p>
-              <span className="text-[11px] font-semibold" style={{ color: PURPLE }}>
+              <span className="text-[11px] font-semibold" style={{ color: theme.accent }}>
                 {Object.values(checked).filter(Boolean).length}/3 selected
               </span>
             </div>
@@ -356,7 +361,7 @@ function IndicatorCard({
                               return { ...c, [i]: true };
                             })
                           }
-                          className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer rounded-[3px] border-2 border-[#C9CDD4] accent-[#502181] disabled:cursor-not-allowed"
+                          className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer rounded-[3px] border-2 border-[#C9CDD4]  disabled:cursor-not-allowed"
                         />
                         <span
                           className={`text-[12px] leading-snug ${checked[i] ? "text-[#9ca3af] line-through" : "text-[#374151]"}`}
@@ -382,6 +387,7 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
   const area = AREAS[areaKey] ?? AREAS["representativeness"]!;
   const indicators = area.indicators;
   const areaNumber = indicators[0]?.code.split(".")[0] ?? "1";
+  const theme = themeForArea(areaKey);
   const results: IndicatorResult[] = indicators.map((_, i) => {
     const pct = percentages[i] ?? 0;
     return { pct, level: levelFromPct(pct) };
@@ -392,16 +398,17 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
   const weakest = sorted.slice(0, 3).map((r) => indicators[r.i]!.title);
 
   return (
+    <AreaThemeProvider areaKey={areaKey}>
     <section>
       {/* Area intro */}
-      <div className="rounded-2xl border border-[#E3DBF0] bg-[#F7F4FC] p-7">
+      <div className="rounded-2xl border p-7">
         <span
           className="inline-block rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white"
-          style={{ backgroundColor: PURPLE }}
+          style={{ backgroundColor: theme.accent }}
         >
           Area {areaNumber}
         </span>
-        <h1 className="mt-3 text-[26px] font-extrabold leading-tight" style={{ color: PURPLE }}>
+        <h1 className="mt-3 text-[26px] font-extrabold leading-tight" style={{ color: theme.accent }}>
           {area.name}
         </h1>
         <p className="mt-2 max-w-[900px] text-[13px] leading-relaxed text-[#4b5563]">
@@ -411,7 +418,7 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
       </div>
 
       {/* Results overview */}
-      <div className="mt-7 rounded-2xl border border-[#E3DBF0] bg-[#F7F4FC] p-4 sm:p-7">
+      <div className="mt-7 rounded-2xl border p-4 sm:p-7">
         <h2 className="text-[17px] font-extrabold text-[#111827]">Results Overview</h2>
         <p className="mt-1 text-[12px] text-[#6b7280]">A quick snapshot of your performance across all indicators</p>
 
@@ -419,7 +426,7 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
           <RoseChart results={results} indicators={indicators} />
         </div>
 
-        <div className="mt-6 rounded-xl p-5 sm:p-6" style={{ backgroundColor: PURPLE }}>
+        <div className="mt-6 rounded-xl p-5 sm:p-6" style={{ backgroundColor: theme.accent }}>
           <p className="text-[14px] font-extrabold text-white">Where to focus next</p>
           <p className="mt-1.5 text-[12px] leading-relaxed text-white/80">
             You're performing well in {best}, but should prioritize improving {weakest.join(", ")}.
@@ -444,7 +451,7 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
       {/* CTA */}
       <div
         className="mt-10 grid items-center gap-6 overflow-hidden rounded-2xl p-8 md:grid-cols-[minmax(0,1fr)_320px]"
-        style={{ backgroundColor: PURPLE }}
+        style={{ backgroundColor: theme.accent }}
       >
         <div className="flex flex-wrap items-center gap-6">
           <div className="min-w-[200px]">
@@ -456,7 +463,7 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
           <Link
             to="/dashboard"
             className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
-            style={{ color: PURPLE }}
+            style={{ color: theme.accent }}
           >
             Build your action plan <ArrowRight size={14} />
           </Link>
@@ -472,12 +479,13 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
       <div className="mt-8">
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-2 rounded-full border-2 px-5 py-2.5 text-[12px] font-bold transition hover:bg-[#502181]/5"
-          style={{ borderColor: PURPLE, color: PURPLE }}
+          className="inline-flex items-center gap-2 rounded-full border-2 px-5 py-2.5 text-[12px] font-bold transition "
+          style={{ borderColor: theme.accent, color: theme.accent }}
         >
           <ArrowLeft size={14} /> Back to Dashboard
         </Link>
       </div>
     </section>
+    </AreaThemeProvider>
   );
 }
