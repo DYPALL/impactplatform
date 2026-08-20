@@ -285,6 +285,30 @@ function IndicatorCard({
 
   const isOpen = alwaysOpen || open;
 
+  if (result.na) {
+    return (
+      <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
+          <div className="min-w-0">
+            <h3 className="text-[15px] font-extrabold text-[#111827] sm:text-[16px]">
+              {content.code} {content.title}
+            </h3>
+            <p className="mt-1 text-[12px] text-[#6b7280]">{content.question}</p>
+          </div>
+          <span className="rounded-full bg-[#F1F1F4] px-3 py-1 text-[11px] font-bold text-[#6b7280]">
+            Not applicable
+          </span>
+        </div>
+        <div className="mt-5 rounded-xl bg-[#F6F6F8] p-5">
+          <p className="text-[13px] leading-relaxed text-[#374151]">
+            You marked this indicator as not applicable to your Local Youth Council, so it was skipped and is not
+            scored in this assessment. You can revisit it at any time by editing your assessment.
+          </p>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
@@ -306,6 +330,7 @@ function IndicatorCard({
         </p>
         <p className="mt-1.5 text-[13px] leading-relaxed text-[#374151]">{content.feedback[result.level]}</p>
       </div>
+
 
       <button
         type="button"
