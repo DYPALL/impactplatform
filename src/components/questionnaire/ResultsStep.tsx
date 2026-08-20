@@ -401,7 +401,7 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
     <AreaThemeProvider areaKey={areaKey}>
     <section>
       {/* Area intro */}
-      <div className="rounded-2xl border p-7">
+      <div className="rounded-2xl border p-7" style={{ backgroundColor: theme.soft, borderColor: theme.border }}>
         <span
           className="inline-block rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white"
           style={{ backgroundColor: theme.accent }}
@@ -418,7 +418,7 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
       </div>
 
       {/* Results overview */}
-      <div className="mt-7 rounded-2xl border p-4 sm:p-7">
+      <div className="mt-7 rounded-2xl border p-4 sm:p-7" style={{ backgroundColor: theme.soft, borderColor: theme.border }}>
         <h2 className="text-[17px] font-extrabold text-[#111827]">Results Overview</h2>
         <p className="mt-1 text-[12px] text-[#6b7280]">A quick snapshot of your performance across all indicators</p>
 
