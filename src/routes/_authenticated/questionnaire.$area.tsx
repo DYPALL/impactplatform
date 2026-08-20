@@ -170,7 +170,8 @@ function QuestionnairePage() {
     if (!current) return true;
     if (current.type === "matrix") return Object.keys(matrix[step - 1] ?? {}).length > 0;
     const s = scale[step - 1];
-    return Boolean(s && (s.na || s.touched));
+    // Slider questions default to value 0 ("Not at all"), so any numeric value is valid.
+    return Boolean(s && (s.na || typeof s.value === "number"));
   };
 
   const handleNext = async () => {
