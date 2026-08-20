@@ -109,10 +109,12 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
           })}
           {/* wifi-signal sectors: constant-pixel gaps so edges stay parallel */}
           {indicators.map((ind, i) => {
+            const isNa = Boolean(results[i]?.na);
             const level = results[i]?.level ?? 0;
             const isActive = active === i;
             const isDimmed = active !== null && active !== i;
-            const color = LEVELS[level].color;
+            const color = isNa ? NA_GREY : LEVELS[level].color;
+
             const [tx, ty] = polar(cx, cy, maxR + 30, -90 + step / 2 + i * step);
 
             const bandCount = 4;
