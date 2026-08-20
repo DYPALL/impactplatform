@@ -413,7 +413,7 @@ function MatrixQuestion({
         ))}
       </div>
 
-      {/* Mobile stacked cards */}
+      {/* Mobile stacked cards with circular radios */}
       <div className="mt-3 space-y-3 sm:hidden">
         {indicator.criteria.map((c, i) => (
           <div
@@ -437,14 +437,26 @@ function MatrixQuestion({
                     aria-checked={checked}
                     aria-label={`${c} — ${label}`}
                     onClick={() => setAnswers((m) => ({ ...m, [i]: key }))}
-                    className="rounded-lg py-2 text-[13px] font-bold transition"
+                    className="flex flex-col items-center gap-1.5 rounded-lg py-2 transition"
                     style={{
-                      backgroundColor: checked ? theme.accent : "#FFFFFF",
-                      color: checked ? "#FFFFFF" : "#6b7280",
+                      backgroundColor: checked ? `${theme.accent}15` : "transparent",
                       border: `2px solid ${checked ? theme.accent : "#e5e7eb"}`,
                     }}
                   >
-                    {label}
+                    <span
+                      className="flex h-[22px] w-[22px] items-center justify-center rounded-full border-2 transition"
+                      style={{ borderColor: checked ? theme.accent : "#C9CDD4" }}
+                    >
+                      {checked && (
+                        <span className="h-[10px] w-[10px] rounded-full" style={{ backgroundColor: theme.accent }} />
+                      )}
+                    </span>
+                    <span
+                      className="text-[11px] font-bold uppercase tracking-wide"
+                      style={{ color: checked ? theme.accent : "#6b7280" }}
+                    >
+                      {label}
+                    </span>
                   </button>
                 );
               })}
