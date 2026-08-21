@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ResultsStep } from "@/components/questionnaire/ResultsStep";
+import { themeForArea } from "@/components/questionnaire/theme";
 
 export const Route = createFileRoute("/_authenticated/results/$id")({
   head: () => ({
@@ -17,8 +18,6 @@ export const Route = createFileRoute("/_authenticated/results/$id")({
   }),
   component: SavedResultsPage,
 });
-
-const PURPLE = "#502181";
 
 function SavedResultsPage() {
   const { id } = Route.useParams();
@@ -48,9 +47,11 @@ function SavedResultsPage() {
     };
   }, [id]);
 
+  const headerColor = themeForArea(areaKey).accent;
+
   return (
     <div className="min-h-screen bg-[#FAFAFB]">
-      <header className="sticky top-0 z-40" style={{ backgroundColor: PURPLE }}>
+      <header className="sticky top-0 z-40" style={{ backgroundColor: headerColor }}>
         <div className="mx-auto grid h-[60px] max-w-[1440px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 md:h-[72px] md:px-6 lg:px-10">
           <Link
             to="/dashboard"
