@@ -505,20 +505,26 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
         className="mt-10 grid items-center gap-6 overflow-hidden rounded-2xl p-8 md:grid-cols-[minmax(0,1fr)_320px]"
         style={{ backgroundColor: theme.accent }}
       >
-        <div className="flex flex-wrap items-center gap-6">
-          <div className="min-w-[200px]">
-            <p className="text-[24px] font-extrabold leading-tight text-white">Ready to take action?</p>
-            <p className="mt-2 max-w-[240px] text-[12px] leading-relaxed text-white/75">
-              Build your personalized Action Plan based on your assessment results and start improving your LYC.
-            </p>
+        <div className="flex flex-col items-center text-center">
+          <p className="text-[24px] font-extrabold leading-tight text-white">Ready to take action?</p>
+          <p className="mt-2 max-w-[320px] text-[12px] leading-relaxed text-white/75">
+            Build your personalized Action Plan based on your assessment results and start improving your LYC.
+          </p>
+          <div className="mt-5 flex flex-col items-center gap-2.5">
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
+              style={{ color: theme.accent }}
+            >
+              Build your action plan <ArrowRight size={14} />
+            </Link>
+            <Link
+              to="/dashboard"
+              className="text-[12px] font-semibold text-white/90 underline underline-offset-2 transition hover:text-white"
+            >
+              I will build my action plan later
+            </Link>
           </div>
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
-            style={{ color: theme.accent }}
-          >
-            Build your action plan <ArrowRight size={14} />
-          </Link>
         </div>
         <img
           src={ctaImg.url}
@@ -526,16 +532,6 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
           loading="lazy"
           className="h-[170px] w-full rounded-xl object-cover"
         />
-      </div>
-
-      <div className="mt-8">
-        <Link
-          to="/dashboard"
-          className="inline-flex items-center gap-2 rounded-full border-2 px-5 py-2.5 text-[12px] font-bold transition "
-          style={{ borderColor: theme.accent, color: theme.accent }}
-        >
-          <ArrowLeft size={14} /> Back to Dashboard
-        </Link>
       </div>
     </section>
     </AreaThemeProvider>
