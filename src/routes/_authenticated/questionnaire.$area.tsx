@@ -148,13 +148,15 @@ function QuestionnairePage() {
       return null;
     }
     const done = opts.completed || isEditing;
+    const m = opts.matrix ?? matrix;
+    const s = opts.scale ?? scale;
     const payload = {
       user_id: userId,
       area: area as "representativeness" | "governance" | "empowerment" | "results" | "general",
       status: done ? "completed" : "in_progress",
       current_step: opts.step,
-      answers: answersPayload,
-      percentages,
+      answers: { answersByIndicator: { matrix: m, scale: s } },
+      percentages: computePercentages(m, s),
       completed_at: done ? new Date().toISOString() : null,
     };
 
