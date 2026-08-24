@@ -109,33 +109,37 @@ function QuestionnairePage() {
   }, [area, routeId, TOTAL_STEPS]);
 
   // A value of -1 marks an indicator the user skipped ("not applicable").
-  const percentages = useMemo(
-    () =>
-      indicators.map((ind, i) => {
-        if (ind.type === "matrix") {
-          const vals = Object.values(matrix[i] ?? {});
-          const counted = vals.filter((v) => v !== "na").length;
-          // Only a fully N/A matrix (every criterion answered and all marked N/A)
-          // makes the whole indicator "not applicable". Partial N/A rows are just
-          // excluded from the score.
-          if (!counted) {
-            const allNa = vals.length > 0 && vals.length === ind.criteria.length;
-            return allNa ? -1 : 0;
-          }
-          return (vals.filter((v) => v === "yes").length / counted) * 100;
+  const computePercentages = (m: MatrixState, s: ScaleState) =>
+    indicators.map((ind, i) => {
+      if (ind.type === "matrix") {
+        const vals = Object.values(m[i] ?? {});
+        const counted = vals.filter((v) => v !== "na").length;
+        // Only a fully N/A matrix (every criterion answered and all marked N/A)
+        // makes the whole indicator "not applicable". Partial N/A rows are just
+        // excluded from the score.
+        if (!counted) {
+          const allNa = vals.length > 0 && vals.length === ind.criteria.length;
+          return allNa ? -1 : 0;
         }
-        const s = scale[i];
-        if (s?.na) return -1;
-        if (!s) return 0;
-        return (s.value / Math.max(ind.levels.length - 1, 1)) * 100;
-      }),
+        return (vals.filter((v) => v === "yes").length / counted) * 100;
+      }
+      const sc = s[i];
+      if (sc?.na) return -1;
+      if (!sc) return 0;
+      return (sc.value / Math.max(ind.levels.length - 1, 1)) * 100;
+    });
+
+  const percentages = useMemo(
+    () => computePercentages(matrix, scale),
     [indicators, matrix, scale],
   );
 
-
-  const answersPayload = useMemo(() => ({ answersByIndicator: { matrix, scale } }), [matrix, scale]);
-
-  const persist = async (opts: { step: number; completed?: boolean }) => {
+  const persist = async (opts: {
+    step: number;
+    completed?: boolean;
+    matrix?: MatrixState;
+    scale?: ScaleState;
+  }) => {
     setSaving(true);
     const { data: userRes } = await supabase.auth.getUser();
     const userId = userRes.user?.id;
@@ -144,13 +148,15 @@ function QuestionnairePage() {
       return null;
     }
     const done = opts.completed || isEditing;
+    const m = opts.matrix ?? matrix;
+    const s = opts.scale ?? scale;
     const payload = {
       user_id: userId,
       area: area as "representativeness" | "governance" | "empowerment" | "results" | "general",
       status: done ? "completed" : "in_progress",
       current_step: opts.step,
-      answers: answersPayload,
-      percentages,
+      answers: { answersByIndicator: { matrix: m, scale: s } },
+      percentages: computePercentages(m, s),
       completed_at: done ? new Date().toISOString() : null,
     };
 
@@ -269,10 +275,15 @@ function QuestionnairePage() {
               setError(null);
             }}
             onSkip={async () => {
-              setScale((s) => ({ ...s, [step - 1]: { value: 0, na: true, touched: false } }));
+              const nextScale: ScaleState = {
+                ...scale,
+                [step - 1]: { value: 0, na: true, touched: false },
+              };
+              setScale(nextScale);
               setError(null);
-              await persist({ step: step + 1 });
-              setStep((s) => s + 1);
+              const next = step + 1;
+              await persist({ step: next, completed: next === TOTAL_STEPS, scale: nextScale });
+              setStep(next);
             }}
           />
         )}
