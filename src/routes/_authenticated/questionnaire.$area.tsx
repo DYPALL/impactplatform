@@ -109,33 +109,37 @@ function QuestionnairePage() {
   }, [area, routeId, TOTAL_STEPS]);
 
   // A value of -1 marks an indicator the user skipped ("not applicable").
-  const percentages = useMemo(
-    () =>
-      indicators.map((ind, i) => {
-        if (ind.type === "matrix") {
-          const vals = Object.values(matrix[i] ?? {});
-          const counted = vals.filter((v) => v !== "na").length;
-          // Only a fully N/A matrix (every criterion answered and all marked N/A)
-          // makes the whole indicator "not applicable". Partial N/A rows are just
-          // excluded from the score.
-          if (!counted) {
-            const allNa = vals.length > 0 && vals.length === ind.criteria.length;
-            return allNa ? -1 : 0;
-          }
-          return (vals.filter((v) => v === "yes").length / counted) * 100;
+  const computePercentages = (m: MatrixState, s: ScaleState) =>
+    indicators.map((ind, i) => {
+      if (ind.type === "matrix") {
+        const vals = Object.values(m[i] ?? {});
+        const counted = vals.filter((v) => v !== "na").length;
+        // Only a fully N/A matrix (every criterion answered and all marked N/A)
+        // makes the whole indicator "not applicable". Partial N/A rows are just
+        // excluded from the score.
+        if (!counted) {
+          const allNa = vals.length > 0 && vals.length === ind.criteria.length;
+          return allNa ? -1 : 0;
         }
-        const s = scale[i];
-        if (s?.na) return -1;
-        if (!s) return 0;
-        return (s.value / Math.max(ind.levels.length - 1, 1)) * 100;
-      }),
+        return (vals.filter((v) => v === "yes").length / counted) * 100;
+      }
+      const sc = s[i];
+      if (sc?.na) return -1;
+      if (!sc) return 0;
+      return (sc.value / Math.max(ind.levels.length - 1, 1)) * 100;
+    });
+
+  const percentages = useMemo(
+    () => computePercentages(matrix, scale),
     [indicators, matrix, scale],
   );
 
-
-  const answersPayload = useMemo(() => ({ answersByIndicator: { matrix, scale } }), [matrix, scale]);
-
-  const persist = async (opts: { step: number; completed?: boolean }) => {
+  const persist = async (opts: {
+    step: number;
+    completed?: boolean;
+    matrix?: MatrixState;
+    scale?: ScaleState;
+  }) => {
     setSaving(true);
     const { data: userRes } = await supabase.auth.getUser();
     const userId = userRes.user?.id;
