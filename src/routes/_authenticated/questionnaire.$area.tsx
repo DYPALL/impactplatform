@@ -275,10 +275,15 @@ function QuestionnairePage() {
               setError(null);
             }}
             onSkip={async () => {
-              setScale((s) => ({ ...s, [step - 1]: { value: 0, na: true, touched: false } }));
+              const nextScale: ScaleState = {
+                ...scale,
+                [step - 1]: { value: 0, na: true, touched: false },
+              };
+              setScale(nextScale);
               setError(null);
-              await persist({ step: step + 1 });
-              setStep((s) => s + 1);
+              const next = step + 1;
+              await persist({ step: next, completed: next === TOTAL_STEPS, scale: nextScale });
+              setStep(next);
             }}
           />
         )}
