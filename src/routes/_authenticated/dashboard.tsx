@@ -28,7 +28,6 @@ type Profile = {
   avatar_url: string | null;
 };
 
-
 type AreaDef = {
   key: "representativeness" | "governance" | "empowerment" | "results";
   badge: string;
@@ -50,7 +49,7 @@ const AREAS: AreaDef[] = [
     color: "var(--impact-purple)",
     softBg: "#EDE4F6",
     softText: "var(--impact-purple)",
-    panelBg: "#F4F1F7",
+    panelBg: "#EDE4F6",
   },
   {
     key: "governance",
@@ -61,7 +60,7 @@ const AREAS: AreaDef[] = [
     color: "var(--impact-orange)",
     softBg: "#FDE6CE",
     softText: "#B85E10",
-    panelBg: "#FBF3EA",
+    panelBg: "#FDE6CE",
   },
   {
     key: "empowerment",
@@ -72,7 +71,7 @@ const AREAS: AreaDef[] = [
     color: "var(--impact-pink)",
     softBg: "#FBD9E7",
     softText: "#B32565",
-    panelBg: "#FCEFF4",
+    panelBg: "#FBD9E7",
   },
   {
     key: "results",
@@ -83,7 +82,7 @@ const AREAS: AreaDef[] = [
     color: "var(--impact-green)",
     softBg: "#D3EDEE",
     softText: "var(--impact-green)",
-    panelBg: "#EDF5F5",
+    panelBg: "#D3EDEE",
   },
 ];
 
@@ -140,11 +139,10 @@ function Dashboard() {
   const openGuide = () => setGuideModalOpen(true);
 
   return (
-    <div className="min-h-screen bg-[#F4F5F7] lg:flex">
+    <div className="min-h-screen bg-[#F4F5F7] lg:flex lg:gap-6 lg:p-6">
       {/* Sidebar */}
-      <aside className="shrink-0 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-[320px] lg:overflow-y-auto lg:border-r lg:border-black/5">
-        {/* Purple block */}
-        <div className="bg-[color:var(--impact-purple)] px-7 pb-8 pt-7 lg:rounded-none">
+      <aside className="shrink-0 bg-[color:var(--impact-purple)] lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:w-[340px] lg:overflow-y-auto lg:rounded-[40px]">
+        <div className="px-6 pb-8 pt-6 lg:px-7 lg:pb-10 lg:pt-7">
           <div className="flex items-center justify-between">
             <img src={logoWhite.url} alt="IMPACT" className="h-7 w-auto" />
             <div className="flex items-center gap-2">
@@ -166,7 +164,7 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="mt-7 flex flex-col items-center text-center lg:mt-8">
+          <div className="mt-6 flex flex-col items-center text-center lg:mt-8">
             <div className="flex h-[86px] w-[86px] items-center justify-center overflow-hidden rounded-full bg-[#E6DCF2] text-[color:var(--impact-purple)]">
               {profile?.avatar_url ? (
                 <img src={profile.avatar_url} alt="Profile picture" className="h-full w-full object-cover" />
@@ -191,14 +189,11 @@ function Dashboard() {
               <p className="mt-1.5 text-[11px] leading-tight text-white/85">In progress</p>
             </div>
           </div>
-        </div>
 
-        {/* White block */}
-        <div className="border-b border-black/5 px-7 py-7">
           <button
             type="button"
             onClick={openGuide}
-            className="flex w-full items-center justify-center gap-3 rounded-full bg-[color:var(--impact-green)] px-5 py-4 text-[15px] font-bold text-white transition hover:opacity-90"
+            className="mt-6 flex w-full items-center justify-center gap-3 rounded-full bg-white/15 px-5 py-3.5 text-[14px] font-bold text-white transition hover:bg-white/25"
           >
             <svg width="20" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden>
               <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
@@ -206,22 +201,20 @@ function Dashboard() {
             How to start assessing?
           </button>
 
-          <h2 className="mt-8 text-[16px] font-extrabold text-[color:var(--impact-ink)]">
+          <h2 className="mt-8 text-[16px] font-extrabold text-white">
             Quick Links
           </h2>
           <nav className="mt-4 grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-2">
-            <QuickLink to="/" label="Home" tint="#EDE4F6" dot="var(--impact-purple)" icon="home" />
-            <QuickLink to="/resource-hub" label="Resource Hub" tint="#DCEFEF" dot="var(--impact-green)" icon="resource-hub" />
-            <QuickLink to="/send-us-a-message" label="Send us a message" tint="#FCE7F0" dot="var(--impact-pink)" icon="message" />
+            <QuickLink to="/" label="Home" icon="home" />
+            <QuickLink to="/resource-hub" label="Resource Hub" icon="resource-hub" />
+            <QuickLink to="/send-us-a-message" label="Send us a message" icon="message" />
           </nav>
-        </div>
 
-        <div className="px-7 py-7">
-          <h2 className="text-[16px] font-extrabold text-[color:var(--impact-ink)]">
+          <h2 className="mt-8 text-[16px] font-extrabold text-white">
             Recent Activity
           </h2>
           {assessments.length === 0 ? (
-            <p className="mt-3 text-[13px] text-[color:var(--impact-ink-muted)]">
+            <p className="mt-3 text-[13px] text-white/70">
               No activity yet — start your first questionnaire.
             </p>
           ) : (
@@ -232,13 +225,13 @@ function Dashboard() {
                   <li key={it.id} className="flex gap-3">
                     <span
                       className="mt-[7px] h-2 w-2 shrink-0 rounded-full"
-                      style={{ backgroundColor: a?.color ?? "var(--impact-purple)" }}
+                      style={{ backgroundColor: "#ffffff" }}
                     />
                     <div className="min-w-0">
-                      <p className="truncate text-[13px] font-bold text-[color:var(--impact-ink)]">
+                      <p className="truncate text-[13px] font-bold text-white">
                         {a?.title ?? it.area}
                       </p>
-                      <p className="text-[12px] text-[color:var(--impact-ink-muted)]">
+                      <p className="text-[12px] text-white/70">
                         {it.status === "completed" ? "Completed" : "In progress"} ·{" "}
                         {new Date(it.updated_at).toLocaleDateString()}
                       </p>
@@ -248,32 +241,31 @@ function Dashboard() {
               })}
             </ul>
           )}
-        </div>
 
-        <div className="hidden border-t border-black/5 px-7 py-6 lg:block">
-          {isAdmin && (
-            <Link
-              to="/admin"
-              className="mb-2 flex items-center gap-2 rounded-2xl px-3 py-3 text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:bg-black/5"
+          <div className="mt-8 hidden border-t border-white/15 pt-6 lg:block">
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="mb-2 flex items-center gap-2 rounded-2xl px-3 py-3 text-[14px] font-bold text-white transition hover:bg-white/15"
+              >
+                <Settings size={16} />
+                Admin panel
+              </Link>
+            )}
+            <button
+              type="button"
+              onClick={() => signOut()}
+              className="flex w-full items-center gap-2 rounded-2xl px-3 py-3 text-[14px] font-bold text-white/80 transition hover:bg-white/15 hover:text-white"
             >
-              <Settings size={16} />
-              Admin panel
-            </Link>
-          )}
-          <button
-            type="button"
-            onClick={() => signOut()}
-            className="flex w-full items-center gap-2 rounded-2xl px-3 py-3 text-[14px] font-bold text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-[color:var(--impact-purple)]"
-          >
-            <LogOut size={16} />
-            Sign out
-          </button>
+              <LogOut size={16} />
+              Sign out
+            </button>
+          </div>
         </div>
       </aside>
 
-
       {/* Main */}
-      <main className="min-w-0 flex-1 px-5 pb-24 pt-8 lg:px-12 lg:pb-16 lg:pt-10">
+      <main className="min-w-0 flex-1 px-5 pb-24 pt-8 lg:px-8 lg:pb-16 lg:pt-10">
         <div className="mx-auto max-w-[1080px]">
           <h2 className="text-[30px] font-extrabold leading-tight text-[color:var(--impact-purple)] lg:text-[38px]">
             Start Your Assessment
@@ -287,7 +279,6 @@ function Dashboard() {
             open={guideModalOpen}
             onClose={() => setGuideModalOpen(false)}
           />
-
 
           <div className="mt-8 space-y-6">
             {AREAS.map((a) => (
@@ -310,14 +301,10 @@ function Dashboard() {
 function QuickLink({
   to,
   label,
-  tint,
-  dot,
   icon,
 }: {
   to: string;
   label: string;
-  tint: string;
-  dot: string;
   icon: "home" | "resource-hub" | "message";
 }) {
   const active = typeof window !== "undefined" && window.location.pathname === to;
@@ -369,13 +356,9 @@ function QuickLink({
   return (
     <Link
       to={to}
-      className="flex items-center justify-center gap-3 rounded-2xl px-3 py-3 text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:brightness-95 lg:justify-start"
-      style={{ backgroundColor: tint }}
+      className={`flex items-center justify-center gap-3 rounded-2xl px-3 py-3 text-[14px] font-bold text-white transition lg:justify-start ${active ? "bg-white/25" : "bg-white/15 hover:bg-white/25"}`}
     >
-      <span
-        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
-        style={{ backgroundColor: dot }}
-      >
+      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20">
         {iconSvg[icon]}
       </span>
       <span className="hidden lg:inline">{label}</span>
@@ -401,27 +384,31 @@ function AreaCard({
       className="rounded-[32px] p-6 md:p-8"
       style={{ backgroundColor: area.panelBg }}
     >
-      <span
-        className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-bold tracking-wide"
-        style={{ backgroundColor: area.softBg, color: area.softText }}
-      >
-        {area.badge}
-      </span>
-      <h3 className="mt-4 text-[22px] font-extrabold text-[color:var(--impact-ink)]">
-        {area.title}
-      </h3>
-      <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-[color:var(--impact-ink-muted)]">
-        {area.description}
-      </p>
+      <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+        <div className="min-w-0 flex-1">
+          <span
+            className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-bold tracking-wide"
+            style={{ backgroundColor: area.softBg, color: area.softText }}
+          >
+            {area.badge}
+          </span>
+          <h3 className="mt-3 text-[22px] font-extrabold text-[color:var(--impact-ink)]">
+            {area.title}
+          </h3>
+          <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-[color:var(--impact-ink-muted)]">
+            {area.description}
+          </p>
+        </div>
 
-      <Link
-        to="/questionnaire/$area"
-        params={{ area: area.key }}
-        className="mt-5 inline-flex items-center justify-center rounded-full px-8 py-3.5 text-[15px] font-bold text-white transition hover:opacity-90"
-        style={{ backgroundColor: area.color }}
-      >
-        Start a new assessment
-      </Link>
+        <Link
+          to="/questionnaire/$area"
+          params={{ area: area.key }}
+          className="inline-flex shrink-0 items-center justify-center rounded-full px-7 py-3.5 text-[14px] font-bold text-white transition hover:opacity-90 md:self-center"
+          style={{ backgroundColor: area.color }}
+        >
+          Start a new assessment
+        </Link>
+      </div>
 
       <button
         type="button"
