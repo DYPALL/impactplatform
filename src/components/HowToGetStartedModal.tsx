@@ -202,14 +202,24 @@ const STYLES = `
 .h2g-q .tr span.c{font-size:14px;} .h2g-q .tr .cell{display:flex; justify-content:center;}
 .h2g-rad{width:22px; height:22px; border-radius:50%; border:2px solid #C9CDD4; display:flex; align-items:center; justify-content:center;}
 .h2g-rad.on{border-color:var(--a1-accent);} .h2g-rad.on::after{content:''; width:10px; height:10px; border-radius:50%; background:var(--a1-accent);}
-.h2g-r1{animation:h2g-blink 10s step-end infinite;}
-.h2g-r2{animation:h2g-blink2 10s step-end infinite;}
-.h2g-r3{animation:h2g-blink3 10s step-end infinite;}
-.h2g-r4{animation:h2g-blink4 10s step-end infinite;}
-@keyframes h2g-blink{0%,8%{opacity:0} 9%,100%{opacity:1}}
-@keyframes h2g-blink2{0%,16%{opacity:0} 17%,100%{opacity:1}}
-@keyframes h2g-blink3{0%,24%{opacity:0} 25%,100%{opacity:1}}
-@keyframes h2g-blink4{0%,32%{opacity:0} 33%,100%{opacity:1}}
+/* Only the inner dot + ring colour animate in — the circle outline is always visible. */
+.h2g-r1,.h2g-r2,.h2g-r3,.h2g-r4{border-color:#C9CDD4;}
+.h2g-r1{animation:h2g-ring 10s step-end infinite;}
+.h2g-r2{animation:h2g-ring2 10s step-end infinite;}
+.h2g-r3{animation:h2g-ring3 10s step-end infinite;}
+.h2g-r4{animation:h2g-ring4 10s step-end infinite;}
+.h2g-r1::after{animation:h2g-dot 10s step-end infinite;}
+.h2g-r2::after{animation:h2g-dot2 10s step-end infinite;}
+.h2g-r3::after{animation:h2g-dot3 10s step-end infinite;}
+.h2g-r4::after{animation:h2g-dot4 10s step-end infinite;}
+@keyframes h2g-ring{0%,8%{border-color:#C9CDD4} 9%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-ring2{0%,16%{border-color:#C9CDD4} 17%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-ring3{0%,24%{border-color:#C9CDD4} 25%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-ring4{0%,32%{border-color:#C9CDD4} 33%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-dot{0%,8%{opacity:0} 9%,100%{opacity:1}}
+@keyframes h2g-dot2{0%,16%{opacity:0} 17%,100%{opacity:1}}
+@keyframes h2g-dot3{0%,24%{opacity:0} 25%,100%{opacity:1}}
+@keyframes h2g-dot4{0%,32%{opacity:0} 33%,100%{opacity:1}}
 
 /* step 3 — slider question */
 .h2g-q .hint{margin-top:26px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--a1-accent);}
