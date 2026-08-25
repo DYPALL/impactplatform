@@ -183,13 +183,13 @@ const STYLES = `
 .h2g-q .top .ct span{position:absolute; inset:0; white-space:nowrap;}
 .h2g-q .top .bar{width:240px; height:7px; border-radius:9999px; background:rgba(255,255,255,.25); overflow:hidden;}
 .h2g-q .top .bar i{display:block; height:100%; background:#fff; border-radius:9999px; animation:h2g-qbar 10s linear infinite;}
-@keyframes h2g-qbar{0%,45%{width:17%} 50%,100%{width:50%}}
+@keyframes h2g-qbar{0%,45%,96%,100%{width:17%} 50%,95%{width:50%}}
 .h2g-q .mn{max-width:1240px; width:100%; margin:0 auto; padding:30px 40px; flex:1;}
 .h2g-q .stage{position:relative; min-height:600px;}
 .h2g-q .pane{position:absolute; inset:0; background:#FAFAFB;}
 .h2g-fade1{animation:h2g-fade1 10s step-end infinite;}
 .h2g-fade2{animation:h2g-fade2 10s step-end infinite;}
-@keyframes h2g-fade1{0%,47%,97%,100%{opacity:1; visibility:visible} 48%,96%{opacity:0; visibility:hidden}}
+@keyframes h2g-fade1{0%,47%,96%,100%{opacity:1; visibility:visible} 48%,95%{opacity:0; visibility:hidden}}
 @keyframes h2g-fade2{0%,47%,96%,100%{opacity:0; visibility:hidden} 48%,95%{opacity:1; visibility:visible}}
 .h2g-q .mn h1{font-size:28px; color:var(--a1-accent);}
 .h2g-q .about{margin-top:16px; background:#fff; border-radius:16px; padding:20px; border:1px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.05);}
