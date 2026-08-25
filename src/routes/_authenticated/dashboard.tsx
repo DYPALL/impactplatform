@@ -423,11 +423,11 @@ function AreaCard({
         <div className="mt-3 overflow-hidden rounded-3xl bg-white ring-1 ring-black/5">
           <div
             className="flex items-center justify-between gap-3 px-4 py-3"
-            style={{ backgroundColor: area.softBg }}
+            style={{ backgroundColor: area.color }}
           >
             <span
-              className="inline-flex items-center rounded-full px-3 py-1 text-[12px] font-bold text-white"
-              style={{ backgroundColor: area.color }}
+              className="inline-flex items-center rounded-full px-3 py-1 text-[12px] font-bold"
+              style={{ backgroundColor: area.softBg, color: area.softText }}
             >
               Completed questionnaires ({items.filter((i) => i.status === "completed").length})
             </span>
