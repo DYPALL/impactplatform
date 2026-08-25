@@ -656,6 +656,8 @@ export function HowToGetStartedModal({
 }) {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
+  const stageRef = React.useRef<HTMLDivElement>(null);
+  const screensRef = React.useRef<HTMLDivElement>(null);
   const isLast = step === SCREENS.length - 1;
   const Screen = SCREENS[step];
   const meta = STEP_META[step];
@@ -667,21 +669,41 @@ export function HowToGetStartedModal({
     if (open) setStep(0);
   }, [open]);
 
-  // scale the 1440×810 canvas to fit its pane (width AND height)
+  // scale the 1440×810 canvas to fit its stage (width AND height)
   useEffect(() => {
     if (!open) return;
-    const pane = document.querySelector<HTMLElement>(".h2g-pane");
-    const stage = document.querySelector<HTMLElement>(".h2g-stage");
-    const screens = document.querySelector<HTMLElement>(".h2g-screens");
-    if (!pane || !stage || !screens) return;
+    let raf = 0;
+    let ro: ResizeObserver | undefined;
+
     const fit = () => {
+      const stage = stageRef.current;
+      const screens = screensRef.current;
+      if (!stage || !screens) return;
       const w = stage.clientWidth;
-      if (w) screens.style.transform = `scale(${w / 1440})`;
+      const h = stage.clientHeight;
+      if (!w || !h) return;
+      const s = Math.min(w / 1440, h / 810);
+      screens.style.transform = `scale(${s})`;
     };
-    const ro = new ResizeObserver(fit);
-    ro.observe(pane);
-    fit();
-    return () => ro.disconnect();
+
+    const attach = () => {
+      const stage = stageRef.current;
+      if (!stage) {
+        raf = requestAnimationFrame(attach);
+        return;
+      }
+      ro = new ResizeObserver(fit);
+      ro.observe(stage);
+      fit();
+    };
+    attach();
+
+    window.addEventListener("resize", fit);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro?.disconnect();
+      window.removeEventListener("resize", fit);
+    };
   }, [open, step]);
 
   const handleNext = () => {
@@ -695,7 +717,14 @@ export function HowToGetStartedModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="h2g max-w-[1340px] w-[calc(100vw-40px)] p-0 overflow-hidden gap-0 border-0">
+      <DialogContent
+        className="h2g p-0 overflow-hidden gap-0 border-0"
+        style={{
+          width: "calc(100vw - 40px)",
+          maxWidth: 1340,
+          maxHeight: "calc(100vh - 40px)",
+        }}
+      >
         <style>{STYLES + typingKeyframes}</style>
 
         {/* header */}
@@ -714,8 +743,8 @@ export function HowToGetStartedModal({
         <div className="h2g-body">
           {/* LEFT: looping screen */}
           <div className="h2g-pane">
-            <div className="h2g-stage">
-              <div className="h2g-screens">
+            <div className="h2g-stage" ref={stageRef}>
+              <div className="h2g-screens" ref={screensRef}>
                 {/* keyed by step so the animation restarts cleanly each time */}
                 <Screen key={step} />
               </div>
