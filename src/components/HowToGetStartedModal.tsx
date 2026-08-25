@@ -350,21 +350,9 @@ function RoseChart() {
 /* =============================================================================
    The four screens
    ============================================================================ */
-const Logo = () => (
-  <span className="mk">
-    <span className="t1" />
-    <span className="t2" />
-    <span className="t3" />
-  </span>
-);
-
 const PublicHeader = () => (
   <header className="h2g-header">
-    <div className="inner">
-      <div className="h2g-logo">
-        <Logo />
-        <span className="wd">IMPACT</span>
-      </div>
+    <div className="inner" style={{ justifyContent: "flex-end" }}>
       <nav className="h2g-nav-links">
         <a href="#">Home</a>
         <a href="#">Resource Hub</a>
