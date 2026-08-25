@@ -152,24 +152,26 @@ const STYLES = `
 
 /* ===== STEP 2 — dashboard ===== */
 .h2g-dash{display:flex; height:810px; background:#F4F5F7;}
-.h2g-dash aside{flex:none; width:320px; background:#fff; overflow:hidden;}
-.h2g-dash .pp{background:var(--impact-purple); padding:22px 28px;}
-.h2g-dash .pp .lg{display:flex; align-items:center; gap:8px;}
-.h2g-dash .pp .lg .wd{font-family:var(--font-heading); font-weight:800; font-size:19px; color:#fff;}
-.h2g-dash .av{margin:18px auto 0; width:74px; height:74px; border-radius:50%; background:#E6DCF2; display:flex; align-items:center; justify-content:center; color:var(--impact-purple);}
+.h2g-dash aside{flex:none; width:320px; background:#fff; padding:18px; overflow:hidden;}
+.h2g-dash .pp{background:var(--impact-purple); border-radius:26px; padding:22px 24px; height:100%; display:flex; flex-direction:column;}
+.h2g-dash .av{margin:6px auto 0; width:74px; height:74px; border-radius:50%; background:#E6DCF2; display:flex; align-items:center; justify-content:center; color:var(--impact-purple);}
 .h2g-dash .wc{margin-top:13px; text-align:center;} .h2g-dash .wc h4{font-size:20px; color:#fff;} .h2g-dash .wc p{margin:4px 0 0; font-size:13px; color:rgba(255,255,255,.7);}
 .h2g-dash .st{margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
 .h2g-dash .st div{background:var(--impact-green); border-radius:16px; padding:13px 12px; text-align:center; color:#fff;}
 .h2g-dash .st b{display:block; font-family:var(--font-heading); font-weight:800; font-size:24px;}
 .h2g-dash .st span{display:block; margin-top:5px; font-size:11px; color:rgba(255,255,255,.85);}
-.h2g-dash main{flex:1; min-width:0; padding:40px 48px; overflow:hidden;}
-.h2g-dash main h2{font-size:38px; color:var(--impact-purple);}
-.h2g-dash main .lede{margin:8px 0 0; max-width:720px; font-size:15px; color:var(--impact-ink-muted);}
-.h2g-card{border-radius:28px; padding:28px; margin-top:22px; position:relative;}
-.h2g-card .bd{display:inline-block; border-radius:9999px; padding:4px 12px; font-size:11px; font-weight:700;}
-.h2g-card h3{margin-top:14px; font-size:22px; color:var(--impact-ink);}
-.h2g-card p{margin:8px 0 0; max-width:640px; font-size:14px; line-height:1.6; color:var(--impact-ink-muted);}
-.h2g-card .go{margin-top:18px; display:inline-flex; align-items:center; justify-content:center; border-radius:9999px; padding:13px 30px; font-size:15px; font-weight:700; color:#fff;}
+.h2g-dash .ql{margin-top:22px;}
+.h2g-dash .ql h5{font-size:13px; font-weight:800; color:#fff; letter-spacing:.02em;}
+.h2g-dash .ql a{margin-top:10px; display:flex; align-items:center; gap:10px; border-radius:9999px; background:rgba(255,255,255,.14); color:#fff; padding:11px 16px; font-size:13px; font-weight:700; text-decoration:none;}
+.h2g-dash main{flex:1; min-width:0; padding:34px 42px; overflow:hidden;}
+.h2g-dash main h2{font-size:32px; color:var(--impact-purple);}
+.h2g-dash main .lede{margin:6px 0 0; max-width:720px; font-size:14px; color:var(--impact-ink-muted);}
+.h2g-card{border-radius:22px; padding:16px 22px; margin-top:14px; position:relative; display:flex; align-items:center; gap:18px;}
+.h2g-card .tx{min-width:0; flex:1;}
+.h2g-card .bd{display:inline-block; border-radius:9999px; padding:3px 10px; font-size:10px; font-weight:700;}
+.h2g-card h3{margin-top:7px; font-size:18px; color:var(--impact-ink);}
+.h2g-card p{margin:5px 0 0; max-width:560px; font-size:12.5px; line-height:1.5; color:var(--impact-ink-muted); overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
+.h2g-card .go{flex:none; display:inline-flex; align-items:center; justify-content:center; border-radius:9999px; padding:11px 22px; font-size:13.5px; font-weight:700; color:#fff; white-space:nowrap;}
 
 /* ===== STEP 3 — questionnaire ===== */
 .h2g-q{height:810px; background:#FAFAFB; display:flex; flex-direction:column;}
