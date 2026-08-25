@@ -382,20 +382,20 @@ function AreaCard({
   return (
     <article
       className="rounded-[32px] p-6 md:p-8"
-      style={{ backgroundColor: area.color }}
+      style={{ backgroundColor: area.panelBg }}
     >
       <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
         <div className="min-w-0 flex-1">
           <span
             className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-bold tracking-wide"
-            style={{ backgroundColor: "rgba(255,255,255,0.9)", color: area.color }}
+            style={{ backgroundColor: area.softBg, color: area.softText }}
           >
             {area.badge}
           </span>
-          <h3 className="mt-3 text-[22px] font-extrabold text-white">
+          <h3 className="mt-3 text-[22px] font-extrabold text-[color:var(--impact-ink)]">
             {area.title}
           </h3>
-          <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-white/85">
+          <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-[color:var(--impact-ink-muted)]">
             {area.description}
           </p>
         </div>
@@ -403,8 +403,8 @@ function AreaCard({
         <Link
           to="/questionnaire/$area"
           params={{ area: area.key }}
-          className="inline-flex shrink-0 items-center justify-center rounded-full px-7 py-3.5 text-[14px] font-bold transition hover:opacity-90 md:self-center"
-          style={{ backgroundColor: "#ffffff", color: area.color }}
+          className="inline-flex shrink-0 items-center justify-center rounded-full px-7 py-3.5 text-[14px] font-bold text-white transition hover:opacity-90 md:self-center"
+          style={{ backgroundColor: area.color }}
         >
           Start a new assessment
         </Link>
@@ -414,7 +414,7 @@ function AreaCard({
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        className="mt-5 flex w-full items-center justify-center text-white/80 hover:text-white"
+        className="mt-5 flex w-full items-center justify-center text-[color:var(--impact-ink-muted)] hover:text-[color:var(--impact-purple)]"
       >
         <ChevronDown size={20} className={`transition-transform ${expanded ? "rotate-180" : ""}`} />
       </button>
