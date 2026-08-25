@@ -591,7 +591,7 @@ function ScreenDashboard() {
   );
 }
 
-/* ---- STEP 3: questionnaire ---- */
+/* ---- STEP 3: questionnaire (two question types, looping) ---- */
 function ScreenQuestionnaire() {
   return (
     <div className="h2g-screen">
@@ -603,42 +603,86 @@ function ScreenQuestionnaire() {
           </span>
           <span className="sq">Save &amp; Quit</span>
           <div className="rt">
-            <span className="ct">Question 1 of 6</span>
+            <span className="ct">
+              <span className="h2g-fade1">Question 1 of 6</span>
+              <span className="h2g-fade2">Question 3 of 6</span>
+            </span>
             <span className="bar"><i /></span>
           </div>
         </div>
         <div className="mn">
-          <h1>1.1 Diversity of Membership</h1>
-          <div className="about">
-            <h2>About This Indicator</h2>
-            <p>The LYC strives to reflect the demographic composition of the local youth population by including members of different ages, genders, backgrounds and abilities.</p>
-          </div>
-          <p className="qq">Does your LYC reflect the demographic composition of the local youth population?</p>
-          <div className="tbl">
-            <div className="th"><span>Criteria</span><span>Yes</span><span>No</span><span>N/A</span></div>
-            <div className="tr" style={{ background: "var(--a1-row)" }}>
-              <span className="c">Young people of different age ranges</span>
-              <span className="cell"><span className="h2g-rad on h2g-r1" /></span>
-              <span className="cell"><span className="h2g-rad" /></span>
-              <span className="cell"><span className="h2g-rad" /></span>
+          <div className="stage">
+            {/* ---- Question type A: Yes / No / N/A matrix ---- */}
+            <div className="pane h2g-fade1">
+              <h1>1.1 Diversity of Membership</h1>
+              <div className="about">
+                <h2>About This Indicator</h2>
+                <p>The LYC strives to reflect the demographic composition of the local youth population by including members of different ages, genders, backgrounds and abilities.</p>
+              </div>
+              <p className="qq">Does your LYC reflect the demographic composition of the local youth population?</p>
+              <div className="tbl">
+                <div className="th"><span>Criteria</span><span>Yes</span><span>No</span><span>N/A</span></div>
+                <div className="tr" style={{ background: "var(--a1-row)" }}>
+                  <span className="c">Young people of different age ranges</span>
+                  <span className="cell"><span className="h2g-rad on h2g-r1" /></span>
+                  <span className="cell"><span className="h2g-rad" /></span>
+                  <span className="cell"><span className="h2g-rad" /></span>
+                </div>
+                <div className="tr" style={{ background: "#fff" }}>
+                  <span className="c">Young people of different genders</span>
+                  <span className="cell"><span className="h2g-rad on h2g-r2" /></span>
+                  <span className="cell"><span className="h2g-rad" /></span>
+                  <span className="cell"><span className="h2g-rad" /></span>
+                </div>
+                <div className="tr" style={{ background: "var(--a1-row)" }}>
+                  <span className="c">Young people from different cultural and ethnic backgrounds</span>
+                  <span className="cell"><span className="h2g-rad" /></span>
+                  <span className="cell"><span className="h2g-rad on h2g-r3" /></span>
+                  <span className="cell"><span className="h2g-rad" /></span>
+                </div>
+                <div className="tr" style={{ background: "#fff" }}>
+                  <span className="c">Young people with disabilities</span>
+                  <span className="cell"><span className="h2g-rad" /></span>
+                  <span className="cell"><span className="h2g-rad on h2g-r4" /></span>
+                  <span className="cell"><span className="h2g-rad" /></span>
+                </div>
+                <Pointer className="h2g-qcursor" style={{ right: 74, top: 61 }} />
+              </div>
             </div>
-            <div className="tr" style={{ background: "#fff" }}>
-              <span className="c">Young people of different genders</span>
-              <span className="cell"><span className="h2g-rad on h2g-r2" /></span>
-              <span className="cell"><span className="h2g-rad" /></span>
-              <span className="cell"><span className="h2g-rad" /></span>
-            </div>
-            <div className="tr" style={{ background: "var(--a1-row)" }}>
-              <span className="c">Young people from different cultural and ethnic backgrounds</span>
-              <span className="cell"><span className="h2g-rad" /></span>
-              <span className="cell"><span className="h2g-rad on h2g-r3" /></span>
-              <span className="cell"><span className="h2g-rad" /></span>
-            </div>
-            <div className="tr" style={{ background: "#fff" }}>
-              <span className="c">Young people with disabilities</span>
-              <span className="cell"><span className="h2g-rad" /></span>
-              <span className="cell"><span className="h2g-rad on h2g-r4" /></span>
-              <span className="cell"><span className="h2g-rad" /></span>
+
+            {/* ---- Question type B: slider scale ---- */}
+            <div className="pane h2g-fade2">
+              <h1>1.3 Outreach and Consultation</h1>
+              <div className="about">
+                <h2>About This Indicator</h2>
+                <p>The LYC actively reaches out to young people who are not yet involved and consults them before taking positions or decisions.</p>
+              </div>
+              <p className="qq">How regularly does your LYC consult young people beyond its own members?</p>
+              <p className="hint">Use the slider to choose what fits best for your case</p>
+              <div className="h2g-slider">
+                <div className="trk">
+                  <i style={{ background: "#E14B45" }} />
+                  <i style={{ background: "#E8913C" }} />
+                  <i style={{ background: "#E5C13F" }} />
+                  <i style={{ background: "#33A06A" }} />
+                </div>
+                <div className="thumb">
+                  <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
+                    <path d="M0 0L16 0L8 10Z" fill="var(--a1-accent)" />
+                  </svg>
+                </div>
+                <Pointer className="h2g-scursor" style={{ top: 26, marginLeft: -4 }} />
+              </div>
+              <div className="h2g-slabels">
+                <span className="h2g-sl1">Not at all</span>
+                <span className="h2g-sl2">Partially</span>
+                <span className="h2g-sl3">Mostly</span>
+                <span className="h2g-sl4">Fully</span>
+              </div>
+              <div className="h2g-feedback">
+                <b>Selected level: Fully</b>
+                <p>The LYC consults young people regularly through open and accessible channels, and feeds what it hears back into its positions and decisions.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -646,6 +690,7 @@ function ScreenQuestionnaire() {
     </div>
   );
 }
+
 
 /* ---- STEP 4: review results ---- */
 function ScreenResults() {
