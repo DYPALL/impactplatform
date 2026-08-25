@@ -241,10 +241,10 @@ const STYLES = `
 .h2g-sl2{animation:h2g-sl2 10s step-end infinite;}
 .h2g-sl3{animation:h2g-sl3 10s step-end infinite;}
 .h2g-sl4{animation:h2g-sl4 10s step-end infinite;}
-@keyframes h2g-sl1{0%{color:#9ca3af} 52%{color:#E14B45} 62%{color:#9ca3af}}
-@keyframes h2g-sl2{0%{color:#9ca3af} 62%{color:#E8913C} 70%{color:#9ca3af}}
-@keyframes h2g-sl3{0%{color:#9ca3af} 70%{color:#E5C13F} 79%{color:#9ca3af}}
-@keyframes h2g-sl4{0%{color:#9ca3af} 79%{color:#33A06A} 100%{color:#33A06A}}
+@keyframes h2g-sl1{0%{color:#E14B45} 58%{color:#9ca3af} 100%{color:#9ca3af}}
+@keyframes h2g-sl2{0%{color:#9ca3af} 58%{color:#E8913C} 66%{color:#9ca3af} 100%{color:#9ca3af}}
+@keyframes h2g-sl3{0%{color:#9ca3af} 66%{color:#E5C13F} 75%{color:#9ca3af} 100%{color:#9ca3af}}
+@keyframes h2g-sl4{0%{color:#9ca3af} 75%{color:#33A06A} 100%{color:#33A06A}}
 .h2g-feedback{margin-top:34px; border-radius:16px; border:1px solid #33A06A; background:#E9F6EF; padding:20px 22px; animation:h2g-fb 10s ease-out infinite;}
 .h2g-feedback b{display:block; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#33A06A;}
 .h2g-feedback p{margin:8px 0 0; font-size:15px; line-height:1.6; color:#1f2937;}
