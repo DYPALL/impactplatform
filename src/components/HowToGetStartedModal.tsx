@@ -762,6 +762,7 @@ function ScreenResults() {
           </span>
           <span style={{ fontSize: 13, opacity: 0.85 }}>Saved results</span>
         </div>
+        <div className="port">
         <div className="mn">
           <div className="intro">
             <span className="bd">Area 1</span>
@@ -783,7 +784,38 @@ function ScreenResults() {
               </div>
             </div>
           </div>
+
+          <div className="sec">
+            <h2>Reflection questions</h2>
+            <p className="sub">Tap a card to reveal a prompt to discuss with your team</p>
+            <div className="h2g-flip">
+              <div className="card"><b>Reflect</b>Which groups of young people are still missing from your council, and why?</div>
+              <div className="card"><b>Reflect</b>How do you know your members represent the local youth population?</div>
+              <div className="card"><b>Reflect</b>What barriers make it harder for some young people to take part?</div>
+            </div>
+          </div>
+
+          <div className="sec">
+            <h2>Recommended action steps</h2>
+            <p className="sub">Pick up to three steps to include in your action plan</p>
+            <div className="h2g-steps">
+              <div className="st on"><span className="bx" />Map the demographics of local youth and compare them with your membership.</div>
+              <div className="st on"><span className="bx" />Run open call-outs in schools, youth clubs and online spaces you don't usually reach.</div>
+              <div className="st"><span className="bx" />Review meeting times, venues and formats for accessibility.</div>
+              <div className="st"><span className="bx" />Set a yearly target for the diversity of new members.</div>
+            </div>
+          </div>
+
+          <div className="h2g-cta">
+            <div>
+              <h3>Ready to take action?</h3>
+              <p>Build your personalised Action Plan from the steps you selected and share it with your council.</p>
+            </div>
+            <span className="btn">Build your action plan</span>
+          </div>
         </div>
+        </div>
+
       </div>
     </div>
   );
