@@ -414,6 +414,23 @@ function RoseChart() {
   );
 }
 
+/* Polished macOS-style pointer used by the looping demos. */
+function Pointer({ className = "", style }: { className?: string; style?: React.CSSProperties }) {
+  return (
+    <span className={`h2g-cursor ${className}`} style={style}>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M5.2 2.4 L18.6 13.1 L12.1 13.6 L15.4 20.4 L12.5 21.7 L9.2 15 L5.2 19.1 Z"
+          fill="#111827"
+          stroke="#ffffff"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  );
+}
+
 /* =============================================================================
    The four screens
    ============================================================================ */
