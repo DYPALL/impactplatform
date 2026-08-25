@@ -667,21 +667,41 @@ export function HowToGetStartedModal({
     if (open) setStep(0);
   }, [open]);
 
-  // scale the 1440×810 canvas to fit its pane (width AND height)
+  // scale the 1440×810 canvas to fit its stage (width AND height)
   useEffect(() => {
     if (!open) return;
-    const pane = document.querySelector<HTMLElement>(".h2g-pane");
-    const stage = document.querySelector<HTMLElement>(".h2g-stage");
-    const screens = document.querySelector<HTMLElement>(".h2g-screens");
-    if (!pane || !stage || !screens) return;
+    let raf = 0;
+    let ro: ResizeObserver | undefined;
+
     const fit = () => {
+      const stage = stageRef.current;
+      const screens = screensRef.current;
+      if (!stage || !screens) return;
       const w = stage.clientWidth;
-      if (w) screens.style.transform = `scale(${w / 1440})`;
+      const h = stage.clientHeight;
+      if (!w || !h) return;
+      const s = Math.min(w / 1440, h / 810);
+      screens.style.transform = `scale(${s})`;
     };
-    const ro = new ResizeObserver(fit);
-    ro.observe(pane);
-    fit();
-    return () => ro.disconnect();
+
+    const attach = () => {
+      const stage = stageRef.current;
+      if (!stage) {
+        raf = requestAnimationFrame(attach);
+        return;
+      }
+      ro = new ResizeObserver(fit);
+      ro.observe(stage);
+      fit();
+    };
+    attach();
+
+    window.addEventListener("resize", fit);
+    return () => {
+      cancelAnimationFrame(raf);
+      ro?.disconnect();
+      window.removeEventListener("resize", fit);
+    };
   }, [open, step]);
 
   const handleNext = () => {
