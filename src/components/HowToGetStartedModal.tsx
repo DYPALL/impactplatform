@@ -717,7 +717,14 @@ export function HowToGetStartedModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="h2g max-w-[1340px] w-[calc(100vw-40px)] p-0 overflow-hidden gap-0 border-0">
+      <DialogContent
+        className="h2g p-0 overflow-hidden gap-0 border-0"
+        style={{
+          width: "calc(100vw - 40px)",
+          maxWidth: 1340,
+          maxHeight: "calc(100vh - 40px)",
+        }}
+      >
         <style>{STYLES + typingKeyframes}</style>
 
         {/* header */}
