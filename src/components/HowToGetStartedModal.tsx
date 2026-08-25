@@ -742,7 +742,15 @@ function ScreenQuestionnaire() {
                 <span className="h2g-sl4">Fully</span>
               </div>
               <div className="h2g-feedback">
-                <b>Selected level: Fully</b>
+                <b>
+                  Selected level:
+                  <span className="val" aria-hidden="true">
+                    <i className="h2g-ltxt1">Not at all</i>
+                    <i className="h2g-ltxt2">Partially</i>
+                    <i className="h2g-ltxt3">Mostly</i>
+                    <i className="h2g-ltxt4">Fully</i>
+                  </span>
+                </b>
                 <p>The LYC consults young people regularly through open and accessible channels, and feeds what it hears back into its positions and decisions.</p>
               </div>
             </div>
