@@ -656,6 +656,8 @@ export function HowToGetStartedModal({
 }) {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
+  const stageRef = React.useRef<HTMLDivElement>(null);
+  const screensRef = React.useRef<HTMLDivElement>(null);
   const isLast = step === SCREENS.length - 1;
   const Screen = SCREENS[step];
   const meta = STEP_META[step];
