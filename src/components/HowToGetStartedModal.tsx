@@ -187,10 +187,10 @@ const STYLES = `
 .h2g-q .mn{max-width:1240px; width:100%; margin:0 auto; padding:30px 40px; flex:1;}
 .h2g-q .stage{position:relative; min-height:600px;}
 .h2g-q .pane{position:absolute; inset:0;}
-.h2g-fade1{animation:h2g-fade1 10s linear infinite;}
-.h2g-fade2{animation:h2g-fade2 10s linear infinite;}
-@keyframes h2g-fade1{0%,44%{opacity:1; visibility:visible} 48%,97%{opacity:0; visibility:hidden} 100%{opacity:1; visibility:visible}}
-@keyframes h2g-fade2{0%,44%{opacity:0; visibility:hidden} 48%,97%{opacity:1; visibility:visible} 100%{opacity:0; visibility:hidden}}
+.h2g-fade1{animation:h2g-fade1 10s step-end infinite;}
+.h2g-fade2{animation:h2g-fade2 10s step-end infinite;}
+@keyframes h2g-fade1{0%,47%,100%{opacity:1; visibility:visible} 48%,99%{opacity:0; visibility:hidden}}
+@keyframes h2g-fade2{0%,47%,98%,100%{opacity:0; visibility:hidden} 48%,97%{opacity:1; visibility:visible}}
 .h2g-q .mn h1{font-size:28px; color:var(--a1-accent);}
 .h2g-q .about{margin-top:16px; background:#fff; border-radius:16px; padding:20px; border:1px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.05);}
 .h2g-q .about h2{font-size:16px;} .h2g-q .about p{margin:8px 0 0; font-size:14px; line-height:1.6;}
@@ -236,8 +236,7 @@ const STYLES = `
   0%,49%,58%{left:12.5%}
   62%,68%{left:37.5%}
   72%,78%{left:62.5%}
-  82%,96%{left:87.5%}
-  100%{left:12.5%}
+  82%,100%{left:87.5%}
 }
 .h2g-slabels{display:flex; margin-top:22px;}
 .h2g-slabels span{flex:1; text-align:center; font-size:14px; font-weight:700; color:#9ca3af; transform:translateY(0);}
@@ -289,8 +288,7 @@ const STYLES = `
   62%,68%{left:37.5%; opacity:1}
   72%,78%{left:62.5%; opacity:1}
   82%,96%{left:87.5%; opacity:1}
-  98%{left:87.5%; opacity:0}
-  100%{left:12.5%; opacity:0}
+  98%,100%{left:87.5%; opacity:0}
 }
 
 
