@@ -420,18 +420,50 @@ function ScreenAuth() {
 
 /* ---- STEP 2: pick focus area ---- */
 function ScreenDashboard() {
+  const areas = [
+    {
+      n: 1,
+      title: "Representativeness and Inclusion",
+      desc: "Who is part of the LYC, how representative it is of local youth, and how inclusive participation is for all.",
+      bg: "#F4F1F7",
+      badgeBg: "#EDE4F6",
+      badgeFg: "#502181",
+      go: "var(--impact-purple)",
+    },
+    {
+      n: 2,
+      title: "Governance and Transparency",
+      desc: "How the LYC is organised, how decisions are made, and how open and accountable it is to youth and the community.",
+      bg: "#FBF3EA",
+      badgeBg: "#FDE6CE",
+      badgeFg: "#B85E10",
+      go: "var(--impact-orange)",
+    },
+    {
+      n: 3,
+      title: "Influence and Impact",
+      desc: "How much the LYC shapes local decisions and creates real change for young people in the community.",
+      bg: "#FCF0F5",
+      badgeBg: "#FBDCE9",
+      badgeFg: "#B02063",
+      go: "var(--impact-pink)",
+    },
+    {
+      n: 4,
+      title: "Capacity and Sustainability",
+      desc: "The resources, skills, support and continuity that keep the LYC running effectively over time.",
+      bg: "#EDF7F7",
+      badgeBg: "#D3EDED",
+      badgeFg: "#12706F",
+      go: "var(--impact-green)",
+    },
+  ];
+
   return (
     <div className="h2g-screen">
       <div className="h2g-dash">
         <aside>
           <div className="pp">
-            <div className="lg">
-              <span className="mk" style={{ position: "relative", width: 24, height: 20 }}>
-                <span style={{ position: "absolute", width: 0, height: 0, borderStyle: "solid", borderWidth: "0 0 12px 12px", borderColor: "transparent transparent #fff transparent", left: 0, top: 8 }} />
-                <span style={{ position: "absolute", width: 0, height: 0, borderStyle: "solid", borderWidth: "12px 12px 0 0", borderColor: "rgba(255,255,255,.65) transparent transparent transparent", left: 7, top: 0 }} />
-              </span>
-              <span className="wd">IMPACT</span>
-            </div>
             <div className="av">
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
             </div>
@@ -440,38 +472,50 @@ function ScreenDashboard() {
               <div><b>8</b><span>Questionnaires done</span></div>
               <div><b>2</b><span>In progress</span></div>
             </div>
+            <div className="ql">
+              <h5>Quick Links</h5>
+              <a href="#">Home</a>
+              <a href="#">Resource Hub</a>
+              <a href="#">Send us a message</a>
+            </div>
           </div>
         </aside>
         <main>
           <h2>Start Your Assessment</h2>
           <p className="lede">Choose a thematic area to launch a self-assessment. You can pause anytime, revisit past questionnaires and build action plans as you go.</p>
 
-          <article className="h2g-card" style={{ background: "#F4F1F7" }}>
-            <span className="bd" style={{ background: "#EDE4F6", color: "#502181" }}>AREA 1</span>
-            <h3>Representativeness and Inclusion</h3>
-            <p>Who is part of the LYC, how representative it is of local youth, and how inclusive and accessible participation is for all.</p>
-            <div className="go" style={{ background: "var(--impact-purple)" }}>Start a new assessment</div>
-          </article>
-
-          <article className="h2g-card" style={{ background: "#FBF3EA", boxShadow: "0 0 0 3px rgba(217,122,43,.3)" }}>
-            <span className="bd" style={{ background: "#FDE6CE", color: "#B85E10" }}>AREA 2</span>
-            <h3>Governance and Transparency</h3>
-            <p>How the LYC is organised, how decisions are made, and how open and accountable it is to youth and the community.</p>
-            <div className="go" style={{ background: "var(--impact-orange)" }}>Start a new assessment</div>
-            {/* looping cursor tap on the AREA 2 button */}
-            <svg
-              className="h2g-cursor"
-              viewBox="0 0 24 24"
-              style={{ left: 250, top: 210, animation: "h2g-tap2 6s ease-in-out infinite" }}
+          {areas.map((a) => (
+            <article
+              key={a.n}
+              className="h2g-card"
+              style={{
+                background: a.bg,
+                boxShadow: a.n === 1 ? "0 0 0 3px rgba(80,33,129,.28)" : undefined,
+              }}
             >
-              <path fill="#111827" d="M4 2l14 8-6 1.5L14 19z" />
-            </svg>
-          </article>
+              <div className="tx">
+                <span className="bd" style={{ background: a.badgeBg, color: a.badgeFg }}>AREA {a.n}</span>
+                <h3>{a.title}</h3>
+                <p>{a.desc}</p>
+              </div>
+              <div className="go" style={{ background: a.go }}>Start a new assessment</div>
+              {a.n === 1 && (
+                /* looping cursor tap on the AREA 1 button */
+                <svg
+                  className="h2g-cursor"
+                  viewBox="0 0 24 24"
+                  style={{ right: 60, top: 46, animation: "h2g-tap2 6s ease-in-out infinite" }}
+                >
+                  <path fill="#111827" d="M4 2l14 8-6 1.5L14 19z" />
+                </svg>
+              )}
+            </article>
+          ))}
         </main>
       </div>
       <style>{`
         @keyframes h2g-tap2{
-          0%{transform:translate(120px,-40px); opacity:0}
+          0%{transform:translate(120px,-60px); opacity:0}
           20%{opacity:1}
           45%,55%{transform:translate(0,0); opacity:1}
           50%{transform:translate(0,3px)}
