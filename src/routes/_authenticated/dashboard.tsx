@@ -141,7 +141,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-[#F4F5F7] lg:flex lg:gap-6 lg:p-6">
       {/* Sidebar */}
-      <aside className="shrink-0 bg-[color:var(--impact-purple)] lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:w-[340px] lg:overflow-y-auto lg:rounded-[40px]">
+      <aside className="shrink-0 bg-[color:var(--impact-purple)] lg:w-[340px] lg:rounded-[40px]">
         <div className="px-6 pb-8 pt-6 lg:px-7 lg:pb-10 lg:pt-7">
           <div className="flex items-center justify-between">
             <img src={logoWhite.url} alt="IMPACT" className="h-7 w-auto" />
@@ -426,8 +426,8 @@ function AreaCard({
             style={{ backgroundColor: area.softBg }}
           >
             <span
-              className="inline-flex items-center rounded-full border bg-white/60 px-3 py-1 text-[12px] font-bold"
-              style={{ borderColor: area.softText, color: area.softText }}
+              className="inline-flex items-center rounded-full px-3 py-1 text-[12px] font-bold text-white"
+              style={{ backgroundColor: area.color }}
             >
               Completed questionnaires ({items.filter((i) => i.status === "completed").length})
             </span>
