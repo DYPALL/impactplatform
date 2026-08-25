@@ -233,22 +233,34 @@ const STYLES = `
   animation:h2g-thumb 10s cubic-bezier(.22,.9,.28,1) infinite;
 }
 @keyframes h2g-thumb{
-  0%,55%{left:12.5%} 62%,64%{left:37.5%} 70%,72%{left:62.5%} 79%,100%{left:87.5%}
+  0%,50%,59%{left:12.5%}
+  63%,69%{left:37.5%}
+  73%,79%{left:62.5%}
+  83%,100%{left:87.5%}
 }
 .h2g-slabels{display:flex; margin-top:22px;}
-.h2g-slabels span{flex:1; text-align:center; font-size:14px; font-weight:700; color:#9ca3af;}
-.h2g-sl1{animation:h2g-sl1 10s step-end infinite;}
-.h2g-sl2{animation:h2g-sl2 10s step-end infinite;}
-.h2g-sl3{animation:h2g-sl3 10s step-end infinite;}
-.h2g-sl4{animation:h2g-sl4 10s step-end infinite;}
-@keyframes h2g-sl1{0%{color:#E14B45} 58%{color:#9ca3af} 100%{color:#9ca3af}}
-@keyframes h2g-sl2{0%{color:#9ca3af} 58%{color:#E8913C} 66%{color:#9ca3af} 100%{color:#9ca3af}}
-@keyframes h2g-sl3{0%{color:#9ca3af} 66%{color:#E5C13F} 75%{color:#9ca3af} 100%{color:#9ca3af}}
-@keyframes h2g-sl4{0%{color:#9ca3af} 75%{color:#33A06A} 100%{color:#33A06A}}
-.h2g-feedback{margin-top:34px; border-radius:16px; border:1px solid #33A06A; background:#E9F6EF; padding:20px 22px; animation:h2g-fb 10s ease-out infinite;}
-.h2g-feedback b{display:block; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#33A06A;}
+.h2g-slabels span{flex:1; text-align:center; font-size:14px; font-weight:700; color:#9ca3af; transform:translateY(0);}
+.h2g-sl1{animation:h2g-sl1 10s linear infinite;}
+.h2g-sl2{animation:h2g-sl2 10s linear infinite;}
+.h2g-sl3{animation:h2g-sl3 10s linear infinite;}
+.h2g-sl4{animation:h2g-sl4 10s linear infinite;}
+@keyframes h2g-sl1{0%,49.9%,60.1%,100%{color:#9ca3af; transform:translateY(0)} 50%,60%{color:#E14B45; transform:translateY(-2px)}}
+@keyframes h2g-sl2{0%,61.9%,70.1%,100%{color:#9ca3af; transform:translateY(0)} 62%,70%{color:#E8913C; transform:translateY(-2px)}}
+@keyframes h2g-sl3{0%,71.9%,80.1%,100%{color:#9ca3af; transform:translateY(0)} 72%,80%{color:#E5C13F; transform:translateY(-2px)}}
+@keyframes h2g-sl4{0%,81.9%,96.1%,100%{color:#9ca3af; transform:translateY(0)} 82%,96%{color:#33A06A; transform:translateY(-2px)}}
+.h2g-feedback{margin-top:34px; border-radius:16px; border:1px solid var(--a1-border); background:var(--a1-soft); padding:20px 22px;}
+.h2g-feedback b{display:flex; align-items:center; gap:6px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--a1-accent);}
+.h2g-feedback .val{position:relative; display:inline-block; min-width:78px; height:15px;}
+.h2g-feedback .val i{position:absolute; left:0; top:0; font-style:normal; opacity:0; transform:translateY(4px); white-space:nowrap;}
+.h2g-ltxt1{animation:h2g-ltxt1 10s linear infinite; color:#E14B45;}
+.h2g-ltxt2{animation:h2g-ltxt2 10s linear infinite; color:#E8913C;}
+.h2g-ltxt3{animation:h2g-ltxt3 10s linear infinite; color:#B99112;}
+.h2g-ltxt4{animation:h2g-ltxt4 10s linear infinite; color:#33A06A;}
+@keyframes h2g-ltxt1{0%,49.9%,60.1%,100%{opacity:0; transform:translateY(4px)} 50%,60%{opacity:1; transform:translateY(0)}}
+@keyframes h2g-ltxt2{0%,61.9%,70.1%,100%{opacity:0; transform:translateY(4px)} 62%,70%{opacity:1; transform:translateY(0)}}
+@keyframes h2g-ltxt3{0%,71.9%,80.1%,100%{opacity:0; transform:translateY(4px)} 72%,80%{opacity:1; transform:translateY(0)}}
+@keyframes h2g-ltxt4{0%,81.9%,96.1%,100%{opacity:0; transform:translateY(4px)} 82%,96%{opacity:1; transform:translateY(0)}}
 .h2g-feedback p{margin:8px 0 0; font-size:15px; line-height:1.6; color:#1f2937;}
-@keyframes h2g-fb{0%,79%{opacity:0; transform:translateY(8px)} 84%,96%{opacity:1; transform:translateY(0)} 100%{opacity:0; transform:translateY(8px)}}
 
 /* step 3 — animated pointer paths */
 .h2g-qcursor{animation:h2g-qcursor 10s cubic-bezier(.3,.8,.3,1) infinite;}
@@ -271,11 +283,11 @@ const STYLES = `
 }
 .h2g-scursor{animation:h2g-scursor 10s cubic-bezier(.22,.9,.28,1) infinite;}
 @keyframes h2g-scursor{
-  0%,50%{left:12.5%; opacity:0}
-  55%{left:12.5%; opacity:1}
-  62%,64%{left:37.5%; opacity:1}
-  70%,72%{left:62.5%; opacity:1}
-  79%,90%{left:87.5%; opacity:1}
+  0%,49%{left:12.5%; opacity:0}
+  52%,59%{left:12.5%; opacity:1}
+  63%,69%{left:37.5%; opacity:1}
+  73%,79%{left:62.5%; opacity:1}
+  83%,94%{left:87.5%; opacity:1}
   96%,100%{left:87.5%; opacity:0}
 }
 
