@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import heroImg from "@/assets/hero-photo.webp.asset.json";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import step1Img from "@/assets/step-1.webp.asset.json";
@@ -11,6 +12,7 @@ import fundacioLogo from "@/assets/Fundacio-logo.png.asset.json";
 import nuvaLogo from "@/assets/Nuva-logo.png.asset.json";
 import { Footer } from "@/components/Footer";
 import { Polygon } from "@/components/Polygon";
+import { HowToGetStartedModal } from "@/components/HowToGetStartedModal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,6 +37,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Hero() {
+  const [guideOpen, setGuideOpen] = useState(false);
   return (
     <section
       className="relative w-full overflow-hidden"
@@ -70,11 +73,12 @@ function Hero() {
               Start your assessment
             </a>
             <button
-              onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => setGuideOpen(true)}
               className="inline-flex h-[52px] items-center justify-center rounded-full border border-[color:var(--impact-orange)] px-[22px] text-[15px] font-bold text-white transition hover:bg-white/10"
             >
               How to get started?
             </button>
+            <HowToGetStartedModal open={guideOpen} onOpenChange={setGuideOpen} />
           </div>
         </div>
         <div className="relative z-10 w-full max-w-[597px] lg:mr-0">
