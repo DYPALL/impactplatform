@@ -128,7 +128,8 @@ const STYLES = `
 .h2g-nav-links .pill{height:44px; padding:0 18px; border-radius:9999px; background:var(--impact-purple); color:#fff; font-size:14px; font-weight:700; display:inline-flex; align-items:center;}
 
 /* animated cursor (shared) */
-.h2g-cursor{position:absolute; width:26px; height:26px; z-index:40; filter:drop-shadow(0 3px 5px rgba(0,0,0,.34)); pointer-events:none;}
+.h2g-cursor{position:absolute; width:30px; height:30px; z-index:40; pointer-events:none;}
+.h2g-cursor svg{display:block; width:100%; height:100%; filter:drop-shadow(0 4px 8px rgba(17,24,39,.35));}
 .h2g-ripple{position:absolute; width:18px; height:18px; margin:-9px 0 0 -9px; border-radius:50%; border:2px solid var(--impact-purple); z-index:39;}
 
 /* ===== STEP 1 — auth ===== */
