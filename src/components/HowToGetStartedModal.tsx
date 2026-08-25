@@ -183,7 +183,7 @@ const STYLES = `
 .h2g-q .top .ct span{position:absolute; inset:0; white-space:nowrap;}
 .h2g-q .top .bar{width:240px; height:7px; border-radius:9999px; background:rgba(255,255,255,.25); overflow:hidden;}
 .h2g-q .top .bar i{display:block; height:100%; background:#fff; border-radius:9999px; animation:h2g-qbar 10s linear infinite;}
-@keyframes h2g-qbar{0%,45%,94%,100%{width:17%} 50%,93%{width:50%}}
+@keyframes h2g-qbar{0%,45%,93%,100%{width:17%} 50%,92%{width:50%}}
 .h2g-q .mn{max-width:1240px; width:100%; margin:0 auto; padding:30px 40px; flex:1;}
 .h2g-q .stage{position:relative; min-height:600px;}
 .h2g-q .pane{position:absolute; inset:0; background:#FAFAFB;}
@@ -191,7 +191,7 @@ const STYLES = `
 .h2g-fade2{animation:h2g-fade2 10s step-end infinite;}
 .h2g-q .pane.h2g-fade1{z-index:1; opacity:1; visibility:visible; animation:none;}
 .h2g-q .pane.h2g-fade2{z-index:2; animation:h2g-slider-pane 10s step-end infinite;}
-@keyframes h2g-fade1{0%,47%,94%,100%{opacity:1; visibility:visible} 48%,93%{opacity:0; visibility:hidden}}
+@keyframes h2g-fade1{0%,47%,93%,100%{opacity:1; visibility:visible} 48%,92%{opacity:0; visibility:hidden}}
 @keyframes h2g-fade2{0%,47%,94%,100%{opacity:0; visibility:hidden} 48%,93%{opacity:1; visibility:visible}}
 @keyframes h2g-slider-pane{0%,47%,94%,100%{opacity:0; visibility:hidden} 48%,93%{opacity:1; visibility:visible}}
 .h2g-q .mn h1{font-size:28px; color:var(--a1-accent);}
