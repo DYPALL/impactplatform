@@ -186,11 +186,11 @@ const STYLES = `
 @keyframes h2g-qbar{0%,45%{width:17%} 50%,100%{width:50%}}
 .h2g-q .mn{max-width:1240px; width:100%; margin:0 auto; padding:30px 40px; flex:1;}
 .h2g-q .stage{position:relative; min-height:600px;}
-.h2g-q .pane{position:absolute; inset:0;}
+.h2g-q .pane{position:absolute; inset:0; background:#FAFAFB;}
 .h2g-fade1{animation:h2g-fade1 10s step-end infinite;}
 .h2g-fade2{animation:h2g-fade2 10s step-end infinite;}
-@keyframes h2g-fade1{0%,47%,100%{opacity:1; visibility:visible} 48%,99%{opacity:0; visibility:hidden}}
-@keyframes h2g-fade2{0%,47%,98%,100%{opacity:0; visibility:hidden} 48%,97%{opacity:1; visibility:visible}}
+@keyframes h2g-fade1{0%,47%,97%,100%{opacity:1; visibility:visible} 48%,96%{opacity:0; visibility:hidden}}
+@keyframes h2g-fade2{0%,47%,96%,100%{opacity:0; visibility:hidden} 48%,95%{opacity:1; visibility:visible}}
 .h2g-q .mn h1{font-size:28px; color:var(--a1-accent);}
 .h2g-q .about{margin-top:16px; background:#fff; border-radius:16px; padding:20px; border:1px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.05);}
 .h2g-q .about h2{font-size:16px;} .h2g-q .about p{margin:8px 0 0; font-size:14px; line-height:1.6;}
@@ -236,7 +236,8 @@ const STYLES = `
   0%,49%,58%{left:12.5%}
   62%,68%{left:37.5%}
   72%,78%{left:62.5%}
-  82%,100%{left:87.5%}
+  82%,95%{left:87.5%}
+  96%,100%{left:12.5%}
 }
 .h2g-slabels{display:flex; margin-top:22px;}
 .h2g-slabels span{flex:1; text-align:center; font-size:14px; font-weight:700; color:#9ca3af; transform:translateY(0);}
@@ -247,7 +248,7 @@ const STYLES = `
 @keyframes h2g-sl1{0%,49%,59%,100%{color:#9ca3af; transform:translateY(0)} 50%,58%{color:#E14B45; transform:translateY(-2px)}}
 @keyframes h2g-sl2{0%,61%,69%,100%{color:#9ca3af; transform:translateY(0)} 62%,68%{color:#E8913C; transform:translateY(-2px)}}
 @keyframes h2g-sl3{0%,71%,79%,100%{color:#9ca3af; transform:translateY(0)} 72%,78%{color:#E5C13F; transform:translateY(-2px)}}
-@keyframes h2g-sl4{0%,81%,97%,100%{color:#9ca3af; transform:translateY(0)} 82%,96%{color:#33A06A; transform:translateY(-2px)}}
+@keyframes h2g-sl4{0%,81%,96%,100%{color:#9ca3af; transform:translateY(0)} 82%,95%{color:#33A06A; transform:translateY(-2px)}}
 .h2g-feedback{margin-top:34px; border-radius:16px; border:1px solid var(--a1-border); background:var(--a1-soft); padding:20px 22px;}
 .h2g-feedback b{display:flex; align-items:center; gap:6px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--a1-accent);}
 .h2g-feedback .val{position:relative; display:inline-block; min-width:78px; height:15px;}
@@ -259,7 +260,7 @@ const STYLES = `
 @keyframes h2g-ltxt1{0%,49%,59%,100%{opacity:0; transform:translateY(4px)} 50%,58%{opacity:1; transform:translateY(0)}}
 @keyframes h2g-ltxt2{0%,61%,69%,100%{opacity:0; transform:translateY(4px)} 62%,68%{opacity:1; transform:translateY(0)}}
 @keyframes h2g-ltxt3{0%,71%,79%,100%{opacity:0; transform:translateY(4px)} 72%,78%{opacity:1; transform:translateY(0)}}
-@keyframes h2g-ltxt4{0%,81%,97%,100%{opacity:0; transform:translateY(4px)} 82%,96%{opacity:1; transform:translateY(0)}}
+@keyframes h2g-ltxt4{0%,81%,96%,100%{opacity:0; transform:translateY(4px)} 82%,95%{opacity:1; transform:translateY(0)}}
 .h2g-feedback p{margin:8px 0 0; font-size:15px; line-height:1.6; color:#1f2937;}
 
 /* step 3 — animated pointer paths */
@@ -287,8 +288,9 @@ const STYLES = `
   50%,58%{left:12.5%; opacity:1}
   62%,68%{left:37.5%; opacity:1}
   72%,78%{left:62.5%; opacity:1}
-  82%,96%{left:87.5%; opacity:1}
-  98%,100%{left:87.5%; opacity:0}
+  82%,95%{left:87.5%; opacity:1}
+  96%{left:87.5%; opacity:0}
+  97%,100%{left:12.5%; opacity:0}
 }
 
 
