@@ -37,7 +37,7 @@
    No other libraries required. All animation is CSS/SVG.
    ============================================================================ */
 
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
   Dialog,
@@ -288,8 +288,8 @@ function RoseChart() {
     const a = (deg * Math.PI) / 180;
     return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
   };
-  const wedges: JSX.Element[] = [];
-  const labels: JSX.Element[] = [];
+  const wedges: React.JSX.Element[] = [];
+  const labels: React.JSX.Element[] = [];
   let key = 0;
   for (let i = 0; i < n; i++) {
     const base = -90 + i * step;
