@@ -182,15 +182,18 @@ const STYLES = `
 .h2g-q .top .ct{position:relative; font-size:13px; color:rgba(255,255,255,.9); min-width:104px; height:18px;}
 .h2g-q .top .ct span{position:absolute; inset:0; white-space:nowrap;}
 .h2g-q .top .bar{width:240px; height:7px; border-radius:9999px; background:rgba(255,255,255,.25); overflow:hidden;}
-.h2g-q .top .bar i{display:block; height:100%; background:#fff; border-radius:9999px; animation:h2g-qbar 10s ease-in-out infinite;}
-@keyframes h2g-qbar{0%,45%{width:17%} 52%,100%{width:50%}}
+.h2g-q .top .bar i{display:block; height:100%; background:#fff; border-radius:9999px; animation:h2g-qbar 10s linear infinite;}
+@keyframes h2g-qbar{0%,45%,93%,100%{width:17%} 50%,92%{width:50%}}
 .h2g-q .mn{max-width:1240px; width:100%; margin:0 auto; padding:30px 40px; flex:1;}
 .h2g-q .stage{position:relative; min-height:600px;}
-.h2g-q .pane{position:absolute; inset:0;}
-.h2g-fade1{animation:h2g-fade1 10s ease-in-out infinite;}
-.h2g-fade2{animation:h2g-fade2 10s ease-in-out infinite;}
-@keyframes h2g-fade1{0%,44%{opacity:1; visibility:visible} 49%,96%{opacity:0; visibility:hidden} 100%{opacity:1; visibility:visible}}
-@keyframes h2g-fade2{0%,44%{opacity:0; visibility:hidden} 49%,96%{opacity:1; visibility:visible} 100%{opacity:0; visibility:hidden}}
+.h2g-q .pane{position:absolute; inset:0; background:#FAFAFB;}
+.h2g-fade1{animation:h2g-fade1 10s step-end infinite;}
+.h2g-fade2{animation:h2g-fade2 10s step-end infinite;}
+.h2g-q .pane.h2g-fade1{z-index:1; opacity:1; visibility:visible; animation:none;}
+.h2g-q .pane.h2g-fade2{z-index:2; animation:h2g-slider-pane 10s step-end infinite;}
+@keyframes h2g-fade1{0%,47%,93%,100%{opacity:1; visibility:visible} 48%,92%{opacity:0; visibility:hidden}}
+@keyframes h2g-fade2{0%,47%,94%,100%{opacity:0; visibility:hidden} 48%,93%{opacity:1; visibility:visible}}
+@keyframes h2g-slider-pane{0%,47%,94%,100%{opacity:0; visibility:hidden} 48%,93%{opacity:1; visibility:visible}}
 .h2g-q .mn h1{font-size:28px; color:var(--a1-accent);}
 .h2g-q .about{margin-top:16px; background:#fff; border-radius:16px; padding:20px; border:1px solid rgba(0,0,0,.05); box-shadow:0 1px 3px rgba(0,0,0,.05);}
 .h2g-q .about h2{font-size:16px;} .h2g-q .about p{margin:8px 0 0; font-size:14px; line-height:1.6;}
@@ -212,14 +215,14 @@ const STYLES = `
 .h2g-r2::after{animation:h2g-dot2 10s step-end infinite;}
 .h2g-r3::after{animation:h2g-dot3 10s step-end infinite;}
 .h2g-r4::after{animation:h2g-dot4 10s step-end infinite;}
-@keyframes h2g-ring{0%,8%{border-color:#C9CDD4} 9%,100%{border-color:var(--a1-accent)}}
-@keyframes h2g-ring2{0%,16%{border-color:#C9CDD4} 17%,100%{border-color:var(--a1-accent)}}
-@keyframes h2g-ring3{0%,24%{border-color:#C9CDD4} 25%,100%{border-color:var(--a1-accent)}}
-@keyframes h2g-ring4{0%,32%{border-color:#C9CDD4} 33%,100%{border-color:var(--a1-accent)}}
-@keyframes h2g-dot{0%,8%{opacity:0} 9%,100%{opacity:1}}
-@keyframes h2g-dot2{0%,16%{opacity:0} 17%,100%{opacity:1}}
-@keyframes h2g-dot3{0%,24%{opacity:0} 25%,100%{opacity:1}}
-@keyframes h2g-dot4{0%,32%{opacity:0} 33%,100%{opacity:1}}
+@keyframes h2g-ring{0%,9%{border-color:#C9CDD4} 10%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-ring2{0%,18%{border-color:#C9CDD4} 19%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-ring3{0%,27%{border-color:#C9CDD4} 28%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-ring4{0%,36%{border-color:#C9CDD4} 37%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-dot{0%,9%{opacity:0} 10%,100%{opacity:1}}
+@keyframes h2g-dot2{0%,18%{opacity:0} 19%,100%{opacity:1}}
+@keyframes h2g-dot3{0%,27%{opacity:0} 28%,100%{opacity:1}}
+@keyframes h2g-dot4{0%,36%{opacity:0} 37%,100%{opacity:1}}
 
 /* step 3 — slider question */
 .h2g-q .hint{margin-top:26px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--a1-accent);}
@@ -230,13 +233,14 @@ const STYLES = `
   position:absolute; top:50%; width:28px; height:28px; margin-left:-14px; margin-top:-14px;
   border-radius:8px; background:#fff; border:1px solid #E5E7EB; box-shadow:0 6px 14px rgba(0,0,0,.16);
   display:flex; align-items:center; justify-content:center;
-  animation:h2g-thumb 10s cubic-bezier(.22,.9,.28,1) infinite;
+  animation:h2g-thumb 10s linear infinite;
 }
 @keyframes h2g-thumb{
-  0%,50%,59%{left:12.5%}
-  63%,69%{left:37.5%}
-  73%,79%{left:62.5%}
-  83%,100%{left:87.5%}
+  0%,49%,58%{left:12.5%}
+  62%,68%{left:37.5%}
+  72%,78%{left:62.5%}
+  82%,95%{left:87.5%}
+  96%,100%{left:12.5%}
 }
 .h2g-slabels{display:flex; margin-top:22px;}
 .h2g-slabels span{flex:1; text-align:center; font-size:14px; font-weight:700; color:#9ca3af; transform:translateY(0);}
@@ -244,10 +248,10 @@ const STYLES = `
 .h2g-sl2{animation:h2g-sl2 10s linear infinite;}
 .h2g-sl3{animation:h2g-sl3 10s linear infinite;}
 .h2g-sl4{animation:h2g-sl4 10s linear infinite;}
-@keyframes h2g-sl1{0%,49.9%,60.1%,100%{color:#9ca3af; transform:translateY(0)} 50%,60%{color:#E14B45; transform:translateY(-2px)}}
-@keyframes h2g-sl2{0%,61.9%,70.1%,100%{color:#9ca3af; transform:translateY(0)} 62%,70%{color:#E8913C; transform:translateY(-2px)}}
-@keyframes h2g-sl3{0%,71.9%,80.1%,100%{color:#9ca3af; transform:translateY(0)} 72%,80%{color:#E5C13F; transform:translateY(-2px)}}
-@keyframes h2g-sl4{0%,81.9%,96.1%,100%{color:#9ca3af; transform:translateY(0)} 82%,96%{color:#33A06A; transform:translateY(-2px)}}
+@keyframes h2g-sl1{0%,49%,59%,100%{color:#9ca3af; transform:translateY(0)} 50%,58%{color:#E14B45; transform:translateY(-2px)}}
+@keyframes h2g-sl2{0%,61%,69%,100%{color:#9ca3af; transform:translateY(0)} 62%,68%{color:#E8913C; transform:translateY(-2px)}}
+@keyframes h2g-sl3{0%,71%,79%,100%{color:#9ca3af; transform:translateY(0)} 72%,78%{color:#E5C13F; transform:translateY(-2px)}}
+@keyframes h2g-sl4{0%,81%,96%,100%{color:#9ca3af; transform:translateY(0)} 82%,95%{color:#33A06A; transform:translateY(-2px)}}
 .h2g-feedback{margin-top:34px; border-radius:16px; border:1px solid var(--a1-border); background:var(--a1-soft); padding:20px 22px;}
 .h2g-feedback b{display:flex; align-items:center; gap:6px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--a1-accent);}
 .h2g-feedback .val{position:relative; display:inline-block; min-width:78px; height:15px;}
@@ -256,10 +260,10 @@ const STYLES = `
 .h2g-ltxt2{animation:h2g-ltxt2 10s linear infinite; color:#E8913C;}
 .h2g-ltxt3{animation:h2g-ltxt3 10s linear infinite; color:#B99112;}
 .h2g-ltxt4{animation:h2g-ltxt4 10s linear infinite; color:#33A06A;}
-@keyframes h2g-ltxt1{0%,49.9%,60.1%,100%{opacity:0; transform:translateY(4px)} 50%,60%{opacity:1; transform:translateY(0)}}
-@keyframes h2g-ltxt2{0%,61.9%,70.1%,100%{opacity:0; transform:translateY(4px)} 62%,70%{opacity:1; transform:translateY(0)}}
-@keyframes h2g-ltxt3{0%,71.9%,80.1%,100%{opacity:0; transform:translateY(4px)} 72%,80%{opacity:1; transform:translateY(0)}}
-@keyframes h2g-ltxt4{0%,81.9%,96.1%,100%{opacity:0; transform:translateY(4px)} 82%,96%{opacity:1; transform:translateY(0)}}
+@keyframes h2g-ltxt1{0%,49%,59%,100%{opacity:0; transform:translateY(4px)} 50%,58%{opacity:1; transform:translateY(0)}}
+@keyframes h2g-ltxt2{0%,61%,69%,100%{opacity:0; transform:translateY(4px)} 62%,68%{opacity:1; transform:translateY(0)}}
+@keyframes h2g-ltxt3{0%,71%,79%,100%{opacity:0; transform:translateY(4px)} 72%,78%{opacity:1; transform:translateY(0)}}
+@keyframes h2g-ltxt4{0%,81%,96%,100%{opacity:0; transform:translateY(4px)} 82%,95%{opacity:1; transform:translateY(0)}}
 .h2g-feedback p{margin:8px 0 0; font-size:15px; line-height:1.6; color:#1f2937;}
 
 /* step 3 — animated pointer paths */
@@ -281,14 +285,15 @@ const STYLES = `
   40%{transform:translate(-108px,138px); opacity:1}
   46%,100%{transform:translate(-108px,138px); opacity:0}
 }
-.h2g-scursor{animation:h2g-scursor 10s cubic-bezier(.22,.9,.28,1) infinite;}
+.h2g-scursor{animation:h2g-scursor 10s linear infinite;}
 @keyframes h2g-scursor{
-  0%,49%{left:12.5%; opacity:0}
-  52%,59%{left:12.5%; opacity:1}
-  63%,69%{left:37.5%; opacity:1}
-  73%,79%{left:62.5%; opacity:1}
-  83%,94%{left:87.5%; opacity:1}
-  96%,100%{left:87.5%; opacity:0}
+  0%,48%{left:12.5%; opacity:0}
+  50%,58%{left:12.5%; opacity:1}
+  62%,68%{left:37.5%; opacity:1}
+  72%,78%{left:62.5%; opacity:1}
+  82%,95%{left:87.5%; opacity:1}
+  96%{left:87.5%; opacity:0}
+  97%,100%{left:12.5%; opacity:0}
 }
 
 
@@ -337,7 +342,7 @@ const STYLES = `
 /* Note: the looping demos ARE the content of this guide, so we keep them
    running even with reduced-motion; we only slow them down a little. */
 @media (prefers-reduced-motion: reduce){
-  .h2g *{animation-duration:9s;}
+  .h2g *, .h2g *::before, .h2g *::after{animation-duration:9s;}
 }
 `;
 
