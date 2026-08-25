@@ -568,13 +568,9 @@ function ScreenDashboard() {
               <div className="go" style={{ background: a.go }}>Start a new assessment</div>
               {a.n === 1 && (
                 /* looping cursor tap on the AREA 1 button */
-                <svg
-                  className="h2g-cursor"
-                  viewBox="0 0 24 24"
-                  style={{ right: 60, top: 46, animation: "h2g-tap2 6s ease-in-out infinite" }}
-                >
-                  <path fill="#111827" d="M4 2l14 8-6 1.5L14 19z" />
-                </svg>
+                <Pointer
+                  style={{ right: 60, top: 44, animation: "h2g-tap2 3.4s cubic-bezier(.3,.8,.3,1) infinite" }}
+                />
               )}
             </article>
           ))}
@@ -582,13 +578,15 @@ function ScreenDashboard() {
       </div>
       <style>{`
         @keyframes h2g-tap2{
-          0%{transform:translate(120px,-60px); opacity:0}
-          20%{opacity:1}
-          45%,55%{transform:translate(0,0); opacity:1}
-          50%{transform:translate(0,3px)}
-          80%,100%{transform:translate(0,0); opacity:0}
+          0%{transform:translate(130px,-70px); opacity:0}
+          18%{opacity:1}
+          42%{transform:translate(0,0); opacity:1}
+          50%{transform:translate(0,5px)}
+          58%,74%{transform:translate(0,0); opacity:1}
+          92%,100%{transform:translate(0,0); opacity:0}
         }
       `}</style>
+
     </div>
   );
 }
