@@ -220,9 +220,10 @@ const STYLES = `
 .h2g-wedge{opacity:0; animation:h2g-wedge 6s ease-in-out infinite;}
 @keyframes h2g-wedge{0%,8%{opacity:0} 30%,92%{opacity:.62} 100%{opacity:0}}
 
+/* Note: the looping demos ARE the content of this guide, so we keep them
+   running even with reduced-motion; we only slow them down a little. */
 @media (prefers-reduced-motion: reduce){
-  .h2g *{animation:none !important;}
-  .h2g-cap{width:auto !important; border-right:0 !important;}
+  .h2g *{animation-duration:9s;}
 }
 `;
 
