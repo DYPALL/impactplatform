@@ -736,8 +736,8 @@ export function HowToGetStartedModal({
         <div className="h2g-body">
           {/* LEFT: looping screen */}
           <div className="h2g-pane">
-            <div className="h2g-stage">
-              <div className="h2g-screens">
+            <div className="h2g-stage" ref={stageRef}>
+              <div className="h2g-screens" ref={screensRef}>
                 {/* keyed by step so the animation restarts cleanly each time */}
                 <Screen key={step} />
               </div>
