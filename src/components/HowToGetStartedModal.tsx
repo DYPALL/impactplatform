@@ -202,14 +202,24 @@ const STYLES = `
 .h2g-q .tr span.c{font-size:14px;} .h2g-q .tr .cell{display:flex; justify-content:center;}
 .h2g-rad{width:22px; height:22px; border-radius:50%; border:2px solid #C9CDD4; display:flex; align-items:center; justify-content:center;}
 .h2g-rad.on{border-color:var(--a1-accent);} .h2g-rad.on::after{content:''; width:10px; height:10px; border-radius:50%; background:var(--a1-accent);}
-.h2g-r1{animation:h2g-blink 10s step-end infinite;}
-.h2g-r2{animation:h2g-blink2 10s step-end infinite;}
-.h2g-r3{animation:h2g-blink3 10s step-end infinite;}
-.h2g-r4{animation:h2g-blink4 10s step-end infinite;}
-@keyframes h2g-blink{0%,8%{opacity:0} 9%,100%{opacity:1}}
-@keyframes h2g-blink2{0%,16%{opacity:0} 17%,100%{opacity:1}}
-@keyframes h2g-blink3{0%,24%{opacity:0} 25%,100%{opacity:1}}
-@keyframes h2g-blink4{0%,32%{opacity:0} 33%,100%{opacity:1}}
+/* Only the inner dot + ring colour animate in — the circle outline is always visible. */
+.h2g-r1,.h2g-r2,.h2g-r3,.h2g-r4{border-color:#C9CDD4;}
+.h2g-r1{animation:h2g-ring 10s step-end infinite;}
+.h2g-r2{animation:h2g-ring2 10s step-end infinite;}
+.h2g-r3{animation:h2g-ring3 10s step-end infinite;}
+.h2g-r4{animation:h2g-ring4 10s step-end infinite;}
+.h2g-r1::after{animation:h2g-dot 10s step-end infinite;}
+.h2g-r2::after{animation:h2g-dot2 10s step-end infinite;}
+.h2g-r3::after{animation:h2g-dot3 10s step-end infinite;}
+.h2g-r4::after{animation:h2g-dot4 10s step-end infinite;}
+@keyframes h2g-ring{0%,8%{border-color:#C9CDD4} 9%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-ring2{0%,16%{border-color:#C9CDD4} 17%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-ring3{0%,24%{border-color:#C9CDD4} 25%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-ring4{0%,32%{border-color:#C9CDD4} 33%,100%{border-color:var(--a1-accent)}}
+@keyframes h2g-dot{0%,8%{opacity:0} 9%,100%{opacity:1}}
+@keyframes h2g-dot2{0%,16%{opacity:0} 17%,100%{opacity:1}}
+@keyframes h2g-dot3{0%,24%{opacity:0} 25%,100%{opacity:1}}
+@keyframes h2g-dot4{0%,32%{opacity:0} 33%,100%{opacity:1}}
 
 /* step 3 — slider question */
 .h2g-q .hint{margin-top:26px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--a1-accent);}
@@ -288,6 +298,29 @@ const STYLES = `
 .h2g-lg small{font-size:11px; color:var(--impact-ink-muted);}
 .h2g-wedge{opacity:0; animation:h2g-wedge 6s ease-in-out infinite;}
 @keyframes h2g-wedge{0%,8%{opacity:0} 30%,92%{opacity:.62} 100%{opacity:0}}
+
+/* Scrolling viewport for the results page */
+.h2g-res .port{flex:1; overflow:hidden; position:relative;}
+.h2g-res .port .mn{animation:h2g-pagescroll 14s ease-in-out infinite;}
+@keyframes h2g-pagescroll{
+  0%,12%{transform:translateY(0)}
+  38%,46%{transform:translateY(-430px)}
+  70%,78%{transform:translateY(-900px)}
+  94%,100%{transform:translateY(0)}
+}
+.h2g-res .sec{margin-top:18px; border-radius:16px; border:1px solid var(--a1-border); background:#fff; padding:22px 26px;}
+.h2g-res .sec h2{font-size:17px;} .h2g-res .sec .sub{margin:4px 0 0; font-size:12px; color:var(--impact-ink-muted);}
+.h2g-flip{margin-top:16px; display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+.h2g-flip .card{border-radius:14px; padding:18px; min-height:120px; background:var(--a1-soft); border:1px solid var(--a1-border); font-size:13px; line-height:1.6; color:#374151;}
+.h2g-flip .card b{display:block; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--a1-accent); margin-bottom:8px;}
+.h2g-steps{margin-top:16px; display:flex; flex-direction:column; gap:10px;}
+.h2g-steps .st{display:flex; align-items:center; gap:12px; border:1px solid var(--a1-border); border-radius:12px; padding:12px 14px; font-size:13px; color:#374151; background:#fff;}
+.h2g-steps .bx{width:20px; height:20px; border-radius:6px; border:2px solid #C9CDD4; flex:none;}
+.h2g-steps .st.on .bx{border-color:var(--a1-accent); background:var(--a1-accent);}
+.h2g-cta{margin-top:18px; border-radius:16px; background:var(--a1-soft); border:1px solid var(--a1-border); padding:24px 26px; display:flex; align-items:center; justify-content:space-between; gap:20px;}
+.h2g-cta h3{font-size:18px; color:var(--a1-accent);}
+.h2g-cta p{margin:6px 0 0; font-size:13px; color:#4b5563; max-width:520px;}
+.h2g-cta .btn{background:var(--a1-accent); color:#fff; border-radius:9999px; padding:12px 22px; font-size:14px; font-weight:700; white-space:nowrap;}
 
 /* Note: the looping demos ARE the content of this guide, so we keep them
    running even with reduced-motion; we only slow them down a little. */
@@ -729,6 +762,7 @@ function ScreenResults() {
           </span>
           <span style={{ fontSize: 13, opacity: 0.85 }}>Saved results</span>
         </div>
+        <div className="port">
         <div className="mn">
           <div className="intro">
             <span className="bd">Area 1</span>
@@ -750,7 +784,38 @@ function ScreenResults() {
               </div>
             </div>
           </div>
+
+          <div className="sec">
+            <h2>Reflection questions</h2>
+            <p className="sub">Tap a card to reveal a prompt to discuss with your team</p>
+            <div className="h2g-flip">
+              <div className="card"><b>Reflect</b>Which groups of young people are still missing from your council, and why?</div>
+              <div className="card"><b>Reflect</b>How do you know your members represent the local youth population?</div>
+              <div className="card"><b>Reflect</b>What barriers make it harder for some young people to take part?</div>
+            </div>
+          </div>
+
+          <div className="sec">
+            <h2>Recommended action steps</h2>
+            <p className="sub">Pick up to three steps to include in your action plan</p>
+            <div className="h2g-steps">
+              <div className="st on"><span className="bx" />Map the demographics of local youth and compare them with your membership.</div>
+              <div className="st on"><span className="bx" />Run open call-outs in schools, youth clubs and online spaces you don't usually reach.</div>
+              <div className="st"><span className="bx" />Review meeting times, venues and formats for accessibility.</div>
+              <div className="st"><span className="bx" />Set a yearly target for the diversity of new members.</div>
+            </div>
+          </div>
+
+          <div className="h2g-cta">
+            <div>
+              <h3>Ready to take action?</h3>
+              <p>Build your personalised Action Plan from the steps you selected and share it with your council.</p>
+            </div>
+            <span className="btn">Build your action plan</span>
+          </div>
         </div>
+        </div>
+
       </div>
     </div>
   );
