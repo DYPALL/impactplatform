@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import heroImg from "@/assets/hero-photo.webp.asset.json";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import step1Img from "@/assets/step-1.webp.asset.json";
