@@ -981,12 +981,14 @@ export function HowToGetStartedModal({
           width: "calc(100vw - 40px)",
           maxWidth: 1340,
           maxHeight: "calc(100vh - 40px)",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <style>{STYLES + typingKeyframes}</style>
 
         {/* header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "18px 24px", borderBottom: "1px solid var(--impact-border)" }}>
+        <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "18px 24px", borderBottom: "1px solid var(--impact-border)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span style={{ display: "inline-flex", alignItems: "center", borderRadius: 9999, background: "#EDE4F6", color: "var(--impact-purple)", padding: "4px 12px", fontSize: 11, fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase" }}>
               Guia
