@@ -69,24 +69,23 @@ function Hero() {
       <div className="hero-gradient" aria-hidden="true" />
 
       {/* Floating polygons */}
-      <Polygon size={78} rotate={-18} depth={1.2} color="rgba(255,255,255,0.18)" style={{ top: 10, left: "52%" }} />
-      <Polygon size={48} rotate={42} depth={1.8} color="rgba(244,162,97,0.55)" style={{ top: 160, left: "66%" }} />
-      <Polygon size={102} rotate={-12} depth={0.6} color="rgba(255,255,255,0.12)" style={{ top: 42, left: "80%" }} />
-      <Polygon size={57} rotate={-28} depth={1.5} color="rgba(233,75,138,0.5)" style={{ top: 260, left: "90%" }} />
-      <Polygon size={54} rotate={92} depth={1.1} color="rgba(255,255,255,0.14)" style={{ top: 467, left: "76%" }} />
-      <Polygon size={37} rotate={-45} depth={2} color="rgba(244,162,97,0.6)" style={{ top: 80, right: 40 }} />
-      <Polygon size={107} rotate={38} depth={0.5} color="rgba(255,255,255,0.10)" style={{ top: 17, left: 35 }} />
-      <Polygon size={36} rotate={-10} depth={1.9} color="rgba(233,75,138,0.45)" style={{ top: 480, left: 70 }} />
-      <Polygon size={44} rotate={-6} depth={1.4} color="rgba(255,255,255,0.14)" style={{ top: 220, left: "32%" }} />
-      <Polygon size={59} rotate={-50} depth={0.9} color="rgba(244,162,97,0.5)" style={{ top: 37, left: "30%" }} />
-      {/* Extra triangles — lower/right */}
-      <Polygon size={64} rotate={15} depth={1.3} color="rgba(255,255,255,0.16)" style={{ bottom: 30, right: "8%" }} />
-      <Polygon size={42} rotate={-35} depth={1.7} color="rgba(244,162,97,0.5)" style={{ bottom: 90, right: "22%" }} />
-      <Polygon size={88} rotate={55} depth={0.7} color="rgba(255,255,255,0.11)" style={{ bottom: 10, right: "35%" }} />
-      <Polygon size={50} rotate={-65} depth={1.4} color="rgba(233,75,138,0.45)" style={{ bottom: 140, right: "4%" }} />
-      <Polygon size={34} rotate={20} depth={2} color="rgba(244,162,97,0.55)" style={{ bottom: 55, left: "78%" }} />
-      <Polygon size={72} rotate={-40} depth={1.1} color="rgba(255,255,255,0.13)" style={{ bottom: 170, left: "88%" }} />
-      <Polygon size={46} rotate={75} depth={1.6} color="rgba(233,75,138,0.4)" style={{ bottom: 200, right: "16%" }} />
+      <Polygon size={92} rotate={-12} depth={0.5} color="rgba(255,255,255,0.10)" style={{ top: "4%", left: "6%" }} />
+      <Polygon size={44} rotate={38} depth={1.8} color="rgba(244,162,97,0.45)" style={{ top: "14%", left: "18%" }} />
+      <Polygon size={64} rotate={-28} depth={1.3} color="rgba(233,75,138,0.40)" style={{ top: "8%", left: "34%" }} />
+      <Polygon size={38} rotate={72} depth={2.0} color="rgba(255,255,255,0.16)" style={{ top: "22%", left: "46%" }} />
+      <Polygon size={82} rotate={-48} depth={0.7} color="rgba(244,162,97,0.35)" style={{ top: "6%", left: "62%" }} />
+      <Polygon size={54} rotate={22} depth={1.4} color="rgba(255,255,255,0.14)" style={{ top: "18%", left: "78%" }} />
+      <Polygon size={48} rotate={-10} depth={1.6} color="rgba(233,75,138,0.45)" style={{ top: "10%", left: "90%" }} />
+      <Polygon size={72} rotate={55} depth={1.0} color="rgba(255,255,255,0.12)" style={{ top: "40%", left: "4%" }} />
+      <Polygon size={36} rotate={-36} depth={2.0} color="rgba(244,162,97,0.55)" style={{ top: "46%", left: "26%" }} />
+      <Polygon size={58} rotate={14} depth={1.2} color="rgba(233,75,138,0.50)" style={{ top: "56%", left: "14%" }} />
+      <Polygon size={42} rotate={-60} depth={1.7} color="rgba(255,255,255,0.15)" style={{ top: "62%", left: "38%" }} />
+      <Polygon size={68} rotate={42} depth={0.9} color="rgba(244,162,97,0.40)" style={{ top: "72%", left: "8%" }} />
+      <Polygon size={50} rotate={-18} depth={1.5} color="rgba(233,75,138,0.40)" style={{ top: "74%", left: "56%" }} />
+      <Polygon size={76} rotate={30} depth={0.8} color="rgba(255,255,255,0.13)" style={{ top: "58%", left: "70%" }} />
+      <Polygon size={40} rotate={-44} depth={1.9} color="rgba(244,162,97,0.50)" style={{ top: "78%", left: "84%" }} />
+      <Polygon size={60} rotate={66} depth={1.1} color="rgba(233,75,138,0.45)" style={{ top: "52%", left: "92%" }} />
+      <Polygon size={86} rotate={-6} depth={0.6} color="rgba(255,255,255,0.11)" style={{ top: "86%", left: "68%" }} />
 
 
 
