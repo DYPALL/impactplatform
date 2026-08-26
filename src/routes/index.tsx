@@ -76,6 +76,15 @@ function Hero() {
       <Polygon size={36} rotate={-10} depth={1.9} color="rgba(233,75,138,0.45)" style={{ top: 480, left: 70 }} />
       <Polygon size={44} rotate={-6} depth={1.4} color="rgba(255,255,255,0.14)" style={{ top: 220, left: "32%" }} />
       <Polygon size={59} rotate={-50} depth={0.9} color="rgba(244,162,97,0.5)" style={{ top: 37, left: "30%" }} />
+      {/* Extra triangles — lower/right */}
+      <Polygon size={64} rotate={15} depth={1.3} color="rgba(255,255,255,0.16)" style={{ bottom: 30, right: "8%" }} />
+      <Polygon size={42} rotate={-35} depth={1.7} color="rgba(244,162,97,0.5)" style={{ bottom: 90, right: "22%" }} />
+      <Polygon size={88} rotate={55} depth={0.7} color="rgba(255,255,255,0.11)" style={{ bottom: 10, right: "35%" }} />
+      <Polygon size={50} rotate={-65} depth={1.4} color="rgba(233,75,138,0.45)" style={{ bottom: 140, right: "4%" }} />
+      <Polygon size={34} rotate={20} depth={2} color="rgba(244,162,97,0.55)" style={{ bottom: 55, left: "78%" }} />
+      <Polygon size={72} rotate={-40} depth={1.1} color="rgba(255,255,255,0.13)" style={{ bottom: 170, left: "88%" }} />
+      <Polygon size={46} rotate={75} depth={1.6} color="rgba(233,75,138,0.4)" style={{ bottom: 200, right: "16%" }} />
+
 
 
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-10 px-6 py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-24 lg:pl-[120px] lg:pr-0">
