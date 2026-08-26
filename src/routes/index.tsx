@@ -38,22 +38,45 @@ export const Route = createFileRoute("/")({
 
 function Hero() {
   const [guideOpen, setGuideOpen] = useState(false);
+  const heroRef = useRef<HTMLElement | null>(null);
+
+  function handlePointerMove(e: React.PointerEvent<HTMLElement>) {
+    const el = heroRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    el.style.setProperty("--px", `${(-nx * 34).toFixed(2)}px`);
+    el.style.setProperty("--py", `${(-ny * 26).toFixed(2)}px`);
+  }
+
+  function handlePointerLeave() {
+    const el = heroRef.current;
+    if (!el) return;
+    el.style.setProperty("--px", "0px");
+    el.style.setProperty("--py", "0px");
+  }
+
   return (
     <section
+      ref={heroRef}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
       className="relative w-full overflow-hidden"
       style={{ backgroundColor: "var(--impact-purple)" }}
     >
       {/* Floating polygons */}
-      <Polygon size={78} rotate={-18} color="rgba(255,255,255,0.18)" style={{ top: 10, left: "52%" }} />
-      <Polygon size={48} rotate={42} color="rgba(244,162,97,0.55)" style={{ top: 160, left: "66%" }} />
-      <Polygon size={102} rotate={-12} color="rgba(255,255,255,0.12)" style={{ top: 42, left: "80%" }} />
-      <Polygon size={57} rotate={-28} color="rgba(233,75,138,0.5)" style={{ top: 260, left: "90%" }} />
-      <Polygon size={54} rotate={92} color="rgba(255,255,255,0.14)" style={{ top: 467, left: "76%" }} />
-      <Polygon size={37} rotate={-45} color="rgba(244,162,97,0.6)" style={{ top: 80, right: 40 }} />
-      <Polygon size={107} rotate={38} color="rgba(255,255,255,0.10)" style={{ top: 17, left: 35 }} />
-      <Polygon size={36} rotate={-10} color="rgba(233,75,138,0.45)" style={{ top: 480, left: 70 }} />
-      <Polygon size={44} rotate={-6} color="rgba(255,255,255,0.14)" style={{ top: 220, left: "32%" }} />
-      <Polygon size={59} rotate={-50} color="rgba(244,162,97,0.5)" style={{ top: 37, left: "30%" }} />
+      <Polygon size={78} rotate={-18} depth={1.2} color="rgba(255,255,255,0.18)" style={{ top: 10, left: "52%" }} />
+      <Polygon size={48} rotate={42} depth={1.8} color="rgba(244,162,97,0.55)" style={{ top: 160, left: "66%" }} />
+      <Polygon size={102} rotate={-12} depth={0.6} color="rgba(255,255,255,0.12)" style={{ top: 42, left: "80%" }} />
+      <Polygon size={57} rotate={-28} depth={1.5} color="rgba(233,75,138,0.5)" style={{ top: 260, left: "90%" }} />
+      <Polygon size={54} rotate={92} depth={1.1} color="rgba(255,255,255,0.14)" style={{ top: 467, left: "76%" }} />
+      <Polygon size={37} rotate={-45} depth={2} color="rgba(244,162,97,0.6)" style={{ top: 80, right: 40 }} />
+      <Polygon size={107} rotate={38} depth={0.5} color="rgba(255,255,255,0.10)" style={{ top: 17, left: 35 }} />
+      <Polygon size={36} rotate={-10} depth={1.9} color="rgba(233,75,138,0.45)" style={{ top: 480, left: 70 }} />
+      <Polygon size={44} rotate={-6} depth={1.4} color="rgba(255,255,255,0.14)" style={{ top: 220, left: "32%" }} />
+      <Polygon size={59} rotate={-50} depth={0.9} color="rgba(244,162,97,0.5)" style={{ top: 37, left: "30%" }} />
+
 
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-10 px-6 py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-24 lg:pl-[120px] lg:pr-0">
         <div className="relative z-10 max-w-[680px]">
