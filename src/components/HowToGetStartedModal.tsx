@@ -644,12 +644,28 @@ function ScreenDashboard() {
                 <h3>{a.title}</h3>
                 <p>{a.desc}</p>
               </div>
-              <div className="go" style={{ background: a.go }}>Start a new assessment</div>
+              <div className="go" style={{ background: a.go, animation: a.n === 1 ? "h2g-btn-press 3.4s ease-in-out infinite" : undefined }}>Start a new assessment</div>
               {a.n === 1 && (
                 /* looping cursor tap on the AREA 1 button */
-                <Pointer
-                  style={{ right: 60, top: 44, animation: "h2g-tap2 3.4s cubic-bezier(.3,.8,.3,1) infinite" }}
-                />
+                <>
+                  <span
+                    style={{
+                      position: "absolute",
+                      right: 68,
+                      top: 38,
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      background: "rgba(80,33,129,0.18)",
+                      animation: "h2g-click-ripple 3.4s ease-in-out infinite",
+                      zIndex: 38,
+                      pointerEvents: "none",
+                    }}
+                  />
+                  <Pointer
+                    style={{ right: 60, top: 44, animation: "h2g-tap2 3.4s cubic-bezier(.3,.8,.3,1) infinite" }}
+                  />
+                </>
               )}
             </article>
           ))}
@@ -663,6 +679,17 @@ function ScreenDashboard() {
           50%{transform:translate(0,5px)}
           58%,74%{transform:translate(0,0); opacity:1}
           92%,100%{transform:translate(0,0); opacity:0}
+        }
+        @keyframes h2g-click-ripple{
+          0%,40%{transform:scale(0); opacity:0}
+          45%{transform:scale(0.6); opacity:1}
+          60%{transform:scale(1.4); opacity:0}
+          100%{transform:scale(1.4); opacity:0}
+        }
+        @keyframes h2g-btn-press{
+          0%,42%{transform:scale(1)}
+          50%{transform:scale(0.96)}
+          58%,100%{transform:scale(1)}
         }
       `}</style>
 
