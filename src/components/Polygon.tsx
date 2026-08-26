@@ -31,11 +31,7 @@ export function Polygon({
         width: size,
         height: size,
         willChange: "transform",
-        transition: "transform 600ms cubic-bezier(0.18, 1.5, 0.4, 1)",
-        transform:
-          `translate3d(calc(var(--px, 0px) * ${depth}), ` +
-          `calc(var(--py, 0px) * ${depth}), 0) ` +
-          `rotate(var(--kr, 0deg))`,
+        transform: "translate3d(0, 0, 0)",
         ...style,
       }}
     >
