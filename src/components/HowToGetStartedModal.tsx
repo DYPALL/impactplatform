@@ -60,7 +60,7 @@ const STYLES = `
   --font-body:"Inter", ui-sans-serif, system-ui, sans-serif;
   font-family:var(--font-body); color:var(--impact-ink);
 }
-.h2g-body{display:grid; grid-template-columns:minmax(0,1fr) 320px; min-height:0;}
+.h2g-body{display:grid; grid-template-columns:minmax(0,1fr) 320px; min-height:0; flex:1 1 auto; overflow:auto;}
 @media (max-width:860px){ .h2g-body{grid-template-columns:1fr;} }
 
 /* LEFT — screen pane */
@@ -69,11 +69,17 @@ const STYLES = `
   padding:20px; display:flex; align-items:center; justify-content:center;
 }
 .h2g-stage{
-  position:relative; width:100%; aspect-ratio:16/9;
+  position:relative; width:100%; aspect-ratio:16/9; margin:auto;
+  max-height:calc(100vh - 210px);
+  max-width:calc((100vh - 210px) * 16 / 9);
   border-radius:12px; overflow:hidden; background:#fff;
   border:1px solid rgba(17,24,39,.07);
   box-shadow:0 14px 32px -14px rgba(59,24,97,.35);
 }
+@media (max-width:860px){
+  .h2g-stage{max-height:min(45vh, calc(100vh - 260px)); max-width:calc(min(45vh, (100vh - 260px)) * 16 / 9);}
+}
+
 .h2g-screens{position:absolute; top:0; left:0; width:1440px; height:810px; transform-origin:top left;}
 .h2g-screen{position:absolute; inset:0; width:1440px; height:810px; overflow:hidden; background:#fff;}
 .h2g h1,.h2g h2,.h2g h3,.h2g h4{font-family:var(--font-heading); font-weight:800; letter-spacing:-.01em; margin:0;}
@@ -81,9 +87,15 @@ const STYLES = `
 /* RIGHT — steps pane */
 .h2g-steps{
   border-left:1px solid var(--impact-border); background:#fff;
-  padding:22px 22px 20px; display:flex; flex-direction:column; min-height:0;
+  padding:22px 22px 20px; display:flex; flex-direction:column; min-height:0; overflow-y:auto;
 }
-@media (max-width:860px){ .h2g-steps{border-left:0; border-top:1px solid var(--impact-border);} }
+@media (max-width:860px){
+  .h2g-body{grid-auto-rows:min-content;}
+  .h2g-steps{border-left:0; border-top:1px solid var(--impact-border); overflow:visible;}
+  .h2g-nav{position:sticky; bottom:0; background:#fff; padding-top:8px;}
+  .h2g-skip{position:sticky; bottom:0; background:#fff; padding-bottom:4px;}
+  .h2g-spacer{display:none;}
+}
 .h2g-kicker{font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin:0 0 6px;}
 .h2g-steps h3{font-size:24px; line-height:1.12; color:var(--impact-purple);}
 .h2g-desc{margin:12px 0 0; font-size:14px; line-height:1.6; color:var(--impact-ink-muted);}
@@ -975,12 +987,14 @@ export function HowToGetStartedModal({
           width: "calc(100vw - 40px)",
           maxWidth: 1340,
           maxHeight: "calc(100vh - 40px)",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <style>{STYLES + typingKeyframes}</style>
 
         {/* header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "18px 24px", borderBottom: "1px solid var(--impact-border)" }}>
+        <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "18px 24px", borderBottom: "1px solid var(--impact-border)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span style={{ display: "inline-flex", alignItems: "center", borderRadius: 9999, background: "#EDE4F6", color: "var(--impact-purple)", padding: "4px 12px", fontSize: 11, fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase" }}>
               Guia
