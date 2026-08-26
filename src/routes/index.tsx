@@ -65,6 +65,9 @@ function Hero() {
       className="relative w-full overflow-hidden"
       style={{ backgroundColor: "var(--impact-purple)" }}
     >
+      {/* Animated gradient wash */}
+      <div className="hero-gradient" aria-hidden="true" />
+
       {/* Floating polygons */}
       <Polygon size={78} rotate={-18} depth={1.2} color="rgba(255,255,255,0.18)" style={{ top: 10, left: "52%" }} />
       <Polygon size={48} rotate={42} depth={1.8} color="rgba(244,162,97,0.55)" style={{ top: 160, left: "66%" }} />
