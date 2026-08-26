@@ -60,7 +60,7 @@ const STYLES = `
   --font-body:"Inter", ui-sans-serif, system-ui, sans-serif;
   font-family:var(--font-body); color:var(--impact-ink);
 }
-.h2g-body{display:grid; grid-template-columns:minmax(0,1fr) 320px; min-height:0;}
+.h2g-body{display:grid; grid-template-columns:minmax(0,1fr) 320px; min-height:0; overflow:auto;}
 @media (max-width:860px){ .h2g-body{grid-template-columns:1fr;} }
 
 /* LEFT — screen pane */
@@ -69,11 +69,17 @@ const STYLES = `
   padding:20px; display:flex; align-items:center; justify-content:center;
 }
 .h2g-stage{
-  position:relative; width:100%; aspect-ratio:16/9;
+  position:relative; width:100%; aspect-ratio:16/9; margin:auto;
+  max-height:calc(100vh - 210px);
+  max-width:calc((100vh - 210px) * 16 / 9);
   border-radius:12px; overflow:hidden; background:#fff;
   border:1px solid rgba(17,24,39,.07);
   box-shadow:0 14px 32px -14px rgba(59,24,97,.35);
 }
+@media (max-width:860px){
+  .h2g-stage{max-height:min(45vh, calc(100vh - 260px)); max-width:calc(min(45vh, (100vh - 260px)) * 16 / 9);}
+}
+
 .h2g-screens{position:absolute; top:0; left:0; width:1440px; height:810px; transform-origin:top left;}
 .h2g-screen{position:absolute; inset:0; width:1440px; height:810px; overflow:hidden; background:#fff;}
 .h2g h1,.h2g h2,.h2g h3,.h2g h4{font-family:var(--font-heading); font-weight:800; letter-spacing:-.01em; margin:0;}
