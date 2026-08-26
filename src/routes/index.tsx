@@ -38,30 +38,9 @@ export const Route = createFileRoute("/")({
 
 function Hero() {
   const [guideOpen, setGuideOpen] = useState(false);
-  const heroRef = useRef<HTMLElement | null>(null);
-
-  function handlePointerMove(e: React.PointerEvent<HTMLElement>) {
-    const el = heroRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const nx = (e.clientX - rect.left) / rect.width - 0.5;
-    const ny = (e.clientY - rect.top) / rect.height - 0.5;
-    el.style.setProperty("--px", `${(-nx * 34).toFixed(2)}px`);
-    el.style.setProperty("--py", `${(-ny * 26).toFixed(2)}px`);
-  }
-
-  function handlePointerLeave() {
-    const el = heroRef.current;
-    if (!el) return;
-    el.style.setProperty("--px", "0px");
-    el.style.setProperty("--py", "0px");
-  }
 
   return (
     <section
-      ref={heroRef}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
       className="relative w-full overflow-hidden"
       style={{ backgroundColor: "var(--impact-purple)" }}
     >
