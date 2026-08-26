@@ -193,5 +193,28 @@
   100% { translate: 0 0; }
 }
 
+@keyframes hero-wash {
+  0%   { background-position: 0% 50%, 100% 50%, 50% 0%; transform: scale(1); }
+  33%  { background-position: 100% 50%, 50% 100%, 0% 50%; transform: scale(1.05); }
+  66%  { background-position: 50% 100%, 0% 50%, 100% 100%; transform: scale(1.02); }
+  100% { background-position: 0% 50%, 100% 50%, 50% 0%; transform: scale(1); }
+}
+
+.hero-gradient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(33, 156, 158, 0.22), transparent 45%),
+    radial-gradient(circle at 70% 70%, rgba(244, 162, 97, 0.18), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(233, 75, 138, 0.14), transparent 55%),
+    linear-gradient(135deg, var(--impact-purple) 0%, var(--impact-purple-dark) 100%);
+  background-size: 180% 180%, 200% 200%, 220% 220%, 100% 100%;
+  animation: hero-wash 18s ease-in-out infinite;
+  will-change: background-position, transform;
+}
+
+
 
 
