@@ -87,7 +87,7 @@ const STYLES = `
 /* RIGHT — steps pane */
 .h2g-steps{
   border-left:1px solid var(--impact-border); background:#fff;
-  padding:22px 22px 20px; display:flex; flex-direction:column; min-height:0;
+  padding:22px 22px 20px; display:flex; flex-direction:column; min-height:0; overflow-y:auto;
 }
 @media (max-width:860px){ .h2g-steps{border-left:0; border-top:1px solid var(--impact-border);} }
 .h2g-kicker{font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin:0 0 6px;}
