@@ -60,7 +60,7 @@ const STYLES = `
   --font-body:"Inter", ui-sans-serif, system-ui, sans-serif;
   font-family:var(--font-body); color:var(--impact-ink);
 }
-.h2g-body{display:grid; grid-template-columns:minmax(0,1fr) 320px; min-height:0; overflow:auto;}
+.h2g-body{display:grid; grid-template-columns:minmax(0,1fr) 320px; min-height:0; flex:1 1 auto; overflow:auto;}
 @media (max-width:860px){ .h2g-body{grid-template-columns:1fr;} }
 
 /* LEFT — screen pane */
