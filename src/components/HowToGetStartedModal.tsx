@@ -516,13 +516,13 @@ function ScreenAuth() {
       <PublicHeader />
       <div className="h2g-auth">
         <aside className="h2g-auth-l">
-          <div className="h2g-poly" style={{ width: 120, height: 120, top: -30, right: -20, transform: "rotate(-18deg)" }}>
+          <div className="h2g-poly" style={{ width: 120, height: 120, top: "62%", right: -20, transform: "rotate(-18deg)" }}>
             <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(255,255,255,0.08)" /></svg>
           </div>
-          <div className="h2g-poly" style={{ width: 70, height: 70, top: 60, right: 90, transform: "rotate(35deg)" }}>
+          <div className="h2g-poly" style={{ width: 70, height: 70, top: "72%", right: 90, transform: "rotate(35deg)" }}>
             <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(244,162,97,0.5)" /></svg>
           </div>
-          <div className="h2g-poly" style={{ width: 90, height: 90, top: "40%", left: -30, transform: "rotate(210deg)" }}>
+          <div className="h2g-poly" style={{ width: 90, height: 90, top: "78%", left: -30, transform: "rotate(210deg)" }}>
             <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(233,75,138,0.35)" /></svg>
           </div>
           <h1>Sign-up your council</h1>
@@ -540,7 +540,7 @@ function ScreenAuth() {
             </div>
             <div className="h2g-fld">
               <label>Local Youth Council</label>
-              <div className="box"><Typed text="Riverside Youth Council" chars={23} delay={1.1} /></div>
+              <div className="box"><Typed text="DYPALL Network" chars={14} delay={1.1} /></div>
             </div>
             <div className="h2g-grid2">
               <div className="h2g-fld">
@@ -926,7 +926,7 @@ export function HowToGetStartedModal({
   const Screen = SCREENS[step];
   const meta = STEP_META[step];
 
-  const typingKeyframes = useTypingKeyframes([12, 23, 8, 6]);
+  const typingKeyframes = useTypingKeyframes([12, 14, 23, 8, 6]);
 
   // reset to step 1 each time the modal opens
   useEffect(() => {
@@ -996,9 +996,6 @@ export function HowToGetStartedModal({
         {/* header */}
         <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, padding: "18px 24px", borderBottom: "1px solid var(--impact-border)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ display: "inline-flex", alignItems: "center", borderRadius: 9999, background: "#EDE4F6", color: "var(--impact-purple)", padding: "4px 12px", fontSize: 11, fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase" }}>
-              Guia
-            </span>
             <DialogTitle style={{ fontSize: 19, fontFamily: "var(--font-heading)", fontWeight: 800 }}>
               How to get started
             </DialogTitle>
