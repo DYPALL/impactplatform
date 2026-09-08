@@ -320,8 +320,8 @@ function IndicatorCard({
           if (!alwaysOpen) setOpen((o) => !o);
         }}
         aria-expanded={isOpen}
-        className={`mt-4 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-semibold transition ${alwaysOpen ? "cursor-default opacity-80" : ""}`}
-        style={{ borderColor: "#D8D3E4", color: "#111827" }}
+        className={`mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-bold text-white shadow-sm transition hover:opacity-90 ${alwaysOpen ? "cursor-default opacity-80" : ""}`}
+        style={{ backgroundColor: theme.accent }}
       >
         Read more about this indicator
         <ChevronDown size={13} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
