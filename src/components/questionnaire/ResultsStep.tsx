@@ -351,7 +351,7 @@ function IndicatorCard({
               </span>
             </div>
             <p className="mt-1.5 text-[12px] text-[#6b7280]">
-              Selected steps will form your custom Action Plan.
+              Pick up to 3 steps per indicator. The steps you select will be automatically imported into your Action Plan builder, ready to be turned into a structured plan.
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
               <ul className="space-y-1">
