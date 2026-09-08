@@ -531,13 +531,25 @@ export function ResultsStep({
             </p>
           </div>
           <div className="flex flex-col items-start gap-2.5">
-            <Link
-              to="/dashboard"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
-              style={{ color: theme.accent }}
-            >
-              Build your action plan <ArrowRight size={14} />
-            </Link>
+            {assessmentId ? (
+              <Link
+                to="/action-plan/$assessmentId"
+                params={{ assessmentId }}
+                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
+                style={{ color: theme.accent }}
+              >
+                Build your action plan <ArrowRight size={14} />
+              </Link>
+            ) : (
+              <Link
+                to="/dashboard"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
+                style={{ color: theme.accent }}
+              >
+                Build your action plan <ArrowRight size={14} />
+              </Link>
+            )}
+
             <Link
               to="/dashboard"
               className="text-left text-[12px] font-semibold text-white/90 underline underline-offset-2 transition hover:text-white"
