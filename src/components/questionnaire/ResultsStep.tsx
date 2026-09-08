@@ -255,15 +255,21 @@ function IndicatorCard({
   result,
   defaultOpen,
   alwaysOpen,
+  selectedIds,
+  onToggle,
 }: {
   content: QIndicator;
   result: IndicatorResult;
   defaultOpen?: boolean;
   alwaysOpen?: boolean;
+  selectedIds: string[];
+  onToggle: (action: string) => void;
 }) {
   const theme = useAreaTheme();
   const [open, setOpen] = useState(alwaysOpen || !!defaultOpen);
-  const [checked, setChecked] = useState<Record<number, boolean>>({});
+  const isChecked = (action: string) => selectedIds.includes(stepId(content.code, action));
+  const selectedCount = content.actions.filter((a) => isChecked(a)).length;
+
 
   const isOpen = alwaysOpen || open;
 
