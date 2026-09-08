@@ -57,7 +57,6 @@ function ActionPlanPage() {
   const { assessmentId } = Route.useParams();
   const [areaKey, setAreaKey] = useState("representativeness");
   const [tab, setTab] = useState<TabKey>("intro");
-  const [model, setModel] = useState("");
   const [goal, setGoal] = useState("");
   const [steps, setSteps] = useState<ActionPlanStep[]>([]);
   const [activeStep, setActiveStep] = useState(0);
