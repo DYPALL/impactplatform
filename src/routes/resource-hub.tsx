@@ -269,7 +269,7 @@ function ResourceHubPage() {
           <div className="relative z-10 mx-auto max-w-[1440px] px-6 py-14 lg:px-[120px] lg:py-[56px]">
             <h1 className="text-4xl font-extrabold leading-[1.1] text-white lg:text-[48px]">Resource Hub</h1>
             <p className="mt-3 max-w-[760px] text-[18px] leading-[1.6] text-white/80">
-              Explore publications, videos, templates and session outlines to support your Local Youth Council's work — filter by area of impact or by resource type.
+              Explore publications, videos, templates and session outlines to support your Local Youth Council's work.
             </p>
           </div>
         </section>
