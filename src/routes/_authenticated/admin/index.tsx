@@ -54,13 +54,6 @@ const AREA_LABEL: Record<string, string> = {
   general: "General",
 };
 
-const TYPE_LABEL: Record<string, string> = {
-  publication: "Publication",
-  video: "Video",
-  template: "Template",
-  session_outline: "Session Outline",
-  document: "Document",
-};
 
 function KpiCard({
   label,
