@@ -135,8 +135,11 @@ function SortIcon() {
 }
 
 function ResourceCard({ resource }: { resource: ResourceRow }) {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = (resource.description?.length ?? 0) > 180;
   const style = typeStyle[resource.resource_type];
   const year = resource.publication_date ? new Date(resource.publication_date).getFullYear() : null;
+
   const metaParts = [
     resource.author,
     year ? `Published ${year}` : null,
