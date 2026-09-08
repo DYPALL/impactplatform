@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, Info, ListChecks, RefreshCw } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, ListChecks, RefreshCw } from "lucide-react";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import { LEVELS, levelFromPct, type LevelKey } from "./results-data";
 import { AREAS, type QIndicator } from "./content";
@@ -347,16 +347,6 @@ function IndicatorCard({
 
       {isOpen && (
         <div className="mt-6 space-y-7">
-          <div>
-            <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
-              <Info size={15} style={{ color: theme.accent }} /> About This Indicator
-            </p>
-            <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
-              <p className="text-[12px] leading-relaxed text-[#111827]">
-                {content.about}
-              </p>
-            </div>
-          </div>
 
           <div>
             <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
