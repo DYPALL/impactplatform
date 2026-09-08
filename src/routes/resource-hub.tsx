@@ -34,7 +34,7 @@ type ResourceRow = {
 
 type AreaKey = "all" | ResourceRow["area"];
 type TypeKey = "all" | ResourceRow["resource_type"];
-type SortKey = "year_desc" | "year_asc" | "title_asc" | "title_desc";
+type SortKey = "reset" | "year_desc" | "year_asc" | "title_asc" | "title_desc";
 
 const areaFilters: { key: AreaKey; label: string; color: string }[] = [
   { key: "all", label: "All", color: "#502181" },
@@ -54,6 +54,7 @@ const typeFilters: { key: TypeKey; label: string }[] = [
 ];
 
 const sortOptions: { key: SortKey; label: string }[] = [
+  { key: "reset", label: "No filters" },
   { key: "year_desc", label: "Publication Year: Newest to Oldest" },
   { key: "year_asc", label: "Publication Year: Oldest to Newest" },
   { key: "title_asc", label: "Alphabetical: A – Z" },
