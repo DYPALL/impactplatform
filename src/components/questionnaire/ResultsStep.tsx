@@ -234,35 +234,15 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
 
 function FlipCard({ index, text }: { index: number; text: string }) {
   const theme = useAreaTheme();
-  const [flipped, setFlipped] = useState(false);
   return (
-    <button
-      type="button"
-      onClick={() => setFlipped((f) => !f)}
-      aria-label={`Reveal reflection question ${index + 1}`}
-      className="h-[104px] w-full text-left [perspective:1000px]"
-    >
-      <div
-        className="relative h-full w-full transition-transform duration-500"
-        style={{ transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "none" }}
-      >
-        <div
-          className="absolute inset-0 flex flex-col justify-between rounded-xl p-4 text-white"
-          style={{ backfaceVisibility: "hidden", backgroundColor: theme.accent }}
-        >
-          <p className="text-[15px] font-extrabold uppercase tracking-wide">Question {index + 1}</p>
-          <p className="flex items-center gap-2 text-[10px] font-semibold text-white/80">
-            Tap to reveal question... <RefreshCw size={11} />
-          </p>
-        </div>
-        <div
-          className="absolute inset-0 flex items-center rounded-xl border-2 bg-white p-4"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", borderColor: theme.accent }}
-        >
-          <p className="text-[12px] leading-snug text-[#1f2937]">{text}</p>
-        </div>
+    <div className="overflow-hidden rounded-xl bg-white ring-1 ring-black/5">
+      <div className="p-4 text-white" style={{ backgroundColor: theme.accent }}>
+        <p className="text-[15px] font-extrabold uppercase tracking-wide">Question {index + 1}</p>
       </div>
-    </button>
+      <div className="flex items-center p-4">
+        <p className="text-[12px] leading-snug text-[#1f2937]">{text}</p>
+      </div>
+    </div>
   );
 }
 
