@@ -292,8 +292,8 @@ function IndicatorCard({
   return (
     <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
-        <div className="min-w-0">
-          <h3 className="text-[15px] font-extrabold text-[#111827] sm:text-[16px]">
+        <div className="min-w-0 border-l-4 pl-3" style={{ borderColor: theme.accent }}>
+          <h3 className="text-[15px] font-extrabold sm:text-[16px]" style={{ color: theme.accent }}>
             {content.code} {content.title}
           </h3>
           <p className="mt-1 text-[12px] text-[#6b7280]">{content.question}</p>
@@ -318,8 +318,8 @@ function IndicatorCard({
           if (!alwaysOpen) setOpen((o) => !o);
         }}
         aria-expanded={isOpen}
-        className={`mt-4 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-semibold transition ${alwaysOpen ? "cursor-default opacity-80" : ""}`}
-        style={{ borderColor: "#D8D3E4", color: "#111827" }}
+        className={`mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-bold text-white shadow-sm transition hover:opacity-90 ${alwaysOpen ? "cursor-default opacity-80" : ""}`}
+        style={{ backgroundColor: theme.accent }}
       >
         Read more about this indicator
         <ChevronDown size={13} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
