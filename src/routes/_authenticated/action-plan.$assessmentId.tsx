@@ -47,7 +47,7 @@ export const Route = createFileRoute("/_authenticated/action-plan/$assessmentId"
 
 const TABS = [
   { key: "intro", label: "Introduction", icon: Lightbulb },
-  { key: "model", label: "Model & Goal", icon: Target },
+  { key: "model", label: "Goal & Steps", icon: Target },
   { key: "steps", label: "Action Steps", icon: ListChecks },
 ] as const;
 
