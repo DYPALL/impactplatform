@@ -172,13 +172,11 @@ function ActionPlanPage() {
           {tab === "intro" && <Introduction accent={theme.accent} />}
 
           {tab === "model" && (
-            <ModelAndGoal
+            <GoalAndSteps
               accent={theme.accent}
               soft={theme.soft}
               border={theme.border}
               areaName={area.name}
-              model={model}
-              setModel={setModel}
               goal={goal}
               setGoal={setGoal}
               grouped={grouped}
