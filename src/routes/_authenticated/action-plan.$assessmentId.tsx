@@ -79,7 +79,6 @@ function ActionPlanPage() {
       if (!active) return;
       if (data?.area) setAreaKey(data.area as string);
       if (plan) {
-        setModel(plan.model);
         setGoal(plan.goal);
         setSteps(plan.steps);
       }
