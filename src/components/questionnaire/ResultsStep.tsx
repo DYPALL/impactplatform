@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, ListChecks } from "lucide-react";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
@@ -6,6 +6,8 @@ import { LEVELS, levelFromPct, type LevelKey } from "./results-data";
 import { AREAS, type QIndicator } from "./content";
 import { AreaThemeProvider, themeForArea, useAreaTheme } from "./theme";
 import { ScoreMeter } from "./ScoreMeter";
+import { loadActionPlan, makeStep, saveActionPlan, stepId, type ActionPlanStep } from "@/lib/action-plan";
+
 
 
 export type IndicatorResult = { pct: number; level: LevelKey; na?: boolean };
