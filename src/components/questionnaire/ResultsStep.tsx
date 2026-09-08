@@ -355,7 +355,7 @@ function IndicatorCard({
                 <ListChecks size={15} style={{ color: theme.accent }} /> Recommended Action Steps
               </p>
               <span className="text-[11px] font-semibold" style={{ color: theme.accent }}>
-                {Object.values(checked).filter(Boolean).length}/3 selected
+                {selectedCount}/3 selected
               </span>
             </div>
             <p className="mt-1.5 text-[12px] text-[#6b7280]">
@@ -363,9 +363,9 @@ function IndicatorCard({
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
               <ul className="space-y-1">
-                {content.actions.map((a, i) => {
-                  const selectedCount = Object.values(checked).filter(Boolean).length;
-                  const atLimit = !checked[i] && selectedCount >= 3;
+                {content.actions.map((a) => {
+                  const checked = isChecked(a);
+                  const atLimit = !checked && selectedCount >= 3;
                   return (
                     <li key={a}>
                       <label
@@ -373,21 +373,14 @@ function IndicatorCard({
                       >
                         <input
                           type="checkbox"
-                          checked={!!checked[i]}
+                          checked={checked}
                           disabled={atLimit}
-                          onChange={() =>
-                            setChecked((c) => {
-                              if (c[i]) return { ...c, [i]: false };
-                              const count = Object.values(c).filter(Boolean).length;
-                              if (count >= 3) return c;
-                              return { ...c, [i]: true };
-                            })
-                          }
+                          onChange={() => onToggle(a)}
                           style={{ accentColor: theme.accent }}
                           className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer rounded-[3px] border-2 border-[#C9CDD4] disabled:cursor-not-allowed"
                         />
                         <span
-                          className={`text-[12px] leading-snug ${checked[i] ? "font-bold text-[#111827]" : "text-[#374151]"}`}
+                          className={`text-[12px] leading-snug ${checked ? "font-bold text-[#111827]" : "text-[#374151]"}`}
                         >
                           {a}
                         </span>
@@ -398,6 +391,7 @@ function IndicatorCard({
               </ul>
             </div>
           </div>
+
         </div>
       )}
     </article>
