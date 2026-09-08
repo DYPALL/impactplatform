@@ -289,8 +289,6 @@ function IndicatorCard({
     );
   }
 
-  const theme = useAreaTheme();
-
   return (
     <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
