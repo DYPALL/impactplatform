@@ -236,6 +236,8 @@ function ResourceHubPage() {
     const dateValue = (r: ResourceRow) => (r.publication_date ? new Date(r.publication_date).getTime() : 0);
 
     switch (sort) {
+      case "reset":
+        return list;
       case "year_desc":
         return [...list].sort((a, b) => dateValue(b) - dateValue(a) || a.title.localeCompare(b.title));
       case "year_asc":
