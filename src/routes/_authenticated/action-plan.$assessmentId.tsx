@@ -17,7 +17,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
-  ENGAGEMENT_MODELS,
   PROGRESS_OPTIONS,
   loadActionPlan,
   saveActionPlan,
