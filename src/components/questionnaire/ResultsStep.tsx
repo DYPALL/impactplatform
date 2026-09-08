@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, ListChecks, RefreshCw } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, ListChecks } from "lucide-react";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import { LEVELS, levelFromPct, type LevelKey } from "./results-data";
 import { AREAS, type QIndicator } from "./content";
