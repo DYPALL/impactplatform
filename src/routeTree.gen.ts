@@ -20,6 +20,7 @@ import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedResultsIdRouteImport } from './routes/_authenticated/results.$id'
 import { Route as AuthenticatedQuestionnaireAreaRouteImport } from './routes/_authenticated/questionnaire.$area'
+import { Route as AuthenticatedAdminResourcesIndexRouteImport } from './routes/_authenticated/admin/resources.index'
 import { Route as AuthenticatedAdminResourcesNewRouteImport } from './routes/_authenticated/admin/resources.new'
 import { Route as AuthenticatedAdminResourcesIdEditRouteImport } from './routes/_authenticated/admin/resources.$id.edit'
 
@@ -78,6 +79,12 @@ const AuthenticatedQuestionnaireAreaRoute =
     path: '/questionnaire/$area',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminResourcesIndexRoute =
+  AuthenticatedAdminResourcesIndexRouteImport.update({
+    id: '/resources/',
+    path: '/resources/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminResourcesNewRoute =
   AuthenticatedAdminResourcesNewRouteImport.update({
     id: '/resources/new',
@@ -103,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
+  '/admin/resources/': typeof AuthenticatedAdminResourcesIndexRoute
   '/admin/resources/$id/edit': typeof AuthenticatedAdminResourcesIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -116,6 +124,7 @@ export interface FileRoutesByTo {
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
+  '/admin/resources': typeof AuthenticatedAdminResourcesIndexRoute
   '/admin/resources/$id/edit': typeof AuthenticatedAdminResourcesIdEditRoute
 }
 export interface FileRoutesById {
@@ -132,6 +141,7 @@ export interface FileRoutesById {
   '/_authenticated/results/$id': typeof AuthenticatedResultsIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
+  '/_authenticated/admin/resources/': typeof AuthenticatedAdminResourcesIndexRoute
   '/_authenticated/admin/resources/$id/edit': typeof AuthenticatedAdminResourcesIdEditRoute
 }
 export interface FileRouteTypes {
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/results/$id'
     | '/admin/'
     | '/admin/resources/new'
+    | '/admin/resources/'
     | '/admin/resources/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/results/$id'
     | '/admin'
     | '/admin/resources/new'
+    | '/admin/resources'
     | '/admin/resources/$id/edit'
   id:
     | '__root__'
@@ -176,6 +188,7 @@ export interface FileRouteTypes {
     | '/_authenticated/results/$id'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/resources/new'
+    | '/_authenticated/admin/resources/'
     | '/_authenticated/admin/resources/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -266,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQuestionnaireAreaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/resources/': {
+      id: '/_authenticated/admin/resources/'
+      path: '/resources'
+      fullPath: '/admin/resources/'
+      preLoaderRoute: typeof AuthenticatedAdminResourcesIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/resources/new': {
       id: '/_authenticated/admin/resources/new'
       path: '/resources/new'
@@ -286,6 +306,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminResourcesNewRoute: typeof AuthenticatedAdminResourcesNewRoute
+  AuthenticatedAdminResourcesIndexRoute: typeof AuthenticatedAdminResourcesIndexRoute
   AuthenticatedAdminResourcesIdEditRoute: typeof AuthenticatedAdminResourcesIdEditRoute
 }
 
@@ -293,6 +314,8 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
   {
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
     AuthenticatedAdminResourcesNewRoute: AuthenticatedAdminResourcesNewRoute,
+    AuthenticatedAdminResourcesIndexRoute:
+      AuthenticatedAdminResourcesIndexRoute,
     AuthenticatedAdminResourcesIdEditRoute:
       AuthenticatedAdminResourcesIdEditRoute,
   }
