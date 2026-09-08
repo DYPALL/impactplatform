@@ -98,11 +98,11 @@ function ActionPlanPage() {
     }
     setSaving(true);
     const t = setTimeout(async () => {
-      await saveActionPlan(assessmentId, areaKey, { model, goal, steps });
+      await saveActionPlan(assessmentId, areaKey, { goal, steps });
       setSaving(false);
     }, 700);
     return () => clearTimeout(t);
-  }, [model, goal, steps, loaded, assessmentId, areaKey]);
+  }, [goal, steps, loaded, assessmentId, areaKey]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, ActionPlanStep[]>();
