@@ -17,7 +17,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
-  ENGAGEMENT_MODELS,
   PROGRESS_OPTIONS,
   loadActionPlan,
   saveActionPlan,
@@ -48,7 +47,7 @@ export const Route = createFileRoute("/_authenticated/action-plan/$assessmentId"
 
 const TABS = [
   { key: "intro", label: "Introduction", icon: Lightbulb },
-  { key: "model", label: "Model & Goal", icon: Target },
+  { key: "model", label: "Goal & Steps", icon: Target },
   { key: "steps", label: "Action Steps", icon: ListChecks },
 ] as const;
 
@@ -58,7 +57,6 @@ function ActionPlanPage() {
   const { assessmentId } = Route.useParams();
   const [areaKey, setAreaKey] = useState("representativeness");
   const [tab, setTab] = useState<TabKey>("intro");
-  const [model, setModel] = useState("");
   const [goal, setGoal] = useState("");
   const [steps, setSteps] = useState<ActionPlanStep[]>([]);
   const [activeStep, setActiveStep] = useState(0);
@@ -81,7 +79,6 @@ function ActionPlanPage() {
       if (!active) return;
       if (data?.area) setAreaKey(data.area as string);
       if (plan) {
-        setModel(plan.model);
         setGoal(plan.goal);
         setSteps(plan.steps);
       }
@@ -101,11 +98,11 @@ function ActionPlanPage() {
     }
     setSaving(true);
     const t = setTimeout(async () => {
-      await saveActionPlan(assessmentId, areaKey, { model, goal, steps });
+      await saveActionPlan(assessmentId, areaKey, { goal, steps });
       setSaving(false);
     }, 700);
     return () => clearTimeout(t);
-  }, [model, goal, steps, loaded, assessmentId, areaKey]);
+  }, [goal, steps, loaded, assessmentId, areaKey]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, ActionPlanStep[]>();
@@ -175,13 +172,11 @@ function ActionPlanPage() {
           {tab === "intro" && <Introduction accent={theme.accent} />}
 
           {tab === "model" && (
-            <ModelAndGoal
+            <GoalAndSteps
               accent={theme.accent}
               soft={theme.soft}
               border={theme.border}
               areaName={area.name}
-              model={model}
-              setModel={setModel}
               goal={goal}
               setGoal={setGoal}
               grouped={grouped}
@@ -270,15 +265,13 @@ function Introduction({ accent }: { accent: string }) {
   );
 }
 
-/* ------------------------------- Model & Goal -------------------------------- */
+/* ------------------------------- Goal & Steps -------------------------------- */
 
-function ModelAndGoal({
+function GoalAndSteps({
   accent,
   soft,
   border,
   areaName,
-  model,
-  setModel,
   goal,
   setGoal,
   grouped,
@@ -287,8 +280,6 @@ function ModelAndGoal({
   soft: string;
   border: string;
   areaName: string;
-  model: string;
-  setModel: (v: string) => void;
   goal: string;
   setGoal: (v: string) => void;
   grouped: [string, ActionPlanStep[]][];
@@ -298,49 +289,6 @@ function ModelAndGoal({
       <p className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: accent }}>
         {areaName}
       </p>
-
-      <div className="mt-5 rounded-2xl p-5 md:p-6" style={{ backgroundColor: soft, border: `1px solid ${border}` }}>
-        <p className="flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-wide" style={{ color: accent }}>
-          <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f4a261] text-[#1f2937]">
-            <Target size={15} />
-          </span>
-          Model of youth engagement
-        </p>
-        <select
-          value={model}
-          onChange={(e) => setModel(e.target.value)}
-          className="mt-4 w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] font-bold text-[#111827]"
-        >
-          <option value="">Select a model…</option>
-          {ENGAGEMENT_MODELS.map((m) => (
-            <option key={m} value={m}>
-              {m}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="mt-5 rounded-2xl p-5 md:p-6" style={{ backgroundColor: soft, border: `1px solid ${border}` }}>
-        <p className="flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-wide" style={{ color: accent }}>
-          <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f4a261] text-[#1f2937]">
-            <Lightbulb size={15} />
-          </span>
-          Goal
-        </p>
-        <textarea
-          value={goal}
-          maxLength={300}
-          onChange={(e) => setGoal(e.target.value)}
-          placeholder="A clear statement of the overall objective the action plan aims to achieve."
-          className="mt-4 h-28 w-full resize-none rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[13px] text-[#111827] placeholder:italic placeholder:text-[#9ca3af]"
-        />
-        <p className="mt-1 text-right text-[11px] font-semibold" style={{ color: accent }}>
-          {goal.length}/300
-        </p>
-        <p className="mt-2 text-[12px] italic text-[#6b7280]">
-          E.g. To establish a Youth Advisory Board within my municipality by the end of 2026
-        </p>
-      </div>
 
       <div className="mt-5 rounded-2xl p-5 md:p-6" style={{ backgroundColor: soft, border: `1px solid ${border}` }}>
         <p className="flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-wide" style={{ color: accent }}>
@@ -373,6 +321,28 @@ function ModelAndGoal({
             ))}
           </div>
         )}
+      </div>
+
+      <div className="mt-5 rounded-2xl p-5 md:p-6" style={{ backgroundColor: soft, border: `1px solid ${border}` }}>
+        <p className="flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-wide" style={{ color: accent }}>
+          <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f4a261] text-[#1f2937]">
+            <Lightbulb size={15} />
+          </span>
+          Goal
+        </p>
+        <textarea
+          value={goal}
+          maxLength={300}
+          onChange={(e) => setGoal(e.target.value)}
+          placeholder="A clear statement of the overall objective the action plan aims to achieve."
+          className="mt-4 h-28 w-full resize-none rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[13px] text-[#111827] placeholder:italic placeholder:text-[#9ca3af]"
+        />
+        <p className="mt-1 text-right text-[11px] font-semibold" style={{ color: accent }}>
+          {goal.length}/300
+        </p>
+        <p className="mt-2 text-[12px] italic text-[#6b7280]">
+          E.g. To establish a Youth Advisory Board within my municipality by the end of 2026
+        </p>
       </div>
     </section>
   );
