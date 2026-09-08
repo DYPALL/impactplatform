@@ -384,9 +384,7 @@ function ActionSteps({
   soft,
   border,
   steps,
-  activeStep,
-  setActiveStep,
-  current,
+  grouped,
   update,
   assessmentId,
 }: {
@@ -394,12 +392,17 @@ function ActionSteps({
   soft: string;
   border: string;
   steps: ActionPlanStep[];
-  activeStep: number;
-  setActiveStep: (i: number) => void;
-  current?: ActionPlanStep;
+  grouped: [string, ActionPlanStep[]][];
   update: (id: string, patch: Partial<ActionPlanStep>) => void;
   assessmentId: string;
 }) {
+  const [indicator, setIndicator] = useState<string>("");
+  const [stepId, setStepId] = useState<string>("");
+
+  const activeIndicator = grouped.find(([k]) => k === indicator) ?? grouped[0];
+  const indicatorSteps = activeIndicator?.[1] ?? [];
+  const current = indicatorSteps.find((s) => s.id === stepId) ?? indicatorSteps[0];
+
   const inputCls =
     "w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[13px] text-[#111827] placeholder:italic placeholder:text-[#9ca3af]";
 
