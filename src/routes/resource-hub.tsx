@@ -345,7 +345,15 @@ function ResourceHubPage() {
                 <select
                   id="sort"
                   value={sort}
-                  onChange={(e) => setSort(e.target.value as SortKey)}
+                  onChange={(e) => {
+                    const value = e.target.value as SortKey;
+                    if (value === "reset") {
+                      setSearch("");
+                      setArea("all");
+                      setType("all");
+                    }
+                    setSort(value);
+                  }}
                   className="bg-transparent text-[13px] font-medium text-[#374151] outline-none"
                 >
                   {sortOptions.map((o) => (
