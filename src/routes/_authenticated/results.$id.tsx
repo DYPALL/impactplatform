@@ -73,7 +73,7 @@ function SavedResultsPage() {
             This assessment could not be found.
           </p>
         )}
-        {percentages && <ResultsStep percentages={percentages} areaKey={areaKey} />}
+        {percentages && <ResultsStep percentages={percentages} areaKey={areaKey} assessmentId={id} />}
       </main>
     </div>
   );

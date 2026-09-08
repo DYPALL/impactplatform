@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      action_plans: {
+        Row: {
+          area: Database["public"]["Enums"]["resource_area"]
+          assessment_id: string
+          created_at: string
+          goal: string
+          id: string
+          model: string
+          steps: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          area?: Database["public"]["Enums"]["resource_area"]
+          assessment_id: string
+          created_at?: string
+          goal?: string
+          id?: string
+          model?: string
+          steps?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          area?: Database["public"]["Enums"]["resource_area"]
+          assessment_id?: string
+          created_at?: string
+          goal?: string
+          id?: string
+          model?: string
+          steps?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "action_plans_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: true
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessments: {
         Row: {
           answers: Json

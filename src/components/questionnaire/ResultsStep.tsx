@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, ListChecks } from "lucide-react";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
@@ -6,6 +6,8 @@ import { LEVELS, levelFromPct, type LevelKey } from "./results-data";
 import { AREAS, type QIndicator } from "./content";
 import { AreaThemeProvider, themeForArea, useAreaTheme } from "./theme";
 import { ScoreMeter } from "./ScoreMeter";
+import { loadActionPlan, makeStep, saveActionPlan, stepId, type ActionPlanStep } from "@/lib/action-plan";
+
 
 
 export type IndicatorResult = { pct: number; level: LevelKey; na?: boolean };
@@ -253,15 +255,21 @@ function IndicatorCard({
   result,
   defaultOpen,
   alwaysOpen,
+  selectedIds,
+  onToggle,
 }: {
   content: QIndicator;
   result: IndicatorResult;
   defaultOpen?: boolean;
   alwaysOpen?: boolean;
+  selectedIds: string[];
+  onToggle: (action: string) => void;
 }) {
   const theme = useAreaTheme();
   const [open, setOpen] = useState(alwaysOpen || !!defaultOpen);
-  const [checked, setChecked] = useState<Record<number, boolean>>({});
+  const isChecked = (action: string) => selectedIds.includes(stepId(content.code, action));
+  const selectedCount = content.actions.filter((a) => isChecked(a)).length;
+
 
   const isOpen = alwaysOpen || open;
 
@@ -347,7 +355,7 @@ function IndicatorCard({
                 <ListChecks size={15} style={{ color: theme.accent }} /> Recommended Action Steps
               </p>
               <span className="text-[11px] font-semibold" style={{ color: theme.accent }}>
-                {Object.values(checked).filter(Boolean).length}/3 selected
+                {selectedCount}/3 selected
               </span>
             </div>
             <p className="mt-1.5 text-[12px] text-[#6b7280]">
@@ -355,9 +363,9 @@ function IndicatorCard({
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
               <ul className="space-y-1">
-                {content.actions.map((a, i) => {
-                  const selectedCount = Object.values(checked).filter(Boolean).length;
-                  const atLimit = !checked[i] && selectedCount >= 3;
+                {content.actions.map((a) => {
+                  const checked = isChecked(a);
+                  const atLimit = !checked && selectedCount >= 3;
                   return (
                     <li key={a}>
                       <label
@@ -365,21 +373,14 @@ function IndicatorCard({
                       >
                         <input
                           type="checkbox"
-                          checked={!!checked[i]}
+                          checked={checked}
                           disabled={atLimit}
-                          onChange={() =>
-                            setChecked((c) => {
-                              if (c[i]) return { ...c, [i]: false };
-                              const count = Object.values(c).filter(Boolean).length;
-                              if (count >= 3) return c;
-                              return { ...c, [i]: true };
-                            })
-                          }
+                          onChange={() => onToggle(a)}
                           style={{ accentColor: theme.accent }}
                           className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer rounded-[3px] border-2 border-[#C9CDD4] disabled:cursor-not-allowed"
                         />
                         <span
-                          className={`text-[12px] leading-snug ${checked[i] ? "font-bold text-[#111827]" : "text-[#374151]"}`}
+                          className={`text-[12px] leading-snug ${checked ? "font-bold text-[#111827]" : "text-[#374151]"}`}
                         >
                           {a}
                         </span>
@@ -390,6 +391,7 @@ function IndicatorCard({
               </ul>
             </div>
           </div>
+
         </div>
       )}
     </article>
@@ -398,7 +400,16 @@ function IndicatorCard({
 
 /* --------------------------------- Results ---------------------------------- */
 
-export function ResultsStep({ percentages, areaKey = "representativeness" }: { percentages: number[]; areaKey?: string }) {
+export function ResultsStep({
+  percentages,
+  areaKey = "representativeness",
+  assessmentId,
+}: {
+  percentages: number[];
+  areaKey?: string;
+  assessmentId?: string | null;
+}) {
+
   const area = AREAS[areaKey] ?? AREAS["representativeness"]!;
   const indicators = area.indicators;
   const areaNumber = indicators[0]?.code.split(".")[0] ?? "1";
@@ -414,6 +425,35 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
   const sorted = [...scored].sort((a, b) => a.pct - b.pct);
   const best = sorted.length ? indicators[sorted[sorted.length - 1]!.i]!.title : null;
   const weakest = sorted.slice(0, 3).map((r) => indicators[r.i]!.title);
+
+  const [planSteps, setPlanSteps] = useState<ActionPlanStep[]>([]);
+
+  useEffect(() => {
+    if (!assessmentId) return;
+    let active = true;
+    loadActionPlan(assessmentId).then((plan) => {
+      if (active && plan) setPlanSteps(plan.steps);
+    });
+    return () => {
+      active = false;
+    };
+  }, [assessmentId]);
+
+  const toggleStep = (indicator: QIndicator, action: string) => {
+    const id = stepId(indicator.code, action);
+    setPlanSteps((prev) => {
+      const exists = prev.some((s) => s.id === id);
+      const next = exists
+        ? prev.filter((s) => s.id !== id)
+        : [...prev, makeStep(indicator.code, `${indicator.code} ${indicator.title}`, action)];
+      if (assessmentId) void saveActionPlan(assessmentId, areaKey, { steps: next });
+      return next;
+    });
+  };
+
+  const selectedIds = planSteps.map((s) => s.id);
+
+
 
 
   return (
@@ -465,8 +505,16 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
 
         <div className="mt-5 space-y-5">
           {indicators.map((c, i) => (
-            <IndicatorCard key={c.code} content={c} result={results[i]!} defaultOpen={i === 0} />
+            <IndicatorCard
+              key={c.code}
+              content={c}
+              result={results[i]!}
+              defaultOpen={i === 0}
+              selectedIds={selectedIds}
+              onToggle={(action) => toggleStep(c, action)}
+            />
           ))}
+
         </div>
       </div>
 
@@ -483,13 +531,25 @@ export function ResultsStep({ percentages, areaKey = "representativeness" }: { p
             </p>
           </div>
           <div className="flex flex-col items-start gap-2.5">
-            <Link
-              to="/dashboard"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
-              style={{ color: theme.accent }}
-            >
-              Build your action plan <ArrowRight size={14} />
-            </Link>
+            {assessmentId ? (
+              <Link
+                to="/action-plan/$assessmentId"
+                params={{ assessmentId }}
+                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
+                style={{ color: theme.accent }}
+              >
+                Build your action plan <ArrowRight size={14} />
+              </Link>
+            ) : (
+              <Link
+                to="/dashboard"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
+                style={{ color: theme.accent }}
+              >
+                Build your action plan <ArrowRight size={14} />
+              </Link>
+            )}
+
             <Link
               to="/dashboard"
               className="text-left text-[12px] font-semibold text-white/90 underline underline-offset-2 transition hover:text-white"

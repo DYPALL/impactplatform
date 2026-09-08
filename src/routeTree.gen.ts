@@ -20,6 +20,7 @@ import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedResultsIdRouteImport } from './routes/_authenticated/results.$id'
 import { Route as AuthenticatedQuestionnaireAreaRouteImport } from './routes/_authenticated/questionnaire.$area'
+import { Route as AuthenticatedActionPlanAssessmentIdRouteImport } from './routes/_authenticated/action-plan.$assessmentId'
 import { Route as AuthenticatedAdminResourcesIndexRouteImport } from './routes/_authenticated/admin/resources.index'
 import { Route as AuthenticatedAdminResourcesNewRouteImport } from './routes/_authenticated/admin/resources.new'
 import { Route as AuthenticatedAdminResourcesIdEditRouteImport } from './routes/_authenticated/admin/resources.$id.edit'
@@ -79,6 +80,12 @@ const AuthenticatedQuestionnaireAreaRoute =
     path: '/questionnaire/$area',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedActionPlanAssessmentIdRoute =
+  AuthenticatedActionPlanAssessmentIdRouteImport.update({
+    id: '/action-plan/$assessmentId',
+    path: '/action-plan/$assessmentId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminResourcesIndexRoute =
   AuthenticatedAdminResourcesIndexRouteImport.update({
     id: '/resources/',
@@ -106,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
   '/questionnaire/$area': typeof AuthenticatedQuestionnaireAreaRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -120,6 +128,7 @@ export interface FileRoutesByTo {
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
   '/questionnaire/$area': typeof AuthenticatedQuestionnaireAreaRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -137,6 +146,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
   '/_authenticated/questionnaire/$area': typeof AuthenticatedQuestionnaireAreaRoute
   '/_authenticated/results/$id': typeof AuthenticatedResultsIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/profile'
+    | '/action-plan/$assessmentId'
     | '/questionnaire/$area'
     | '/results/$id'
     | '/admin/'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/send-us-a-message'
     | '/dashboard'
     | '/profile'
+    | '/action-plan/$assessmentId'
     | '/questionnaire/$area'
     | '/results/$id'
     | '/admin'
@@ -184,6 +196,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
+    | '/_authenticated/action-plan/$assessmentId'
     | '/_authenticated/questionnaire/$area'
     | '/_authenticated/results/$id'
     | '/_authenticated/admin/'
@@ -279,6 +292,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQuestionnaireAreaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/action-plan/$assessmentId': {
+      id: '/_authenticated/action-plan/$assessmentId'
+      path: '/action-plan/$assessmentId'
+      fullPath: '/action-plan/$assessmentId'
+      preLoaderRoute: typeof AuthenticatedActionPlanAssessmentIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/resources/': {
       id: '/_authenticated/admin/resources/'
       path: '/resources'
@@ -329,6 +349,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedActionPlanAssessmentIdRoute: typeof AuthenticatedActionPlanAssessmentIdRoute
   AuthenticatedQuestionnaireAreaRoute: typeof AuthenticatedQuestionnaireAreaRoute
   AuthenticatedResultsIdRoute: typeof AuthenticatedResultsIdRoute
 }
@@ -337,6 +358,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedActionPlanAssessmentIdRoute:
+    AuthenticatedActionPlanAssessmentIdRoute,
   AuthenticatedQuestionnaireAreaRoute: AuthenticatedQuestionnaireAreaRoute,
   AuthenticatedResultsIdRoute: AuthenticatedResultsIdRoute,
 }
