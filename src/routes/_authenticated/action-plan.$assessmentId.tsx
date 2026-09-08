@@ -59,7 +59,7 @@ function ActionPlanPage() {
   const [tab, setTab] = useState<TabKey>("intro");
   const [goal, setGoal] = useState("");
   const [steps, setSteps] = useState<ActionPlanStep[]>([]);
-  const [activeStep, setActiveStep] = useState(0);
+  
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
   const skipSave = useRef(true);
@@ -118,7 +118,6 @@ function ActionPlanPage() {
     setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
 
   const tabIndex = TABS.findIndex((t) => t.key === tab);
-  const current = steps[activeStep];
 
   const Tabs = () => (
     <div className="flex flex-wrap items-center justify-center gap-2">
@@ -189,9 +188,7 @@ function ActionPlanPage() {
               soft={theme.soft}
               border={theme.border}
               steps={steps}
-              activeStep={activeStep}
-              setActiveStep={setActiveStep}
-              current={current}
+              grouped={grouped}
               update={update}
               assessmentId={assessmentId}
             />
@@ -427,15 +424,40 @@ function ActionSteps({
 
   return (
     <section className="rounded-3xl bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-8">
-      {/* Step selector bar */}
+      {/* Indicator selector bar */}
       <div className="flex flex-wrap gap-2">
-        {steps.map((s, i) => {
-          const on = i === activeStep;
+        {grouped.map(([key]) => {
+          const on = key === (activeIndicator?.[0] ?? "");
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => {
+                setIndicator(key);
+                setStepId("");
+              }}
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold transition"
+              style={
+                on
+                  ? { backgroundColor: accent, color: "#fff" }
+                  : { backgroundColor: soft, color: accent, border: `1px solid ${border}` }
+              }
+            >
+              {key}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Step selector bar */}
+      <div className="mt-3 flex flex-wrap gap-2">
+        {indicatorSteps.map((s, i) => {
+          const on = s.id === current?.id;
           return (
             <button
               key={s.id}
               type="button"
-              onClick={() => setActiveStep(i)}
+              onClick={() => setStepId(s.id)}
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold transition"
               style={
                 on
