@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Search, Filter, Pencil, Trash2, Users, ClipboardCheck, Activity, ListChecks, ArrowLeft, CheckCircle2, HeartPulse } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Users, ListChecks, ArrowLeft, CheckCircle2, HeartPulse } from "lucide-react";
 import { BarChart, Bar, XAxis, ResponsiveContainer, PieChart, Pie, Cell, Tooltip, CartesianGrid } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
+import { ManageResources } from "@/components/admin/ManageResources";
+
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({
