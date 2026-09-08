@@ -426,6 +426,35 @@ export function ResultsStep({
   const best = sorted.length ? indicators[sorted[sorted.length - 1]!.i]!.title : null;
   const weakest = sorted.slice(0, 3).map((r) => indicators[r.i]!.title);
 
+  const [planSteps, setPlanSteps] = useState<ActionPlanStep[]>([]);
+
+  useEffect(() => {
+    if (!assessmentId) return;
+    let active = true;
+    loadActionPlan(assessmentId).then((plan) => {
+      if (active && plan) setPlanSteps(plan.steps);
+    });
+    return () => {
+      active = false;
+    };
+  }, [assessmentId]);
+
+  const toggleStep = (indicator: QIndicator, action: string) => {
+    const id = stepId(indicator.code, action);
+    setPlanSteps((prev) => {
+      const exists = prev.some((s) => s.id === id);
+      const next = exists
+        ? prev.filter((s) => s.id !== id)
+        : [...prev, makeStep(indicator.code, `${indicator.code} ${indicator.title}`, action)];
+      if (assessmentId) void saveActionPlan(assessmentId, areaKey, { steps: next });
+      return next;
+    });
+  };
+
+  const selectedIds = planSteps.map((s) => s.id);
+
+
+
 
   return (
     <AreaThemeProvider areaKey={areaKey}>
