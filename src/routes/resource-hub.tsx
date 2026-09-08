@@ -34,7 +34,7 @@ type ResourceRow = {
 
 type AreaKey = "all" | ResourceRow["area"];
 type TypeKey = "all" | ResourceRow["resource_type"];
-type SortKey = "year_desc" | "year_asc" | "title_asc" | "title_desc";
+type SortKey = "reset" | "year_desc" | "year_asc" | "title_asc" | "title_desc";
 
 const areaFilters: { key: AreaKey; label: string; color: string }[] = [
   { key: "all", label: "All", color: "#502181" },
@@ -54,6 +54,7 @@ const typeFilters: { key: TypeKey; label: string }[] = [
 ];
 
 const sortOptions: { key: SortKey; label: string }[] = [
+  { key: "reset", label: "No filters" },
   { key: "year_desc", label: "Publication Year: Newest to Oldest" },
   { key: "year_asc", label: "Publication Year: Oldest to Newest" },
   { key: "title_asc", label: "Alphabetical: A – Z" },
@@ -235,6 +236,8 @@ function ResourceHubPage() {
     const dateValue = (r: ResourceRow) => (r.publication_date ? new Date(r.publication_date).getTime() : 0);
 
     switch (sort) {
+      case "reset":
+        return list;
       case "year_desc":
         return [...list].sort((a, b) => dateValue(b) - dateValue(a) || a.title.localeCompare(b.title));
       case "year_asc":
@@ -342,7 +345,15 @@ function ResourceHubPage() {
                 <select
                   id="sort"
                   value={sort}
-                  onChange={(e) => setSort(e.target.value as SortKey)}
+                  onChange={(e) => {
+                    const value = e.target.value as SortKey;
+                    if (value === "reset") {
+                      setSearch("");
+                      setArea("all");
+                      setType("all");
+                    }
+                    setSort(value);
+                  }}
                   className="bg-transparent text-[13px] font-medium text-[#374151] outline-none"
                 >
                   {sortOptions.map((o) => (
