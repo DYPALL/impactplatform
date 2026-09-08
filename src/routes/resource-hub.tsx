@@ -134,6 +134,31 @@ function SortIcon() {
   );
 }
 
+function FilterIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M22 3H2L10 12.46V19L14 21V12.46L22 3Z" stroke="#502181" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M6 9L12 15L18 9" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function ResourceCard({ resource }: { resource: ResourceRow }) {
   const [expanded, setExpanded] = useState(false);
   const isLong = (resource.description?.length ?? 0) > 180;
@@ -284,66 +309,57 @@ function ResourceHubPage() {
             />
           </div>
 
-          <div className="mt-5 flex flex-col gap-4 sm:mt-6 sm:gap-5">
-            <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-              <span className="text-[13px] font-bold text-[#111827] sm:text-[14px]">Area</span>
-              <div className="flex flex-wrap gap-2 sm:gap-3">
-                {areaFilters.map((f) => {
-                  const active = area === f.key;
-                  return (
-                    <button
-                      key={f.key}
-                      onClick={() => setArea(f.key)}
-                      className="rounded-full px-3 py-2 text-[13px] font-bold transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
-                      style={
-                        active
-                          ? { backgroundColor: f.color, color: "#ffffff", boxShadow: "0 0 0 3px rgba(0,0,0,0.08)" }
-                          : { backgroundColor: `${f.color}22`, color: f.color }
-                      }
-                    >
+          <div className="mt-5 grid grid-cols-1 gap-3 sm:mt-6 sm:grid-cols-2 lg:grid-cols-4 lg:items-end">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="area-filter" className="text-[13px] font-bold text-[#111827]">Filter by area</label>
+              <div className="relative">
+                <select
+                  id="area-filter"
+                  value={area}
+                  onChange={(e) => setArea(e.target.value as AreaKey)}
+                  className="h-[44px] w-full cursor-pointer appearance-none rounded-xl border border-[#e5e7eb] bg-white pl-3 pr-10 text-[13px] font-medium text-[#374151] outline-none transition focus:border-[color:var(--impact-purple)] focus:ring-2 focus:ring-[color:var(--impact-purple)]/20 sm:h-[48px] sm:text-[14px]"
+                >
+                  {areaFilters.map((f) => (
+                    <option key={f.key} value={f.key}>
                       {f.label}
-                    </button>
-                  );
-                })}
+                    </option>
+                  ))}
+                </select>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                  <ChevronDownIcon />
+                </span>
               </div>
             </div>
 
-            <div className="flex flex-col gap-2.5 border-t border-[#f1f2f4] pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 sm:border-t-0 sm:pt-0">
-              <span className="text-[13px] font-bold text-[#111827] sm:text-[14px]">Type</span>
-              <div className="flex flex-wrap gap-2 sm:gap-3">
-                {typeFilters.map((f) => {
-                  const active = type === f.key;
-                  return (
-                    <button
-                      key={f.key}
-                      onClick={() => setType(f.key)}
-                      className={
-                        active
-                          ? "rounded-full bg-[#502181] px-3 py-2 text-[13px] font-bold text-white transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
-                          : "rounded-full border border-[#e5e7eb] bg-[#f3f4f6] px-3 py-2 text-[13px] font-bold text-[#6b7280] transition hover:bg-[#e5e7eb] sm:px-[14px] sm:py-[10px] sm:text-[14px]"
-                      }
-                    >
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="type-filter" className="text-[13px] font-bold text-[#111827]">Filter by type</label>
+              <div className="relative">
+                <select
+                  id="type-filter"
+                  value={type}
+                  onChange={(e) => setType(e.target.value as TypeKey)}
+                  className="h-[44px] w-full cursor-pointer appearance-none rounded-xl border border-[#e5e7eb] bg-white pl-3 pr-10 text-[13px] font-medium text-[#374151] outline-none transition focus:border-[color:var(--impact-purple)] focus:ring-2 focus:ring-[color:var(--impact-purple)]/20 sm:h-[48px] sm:text-[14px]"
+                >
+                  {typeFilters.map((f) => (
+                    <option key={f.key} value={f.key}>
                       {f.label}
-                    </button>
-                  );
-                })}
+                    </option>
+                  ))}
+                </select>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                  <ChevronDownIcon />
+                </span>
               </div>
             </div>
 
-            <div className="flex flex-col gap-3 border-t border-[#f1f2f4] pt-4 sm:flex-row sm:items-center sm:justify-between">
-              <span className="text-[13px] font-semibold text-[#6b7280]">
-                {filtered.length} resource{filtered.length === 1 ? "" : "s"} found
-              </span>
-              <div className="flex w-full items-center justify-between gap-2 rounded-xl border border-[#e5e7eb] bg-white px-3 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.04)] sm:w-auto">
-                <div className="flex items-center gap-2">
-                  <SortIcon />
-                  <label htmlFor="sort" className="text-[13px] font-bold text-[#111827]">Sort by</label>
-                </div>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="sort" className="text-[13px] font-bold text-[#111827]">Sort by</label>
+              <div className="relative">
                 <select
                   id="sort"
                   value={sort}
                   onChange={(e) => setSort(e.target.value as SortKey)}
-                  className="bg-transparent text-[13px] font-medium text-[#374151] outline-none"
+                  className="h-[44px] w-full cursor-pointer appearance-none rounded-xl border border-[#e5e7eb] bg-white pl-3 pr-10 text-[13px] font-medium text-[#374151] outline-none transition focus:border-[color:var(--impact-purple)] focus:ring-2 focus:ring-[color:var(--impact-purple)]/20 sm:h-[48px] sm:text-[14px]"
                 >
                   {sortOptions.map((o) => (
                     <option key={o.key} value={o.key}>
@@ -351,8 +367,36 @@ function ResourceHubPage() {
                     </option>
                   ))}
                 </select>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                  <SortIcon />
+                </span>
               </div>
             </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setSearch("");
+                setArea("all");
+                setType("all");
+                setSort("year_desc");
+              }}
+              className="inline-flex h-[44px] items-center justify-center gap-2 rounded-xl border border-[#e5e7eb] bg-white px-4 text-[13px] font-bold text-[#6b7280] shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:border-[color:var(--impact-purple)] hover:text-[color:var(--impact-purple)] sm:h-[48px] sm:text-[14px]"
+            >
+              <XIcon />
+              Clear filters
+            </button>
+          </div>
+
+          <div className="mt-5 flex items-center justify-between border-t border-[#f1f2f4] pt-4 sm:mt-6">
+            <span className="text-[13px] font-semibold text-[#6b7280]">
+              {filtered.length} resource{filtered.length === 1 ? "" : "s"} found
+            </span>
+            {(search || area !== "all" || type !== "all" || sort !== "year_desc") && (
+              <span className="text-[13px] font-medium text-[color:var(--impact-purple)]">
+                Filters active
+              </span>
+            )}
           </div>
         </section>
 
