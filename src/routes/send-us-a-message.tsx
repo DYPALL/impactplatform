@@ -111,14 +111,14 @@ function ContactPage() {
 
               <div className="flex flex-col gap-1.5">
                 <label className="border-l-4 border-[#e84393] pl-3 text-[14px] font-bold text-[#111827]">
-                  Organisation / Institution
+                  Local Youth Council / Municipality
                 </label>
                 <input
                   type="text"
                   name="organisation"
                   value={form.organisation}
                   onChange={handleChange}
-                  placeholder="Your organisation or institution"
+                  placeholder="Your Local Youth Council or Municipality"
                   className="h-[52px] rounded-[12px] border border-[#e5e7eb] px-4 text-[15px] text-[#111827] placeholder-[#9ca3af] outline-none focus:border-[color:var(--impact-pink)]"
                 />
               </div>
