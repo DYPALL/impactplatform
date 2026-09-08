@@ -505,8 +505,16 @@ export function ResultsStep({
 
         <div className="mt-5 space-y-5">
           {indicators.map((c, i) => (
-            <IndicatorCard key={c.code} content={c} result={results[i]!} defaultOpen={i === 0} />
+            <IndicatorCard
+              key={c.code}
+              content={c}
+              result={results[i]!}
+              defaultOpen={i === 0}
+              selectedIds={selectedIds}
+              onToggle={(action) => toggleStep(c, action)}
+            />
           ))}
+
         </div>
       </div>
 
