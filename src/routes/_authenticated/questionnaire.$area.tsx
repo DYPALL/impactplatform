@@ -287,7 +287,7 @@ function QuestionnairePage() {
             }}
           />
         )}
-        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} areaKey={areaContent.key} />}
+        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} areaKey={areaContent.key} assessmentId={assessmentId} />}
 
         {/* Nav */}
         {step < TOTAL_STEPS && (
