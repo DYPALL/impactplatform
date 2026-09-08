@@ -409,7 +409,7 @@ function IndicatorCard({
                           className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer rounded-[3px] border-2 border-[#C9CDD4] disabled:cursor-not-allowed"
                         />
                         <span
-                          className={`text-[12px] leading-snug ${checked[i] ? "text-[#9ca3af] line-through" : "text-[#374151]"}`}
+                          className={`text-[12px] leading-snug ${checked[i] ? "font-bold text-[#111827]" : "text-[#374151]"}`}
                         >
                           {a}
                         </span>
