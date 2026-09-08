@@ -166,7 +166,21 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
             {metaParts.join(" · ")}
           </p>
         )}
-        <p className="flex-1 text-[14px] leading-[1.7] text-[#6b7280]">{resource.description}</p>
+        <div className="flex-1">
+          <p className="text-[14px] leading-[1.7] text-[#6b7280]">
+            {isLong && !expanded ? `${resource.description.slice(0, 160).trimEnd()}…` : resource.description}
+          </p>
+          {isLong && (
+            <button
+              type="button"
+              onClick={() => setExpanded((v) => !v)}
+              className="mt-1 text-[13px] font-bold text-[color:var(--impact-purple)] underline underline-offset-2 transition hover:opacity-80"
+            >
+              {expanded ? "Read less" : "Read more"}
+            </button>
+          )}
+        </div>
+
         {resource.url ? (
           <a
             href={resource.url}
