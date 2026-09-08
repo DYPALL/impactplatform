@@ -400,7 +400,16 @@ function IndicatorCard({
 
 /* --------------------------------- Results ---------------------------------- */
 
-export function ResultsStep({ percentages, areaKey = "representativeness" }: { percentages: number[]; areaKey?: string }) {
+export function ResultsStep({
+  percentages,
+  areaKey = "representativeness",
+  assessmentId,
+}: {
+  percentages: number[];
+  areaKey?: string;
+  assessmentId?: string | null;
+}) {
+
   const area = AREAS[areaKey] ?? AREAS["representativeness"]!;
   const indicators = area.indicators;
   const areaNumber = indicators[0]?.code.split(".")[0] ?? "1";
