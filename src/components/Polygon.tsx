@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 export function Polygon({
   size = 60,
@@ -21,6 +21,15 @@ export function Polygon({
   const duration = floatDuration ?? 7 + (size % 5);
   const delay = floatDelay ?? (size % 7) * -0.6;
   const ref = useRef<HTMLDivElement | null>(null);
+  const innerRef = useRef<HTMLDivElement | null>(null);
+
+  // Sync float phase to a global clock so shapes continue where they were across page changes.
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    const phase = (Date.now() / 1000) % duration;
+    el.style.animationDelay = `${delay - phase}s`;
+  }, [duration, delay]);
 
   return (
     <div
@@ -36,6 +45,7 @@ export function Polygon({
       }}
     >
       <div
+        ref={innerRef}
         style={{
           width: "100%",
           height: "100%",
