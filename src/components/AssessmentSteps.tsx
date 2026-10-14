@@ -10,11 +10,11 @@ import step4 from "@/assets/step-4.webp.asset.json";
 import actionPhoto from "@/assets/cta-photo.webp.asset.json";
 
 const steps = [
-  { title: "Start assessing", body: "Take a fresh look at your Local Youth Council. Start with where you are today.", image: step1.url, tone: "steps-mint" },
-  { title: "Choose your focus", body: "Pick one thematic area, or explore all four to see the bigger picture.", image: step2.url, tone: "steps-peach" },
-  { title: "Share your answers", body: "Reflect together and rate each indicator. Allow 15–30 minutes for your questionnaire.", image: step3.url, tone: "steps-blue" },
-  { title: "Discover your results", body: "See your scoreboard. Sign-up to unlock detailed feedback and reflection questions.", image: step4.url, tone: "steps-rose" },
-  { title: "Plan your next steps", body: "Choose actions, set a goal and agree who will do what, when and with which resources.", image: actionPhoto.url, tone: "steps-lilac" },
+  { title: "Start assessing", body: "Choose your starting point. Create an account when you are ready to unlock your full results and save your progress.", image: step1.url, tone: "steps-purple" },
+  { title: "Pick a focus area", body: "Choose one of the IMPACT thematic areas to start with, or run the full self-assessment across all dimensions.", image: step2.url, tone: "steps-teal" },
+  { title: "Answer the questionnaire", body: "Rate your council against each indicator. It takes 15–30 minutes and you can save your progress anytime.", image: step3.url, tone: "steps-orange" },
+  { title: "Review your results", body: "Explore your visual scoreboard, then Sign-up for detailed feedback and reflection questions saved to your account.", image: step4.url, tone: "steps-pink" },
+  { title: "Build your action plan", body: "Select your next steps, set a goal and organise who will do what, when and with which resources.", image: actionPhoto.url, tone: "steps-plum" },
 ];
 
 export function AssessmentSteps() {
@@ -39,9 +39,9 @@ export function AssessmentSteps() {
         <div className="grid items-end gap-6 md:grid-cols-[1fr_1.3fr] md:gap-16">
           <div className="max-w-[340px]">
             <span className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground" aria-hidden="true"><ArrowUpRight size={20} /></span>
-            <p className="text-sm leading-relaxed text-muted-foreground">From your first answers to your next actions. Five steps to reflect together and strengthen your Local Youth Council.</p>
+            <p className="text-sm leading-relaxed text-muted-foreground">Five simple steps to measure your Local Youth Council's impact, reflect together as a team, and turn results into concrete action.</p>
           </div>
-          <h2 id="assessment-steps-title" className="text-4xl leading-[1.1] tracking-normal text-foreground lg:text-5xl">Your impact,<br />step by step.</h2>
+          <h2 id="assessment-steps-title" className="text-4xl leading-[1.1] tracking-normal text-[color:var(--impact-purple)] lg:text-5xl">How to start assessing?</h2>
         </div>
 
         <div ref={carouselRef} className="mt-10 overflow-hidden">

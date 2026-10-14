@@ -288,16 +288,17 @@
 .indicator-result.score-level-3 { background-color: var(--score-fully-soft); }
 
 :root {
-  --steps-mint: oklch(0.9 0.12 139);
-  --steps-peach: oklch(0.79 0.14 51);
-  --steps-blue: oklch(0.83 0.06 242);
-  --steps-rose: oklch(0.88 0.07 355);
-  --steps-lilac: oklch(0.86 0.07 303);
+  --steps-purple: color-mix(in oklab, var(--impact-purple) 14%, white);
+  --steps-teal: color-mix(in oklab, var(--impact-green) 16%, white);
+  --steps-orange: color-mix(in oklab, var(--impact-orange) 22%, white);
+  --steps-pink: color-mix(in oklab, var(--impact-pink) 13%, white);
+  --steps-plum: color-mix(in oklab, var(--impact-purple) 22%, white);
   --steps-ink: oklch(0.2 0.02 265);
+
 }
 .assessment-step-card { min-height: 340px; color: var(--steps-ink); }
-.steps-mint { background: var(--steps-mint); }
-.steps-peach { background: var(--steps-peach); }
-.steps-blue { background: var(--steps-blue); }
-.steps-rose { background: var(--steps-rose); }
-.steps-lilac { background: var(--steps-lilac); }
+.steps-purple { background: var(--steps-purple); }
+.steps-teal { background: var(--steps-teal); }
+.steps-orange { background: var(--steps-orange); }
+.steps-pink { background: var(--steps-pink); }
+.steps-plum { background: var(--steps-plum); }
