@@ -33,8 +33,10 @@ type ResourceRow = {
   area: "representativeness" | "governance" | "empowerment" | "results" | "general";
 };
 
-type AreaKey = "all" | ResourceRow["area"];
-type TypeKey = "all" | ResourceRow["resource_type"];
+type AreaValue = ResourceRow["area"];
+type TypeValue = ResourceRow["resource_type"];
+type AreaKey = "all" | AreaValue;
+type TypeKey = "all" | TypeValue;
 type SortKey = "reset" | "year_desc" | "year_asc" | "title_asc" | "title_desc";
 
 const areaFilters: { key: AreaKey; label: string; color: string }[] = [
@@ -136,6 +138,14 @@ function SortIcon() {
   );
 }
 
+function CheckGlyph() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M20 6L9 17L4 12" />
+    </svg>
+  );
+}
+
 function ResourceCard({ resource }: { resource: ResourceRow }) {
   const [expanded, setExpanded] = useState(false);
   const isLong = (resource.description?.length ?? 0) > 180;
@@ -208,8 +218,12 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
 
 function ResourceHubPage() {
   const [search, setSearch] = useState("");
-  const [area, setArea] = useState<AreaKey>("all");
-  const [type, setType] = useState<TypeKey>("all");
+  const [areas, setAreas] = useState<AreaValue[]>([]);
+  const [types, setTypes] = useState<TypeValue[]>([]);
+  const toggleArea = (key: AreaValue) =>
+    setAreas((prev) => (prev.includes(key) ? prev.filter((a) => a !== key) : [...prev, key]));
+  const toggleType = (key: TypeValue) =>
+    setTypes((prev) => (prev.includes(key) ? prev.filter((t) => t !== key) : [...prev, key]));
   const [sort, setSort] = useState<SortKey>("year_desc");
 
   const { data: resources = [], isLoading } = useQuery({
@@ -228,8 +242,8 @@ function ResourceHubPage() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     const list = resources.filter((r) => {
-      if (area !== "all" && r.area !== area) return false;
-      if (type !== "all" && r.resource_type !== type) return false;
+      if (areas.length > 0 && !areas.includes(r.area)) return false;
+      if (types.length > 0 && !types.includes(r.resource_type)) return false;
       if (q && !`${r.title} ${r.description}`.toLowerCase().includes(q)) return false;
       return true;
     });
@@ -250,7 +264,7 @@ function ResourceHubPage() {
       default:
         return list;
     }
-  }, [resources, search, area, type, sort]);
+  }, [resources, search, areas, types, sort]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -293,12 +307,15 @@ function ResourceHubPage() {
               <span className="text-[13px] font-bold text-[#111827] sm:text-[14px]">Area</span>
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 {areaFilters.map((f) => {
-                  const active = area === f.key;
+                  const isAll = f.key === "all";
+                  const active = isAll ? areas.length === 0 : areas.includes(f.key);
                   return (
                     <button
                       key={f.key}
-                      onClick={() => setArea(f.key)}
-                      className="rounded-full px-3 py-2 text-[13px] font-bold transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => (isAll ? setAreas([]) : toggleArea(f.key))}
+                      className="inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-bold transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
                       style={
                         active
                           ? { backgroundColor: f.color, color: "#ffffff", boxShadow: "0 0 0 3px rgba(0,0,0,0.08)" }
@@ -306,9 +323,19 @@ function ResourceHubPage() {
                       }
                     >
                       {f.label}
+                      {!isAll && active && <CheckGlyph />}
                     </button>
                   );
                 })}
+                {areas.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => setAreas([])}
+                    className="rounded-full px-2 py-2 text-[13px] font-bold text-[#6b7280] underline underline-offset-4 transition hover:text-[#111827] sm:text-[14px]"
+                  >
+                    Clear areas
+                  </button>
+                )}
               </div>
             </div>
 
@@ -316,21 +343,34 @@ function ResourceHubPage() {
               <span className="text-[13px] font-bold text-[#111827] sm:text-[14px]">Type</span>
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 {typeFilters.map((f) => {
-                  const active = type === f.key;
+                  const isAll = f.key === "all";
+                  const active = isAll ? types.length === 0 : types.includes(f.key);
                   return (
                     <button
                       key={f.key}
-                      onClick={() => setType(f.key)}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => (isAll ? setTypes([]) : toggleType(f.key))}
                       className={
                         active
-                          ? "rounded-full bg-[#502181] px-3 py-2 text-[13px] font-bold text-white transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
-                          : "rounded-full border border-[#e5e7eb] bg-[#f3f4f6] px-3 py-2 text-[13px] font-bold text-[#6b7280] transition hover:bg-[#e5e7eb] sm:px-[14px] sm:py-[10px] sm:text-[14px]"
+                          ? "inline-flex items-center gap-1.5 rounded-full bg-[color:var(--impact-purple)] px-3 py-2 text-[13px] font-bold text-white transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
+                          : "inline-flex items-center gap-1.5 rounded-full border border-[#e5e7eb] bg-[#f3f4f6] px-3 py-2 text-[13px] font-bold text-[#6b7280] transition hover:bg-[#e5e7eb] sm:px-[14px] sm:py-[10px] sm:text-[14px]"
                       }
                     >
                       {f.label}
+                      {!isAll && active && <CheckGlyph />}
                     </button>
                   );
                 })}
+                {types.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => setTypes([])}
+                    className="rounded-full px-2 py-2 text-[13px] font-bold text-[#6b7280] underline underline-offset-4 transition hover:text-[#111827] sm:text-[14px]"
+                  >
+                    Clear types
+                  </button>
+                )}
               </div>
             </div>
 
@@ -350,8 +390,8 @@ function ResourceHubPage() {
                     const value = e.target.value as SortKey;
                     if (value === "reset") {
                       setSearch("");
-                      setArea("all");
-                      setType("all");
+                      setAreas([]);
+                      setTypes([]);
                     }
                     setSort(value);
                   }}
@@ -375,7 +415,7 @@ function ResourceHubPage() {
           ) : filtered.length === 0 ? (
             <div className="rounded-[16px] border border-dashed border-[#e5e7eb] p-12 text-center">
               <p className="text-[16px] font-bold text-[#111827]">No resources match your filters</p>
-              <p className="mt-2 text-[14px] text-[#6b7280]">Try clearing your search or selecting a different area or type.</p>
+              <p className="mt-2 text-[14px] text-[#6b7280]">Try clearing your search or choosing different areas or types.</p>
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
