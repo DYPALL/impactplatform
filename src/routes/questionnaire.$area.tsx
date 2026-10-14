@@ -6,10 +6,13 @@ import type { Database } from "@/integrations/supabase/types";
 import { ResultsStep } from "@/components/questionnaire/ResultsStep";
 import { AREAS, type QIndicator } from "@/components/questionnaire/content";
 import { AreaThemeProvider, themeForArea, useAreaTheme } from "@/components/questionnaire/theme";
+import { useAuth } from "@/hooks/use-auth";
+import { loadGuest, saveGuest } from "@/lib/guest-assessment";
 
 type ResourceArea = Database["public"]["Enums"]["resource_area"];
 
-export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
+export const Route = createFileRoute("/questionnaire/$area")({
+  ssr: false,
   validateSearch: (search: Record<string, unknown>): { id?: string } => ({
     id: typeof search['id'] === "string" ? (search['id'] as string) : undefined,
   }),
@@ -77,9 +80,23 @@ function QuestionnairePage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const { user, loading: authLoading } = useAuth();
+  const isGuest = !authLoading && !user;
+
   // Resume a specific assessment (?id=) or the latest unfinished one for this area
   useEffect(() => {
+    if (authLoading) return;
     let active = true;
+    if (!user) {
+      const g = loadGuest(area);
+      if (g && !g.completed) {
+        const migrated = migrateLegacy((g.answers ?? {}) as Record<string, unknown>);
+        setStep(Math.min(Math.max(g.step, 1), TOTAL_STEPS - 1));
+        setMatrix(migrated.matrix);
+        setScale(migrated.scale);
+      }
+      return;
+    }
     const query = routeId
       ? supabase.from("assessments").select("id, current_step, answers, status").eq("id", routeId).maybeSingle()
       : supabase
@@ -106,7 +123,7 @@ function QuestionnairePage() {
     return () => {
       active = false;
     };
-  }, [area, routeId, TOTAL_STEPS]);
+  }, [area, routeId, TOTAL_STEPS, authLoading, user]);
 
   // A value of -1 marks an indicator the user skipped ("not applicable").
   const computePercentages = (m: MatrixState, s: ScaleState) =>
@@ -141,9 +158,18 @@ function QuestionnairePage() {
     scale?: ScaleState;
   }) => {
     setSaving(true);
-    const { data: userRes } = await supabase.auth.getUser();
-    const userId = userRes.user?.id;
+    const { data: sess } = await supabase.auth.getSession();
+    const userId = sess.session?.user.id;
     if (!userId) {
+      const m = opts.matrix ?? matrix;
+      const s = opts.scale ?? scale;
+      saveGuest({
+        area,
+        step: opts.step,
+        completed: Boolean(opts.completed),
+        answers: { answersByIndicator: { matrix: m, scale: s } },
+        percentages: computePercentages(m, s),
+      });
       setSaving(false);
       return null;
     }
@@ -206,7 +232,7 @@ function QuestionnairePage() {
 
   const handleSaveAndQuit = async () => {
     await persist({ step });
-    navigate({ to: "/dashboard" });
+    navigate({ to: isGuest ? "/" : "/dashboard" });
   };
 
   const progress = step / TOTAL_STEPS;
@@ -218,11 +244,11 @@ function QuestionnairePage() {
       <header className="sticky top-0 z-40" style={{ backgroundColor: theme.accent }}>
         <div className="mx-auto flex h-[72px] max-w-[1440px] items-center gap-4 px-6 lg:px-10">
           <Link
-            to="/dashboard"
+            to={isGuest ? "/" : "/dashboard"}
             className="flex shrink-0 items-center gap-3 text-[15px] font-semibold text-white transition hover:opacity-80"
           >
             <ArrowLeft size={20} />
-            <span className="hidden sm:inline">Back to Dashboard</span>
+            <span className="hidden sm:inline">{isGuest ? "Back to Home" : "Back to Dashboard"}</span>
           </Link>
           <button
             type="button"
@@ -287,7 +313,7 @@ function QuestionnairePage() {
             }}
           />
         )}
-        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} areaKey={areaContent.key} assessmentId={assessmentId} />}
+        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} areaKey={areaContent.key} assessmentId={assessmentId} locked={isGuest} />}
 
         {/* Nav */}
         {step < TOTAL_STEPS && (

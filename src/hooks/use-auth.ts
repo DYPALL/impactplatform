@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { claimGuestAssessment } from "@/lib/guest-assessment";
 
 // Module-level cache so remounting components (e.g. the header on route
 // changes) don't flash back to the logged-out state while the session loads.
@@ -13,6 +14,7 @@ function setCached(u: User | null) {
   cachedUser = u;
   cachedLoading = false;
   listeners.forEach((l) => l(u));
+  if (u) void claimGuestAssessment(u.id);
 }
 
 function start() {

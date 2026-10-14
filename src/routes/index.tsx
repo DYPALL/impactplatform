@@ -80,7 +80,7 @@ function Hero() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3.5">
             <a
-              href="/auth"
+              href="/questionnaire/representativeness"
               className="inline-flex h-[52px] items-center justify-center rounded-full bg-[color:var(--impact-green)] px-[22px] text-[15px] font-bold text-white transition hover:brightness-110"
             >
               Start your assessment
@@ -198,7 +198,7 @@ function HowItWorks() {
 
         <div className="mt-11 flex justify-center">
           <a
-            href="/auth"
+            href="/questionnaire/representativeness"
             className="inline-flex h-14 items-center justify-center rounded-full bg-[color:var(--impact-purple)] px-7 text-[15px] font-bold text-white transition hover:opacity-90"
           >
             Start your assessment
