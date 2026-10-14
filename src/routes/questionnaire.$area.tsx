@@ -6,6 +6,8 @@ import type { Database } from "@/integrations/supabase/types";
 import { ResultsStep } from "@/components/questionnaire/ResultsStep";
 import { AREAS, type QIndicator } from "@/components/questionnaire/content";
 import { AreaThemeProvider, themeForArea, useAreaTheme } from "@/components/questionnaire/theme";
+import { useAuth } from "@/hooks/use-auth";
+import { loadGuest, saveGuest } from "@/lib/guest-assessment";
 
 type ResourceArea = Database["public"]["Enums"]["resource_area"];
 
@@ -121,7 +123,7 @@ function QuestionnairePage() {
     return () => {
       active = false;
     };
-  }, [area, routeId, TOTAL_STEPS]);
+  }, [area, routeId, TOTAL_STEPS, authLoading, user]);
 
   // A value of -1 marks an indicator the user skipped ("not applicable").
   const computePercentages = (m: MatrixState, s: ScaleState) =>
@@ -311,7 +313,7 @@ function QuestionnairePage() {
             }}
           />
         )}
-        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} areaKey={areaContent.key} assessmentId={assessmentId} />}
+        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} areaKey={areaContent.key} assessmentId={assessmentId} locked={isGuest} />}
 
         {/* Nav */}
         {step < TOTAL_STEPS && (
