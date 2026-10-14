@@ -42,7 +42,7 @@ function useAutoScroll() {
 
 export function ResourcePreview() {
   const autoScroll = useAutoScroll();
-  const [viewportRef, carousel] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 }, [autoScroll.plugin]);
+  const [viewportRef, carousel] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1, duration: 42 }, [autoScroll.plugin]);
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -60,6 +60,19 @@ export function ResourcePreview() {
     update(); preference.addEventListener("change", update);
     return () => preference.removeEventListener("change", update);
   }, []);
+  // Resume auto-scroll only after an arrow-triggered scroll has settled, so the
+  // manual glide finishes cleanly before the continuous scroll takes over again.
+  const [resumeAfterSettle, setResumeAfterSettle] = useState(false);
+  useEffect(() => {
+    if (!carousel) return;
+    const onSettle = () => {
+      if (!resumeAfterSettle) return;
+      setResumeAfterSettle(false);
+      if (!hovering && !focused && !document.hidden && data.length >= 2) autoScroll.play();
+    };
+    carousel.on("settle", onSettle);
+    return () => carousel.off("settle", onSettle);
+  }, [carousel, resumeAfterSettle, hovering, focused, autoScroll, data.length]);
   useEffect(() => {
     if (!carousel) return;
     const sync = () => {
