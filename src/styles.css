@@ -302,3 +302,12 @@
 .steps-orange { background: var(--steps-orange); }
 .steps-pink { background: var(--steps-pink); }
 .steps-plum { background: var(--steps-plum); }
+
+/* One shared heading scale for every home page section. */
+@utility section-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.25rem);
+}
