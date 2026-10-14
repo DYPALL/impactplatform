@@ -125,7 +125,7 @@ function CtaBanner() {
 
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-12 px-6 py-20 lg:flex-row lg:gap-16 lg:py-[72px] lg:pl-[120px] lg:pr-0">
         <div className="relative z-10 max-w-[560px]">
-          <h2 className="text-3xl text-white lg:text-[36px]">
+          <h2 className="section-title text-white">
             Keep your progress in one place?
           </h2>
           <p className="mt-3 text-[16px] leading-[1.6] text-white/85">
@@ -165,7 +165,7 @@ function Consortium() {
     <section className="w-full bg-[color:var(--impact-surface-muted)]">
       <div className="mx-auto max-w-[1440px] px-6 py-20 lg:px-[120px] lg:py-24">
         <div className="max-w-4xl">
-          <h2 className="text-3xl text-[color:var(--impact-purple)] lg:text-[36px]">
+          <h2 className="section-title text-primary">
             Partner's consortium
           </h2>
           <p className="mt-3 text-[16px] leading-[1.6] text-[color:var(--impact-ink-muted)]">
@@ -208,7 +208,7 @@ function Landing() {
         <section id="about-impact" className="bg-background">
           <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-6 py-16 md:grid-cols-[minmax(0,1fr)_260px] lg:gap-16 lg:px-[120px]">
             <div>
-              <h2 className="text-3xl text-primary">About the IMPACT project</h2>
+              <h2 className="section-title text-primary">About the IMPACT project</h2>
               <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">IMPACT is a European collaboration working to strengthen Local Youth Councils and meaningful youth participation. The platform brings together assessment, reflection, practical action planning and shared resources so councils and the people supporting them can identify opportunities for growth and take their next steps.</p>
               <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">Delivered by DYPALL Network, Bataljong, Fundació Ferrer i Guàrdia and Nuva, with co-funding from the European Union.</p>
               <Button asChild variant="link" className="mt-5 px-0"><a href="/faq">Questions about IMPACT?</a></Button>

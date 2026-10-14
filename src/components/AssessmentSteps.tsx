@@ -36,12 +36,9 @@ export function AssessmentSteps() {
   return (
     <section id="how" className="w-full bg-background py-16 lg:py-24" aria-labelledby="assessment-steps-title">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-[120px]">
-        <div className="grid items-end gap-6 md:grid-cols-[1fr_1.3fr] md:gap-16">
-          <div className="max-w-[340px]">
-            <span className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground" aria-hidden="true"><ArrowUpRight size={20} /></span>
-            <p className="text-sm leading-relaxed text-muted-foreground">Five simple steps to measure your Local Youth Council's impact, reflect together as a team, and turn results into concrete action.</p>
-          </div>
-          <h2 id="assessment-steps-title" className="text-4xl leading-[1.1] tracking-normal text-[color:var(--impact-purple)] lg:text-5xl">How to start assessing?</h2>
+        <div className="max-w-2xl">
+          <h2 id="assessment-steps-title" className="section-title text-primary">How to start assessing?</h2>
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">Five simple steps to measure your Local Youth Council's impact, reflect together as a team, and turn results into concrete action.</p>
         </div>
 
         <div ref={carouselRef} className="mt-10 overflow-hidden">
