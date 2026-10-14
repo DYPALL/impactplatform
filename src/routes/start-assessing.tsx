@@ -52,40 +52,35 @@ function StartAssessing() {
           </div>
         </section>
 
-        {/* Area panels */}
+        {/* Area panels: two columns, two rows on desktop */}
         <section className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 sm:py-14 lg:px-[120px]">
-          <div className="mx-auto max-w-[1080px] space-y-6">
+          <div className="mx-auto grid max-w-[1180px] gap-6 md:grid-cols-2">
             {AREAS.map((area) => (
               <article
                 key={area.key}
-                className="rounded-[32px] p-6 md:p-8"
+                className="flex h-full flex-col rounded-[32px] p-6 md:p-8"
                 style={{ backgroundColor: area.panelBg }}
               >
-                <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-                  <div className="min-w-0 flex-1">
-                    <span
-                      className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-bold tracking-wide"
-                      style={{ backgroundColor: area.softBg, color: area.softText }}
-                    >
-                      {area.badge}
-                    </span>
-                    <h2 className="mt-3 text-[22px] font-extrabold text-[color:var(--impact-ink)]">
-                      {area.title}
-                    </h2>
-                    <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-[color:var(--impact-ink-muted)]">
-                      {area.description}
-                    </p>
-                  </div>
-
-                  <Link
-                    to="/questionnaire/$area"
-                    params={{ area: area.key }}
-                    className="inline-flex shrink-0 items-center justify-center rounded-full px-7 py-3.5 text-[14px] font-bold text-white transition hover:opacity-90 md:self-center"
-                    style={{ backgroundColor: area.color }}
-                  >
-                    Start this area
-                  </Link>
-                </div>
+                <span
+                  className="inline-flex w-fit items-center rounded-full px-3 py-1 text-[11px] font-bold tracking-wide"
+                  style={{ backgroundColor: area.softBg, color: area.softText }}
+                >
+                  {area.badge}
+                </span>
+                <h2 className="mt-3 text-[22px] font-extrabold leading-snug text-[color:var(--impact-ink)]">
+                  {area.title}
+                </h2>
+                <p className="mt-2 flex-1 text-[14px] leading-relaxed text-[color:var(--impact-ink-muted)]">
+                  {area.description}
+                </p>
+                <Link
+                  to="/questionnaire/$area"
+                  params={{ area: area.key }}
+                  className="mt-6 inline-flex w-fit items-center justify-center rounded-full px-7 py-3.5 text-[14px] font-bold text-white transition hover:opacity-90"
+                  style={{ backgroundColor: area.color }}
+                >
+                  Start this area
+                </Link>
               </article>
             ))}
           </div>
