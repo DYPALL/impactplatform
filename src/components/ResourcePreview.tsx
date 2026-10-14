@@ -13,7 +13,7 @@ export function ResourcePreview() {
   const [paused, setPaused] = useState(false);
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const { data = [], isError } = useQuery({
     queryKey: ["home-resource-preview"],
     queryFn: async () => {
@@ -31,7 +31,7 @@ export function ResourcePreview() {
   useEffect(() => {
     if (!carousel) return;
     const sync = () => {
-      if (paused || hovering || focused || reducedMotion || document.hidden || data.length < 2) autoScroll.stop();
+      if (paused || hovering || focused || document.hidden || data.length < 2) autoScroll.stop();
       else autoScroll.play();
     };
     sync();
@@ -49,7 +49,7 @@ export function ResourcePreview() {
         <div className="max-w-2xl"><h2 className="text-3xl text-primary">Resource Hub</h2><p className="mt-3 text-base leading-relaxed text-muted-foreground">Ideas and practical tools for everyone working with young people: youth councillors, youth workers, municipalities, educators and researchers.</p></div>
         <Button asChild><Link to="/resource-hub">Explore all resources <ArrowRight /></Link></Button>
       </div>
-      <div className="mt-7 flex justify-end gap-2">{!reducedMotion && <Button variant="outline" size="icon" title={paused ? "Play carousel" : "Pause carousel"} aria-label={paused ? "Play carousel" : "Pause carousel"} aria-pressed={paused} onClick={() => setPaused(value => !value)}>{paused ? <Play /> : <Pause />}</Button>}<Button variant="outline" size="icon" title="Previous resources" aria-label="Previous resources" onClick={() => { autoScroll.stop(); carousel?.scrollPrev(reducedMotion); if (!paused && !reducedMotion && !hovering && !focused) autoScroll.play(); }}><ArrowLeft /></Button><Button variant="outline" size="icon" title="Next resources" aria-label="Next resources" onClick={() => { autoScroll.stop(); carousel?.scrollNext(reducedMotion); if (!paused && !reducedMotion && !hovering && !focused) autoScroll.play(); }}><ArrowRight /></Button></div>
+      <div className="mt-7 flex justify-end gap-2">{<Button variant="outline" size="icon" title={paused ? "Play carousel" : "Pause carousel"} aria-label={paused ? "Play carousel" : "Pause carousel"} aria-pressed={paused} onClick={() => setPaused(value => !value)}>{paused ? <Play /> : <Pause />}</Button>}<Button variant="outline" size="icon" title="Previous resources" aria-label="Previous resources" onClick={() => { autoScroll.stop(); carousel?.scrollPrev(reducedMotion); if (!paused && !hovering && !focused) autoScroll.play(); }}><ArrowLeft /></Button><Button variant="outline" size="icon" title="Next resources" aria-label="Next resources" onClick={() => { autoScroll.stop(); carousel?.scrollNext(reducedMotion); if (!paused && !hovering && !focused) autoScroll.play(); }}><ArrowRight /></Button></div>
       <div onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}>
       <div ref={viewportRef} aria-label="Featured resources" aria-roledescription="carousel" className="mt-3 overflow-hidden">
       <div className="-ml-6 flex touch-pan-y">
