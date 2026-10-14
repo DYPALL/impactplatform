@@ -52,7 +52,7 @@ function AreaCard({ area }: { area: (typeof AREAS)[number] }) {
       >
         <span
           className="font-[Work_Sans] text-[68px] font-extrabold leading-none opacity-90"
-          style={{ color: area.color }}
+          style={{ color: area.softText }}
         >
           {number}
         </span>
