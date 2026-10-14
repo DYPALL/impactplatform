@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StartAssessingRouteImport } from './routes/start-assessing'
 import { Route as SendUsAMessageRouteImport } from './routes/send-us-a-message'
 import { Route as ResourceHubRouteImport } from './routes/resource-hub'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -39,6 +40,11 @@ const SendUsAMessageRoute = SendUsAMessageRouteImport.update({
 const ResourceHubRoute = ResourceHubRouteImport.update({
   id: '/resource-hub',
   path: '/resource-hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -113,6 +119,7 @@ const AuthenticatedAdminResourcesIdEditRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/faq': typeof FaqRoute
   '/resource-hub': typeof ResourceHubRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/faq': typeof FaqRoute
   '/resource-hub': typeof ResourceHubRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/faq': typeof FaqRoute
   '/resource-hub': typeof ResourceHubRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/faq'
     | '/resource-hub'
     | '/send-us-a-message'
     | '/start-assessing'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/faq'
     | '/resource-hub'
     | '/send-us-a-message'
     | '/start-assessing'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/faq'
     | '/resource-hub'
     | '/send-us-a-message'
     | '/start-assessing'
@@ -220,6 +232,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  FaqRoute: typeof FaqRoute
   ResourceHubRoute: typeof ResourceHubRoute
   SendUsAMessageRoute: typeof SendUsAMessageRoute
   StartAssessingRoute: typeof StartAssessingRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/resource-hub'
       fullPath: '/resource-hub'
       preLoaderRoute: typeof ResourceHubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -389,6 +409,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  FaqRoute: FaqRoute,
   ResourceHubRoute: ResourceHubRoute,
   SendUsAMessageRoute: SendUsAMessageRoute,
   StartAssessingRoute: StartAssessingRoute,

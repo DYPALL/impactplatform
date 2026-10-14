@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { TutorialSlot } from "@/components/TutorialSlot";
+import { Button } from "@/components/ui/button";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Footer } from "@/components/Footer";
@@ -274,6 +276,7 @@ function ResourceHubPage() {
           </div>
         </section>
 
+        <section className="mx-auto max-w-[1440px] px-6 pt-6 lg:px-[120px]"><TutorialSlot tutorial="resources" /></section>
         {/* Search and filters */}
         <section className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 sm:py-12 lg:px-[120px]">
           <div className="flex h-[48px] items-center gap-3 rounded-[12px] border border-[#e5e7eb] bg-white px-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] sm:h-[56px] sm:rounded-[16px] sm:px-4">
@@ -384,6 +387,7 @@ function ResourceHubPage() {
             </div>
           )}
         </section>
+        <section className="bg-muted/40"><div className="mx-auto max-w-[1440px] px-6 py-12 lg:px-[120px]"><h2 className="text-2xl text-primary">Know a resource worth sharing?</h2><p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Help grow our collection. Share a publication, video, template or session outline — including resources in other languages — with the IMPACT team.</p><Button asChild className="mt-5"><Link to="/send-us-a-message" search={{ subject: "resource" }}>Suggest a resource</Link></Button></div></section>
       </main>
 
       <Footer />

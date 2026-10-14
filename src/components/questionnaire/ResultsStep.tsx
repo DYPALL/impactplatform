@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, ListChecks, Lock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, ListChecks, Lock, Save, Pencil } from "lucide-react";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import { LEVELS, levelFromPct, type LevelKey } from "./results-data";
 import { AREAS, type QIndicator } from "./content";
@@ -58,7 +59,7 @@ function annularSectorPath(
   return `M ${x1} ${y1} L ${x2} ${y2} A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${x3} ${y3} L ${x4} ${y4} A ${rInner} ${rInner} 0 ${largeArc} 0 ${x1} ${y1} Z`;
 }
 
-function RoseChart({ results, indicators }: { results: IndicatorResult[]; indicators: QIndicator[] }) {
+function RoseChart({ results, indicators, locked }: { results: IndicatorResult[]; indicators: QIndicator[]; locked: boolean }) {
   const theme = useAreaTheme();
   const step = 360 / indicators.length;
   const cx = 160;
@@ -68,6 +69,15 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
   const [hovered, setHovered] = useState<number | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const active = selected ?? hovered;
+  const jumpTo = (index: number) => {
+    setSelected(index);
+    if (locked) return;
+    const code = indicators[index]?.code;
+    if (code) {
+      window.dispatchEvent(new CustomEvent("impact-open-indicator", { detail: code }));
+      document.getElementById(`indicator-${code}`)?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+    }
+  };
 
   return (
     <div className="grid items-center gap-6 md:gap-8 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
@@ -76,7 +86,7 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
         <svg
           viewBox="-24 -24 368 368"
           className="block w-full overflow-visible"
-          role="img"
+          role="group"
           aria-label="Indicator breakdown chart"
           onMouseLeave={() => setHovered(null)}
         >
@@ -146,9 +156,13 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
             return (
               <g
                 key={ind.code}
+                role="button"
+                tabIndex={0}
+                aria-label={`View indicator ${ind.code} ${ind.title}`}
+                onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); jumpTo(i); } }}
                 className="cursor-pointer transition-opacity duration-200"
                 onMouseEnter={() => setHovered(i)}
-                onClick={() => setSelected((s) => (s === i ? null : i))}
+                onClick={() => jumpTo(i)}
                 style={{ opacity: isDimmed ? 0.35 : 1 }}
               >
                 {bands.map((b, idx) =>
@@ -200,7 +214,7 @@ function RoseChart({ results, indicators }: { results: IndicatorResult[]; indica
               type="button"
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
-              onClick={() => setSelected((s) => (s === i ? null : i))}
+              onClick={() => jumpTo(i)}
               style={isActive ? { borderColor: theme.accent, boxShadow: `0 0 0 1px ${theme.accent}` } : undefined}
               className={`flex items-center gap-2.5 rounded-xl border bg-white px-2.5 py-2 text-left transition-all duration-200 cursor-pointer sm:gap-3 sm:px-3 sm:py-2.5 ${
                 isActive ? "ring-1" : "border-[#EDEAF3] hover:bg-black/[0.02]"
@@ -267,6 +281,11 @@ function IndicatorCard({
 }) {
   const theme = useAreaTheme();
   const [open, setOpen] = useState(alwaysOpen || !!defaultOpen);
+  useEffect(() => {
+    const reveal = (event: Event) => { if ((event as CustomEvent<string>).detail === content.code) setOpen(true); };
+    window.addEventListener("impact-open-indicator", reveal);
+    return () => window.removeEventListener("impact-open-indicator", reveal);
+  }, [content.code]);
   const isChecked = (action: string) => selectedIds.includes(stepId(content.code, action));
   const selectedCount = content.actions.filter((a) => isChecked(a)).length;
 
@@ -275,7 +294,7 @@ function IndicatorCard({
 
   if (result.na) {
     return (
-      <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
+      <article id={`indicator-${content.code}`} className="scroll-mt-24 rounded-2xl bg-muted p-4 ring-1 ring-border sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
           <div className="min-w-0">
             <h3 className="text-[15px] font-extrabold text-[#111827] sm:text-[16px]">
@@ -298,7 +317,7 @@ function IndicatorCard({
   }
 
   return (
-    <article className="rounded-2xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 sm:p-6">
+    <article id={`indicator-${content.code}`} className={`indicator-result score-level-${result.level} scroll-mt-24 rounded-2xl p-4 ring-1 ring-border sm:p-6`}>
       <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
         <div className="min-w-0 border-l-4 pl-3" style={{ borderColor: theme.accent }}>
           <h3 className="text-[15px] font-extrabold sm:text-[16px]" style={{ color: theme.accent }}>
@@ -308,7 +327,7 @@ function IndicatorCard({
         </div>
         <div className="flex items-center gap-3">
           <LevelPill level={result.level} />
-          <Battery level={result.level} className="h-[28px] sm:h-[38px]" />
+          <Battery level={result.level} className="h-[38px] sm:h-[48px]" />
         </div>
       </div>
 
@@ -320,25 +339,23 @@ function IndicatorCard({
       </div>
 
 
-      <button
+      <Button
         type="button"
-        onClick={() => {
-          if (!alwaysOpen) setOpen((o) => !o);
-        }}
+        variant={isOpen ? "outline" : "default"}
+        onClick={() => { if (!alwaysOpen) setOpen(o => !o); }}
         aria-expanded={isOpen}
-        className={`mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-bold text-white shadow-sm transition hover:opacity-90 ${alwaysOpen ? "cursor-default opacity-80" : ""}`}
-        style={{ backgroundColor: theme.accent }}
+        className="mt-4 text-xs"
       >
-        Read more about this indicator
-        <ChevronDown size={13} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
-      </button>
+        {isOpen ? "Hide reflection & next steps" : "Discover your next steps"}
+        <ChevronDown className={isOpen ? "rotate-180" : ""} />
+      </Button>
 
       {isOpen && (
         <div className="mt-6 space-y-7">
 
           <div>
             <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
-              <CircleHelp size={15} style={{ color: theme.accent }} /> Reflection Questions
+              <CircleHelp size={24} style={{ color: theme.accent }} /> Reflection Questions
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
               <div className="grid gap-4 sm:grid-cols-3">
@@ -352,7 +369,7 @@ function IndicatorCard({
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
-                <ListChecks size={15} style={{ color: theme.accent }} /> Recommended Action Steps
+                <ListChecks size={24} style={{ color: theme.accent }} /> Select up to 3 steps for your action plan
               </p>
               <span className="text-[11px] font-semibold" style={{ color: theme.accent }}>
                 {selectedCount}/3 selected
@@ -405,14 +422,19 @@ export function ResultsStep({
   areaKey = "representativeness",
   assessmentId,
   locked = false,
+  onSave,
+  onEdit,
 }: {
   percentages: number[];
   areaKey?: string;
   assessmentId?: string | null;
   locked?: boolean;
+  onSave?: () => Promise<boolean>;
+  onEdit?: () => void;
 }) {
 
-  const area = AREAS[areaKey] ?? AREAS["representativeness"]!;
+  const area = AREAS[areaKey] ?? AREAS["representativeness"];
+  if (!area) throw new Error("Assessment content is unavailable");
   const indicators = area.indicators;
   const areaNumber = indicators[0]?.code.split(".")[0] ?? "1";
   const theme = themeForArea(areaKey);
@@ -425,9 +447,11 @@ export function ResultsStep({
 
   const scored = results.map((r, i) => ({ ...r, i })).filter((r) => !r.na);
   const sorted = [...scored].sort((a, b) => a.pct - b.pct);
-  const best = sorted.length ? indicators[sorted[sorted.length - 1]!.i]!.title : null;
-  const weakest = sorted.slice(0, 3).map((r) => indicators[r.i]!.title);
+  const bestResult = sorted.at(-1);
+  const best = bestResult ? indicators[bestResult.i]?.title ?? null : null;
+  const weakest = sorted.slice(0, 3).map((r) => indicators[r.i]?.title ?? "");
 
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [planSteps, setPlanSteps] = useState<ActionPlanStep[]>([]);
 
   useEffect(() => {
@@ -478,13 +502,19 @@ export function ResultsStep({
         </p>
       </div>
 
+      <div className="mt-5 flex flex-wrap items-center gap-3">
+        {!locked && onSave && <Button disabled={saveStatus === "saving"} onClick={async () => { setSaveStatus("saving"); try { setSaveStatus(await onSave() ? "saved" : "error"); } catch { setSaveStatus("error"); } }}><Save />{saveStatus === "saving" ? "Saving…" : saveStatus === "saved" ? "Results saved" : "Save results"}</Button>}
+        {onEdit ? <Button variant="outline" onClick={onEdit}><Pencil />Edit your answers</Button> : assessmentId && <Button asChild variant="outline"><Link to="/questionnaire/$area" params={{ area: areaKey }} search={{ id: assessmentId }}><Pencil />Edit your answers</Link></Button>}
+        {!locked && assessmentId && <p className="text-xs text-muted-foreground">Results saved automatically in My Assessments.</p>}
+        {saveStatus === "error" && <p role="alert" className="text-xs text-destructive">Could not save your results. Please try again.</p>}
+      </div>
       {/* Results overview */}
       <div className="mt-7 rounded-2xl border p-4 sm:p-7" style={{ backgroundColor: theme.soft, borderColor: theme.border }}>
         <h2 className="text-[17px] font-extrabold text-[#111827]">Results Overview</h2>
         <p className="mt-1 text-[12px] text-[#6b7280]">A quick snapshot of your performance across all indicators</p>
 
         <div className="mt-5 rounded-xl bg-white p-3 ring-1 ring-black/5 sm:p-4">
-          <RoseChart results={results} indicators={indicators} />
+          <RoseChart results={results} indicators={indicators} locked={locked} />
         </div>
 
         <div className="mt-6 rounded-xl p-5 sm:p-6" style={{ backgroundColor: theme.accent }}>
@@ -509,6 +539,7 @@ export function ResultsStep({
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <Link
               to="/auth"
+              search={{ mode: "signup" }}
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-[13px] font-bold transition hover:opacity-90"
               style={{ color: theme.accent }}
             >
@@ -536,7 +567,7 @@ export function ResultsStep({
             <IndicatorCard
               key={c.code}
               content={c}
-              result={results[i]!}
+              result={results[i] ?? { pct: 0, level: 0 }}
               defaultOpen={i === 0}
               selectedIds={selectedIds}
               onToggle={(action) => toggleStep(c, action)}

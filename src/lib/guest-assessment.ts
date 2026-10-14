@@ -32,9 +32,9 @@ export function claimGuestAssessment(userId: string): Promise<void> {
   if (claiming) return claiming;
   const g = loadGuest();
   if (!g) return Promise.resolve();
-  localStorage.removeItem(KEY);
+
   claiming = (async () => {
-    await supabase.from("assessments").insert({
+    const { error } = await supabase.from("assessments").insert({
       user_id: userId,
       area: g.area as "representativeness",
       status: g.completed ? "completed" : "in_progress",
@@ -43,6 +43,7 @@ export function claimGuestAssessment(userId: string): Promise<void> {
       percentages: g.percentages,
       completed_at: g.completed ? new Date().toISOString() : null,
     });
+    if (!error && localStorage.getItem(KEY) === JSON.stringify(g)) localStorage.removeItem(KEY);
   })().finally(() => {
     claiming = null;
   });

@@ -8,12 +8,15 @@ import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import cofundLogo from "@/assets/cofund-eu-white.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (search: Record<string, unknown>): { mode?: "signup" } => ({ mode: search.mode === "signup" ? "signup" : undefined }),
   head: () => ({
     meta: [
       { title: "Log-in — IMPACT" },
       { name: "description", content: "Log-in or Sign-up to save your IMPACT youth council assessments." },
       { property: "og:title", content: "Log-in — IMPACT" },
       { property: "og:description", content: "Log-in or Sign-up to save your IMPACT youth council assessments." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AuthPage,
@@ -105,7 +108,8 @@ function Triangle({
 /* ---------- Page ---------- */
 
 function AuthPage() {
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const search = Route.useSearch();
+  const [mode, setMode] = useState<"signin" | "signup">(search.mode === "signup" ? "signup" : "signin");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -196,8 +200,8 @@ function AuthPage() {
             </h1>
             <p className="mt-5 text-[15px] leading-relaxed text-white/85">
               {mode === "signin"
-                ? "If you don't have an account, you must sign-up before proceeding."
-                : "Sign-up your Local Youth Council to save assessments and revisit results anytime."}
+                ? "Log-in to revisit your saved assessments, review full results and continue your action plans."
+                : "Unlock detailed feedback and reflection questions, save assessments automatically and build action plans for your Local Youth Council."}
             </p>
           </div>
 

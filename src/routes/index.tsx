@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { ResourcePreview } from "@/components/ResourcePreview";
+import { TutorialSlot } from "@/components/TutorialSlot";
+import { Button } from "@/components/ui/button";
 import heroImg from "@/assets/hero-photo.webp.asset.json";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import step1Img from "@/assets/step-1.webp.asset.json";
@@ -74,13 +77,11 @@ function Hero() {
             What is IMPACT digital platform?
           </h1>
           <p className="mt-5 max-w-[560px] text-[18px] leading-[1.6] text-white/80">
-            A comprehensive platform for Local Youth Councils to measure their
-            impact, identify opportunities for growth, and access practical
-            guidance and resources.
+            For Local Youth Councils and the people supporting them: assess your council, reflect on your results and build a practical action plan. Our public Resource Hub also welcomes youth workers, municipalities, educators and anyone interested in meaningful youth participation.
           </p>
           <div className="mt-8 flex flex-wrap gap-3.5">
             <a
-              href="/questionnaire/representativeness"
+              href="/start-assessing"
               className="inline-flex h-[52px] items-center justify-center rounded-full bg-[color:var(--impact-green)] px-[22px] text-[15px] font-bold text-white transition hover:brightness-110"
             >
               Start your assessment
@@ -111,8 +112,8 @@ function Hero() {
 const steps = [
   {
     n: 1,
-    title: "Create your account",
-    body: "Register your Local Youth Council so results, action plans and reflections are stored securely in one place.",
+    title: "Start assessing",
+    body: "Choose your starting point. Create an account when you are ready to unlock your full results and save your progress.",
     image: step1Img.url,
     color: "var(--impact-purple)",
   },
@@ -133,10 +134,11 @@ const steps = [
   {
     n: 4,
     title: "Review your results",
-    body: "Get a visual scoreboard, reflection prompts and a tailored action plan you can share with your team.",
+    body: "Explore your visual scoreboard, then Sign-up for detailed feedback and reflection questions saved to your account.",
     image: step4Img.url,
     color: "var(--impact-pink)",
   },
+  { n: 5, title: "Build your action plan", body: "Select your next steps, set a goal and organise who will do what, when and with which resources.", image: ctaImg.url, color: "var(--impact-green)" },
 ];
 
 function HowItWorks() {
@@ -148,12 +150,12 @@ function HowItWorks() {
             How to start assessing?
           </h2>
           <p className="mt-3 text-[16px] leading-[1.6] text-[color:var(--impact-ink-muted)]">
-            Four simple steps to measure your Local Youth Council's impact,
+            Five simple steps to measure your Local Youth Council's impact,
             reflect together as a team, and turn results into concrete action.
           </p>
         </div>
 
-        <div className="mt-11 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-11 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
           {steps.map((s) => (
             <article
               key={s.n}
@@ -167,8 +169,8 @@ function HowItWorks() {
                 />
                 <div className="absolute inset-0 bg-[rgba(17,24,39,0.15)]" />
               </div>
-              <div className="flex flex-col gap-4 p-8">
-                <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-4 p-5">
+                <div className="flex flex-col items-start gap-3">
                   <div className="relative h-[52px] w-[56px] shrink-0">
                     <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
                       <path
@@ -191,6 +193,7 @@ function HowItWorks() {
                 <p className="text-[14px] leading-[1.8] text-[color:var(--impact-ink-muted)]">
                   {s.body}
                 </p>
+                {s.n === 5 && <TutorialSlot tutorial="actionPlan" />}
               </div>
             </article>
           ))}
@@ -198,7 +201,7 @@ function HowItWorks() {
 
         <div className="mt-11 flex justify-center">
           <a
-            href="/questionnaire/representativeness"
+            href="/start-assessing"
             className="inline-flex h-14 items-center justify-center rounded-full bg-[color:var(--impact-purple)] px-7 text-[15px] font-bold text-white transition hover:opacity-90"
           >
             Start your assessment
@@ -226,18 +229,16 @@ function CtaBanner() {
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-12 px-6 py-20 lg:flex-row lg:gap-16 lg:py-[72px] lg:pl-[120px] lg:pr-0">
         <div className="relative z-10 max-w-[560px]">
           <h2 className="text-3xl text-white lg:text-[36px]">
-            Ready to take action?
+            Keep your progress in one place?
           </h2>
           <p className="mt-3 text-[16px] leading-[1.6] text-white/85">
-            Your results become an actionable roadmap. Save assessments to your
-            account, revisit past results, and track how your council grows
-            year on year.
+            Sign-up to unlock your full assessment feedback, save results automatically, revisit previous questionnaires and turn selected steps into an action plan.
           </p>
           <a
             href="/auth"
             className="mt-8 inline-flex h-14 items-center justify-center rounded-full bg-[color:var(--impact-purple)] px-7 text-[15px] font-bold text-white transition hover:opacity-90"
           >
-            Start your assessment
+            Sign-up
           </a>
         </div>
         <div className="relative z-10 w-full max-w-[520px]">
@@ -304,8 +305,10 @@ function Landing() {
       <main>
         <Hero />
         <HowItWorks />
+        <ResourcePreview />
         <CtaBanner />
         <Consortium />
+        <section className="bg-background"><div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-[120px]"><h2 className="text-3xl text-primary">About the IMPACT project</h2><p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">IMPACT is a European collaboration working to strengthen Local Youth Councils and meaningful youth participation. The platform brings together assessment, reflection, practical action planning and shared resources so councils and the people supporting them can identify opportunities for growth and take their next steps.</p><p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">Delivered by DYPALL Network, Bataljong, Fundació Ferrer i Guàrdia and Nuva, with co-funding from the European Union.</p><Button asChild variant="link" className="mt-5 px-0"><a href="/faq">Questions about IMPACT?</a></Button></div></section>
       </main>
       <Footer />
     </div>
