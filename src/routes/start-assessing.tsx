@@ -51,7 +51,7 @@ function AreaCard({ area }: { area: (typeof AREAS)[number] }) {
         style={{ backgroundColor: area.softBg }}
       >
         <span
-          className="font-[Work_Sans] text-[68px] font-extrabold leading-none opacity-70"
+          className="font-[Work_Sans] text-[68px] font-extrabold leading-none opacity-90"
           style={{ color: area.color }}
         >
           {number}
