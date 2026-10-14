@@ -47,7 +47,7 @@ export function AssessmentSteps() {
         <div ref={carouselRef} className="mt-10 overflow-hidden">
           <div className="flex touch-pan-y gap-5">
             {steps.map((step, index) => (
-              <article key={step.title} className={`assessment-step-card ${step.tone} relative min-w-0 shrink-0 basis-full overflow-hidden rounded-[28px] p-5 sm:basis-[calc((100%-20px)/2)] xl:basis-[calc((100%-40px)/3)]`} aria-label={`Step ${index + 1}: ${step.title}`}>
+              <article key={step.title} className={`assessment-step-card ${step.tone} relative min-w-0 shrink-0 basis-full overflow-hidden rounded-[28px] p-5 sm:basis-[calc((100%_-_20px)/2)] lg:basis-[calc((100%_-_40px)/3)]`} aria-label={`Step ${index + 1}: ${step.title}`}>
                 <div className="flex items-start justify-between gap-4">
                   <span className="rounded-full border border-current px-3 py-1 text-xs font-medium">Step {String(index + 1).padStart(2, "0")}</span>
                   <img src={step.image} alt={step.title} loading="lazy" className="h-[146px] w-[46%] rounded-2xl object-cover" />
