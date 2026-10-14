@@ -147,8 +147,11 @@ function RootComponent() {
       <CompleteCouncilProfile />
       {!pathname.startsWith("/auth") && !pathname.startsWith("/questionnaire") && !pathname.startsWith("/results") && <Header />}
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <div key={pathname} className="page-transition">
-        <Outlet />
+      <div key={pathname} className="page-transition-frame">
+        <div className="page-transition-accent" aria-hidden="true" />
+        <div className="page-transition">
+          <Outlet />
+        </div>
       </div>
 
       {!pathname.startsWith("/questionnaire") && !pathname.startsWith("/dashboard") && <MobileBottomNav />}
