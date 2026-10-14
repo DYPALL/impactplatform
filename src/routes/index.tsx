@@ -3,14 +3,10 @@ import { useState } from "react";
 import { ResourcePreview } from "@/components/ResourcePreview";
 import { HomeFAQ } from "@/components/HomeFAQ";
 import impactLogo from "@/assets/logo_color_impact.png.asset.json";
-import { TutorialSlot } from "@/components/TutorialSlot";
+import { AssessmentSteps } from "@/components/AssessmentSteps";
 import { Button } from "@/components/ui/button";
 import heroImg from "@/assets/hero-photo.webp.asset.json";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
-import step1Img from "@/assets/step-1.webp.asset.json";
-import step2Img from "@/assets/step-2.webp.asset.json";
-import step3Img from "@/assets/step-3.webp.asset.json";
-import step4Img from "@/assets/step-4.webp.asset.json";
 import dypallLogo from "@/assets/DYPALL-logo.png.asset.json";
 import bataljongLogo from "@/assets/Bataljong-logo.png.asset.json";
 import fundacioLogo from "@/assets/Fundacio-logo.png.asset.json";
@@ -35,6 +31,8 @@ export const Route = createFileRoute("/")({
           "Assess, reflect and act. A comprehensive platform for Local Youth Councils to measure impact and plan next steps.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: heroImg.url },
+      { name: "twitter:image", content: heroImg.url },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
@@ -105,109 +103,6 @@ function Hero() {
             height={800}
             className="h-[280px] w-full rounded-l-2xl object-cover shadow-2xl sm:h-[360px] lg:h-[397px]"
           />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const steps = [
-  {
-    n: 1,
-    title: "Start assessing",
-    body: "Choose your starting point. Create an account when you are ready to unlock your full results and save your progress.",
-    image: step1Img.url,
-    color: "var(--impact-purple)",
-  },
-  {
-    n: 2,
-    title: "Pick a focus area",
-    body: "Choose one of the IMPACT thematic areas to start with, or run the full self-assessment across all dimensions.",
-    image: step2Img.url,
-    color: "var(--impact-orange)",
-  },
-  {
-    n: 3,
-    title: "Answer the questionnaire",
-    body: "Rate your council against each indicator. It takes 15–30 minutes and you can save your progress anytime.",
-    image: step3Img.url,
-    color: "var(--impact-green)",
-  },
-  {
-    n: 4,
-    title: "Review your results",
-    body: "Explore your visual scoreboard, then Sign-up for detailed feedback and reflection questions saved to your account.",
-    image: step4Img.url,
-    color: "var(--impact-pink)",
-  },
-  { n: 5, title: "Build your action plan", body: "Select your next steps, set a goal and organise who will do what, when and with which resources.", image: ctaImg.url, color: "var(--impact-green)" },
-];
-
-function HowItWorks() {
-  return (
-    <section id="how" className="w-full bg-white">
-      <div className="mx-auto max-w-[1440px] px-6 py-20 lg:px-[120px] lg:py-24">
-        <div className="max-w-3xl">
-          <h2 className="text-3xl text-[color:var(--impact-purple)] lg:text-[36px]">
-            How to start assessing?
-          </h2>
-          <p className="mt-3 text-[16px] leading-[1.6] text-[color:var(--impact-ink-muted)]">
-            Five simple steps to measure your Local Youth Council's impact,
-            reflect together as a team, and turn results into concrete action.
-          </p>
-        </div>
-
-        <div className="mt-11 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
-          {steps.map((s) => (
-            <article
-              key={s.n}
-              className="flex flex-col overflow-hidden rounded-[20px] border border-[color:var(--impact-border)] bg-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.05)]"
-            >
-              <div className="relative h-[220px] w-full overflow-hidden">
-                <img
-                  src={s.image}
-                  alt={s.title}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-[rgba(17,24,39,0.15)]" />
-              </div>
-              <div className="flex flex-col gap-4 p-5">
-                <div className="flex flex-col items-start gap-3">
-                  <div className="relative h-[52px] w-[56px] shrink-0">
-                    <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
-                      <path
-                        d="M50,8 L90,80 L10,80 Z"
-                        fill={s.color}
-                        stroke={s.color}
-                        strokeWidth="10"
-                        strokeLinejoin="round"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    <span className="absolute inset-0 flex items-center justify-center pt-1 text-[20px] font-bold text-white">
-                      {s.n}
-                    </span>
-                  </div>
-                  <h3 className="text-[20px] font-bold leading-tight text-[color:var(--impact-ink)]">
-                    {s.title}
-                  </h3>
-                </div>
-                <p className="text-[14px] leading-[1.8] text-[color:var(--impact-ink-muted)]">
-                  {s.body}
-                </p>
-                {s.n === 5 && <TutorialSlot tutorial="actionPlan" />}
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <div className="mt-11 flex justify-center">
-          <a
-            href="/start-assessing"
-            className="inline-flex h-14 items-center justify-center rounded-full bg-[color:var(--impact-purple)] px-7 text-[15px] font-bold text-white transition hover:opacity-90"
-          >
-            Start your assessment
-          </a>
         </div>
       </div>
     </section>
@@ -306,7 +201,7 @@ function Landing() {
     <div className="min-h-screen bg-white">
       <main>
         <Hero />
-        <HowItWorks />
+        <AssessmentSteps />
         <CtaBanner />
         <ResourcePreview />
         <Consortium />
