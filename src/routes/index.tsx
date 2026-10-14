@@ -310,7 +310,17 @@ function Landing() {
         <CtaBanner />
         <ResourcePreview />
         <Consortium />
-        <section id="about-impact" className="bg-background"><div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-[120px]"><img src={impactLogo.url} alt="IMPACT project logo" loading="lazy" className="mb-8 h-auto w-[260px] max-w-full" /><h2 className="text-3xl text-primary">About the IMPACT project</h2><p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">IMPACT is a European collaboration working to strengthen Local Youth Councils and meaningful youth participation. The platform brings together assessment, reflection, practical action planning and shared resources so councils and the people supporting them can identify opportunities for growth and take their next steps.</p><p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">Delivered by DYPALL Network, Bataljong, Fundació Ferrer i Guàrdia and Nuva, with co-funding from the European Union.</p><Button asChild variant="link" className="mt-5 px-0"><a href="/faq">Questions about IMPACT?</a></Button></div></section>
+        <section id="about-impact" className="bg-background">
+          <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-6 py-16 md:grid-cols-[minmax(0,1fr)_260px] lg:gap-16 lg:px-[120px]">
+            <div>
+              <h2 className="text-3xl text-primary">About the IMPACT project</h2>
+              <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">IMPACT is a European collaboration working to strengthen Local Youth Councils and meaningful youth participation. The platform brings together assessment, reflection, practical action planning and shared resources so councils and the people supporting them can identify opportunities for growth and take their next steps.</p>
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">Delivered by DYPALL Network, Bataljong, Fundació Ferrer i Guàrdia and Nuva, with co-funding from the European Union.</p>
+              <Button asChild variant="link" className="mt-5 px-0"><a href="/faq">Questions about IMPACT?</a></Button>
+            </div>
+            <img src={impactLogo.url} alt="IMPACT project logo" loading="lazy" className="h-auto w-[260px] max-w-full justify-self-center" />
+          </div>
+        </section>
         <HomeFAQ />
       </main>
       <Footer />

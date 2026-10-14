@@ -1,4 +1,5 @@
 # Platform updates
+- [x] Smooth Home FAQ opening/closing, place project logo right of text, and correct continuous resource carousel movement; browser-verified animation, playback, hover pause, reduced motion and mobile layout.
 - [x] Improve Home audience copy, resource preview carousel, fifth Action Plan step, and existing project information.
 - [x] Add footer-linked FAQs and Resource Hub resource-sharing contact link with message prefill. Existing contact submission is still presentation-only; delivery was not implemented.
 - [x] Require council name, role, country after Google/Apple sign-up; highlight account benefits. Existing signed-in session tested; a live provider sign-up was not exercised.
