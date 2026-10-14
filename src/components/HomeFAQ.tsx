@@ -17,7 +17,11 @@ export function HomeFAQ() {
               <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 shrink-0 fill-secondary transition-transform duration-500 ease-in-out group-data-[state=open]:rotate-180 motion-reduce:transition-none"><path d="M4 7 Q3 7 3.5 8 L11 19 Q12 20 13 19 L20.5 8 Q21 7 20 7 Z" /></svg>
             </Accordion.Trigger>
           </Accordion.Header>
-          <Accordion.Content forceMount className="home-faq-answer" aria-hidden={openQuestion !== `faq-${index}`} inert={openQuestion !== `faq-${index}`}><div className="min-h-0 overflow-hidden"><p className="home-faq-copy max-w-3xl pb-6 text-base leading-relaxed text-muted-foreground">{answer}</p></div></Accordion.Content>
+          <Accordion.Content forceMount aria-hidden={openQuestion !== `faq-${index}`} inert={openQuestion !== `faq-${index}`}>
+            <div className="home-faq-answer" data-state={openQuestion === `faq-${index}` ? "open" : "closed"}>
+              <div className="min-h-0 overflow-hidden"><p className="home-faq-copy max-w-3xl pb-6 text-base leading-relaxed text-muted-foreground">{answer}</p></div>
+            </div>
+          </Accordion.Content>
         </Accordion.Item>)}
       </Accordion.Root>
       <p className="mt-7 text-sm text-muted-foreground">Still have a question? <Link to="/send-us-a-message" className="font-bold text-primary underline">Send us a message</Link></p>
