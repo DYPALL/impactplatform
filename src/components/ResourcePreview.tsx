@@ -45,7 +45,7 @@ export function ResourcePreview() {
   return <section id="resources" className="bg-muted/40">
     <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-[120px]">
       <div className="max-w-2xl"><h2 className="text-3xl text-primary">Resource Hub</h2><p className="mt-3 text-base leading-relaxed text-muted-foreground">Ideas and practical tools for everyone working with young people: youth councillors, youth workers, municipalities, educators and researchers.</p></div>
-      <div className="mt-7 flex justify-end gap-2"><Button variant="outline" size="icon" title="Previous resources" aria-label="Previous resources" onClick={() => { autoScroll.stop(); carousel?.scrollPrev(reducedMotion); if (!hovering && !focused) autoScroll.play(); }}><ArrowLeft /></Button><Button variant="outline" size="icon" title="Next resources" aria-label="Next resources" onClick={() => { autoScroll.stop(); carousel?.scrollNext(reducedMotion); if (!hovering && !focused) autoScroll.play(); }}><ArrowRight /></Button></div>
+      <div className="mt-7 flex justify-end gap-2"><Button variant="default" size="icon" className="h-10 w-10 rounded-full" title="Previous resources" aria-label="Previous resources" onClick={() => { autoScroll.stop(); carousel?.scrollPrev(reducedMotion); if (!hovering && !focused) autoScroll.play(); }}><ArrowLeft /></Button><Button variant="default" size="icon" className="h-10 w-10 rounded-full" title="Next resources" aria-label="Next resources" onClick={() => { autoScroll.stop(); carousel?.scrollNext(reducedMotion); if (!hovering && !focused) autoScroll.play(); }}><ArrowRight /></Button></div>
       <div onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}>
       <div ref={viewportRef} aria-label="Featured resources" aria-roledescription="carousel" className="mt-3 overflow-hidden">
       <div className="-ml-6 flex touch-pan-y">
@@ -56,7 +56,7 @@ export function ResourcePreview() {
       </div>
       </div>
       </div>
-      <div className="mt-9 flex justify-center"><Button asChild size="lg"><Link to="/resource-hub">Explore all resources <ArrowRight /></Link></Button></div>
+      <div className="mt-9 flex justify-center"><Button asChild size="lg" className="rounded-full px-9"><Link to="/resource-hub">Explore all resources <ArrowRight /></Link></Button></div>
       {isError && <p className="text-sm text-muted-foreground">Resource previews are unavailable right now. Visit the Resource Hub to try again.</p>}
     </div>
   </section>;
