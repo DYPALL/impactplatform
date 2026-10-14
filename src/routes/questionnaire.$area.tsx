@@ -78,9 +78,23 @@ function QuestionnairePage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const { user, loading: authLoading } = useAuth();
+  const isGuest = !authLoading && !user;
+
   // Resume a specific assessment (?id=) or the latest unfinished one for this area
   useEffect(() => {
+    if (authLoading) return;
     let active = true;
+    if (!user) {
+      const g = loadGuest(area);
+      if (g && !g.completed) {
+        const migrated = migrateLegacy((g.answers ?? {}) as Record<string, unknown>);
+        setStep(Math.min(Math.max(g.step, 1), TOTAL_STEPS - 1));
+        setMatrix(migrated.matrix);
+        setScale(migrated.scale);
+      }
+      return;
+    }
     const query = routeId
       ? supabase.from("assessments").select("id, current_step, answers, status").eq("id", routeId).maybeSingle()
       : supabase
@@ -142,9 +156,18 @@ function QuestionnairePage() {
     scale?: ScaleState;
   }) => {
     setSaving(true);
-    const { data: userRes } = await supabase.auth.getUser();
-    const userId = userRes.user?.id;
+    const { data: sess } = await supabase.auth.getSession();
+    const userId = sess.session?.user.id;
     if (!userId) {
+      const m = opts.matrix ?? matrix;
+      const s = opts.scale ?? scale;
+      saveGuest({
+        area,
+        step: opts.step,
+        completed: Boolean(opts.completed),
+        answers: { answersByIndicator: { matrix: m, scale: s } },
+        percentages: computePercentages(m, s),
+      });
       setSaving(false);
       return null;
     }

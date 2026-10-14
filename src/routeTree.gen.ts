@@ -14,12 +14,12 @@ import { Route as ResourceHubRouteImport } from './routes/resource-hub'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as QuestionnaireAreaRouteImport } from './routes/questionnaire.$area'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedResultsIdRouteImport } from './routes/_authenticated/results.$id'
-import { Route as AuthenticatedQuestionnaireAreaRouteImport } from './routes/_authenticated/questionnaire.$area'
 import { Route as AuthenticatedActionPlanAssessmentIdRouteImport } from './routes/_authenticated/action-plan.$assessmentId'
 import { Route as AuthenticatedAdminResourcesIndexRouteImport } from './routes/_authenticated/admin/resources.index'
 import { Route as AuthenticatedAdminResourcesNewRouteImport } from './routes/_authenticated/admin/resources.new'
@@ -49,6 +49,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuestionnaireAreaRoute = QuestionnaireAreaRouteImport.update({
+  id: '/questionnaire/$area',
+  path: '/questionnaire/$area',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -74,12 +79,6 @@ const AuthenticatedResultsIdRoute = AuthenticatedResultsIdRouteImport.update({
   path: '/results/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedQuestionnaireAreaRoute =
-  AuthenticatedQuestionnaireAreaRouteImport.update({
-    id: '/questionnaire/$area',
-    path: '/questionnaire/$area',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedActionPlanAssessmentIdRoute =
   AuthenticatedActionPlanAssessmentIdRouteImport.update({
     id: '/action-plan/$assessmentId',
@@ -113,8 +112,8 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/questionnaire/$area': typeof QuestionnaireAreaRoute
   '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
-  '/questionnaire/$area': typeof AuthenticatedQuestionnaireAreaRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
@@ -128,8 +127,8 @@ export interface FileRoutesByTo {
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/questionnaire/$area': typeof QuestionnaireAreaRoute
   '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
-  '/questionnaire/$area': typeof AuthenticatedQuestionnaireAreaRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
@@ -146,8 +145,8 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/questionnaire/$area': typeof QuestionnaireAreaRoute
   '/_authenticated/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
-  '/_authenticated/questionnaire/$area': typeof AuthenticatedQuestionnaireAreaRoute
   '/_authenticated/results/$id': typeof AuthenticatedResultsIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
@@ -164,8 +163,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/profile'
-    | '/action-plan/$assessmentId'
     | '/questionnaire/$area'
+    | '/action-plan/$assessmentId'
     | '/results/$id'
     | '/admin/'
     | '/admin/resources/new'
@@ -179,8 +178,8 @@ export interface FileRouteTypes {
     | '/send-us-a-message'
     | '/dashboard'
     | '/profile'
-    | '/action-plan/$assessmentId'
     | '/questionnaire/$area'
+    | '/action-plan/$assessmentId'
     | '/results/$id'
     | '/admin'
     | '/admin/resources/new'
@@ -196,8 +195,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
+    | '/questionnaire/$area'
     | '/_authenticated/action-plan/$assessmentId'
-    | '/_authenticated/questionnaire/$area'
     | '/_authenticated/results/$id'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/resources/new'
@@ -211,6 +210,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ResourceHubRoute: typeof ResourceHubRoute
   SendUsAMessageRoute: typeof SendUsAMessageRoute
+  QuestionnaireAreaRoute: typeof QuestionnaireAreaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -250,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/questionnaire/$area': {
+      id: '/questionnaire/$area'
+      path: '/questionnaire/$area'
+      fullPath: '/questionnaire/$area'
+      preLoaderRoute: typeof QuestionnaireAreaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
       path: '/profile'
@@ -283,13 +290,6 @@ declare module '@tanstack/react-router' {
       path: '/results/$id'
       fullPath: '/results/$id'
       preLoaderRoute: typeof AuthenticatedResultsIdRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/questionnaire/$area': {
-      id: '/_authenticated/questionnaire/$area'
-      path: '/questionnaire/$area'
-      fullPath: '/questionnaire/$area'
-      preLoaderRoute: typeof AuthenticatedQuestionnaireAreaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/action-plan/$assessmentId': {
@@ -350,7 +350,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedActionPlanAssessmentIdRoute: typeof AuthenticatedActionPlanAssessmentIdRoute
-  AuthenticatedQuestionnaireAreaRoute: typeof AuthenticatedQuestionnaireAreaRoute
   AuthenticatedResultsIdRoute: typeof AuthenticatedResultsIdRoute
 }
 
@@ -360,7 +359,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedActionPlanAssessmentIdRoute:
     AuthenticatedActionPlanAssessmentIdRoute,
-  AuthenticatedQuestionnaireAreaRoute: AuthenticatedQuestionnaireAreaRoute,
   AuthenticatedResultsIdRoute: AuthenticatedResultsIdRoute,
 }
 
@@ -373,6 +371,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ResourceHubRoute: ResourceHubRoute,
   SendUsAMessageRoute: SendUsAMessageRoute,
+  QuestionnaireAreaRoute: QuestionnaireAreaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
