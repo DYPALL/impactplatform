@@ -74,6 +74,7 @@ export function Footer() {
                 Send us a message
               </Link>
             </li>
+            <li><Link to="/faq" className="inline-flex items-center gap-2 hover:text-white">Frequently asked questions</Link></li>
           </ul>
         </div>
       </div>

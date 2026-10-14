@@ -234,3 +234,14 @@
 
 
 
+
+:root {
+  --score-not-at-all-soft: #FDECEB;
+  --score-partially-soft: #FDF1E5;
+  --score-mostly-soft: #FCF7E4;
+  --score-fully-soft: #E9F6EF;
+}
+.indicator-result.score-level-0 { background-color: var(--score-not-at-all-soft); }
+.indicator-result.score-level-1 { background-color: var(--score-partially-soft); }
+.indicator-result.score-level-2 { background-color: var(--score-mostly-soft); }
+.indicator-result.score-level-3 { background-color: var(--score-fully-soft); }

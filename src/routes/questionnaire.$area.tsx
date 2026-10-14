@@ -22,6 +22,8 @@ export const Route = createFileRoute("/questionnaire/$area")({
       { name: "description", content: "Answer the IMPACT self-assessment questionnaire for your Local Youth Council." },
       { property: "og:title", content: "Questionnaire — IMPACT" },
       { property: "og:description", content: "Answer the IMPACT self-assessment questionnaire for your Local Youth Council." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: QuestionnairePage,
@@ -188,9 +190,11 @@ function QuestionnairePage() {
 
     let id = assessmentId;
     if (id) {
-      await supabase.from("assessments").update(payload).eq("id", id);
+      const { error: saveError } = await supabase.from("assessments").update(payload).eq("id", id);
+      if (saveError) { setSaving(false); setError("Your answers could not be saved. Please try again."); return null; }
     } else {
-      const { data } = await supabase.from("assessments").insert(payload).select("id").maybeSingle();
+      const { data, error: saveError } = await supabase.from("assessments").insert(payload).select("id").maybeSingle();
+      if (saveError || !data) { setSaving(false); setError("Your answers could not be saved. Please try again."); return null; }
       id = data?.id ?? null;
       setAssessmentId(id);
     }
@@ -226,12 +230,14 @@ function QuestionnairePage() {
     }
     setError(null);
     const next = step + 1;
-    await persist({ step: next, completed: next === TOTAL_STEPS });
+    const savedId = await persist({ step: next, completed: next === TOTAL_STEPS });
+    if (user && !savedId) return;
     setStep(next);
   };
 
   const handleSaveAndQuit = async () => {
-    await persist({ step });
+    const savedId = await persist({ step });
+    if (user && !savedId) return;
     navigate({ to: isGuest ? "/" : "/dashboard" });
   };
 
@@ -308,12 +314,13 @@ function QuestionnairePage() {
               setScale(nextScale);
               setError(null);
               const next = step + 1;
-              await persist({ step: next, completed: next === TOTAL_STEPS, scale: nextScale });
+              const savedId = await persist({ step: next, completed: next === TOTAL_STEPS, scale: nextScale });
+              if (user && !savedId) return;
               setStep(next);
             }}
           />
         )}
-        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} areaKey={areaContent.key} assessmentId={assessmentId} locked={isGuest} />}
+        {step === TOTAL_STEPS && <ResultsStep percentages={percentages} areaKey={areaContent.key} assessmentId={assessmentId} locked={isGuest} onSave={async () => Boolean(await persist({ step: TOTAL_STEPS, completed: true }))} onEdit={() => { setIsEditing(!isGuest); setError(null); setStep(1); window.scrollTo({ top: 0 }); }} />}
 
         {/* Nav */}
         {step < TOTAL_STEPS && (

@@ -10,6 +10,8 @@ export const Route = createFileRoute("/_authenticated/profile")({
       { name: "description", content: "Update your personal details, role, entity, email and password on IMPACT." },
       { property: "og:title", content: "Manage your profile — IMPACT" },
       { property: "og:description", content: "Update your personal details, role, entity, email and password on IMPACT." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ProfilePage,

@@ -12,6 +12,10 @@ export const Route = createFileRoute("/_authenticated/admin/")({
     meta: [
       { title: "Admin Dashboard — IMPACT" },
       { name: "description", content: "Manage resources and monitor platform metrics." },
+      { property: "og:title", content: "Admin Dashboard — IMPACT" },
+      { property: "og:description", content: "Manage IMPACT resources and monitor platform metrics." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],
   }),

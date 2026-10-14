@@ -73,7 +73,7 @@ function SavedResultsPage() {
             This assessment could not be found.
           </p>
         )}
-        {percentages && <ResultsStep percentages={percentages} areaKey={areaKey} assessmentId={id} />}
+        {percentages && <ResultsStep percentages={percentages} areaKey={areaKey} assessmentId={id} onSave={async () => { const { data, error } = await supabase.from("assessments").select("id").eq("id", id).maybeSingle(); return !error && Boolean(data); }} />}
       </main>
     </div>
   );

@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Polygon } from "@/components/Polygon";
 
 export const Route = createFileRoute("/send-us-a-message")({
+  validateSearch: (search: Record<string, unknown>): { subject?: string } => ({ subject: search.subject === "resource" ? "resource" : undefined }),
   head: () => ({
     meta: [
       { title: "Send us a message — IMPACT" },
@@ -18,7 +19,8 @@ export const Route = createFileRoute("/send-us-a-message")({
 });
 
 function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", organisation: "", message: "" });
+  const { subject } = Route.useSearch();
+  const [form, setForm] = useState({ name: "", email: "", organisation: "", message: subject === "resource" ? "I would like to suggest a resource.\n\nTitle: \nLink: \nLanguage: \nWhy it is useful: " : "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));

@@ -14,6 +14,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
       { name: "description", content: "Your IMPACT assessments: results, progress and action plans for your Local Youth Council." },
       { property: "og:title", content: "My Assessments — IMPACT" },
       { property: "og:description", content: "Your IMPACT assessments: results, progress and action plans for your Local Youth Council." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Dashboard,

@@ -14,6 +14,9 @@ import {
   Check,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { TutorialSlot } from "@/components/TutorialSlot";
+import { Download } from "lucide-react";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
@@ -163,6 +166,8 @@ function ActionPlanPage() {
           </span>
         </div>
 
+        <div className="mt-5 flex justify-end"><Button asChild variant="outline"><a href="/downloads/IMPACT-blank-action-plan.xlsx" download><Download />Download blank template</a></Button></div>
+        <TutorialSlot tutorial="actionPlan" />
         <div className="mt-6">
           <Tabs />
         </div>
