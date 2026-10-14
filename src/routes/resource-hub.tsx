@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { TutorialSlot } from "@/components/TutorialSlot";
 import { Button } from "@/components/ui/button";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -276,7 +275,6 @@ function ResourceHubPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1440px] px-6 pt-6 lg:px-[120px]"><TutorialSlot tutorial="resources" /></section>
         {/* Search and filters */}
         <section className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 sm:py-12 lg:px-[120px]">
           <div className="flex h-[48px] items-center gap-3 rounded-[12px] border border-[#e5e7eb] bg-white px-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] sm:h-[56px] sm:rounded-[16px] sm:px-4">
