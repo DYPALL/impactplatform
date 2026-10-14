@@ -76,6 +76,7 @@ function StartAssessing() {
                 <Link
                   to="/questionnaire/$area"
                   params={{ area: area.key }}
+                  replace
                   className="mt-6 inline-flex w-fit items-center justify-center rounded-full px-7 py-3.5 text-[14px] font-bold text-white transition hover:opacity-90"
                   style={{ backgroundColor: area.color }}
                 >
