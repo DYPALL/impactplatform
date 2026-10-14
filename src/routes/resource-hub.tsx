@@ -304,17 +304,23 @@ function ResourceHubPage() {
 
           <div className="mt-5 flex flex-col gap-4 sm:mt-6 sm:gap-5">
             <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-              <span className="text-[13px] font-bold text-[#111827] sm:text-[14px]">Area</span>
+              <span className="flex items-center gap-2 text-[13px] font-bold text-[#111827] sm:text-[14px]">
+                Area
+                {areas.length > 1 && (
+                  <button type="button" onClick={() => setAreas([])} className="text-[12px] font-semibold text-[#6b7280] underline underline-offset-4 transition hover:text-[#111827]">
+                    Clear
+                  </button>
+                )}
+              </span>
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 {areaFilters.map((f) => {
-                  const isAll = f.key === "all";
-                  const active = isAll ? areas.length === 0 : areas.includes(f.key);
+                  const active = f.key === "all" ? areas.length === 0 : areas.includes(f.key);
                   return (
                     <button
                       key={f.key}
                       type="button"
                       aria-pressed={active}
-                      onClick={() => (isAll ? setAreas([]) : toggleArea(f.key))}
+                      onClick={() => (f.key === "all" ? setAreas([]) : toggleArea(f.key))}
                       className="inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-bold transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
                       style={
                         active
@@ -323,34 +329,31 @@ function ResourceHubPage() {
                       }
                     >
                       {f.label}
-                      {!isAll && active && <CheckGlyph />}
+                      {f.key !== "all" && active && <CheckGlyph />}
                     </button>
                   );
                 })}
-                {areas.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => setAreas([])}
-                    className="rounded-full px-2 py-2 text-[13px] font-bold text-[#6b7280] underline underline-offset-4 transition hover:text-[#111827] sm:text-[14px]"
-                  >
-                    Clear areas
-                  </button>
-                )}
               </div>
             </div>
 
             <div className="flex flex-col gap-2.5 border-t border-[#f1f2f4] pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 sm:border-t-0 sm:pt-0">
-              <span className="text-[13px] font-bold text-[#111827] sm:text-[14px]">Type</span>
+              <span className="flex items-center gap-2 text-[13px] font-bold text-[#111827] sm:text-[14px]">
+                Type
+                {types.length > 1 && (
+                  <button type="button" onClick={() => setTypes([])} className="text-[12px] font-semibold text-[#6b7280] underline underline-offset-4 transition hover:text-[#111827]">
+                    Clear
+                  </button>
+                )}
+              </span>
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 {typeFilters.map((f) => {
-                  const isAll = f.key === "all";
-                  const active = isAll ? types.length === 0 : types.includes(f.key);
+                  const active = f.key === "all" ? types.length === 0 : types.includes(f.key);
                   return (
                     <button
                       key={f.key}
                       type="button"
                       aria-pressed={active}
-                      onClick={() => (isAll ? setTypes([]) : toggleType(f.key))}
+                      onClick={() => (f.key === "all" ? setTypes([]) : toggleType(f.key))}
                       className={
                         active
                           ? "inline-flex items-center gap-1.5 rounded-full bg-[color:var(--impact-purple)] px-3 py-2 text-[13px] font-bold text-white transition sm:px-[14px] sm:py-[10px] sm:text-[14px]"
@@ -358,19 +361,10 @@ function ResourceHubPage() {
                       }
                     >
                       {f.label}
-                      {!isAll && active && <CheckGlyph />}
+                      {f.key !== "all" && active && <CheckGlyph />}
                     </button>
                   );
                 })}
-                {types.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => setTypes([])}
-                    className="rounded-full px-2 py-2 text-[13px] font-bold text-[#6b7280] underline underline-offset-4 transition hover:text-[#111827] sm:text-[14px]"
-                  >
-                    Clear types
-                  </button>
-                )}
               </div>
             </div>
 
