@@ -6,7 +6,10 @@ export function HomeFAQ() {
   const [openQuestion, setOpenQuestion] = useState<number | null>(null);
   return <section id="home-faq" className="bg-muted/40">
     <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-[120px]">
-      <h2 className="section-title text-primary">Frequently asked questions</h2>
+      <h2 className="section-title flex items-center gap-3 text-primary">
+        <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-xl font-extrabold leading-none text-primary-foreground">?</span>
+        Frequently asked questions
+      </h2>
       <p className="mt-3 text-base text-muted-foreground">Local Youth Councils, assessments and your next steps.</p>
       <div className="mt-8 border-t border-border">
         {FAQ_QUESTIONS.map(([question, answer], index) => {
