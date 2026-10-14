@@ -9,6 +9,7 @@
 - [ ] Add Action Plan video tutorial — needs supplied video files or URLs. Resource Hub tutorial removed at the user's request.
 - [ ] Replace draft project description with approved copy — waiting for consortium text.
 - [x] Verify updated public pages and signed-in assessment saving/readback, editing, chart navigation, selection limits, template download, and mobile overflow.
+- [x] Move the step-by-step title and intro to the left without the arrow icon, and give every home section heading one shared size and font; browser-verified all six headings at 36px/800 Work Sans.
 
 ## Options reviewed (not implemented)
 - [x] Home refinements: looping automatic resource carousel directly before partners, project logo, animated triangle FAQ accordion before footer; desktop/mobile interactions verified.
