@@ -69,15 +69,6 @@ export function Header() {
         <nav className="hidden flex-1 items-center justify-end lg:flex">
           <div className="flex items-center gap-7">
             <Link
-              to="/start-assessing"
-              className={`${navLinkBase} ${pathname === "/start-assessing" ? "bg-[color:var(--impact-purple)] text-white" : "bg-[color:var(--impact-purple)]/10 text-[color:var(--impact-purple)] hover:bg-[color:var(--impact-purple)] hover:text-white"}`}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <polygon points="6 3 20 12 6 21 6 3" />
-              </svg>
-              Start assessing
-            </Link>
-            <Link
               to="/"
               className={linkClass("/")}
             >
