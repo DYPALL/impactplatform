@@ -1,0 +1,10 @@
+export const FAQ_QUESTIONS = [
+  ["What is a Local Youth Council?", "A Local Youth Council (LYC) is a group or participatory body through which young people represent their perspectives, discuss local priorities and contribute to decisions in their community. Its structure and relationship with the municipality vary from place to place."],
+  ["What is IMPACT?", "IMPACT brings together a self-assessment tool, tailored guidance, an Action Plan builder and a public Resource Hub to help strengthen Local Youth Councils and meaningful youth participation."],
+  ["Who can use the platform?", "The assessment is designed for Local Youth Councils and the people supporting them. The Resource Hub is also open to youth workers, municipalities, educators, researchers and anyone interested in youth participation."],
+  ["Do I need an account?", "You can start an assessment and see its visual overview without an account. Sign-up unlocks detailed feedback, reflection questions and the Action Plan builder, and saves your assessment to My Assessments."],
+  ["Where are my results saved?", "Completed assessments are saved automatically to My Assessments when you are logged in. Before Log-in, progress stays in the browser you used. After you Log-in or complete Sign-up, that progress can be saved to your account."],
+  ["Can I change my answers?", "Yes. Choose Edit your answers on your results page, or edit a completed assessment from My Assessments. Your scores update when you save your changes."],
+  ["How do I create an Action Plan?", "Choose up to three action steps for each indicator in your full results. The selected steps appear in the Action Plan builder, where you can add your goal, responsibilities, timing and resources. An editable blank spreadsheet template is also available."],
+  ["Can I use resources without an account?", "Yes. The Resource Hub is public. Each resource opens at its original source, where access and download availability are determined by the publisher."],
+] as const;
