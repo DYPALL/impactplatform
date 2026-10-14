@@ -496,6 +496,33 @@ export function ResultsStep({
 
       </div>
 
+      {locked ? (
+        <div className="mt-8 rounded-2xl p-8 text-center" style={{ backgroundColor: theme.accent }}>
+          <Lock size={28} className="mx-auto text-white" />
+          <p className="mt-3 text-[22px] font-extrabold leading-tight text-white">Sign-up to see your full results</p>
+          <p className="mx-auto mt-2 max-w-[520px] text-[13px] leading-relaxed text-white/80">
+            Create a free account to unlock detailed feedback for each indicator, reflection questions, recommended
+            action steps and the Action Plan builder. Your answers will be saved to your account automatically.
+          </p>
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            <Link
+              to="/auth"
+              search={{ mode: "signup" } as never}
+              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-[13px] font-bold transition hover:opacity-90"
+              style={{ color: theme.accent }}
+            >
+              Sign-up <ArrowRight size={14} />
+            </Link>
+            <Link
+              to="/auth"
+              className="inline-flex items-center rounded-full border border-white/70 px-6 py-3 text-[13px] font-bold text-white transition hover:bg-white/10"
+            >
+              Log-in
+            </Link>
+          </div>
+        </div>
+      ) : (
+      <>
       {/* Indicator cards */}
       <div className="mt-10">
         <h2 className="text-[20px] font-extrabold text-[#111827]">Your Results</h2>

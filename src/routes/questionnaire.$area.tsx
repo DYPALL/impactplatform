@@ -232,7 +232,7 @@ function QuestionnairePage() {
 
   const handleSaveAndQuit = async () => {
     await persist({ step });
-    navigate({ to: "/dashboard" });
+    navigate({ to: isGuest ? "/" : "/dashboard" });
   };
 
   const progress = step / TOTAL_STEPS;
@@ -244,11 +244,11 @@ function QuestionnairePage() {
       <header className="sticky top-0 z-40" style={{ backgroundColor: theme.accent }}>
         <div className="mx-auto flex h-[72px] max-w-[1440px] items-center gap-4 px-6 lg:px-10">
           <Link
-            to="/dashboard"
+            to={isGuest ? "/" : "/dashboard"}
             className="flex shrink-0 items-center gap-3 text-[15px] font-semibold text-white transition hover:opacity-80"
           >
             <ArrowLeft size={20} />
-            <span className="hidden sm:inline">Back to Dashboard</span>
+            <span className="hidden sm:inline">{isGuest ? "Back to Home" : "Back to Dashboard"}</span>
           </Link>
           <button
             type="button"
