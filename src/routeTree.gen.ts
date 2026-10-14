@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StartAssessingRouteImport } from './routes/start-assessing'
 import { Route as SendUsAMessageRouteImport } from './routes/send-us-a-message'
 import { Route as ResourceHubRouteImport } from './routes/resource-hub'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -25,6 +26,11 @@ import { Route as AuthenticatedAdminResourcesIndexRouteImport } from './routes/_
 import { Route as AuthenticatedAdminResourcesNewRouteImport } from './routes/_authenticated/admin/resources.new'
 import { Route as AuthenticatedAdminResourcesIdEditRouteImport } from './routes/_authenticated/admin/resources.$id.edit'
 
+const StartAssessingRoute = StartAssessingRouteImport.update({
+  id: '/start-assessing',
+  path: '/start-assessing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SendUsAMessageRoute = SendUsAMessageRouteImport.update({
   id: '/send-us-a-message',
   path: '/send-us-a-message',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/resource-hub': typeof ResourceHubRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
+  '/start-assessing': typeof StartAssessingRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/resource-hub': typeof ResourceHubRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
+  '/start-assessing': typeof StartAssessingRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/questionnaire/$area': typeof QuestionnaireAreaRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/resource-hub': typeof ResourceHubRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
+  '/start-assessing': typeof StartAssessingRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/resource-hub'
     | '/send-us-a-message'
+    | '/start-assessing'
     | '/admin'
     | '/dashboard'
     | '/profile'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/resource-hub'
     | '/send-us-a-message'
+    | '/start-assessing'
     | '/dashboard'
     | '/profile'
     | '/questionnaire/$area'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/resource-hub'
     | '/send-us-a-message'
+    | '/start-assessing'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
@@ -210,11 +222,19 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ResourceHubRoute: typeof ResourceHubRoute
   SendUsAMessageRoute: typeof SendUsAMessageRoute
+  StartAssessingRoute: typeof StartAssessingRoute
   QuestionnaireAreaRoute: typeof QuestionnaireAreaRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/start-assessing': {
+      id: '/start-assessing'
+      path: '/start-assessing'
+      fullPath: '/start-assessing'
+      preLoaderRoute: typeof StartAssessingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/send-us-a-message': {
       id: '/send-us-a-message'
       path: '/send-us-a-message'
@@ -371,6 +391,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ResourceHubRoute: ResourceHubRoute,
   SendUsAMessageRoute: SendUsAMessageRoute,
+  StartAssessingRoute: StartAssessingRoute,
   QuestionnaireAreaRoute: QuestionnaireAreaRoute,
 }
 export const routeTree = rootRouteImport
