@@ -42,7 +42,7 @@ function useAutoScroll() {
 
 export function ResourcePreview() {
   const autoScroll = useAutoScroll();
-  const [viewportRef, carousel] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1, duration: 42 }, [autoScroll.plugin]);
+  const [viewportRef, carousel] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1, duration: 36 }, [autoScroll.plugin]);
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -96,7 +96,7 @@ export function ResourcePreview() {
   return <section id="resources" className="bg-muted/40">
     <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-[120px]">
       <div className="max-w-2xl"><h2 className="text-3xl text-primary">Resource Hub</h2><p className="mt-3 text-base leading-relaxed text-muted-foreground">Ideas and practical tools for everyone working with young people: youth councillors, youth workers, municipalities, educators and researchers.</p></div>
-      <div className="mt-7 flex justify-end gap-2"><Button variant="default" size="icon" className="h-10 w-10 rounded-full" title="Previous resources" aria-label="Previous resources" onClick={() => { if (!carousel) return; autoScroll.stop(); carousel.scrollPrev(reducedMotion); if (!hovering && !focused && !document.hidden && data.length >= 2) setResumeAfterSettle(true); }}><ArrowLeft /></Button><Button variant="default" size="icon" className="h-10 w-10 rounded-full" title="Next resources" aria-label="Next resources" onClick={() => { if (!carousel) return; autoScroll.stop(); carousel.scrollNext(reducedMotion); if (!hovering && !focused && !document.hidden && data.length >= 2) setResumeAfterSettle(true); }}><ArrowRight /></Button></div>
+      <div className="mt-7 flex justify-end gap-2"><Button variant="default" size="icon" className="h-10 w-10 rounded-full" title="Previous resources" aria-label="Previous resources" onClick={() => { if (!carousel) return; autoScroll.stop(); carousel.scrollPrev(); if (!hovering && !focused && !document.hidden && data.length >= 2) setResumeAfterSettle(true); }}><ArrowLeft /></Button><Button variant="default" size="icon" className="h-10 w-10 rounded-full" title="Next resources" aria-label="Next resources" onClick={() => { if (!carousel) return; autoScroll.stop(); carousel.scrollNext(); if (!hovering && !focused && !document.hidden && data.length >= 2) setResumeAfterSettle(true); }}><ArrowRight /></Button></div>
       <div onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}>
         {data.length > 1
           ? <div ref={viewportRef} aria-label="Featured resources" aria-roledescription="carousel" className="mt-3 overflow-hidden">{track}</div>
