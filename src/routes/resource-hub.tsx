@@ -303,8 +303,8 @@ function ResourceHubPage() {
           </div>
 
           <div className="mt-5 flex flex-col gap-4 sm:mt-6 sm:gap-5">
-            <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-              <span className="flex items-center gap-2 text-[13px] font-bold text-[#111827] sm:text-[14px]">
+            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-3">
+              <span className="flex items-center gap-2 whitespace-nowrap text-[13px] font-bold text-[#111827] sm:text-[14px]">
                 Area
                 {areas.length > 1 && (
                   <button type="button" onClick={() => setAreas([])} className="text-[12px] font-semibold text-[#6b7280] underline underline-offset-4 transition hover:text-[#111827]">
@@ -336,8 +336,8 @@ function ResourceHubPage() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2.5 border-t border-[#f1f2f4] pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 sm:border-t-0 sm:pt-0">
-              <span className="flex items-center gap-2 text-[13px] font-bold text-[#111827] sm:text-[14px]">
+            <div className="grid grid-cols-1 gap-2.5 border-t border-[#f1f2f4] pt-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-3 sm:border-t-0 sm:pt-0">
+              <span className="flex items-center gap-2 whitespace-nowrap text-[13px] font-bold text-[#111827] sm:text-[14px]">
                 Type
                 {types.length > 1 && (
                   <button type="button" onClick={() => setTypes([])} className="text-[12px] font-semibold text-[#6b7280] underline underline-offset-4 transition hover:text-[#111827]">
