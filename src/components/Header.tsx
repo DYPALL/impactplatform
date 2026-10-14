@@ -112,7 +112,7 @@ export function Header() {
 
             <Link
               to="/start-assessing"
-              className={`${navLinkBase} ${pathname === "/start-assessing" ? "bg-[color:var(--impact-purple)] text-white" : "bg-[color:var(--impact-purple)]/10 text-[color:var(--impact-purple)] hover:bg-[color:var(--impact-purple)] hover:text-white"}`}
+              className={linkClass("/start-assessing")}
             >
               <svg width="16" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
