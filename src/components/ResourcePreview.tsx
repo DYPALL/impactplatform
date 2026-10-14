@@ -71,7 +71,7 @@ export function ResourcePreview() {
       if (!hovering && !focused && !document.hidden && data.length >= 2) autoScroll.play();
     };
     carousel.on("settle", onSettle);
-    return () => carousel.off("settle", onSettle);
+    return () => { carousel.off("settle", onSettle); };
   }, [carousel, resumeAfterSettle, hovering, focused, autoScroll, data.length]);
   useEffect(() => {
     if (!carousel) return;
