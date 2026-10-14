@@ -9,7 +9,8 @@ import { AreaThemeProvider, themeForArea, useAreaTheme } from "@/components/ques
 
 type ResourceArea = Database["public"]["Enums"]["resource_area"];
 
-export const Route = createFileRoute("/_authenticated/questionnaire/$area")({
+export const Route = createFileRoute("/questionnaire/$area")({
+  ssr: false,
   validateSearch: (search: Record<string, unknown>): { id?: string } => ({
     id: typeof search['id'] === "string" ? (search['id'] as string) : undefined,
   }),
