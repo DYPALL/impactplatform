@@ -14,5 +14,6 @@
 - The Home resource carousel reads only published resource records and preserves original publisher links.
 - Use Embla with its Auto Scroll plugin for continuous looping Home resources; pause over cards, during card focus, when hidden and for reduced motion so controls do not trap playback.
 - Keep Home FAQ answer panels mounted and animate grid rows with hidden/inert closed content, so opening and closing remain smooth and accessible.
+- Prebundle the carousel Auto Scroll plugin in Vite at startup to avoid late dependency optimization replacing React bundles in an open preview.
 - Share FAQ copy between the FAQ page and Home accordion through a browser-safe data module to prevent divergent answers.
 - Blank Action Plan exports are static same-origin editable spreadsheets, independent of a user's saved plan.
