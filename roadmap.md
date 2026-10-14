@@ -10,6 +10,7 @@
 - [ ] Replace draft project description with approved copy — waiting for consortium text.
 - [x] Verify updated public pages and signed-in assessment saving/readback, editing, chart navigation, selection limits, template download, and mobile overflow.
 - [x] Move the step-by-step title and intro to the left without the arrow icon, and give every home section heading one shared size and font; browser-verified all six headings at 36px/800 Work Sans.
+- [x] Let Resource Hub Area and Type filters select several options at once (toggle chips, All/Clear resets, check marks); verified counts 21 → 11 → 18 → 9 → 5 and mobile layout, no console errors.
 
 ## Options reviewed (not implemented)
 - [x] Home refinements: looping automatic resource carousel directly before partners, project logo, animated triangle FAQ accordion before footer; desktop/mobile interactions verified.
