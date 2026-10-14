@@ -205,7 +205,7 @@
   pointer-events: none;
   background: var(--primary);
   clip-path: polygon(0 0, 65% 0, 100% 100%, 35% 100%);
-  animation: page-accent-sweep 900ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: page-accent-sweep 1100ms cubic-bezier(0.65, 0, 0.35, 1) both;
 }
 
 .home-faq-answer {
@@ -229,9 +229,10 @@
 [data-state="open"] > .home-faq-chevron { transform: rotate(180deg); }
 
 .page-transition {
-  animation: page-fade-in 900ms cubic-bezier(0.22, 0.65, 0.3, 1) both;
+  animation: page-fade-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-origin: center top;
   backface-visibility: hidden;
+  will-change: opacity, transform;
 }
 
 /* Reduced-motion devices still get a gentle fade (no sweep, blur or slide). */
