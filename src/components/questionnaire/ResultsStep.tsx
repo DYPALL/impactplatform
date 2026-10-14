@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, ListChecks } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, CircleHelp, ListChecks, Lock } from "lucide-react";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import { LEVELS, levelFromPct, type LevelKey } from "./results-data";
 import { AREAS, type QIndicator } from "./content";
@@ -404,10 +404,12 @@ export function ResultsStep({
   percentages,
   areaKey = "representativeness",
   assessmentId,
+  locked = false,
 }: {
   percentages: number[];
   areaKey?: string;
   assessmentId?: string | null;
+  locked?: boolean;
 }) {
 
   const area = AREAS[areaKey] ?? AREAS["representativeness"]!;
@@ -592,6 +594,8 @@ export function ResultsStep({
           className="h-[170px] w-full rounded-xl object-cover"
         />
       </div>
+      </>
+      )}
     </section>
     </AreaThemeProvider>
   );
