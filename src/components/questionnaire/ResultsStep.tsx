@@ -509,7 +509,6 @@ export function ResultsStep({
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <Link
               to="/auth"
-              search={{ mode: "signup" } as never}
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-[13px] font-bold transition hover:opacity-90"
               style={{ color: theme.accent }}
             >

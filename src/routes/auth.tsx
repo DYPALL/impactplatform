@@ -1,3 +1,4 @@
+import { claimGuestAssessment } from "@/lib/guest-assessment";
 import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
@@ -141,6 +142,8 @@ function AuthPage() {
         });
         if (error) { setError(error.message); return; }
       }
+      const { data: sess } = await supabase.auth.getSession();
+      if (sess.session) await claimGuestAssessment(sess.session.user.id);
       router.invalidate();
       navigate({ to: "/dashboard", replace: true });
     } finally {
