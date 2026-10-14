@@ -1,29 +1,29 @@
-import * as Accordion from "@radix-ui/react-accordion";
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { FAQ_QUESTIONS } from "@/lib/faq";
 
 export function HomeFAQ() {
-  const [openQuestion, setOpenQuestion] = useState("");
+  const [openQuestion, setOpenQuestion] = useState<number | null>(null);
   return <section id="home-faq" className="bg-muted/40">
     <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-[120px]">
       <h2 className="text-3xl text-primary">Frequently asked questions</h2>
       <p className="mt-3 text-base text-muted-foreground">Local Youth Councils, assessments and your next steps.</p>
-      <Accordion.Root type="single" collapsible value={openQuestion} onValueChange={setOpenQuestion} className="mt-8 border-t border-border">
-        {FAQ_QUESTIONS.map(([question, answer], index) => <Accordion.Item key={question} value={`faq-${index}`} className="border-b border-border">
-          <Accordion.Header>
-            <Accordion.Trigger className="group flex w-full cursor-pointer items-center justify-between gap-5 py-6 text-left text-lg font-bold text-primary transition-colors hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-              {question}
-              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 shrink-0 fill-secondary transition-transform duration-500 ease-in-out group-data-[state=open]:rotate-180 motion-reduce:transition-none"><path d="M4 7 Q3 7 3.5 8 L11 19 Q12 20 13 19 L20.5 8 Q21 7 20 7 Z" /></svg>
-            </Accordion.Trigger>
-          </Accordion.Header>
-          <Accordion.Content forceMount aria-hidden={openQuestion !== `faq-${index}`} inert={openQuestion !== `faq-${index}`}>
-            <div className="home-faq-answer" data-state={openQuestion === `faq-${index}` ? "open" : "closed"}>
+      <div className="mt-8 border-t border-border">
+        {FAQ_QUESTIONS.map(([question, answer], index) => {
+          const open = openQuestion === index;
+          return <div key={question} className="border-b border-border">
+            <h3 className="m-0 text-lg">
+              <button type="button" id={`home-faq-q-${index}`} aria-expanded={open} aria-controls={`home-faq-a-${index}`} data-state={open ? "open" : "closed"} onClick={() => setOpenQuestion(open ? null : index)} className="group flex w-full cursor-pointer items-center justify-between gap-5 py-6 text-left text-lg font-bold text-primary transition-colors hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                {question}
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="home-faq-chevron h-6 w-6 shrink-0 fill-secondary"><path d="M4 7 Q3 7 3.5 8 L11 19 Q12 20 13 19 L20.5 8 Q21 7 20 7 Z" /></svg>
+              </button>
+            </h3>
+            <div id={`home-faq-a-${index}`} role="region" aria-labelledby={`home-faq-q-${index}`} aria-hidden={!open} inert={!open} className="home-faq-answer" data-state={open ? "open" : "closed"}>
               <div className="min-h-0 overflow-hidden"><p className="home-faq-copy max-w-3xl pb-6 text-base leading-relaxed text-muted-foreground">{answer}</p></div>
             </div>
-          </Accordion.Content>
-        </Accordion.Item>)}
-      </Accordion.Root>
+          </div>;
+        })}
+      </div>
       <p className="mt-7 text-sm text-muted-foreground">Still have a question? <Link to="/send-us-a-message" className="font-bold text-primary underline">Send us a message</Link></p>
     </div>
   </section>;
