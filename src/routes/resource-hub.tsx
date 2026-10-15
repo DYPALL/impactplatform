@@ -418,7 +418,7 @@ function ResourceHubPage() {
             </div>
           )}
         </section>
-        <section className="bg-muted/40"><div className="mx-auto max-w-[1440px] px-6 py-12 lg:px-[120px]"><h2 className="text-2xl text-primary">Know a resource worth sharing?</h2><p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Help grow our collection. Share a publication, video, template or session outline — including resources in other languages — with the IMPACT team.</p><Button asChild className="mt-5"><Link to="/send-us-a-message" search={{ subject: "resource" }}>Suggest a resource</Link></Button></div></section>
+        <section className="bg-muted/40"><div className="mx-auto max-w-[1440px] px-6 py-12 lg:px-[120px]"><h2 className="text-2xl text-primary">Know a resource worth sharing?</h2><p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Help grow our collection. Share a publication, video, guideline or manual — including resources in other languages — with the IMPACT team.</p><Button asChild className="mt-5"><Link to="/send-us-a-message" search={{ subject: "resource" }}>Suggest a resource</Link></Button></div></section>
       </main>
 
       <Footer />
