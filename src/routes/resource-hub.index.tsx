@@ -178,7 +178,11 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
           <p className="line-clamp-3 text-[14px] leading-[1.7] text-[#6b7280]">{resource.description}</p>
         </div>
 
-        <Button asChild className="mt-1 w-fit rounded-full px-5 py-2.5 text-[14px] font-bold">
+        <Button
+          asChild
+          variant="outline"
+          className="mt-1 w-fit rounded-full border-2 border-[color:var(--impact-purple)] bg-transparent px-5 py-2.5 text-[14px] font-bold text-[color:var(--impact-purple)] shadow-none hover:bg-[color:var(--impact-purple)] hover:text-white"
+        >
           <Link to="/resource-hub/$id" params={{ id: resource.id }}>
             View Resource
             <ArrowRight color="currentColor" />
