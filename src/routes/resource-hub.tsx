@@ -191,14 +191,12 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
           )}
         </div>
 
-        <Link
-          to="/resource-hub/$id"
-          params={{ id: resource.id }}
-          className="mt-1 inline-flex w-fit items-center gap-2 rounded-lg bg-[color:var(--impact-purple)] px-4 py-2.5 text-[14px] font-bold text-white shadow-[0_4px_12px_-4px_rgba(80,33,129,0.35)] transition hover:opacity-90"
-        >
-          View Resource
-          <ArrowRight color="#ffffff" />
-        </Link>
+        <Button asChild className="mt-1 w-fit rounded-full px-5 py-2.5 text-[14px] font-bold">
+          <Link to="/resource-hub/$id" params={{ id: resource.id }}>
+            View Resource
+            <ArrowRight color="currentColor" />
+          </Link>
+        </Button>
       </div>
     </article>
   );
