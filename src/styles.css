@@ -376,3 +376,25 @@
   max-width: 238px;
   border-radius: 2px 1px 1px 2px;
 }
+
+/* Detail pages: cover sits directly on the page, larger and without a tinted panel. */
+.publication-mockup-stage--detail {
+  height: auto;
+  min-height: 360px;
+  background: transparent;
+  perspective: 1200px;
+}
+.publication-mockup-stage--detail .publication-mockup-book {
+  max-width: 320px;
+}
+.publication-mockup-stage--detail .publication-mockup-cover {
+  max-height: 360px;
+  max-width: 320px;
+}
+.publication-mockup-stage--detail .publication-mockup-book--landscape {
+  max-width: 460px;
+}
+.publication-mockup-stage--detail .publication-mockup-cover--landscape {
+  max-height: 300px;
+  max-width: 450px;
+}

@@ -148,13 +148,15 @@ function ResourceDetailPage() {
 
         {/* Detail */}
         <section className="mx-auto max-w-[1440px] px-6 py-12 lg:px-[120px] lg:py-16">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:gap-16">
-            <div
-              className="flex h-fit items-center justify-center overflow-hidden rounded-[16px] py-10"
-              style={{ backgroundColor: "rgba(80,33,129,0.06)" }}
-            >
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,480px)_minmax(0,1fr)] lg:gap-16">
+            <div className="flex h-fit items-center justify-center">
               {resource.image_url ? (
-                <PublicationMockup key={resource.image_url} src={resource.image_url} title={resource.title} />
+                <PublicationMockup
+                  key={resource.image_url}
+                  src={resource.image_url}
+                  title={resource.title}
+                  size="detail"
+                />
               ) : (
                 <span className="text-[14px] font-semibold text-[#9ca3af]">No cover available</span>
               )}
