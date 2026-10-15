@@ -496,12 +496,6 @@ export function ResultsStep({
         </p>
       </div>
 
-      <div className="mt-5 flex flex-wrap items-center gap-3">
-        {!locked && onSave && <Button disabled={saveStatus === "saving"} onClick={async () => { setSaveStatus("saving"); try { setSaveStatus(await onSave() ? "saved" : "error"); } catch { setSaveStatus("error"); } }}><Save />{saveStatus === "saving" ? "Saving…" : saveStatus === "saved" ? "Results saved" : "Save results"}</Button>}
-        {onEdit ? <Button variant="outline" onClick={onEdit}><Pencil />Edit your answers</Button> : assessmentId && <Button asChild variant="outline"><Link to="/questionnaire/$area" params={{ area: areaKey }} search={{ id: assessmentId }}><Pencil />Edit your answers</Link></Button>}
-        {!locked && assessmentId && <p className="text-xs text-muted-foreground">Results saved automatically in My Assessments.</p>}
-        {saveStatus === "error" && <p role="alert" className="text-xs text-destructive">Could not save your results. Please try again.</p>}
-      </div>
       {/* Results overview */}
       <div className="mt-7 rounded-2xl border p-4 sm:p-7" style={{ backgroundColor: theme.soft, borderColor: theme.border }}>
         <h2 className="text-[17px] font-extrabold text-[#111827]">Results Overview</h2>
