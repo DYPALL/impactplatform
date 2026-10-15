@@ -144,7 +144,7 @@ function CheckGlyph() {
 function ResourceCard({ resource }: { resource: ResourceRow }) {
   const [expanded, setExpanded] = useState(false);
   const isLong = (resource.description?.length ?? 0) > 180;
-  const style = typeStyle[resource.resource_type];
+  const style = typeStyle[resource.resource_type] ?? { bg: "rgba(80,33,129,0.10)", icon: "file" as const };
   const year = resource.publication_date ? new Date(resource.publication_date).getFullYear() : null;
 
   const metaParts = [
@@ -172,7 +172,7 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
 
       <div className="flex flex-1 flex-col gap-[12px] p-[20px]">
         <span className="w-fit rounded-full border border-[#e5e7eb] bg-[#eee] px-[10px] py-[6px] text-[12px] font-bold text-[#444]">
-          {typeLabel[resource.resource_type]}
+          {typeLabel[resource.resource_type] ?? resource.resource_type.replaceAll("_", " ")}
         </span>
         <h3 className="text-[18px] font-bold leading-[1.3] text-[#111827]">{resource.title}</h3>
         {metaParts.length > 0 && (
