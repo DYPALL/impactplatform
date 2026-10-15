@@ -15,8 +15,7 @@ const AREA_LABEL: Record<string, string> = {
 const TYPE_LABEL: Record<string, string> = {
   publication: "Publication",
   video: "Video",
-  template: "Template",
-  session_outline: "Session Outline",
+  guideline_manual: "Guideline / Manual",
   document: "Document",
 };
 
