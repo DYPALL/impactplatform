@@ -178,8 +178,8 @@
 
 @keyframes page-fade-in {
   0% {
-    opacity: 0;
-    transform: translateY(14px);
+    opacity: 0.92;
+    transform: translateY(6px);
   }
   100% {
     opacity: 1;
@@ -187,25 +187,8 @@
   }
 }
 
-@keyframes page-accent-sweep {
-  0% { transform: translateX(-130%); opacity: 0; }
-  30% { opacity: 0.07; }
-  70% { opacity: 0.05; }
-  100% { transform: translateX(130%); opacity: 0; }
-}
-
 .page-transition-frame {
   overflow-x: clip;
-}
-
-.page-transition-accent {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  pointer-events: none;
-  background: var(--primary);
-  clip-path: polygon(0 0, 65% 0, 100% 100%, 35% 100%);
-  animation: page-accent-sweep 1100ms cubic-bezier(0.65, 0, 0.35, 1) both;
 }
 
 .home-faq-answer {
@@ -247,17 +230,14 @@
 .results-reveal[data-state="open"] .results-reveal-copy { transform: translateY(0); }
 
 .page-transition {
-  animation: page-fade-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: page-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-origin: center top;
   backface-visibility: hidden;
   will-change: opacity, transform;
 }
 
-/* Reduced-motion devices still get a gentle fade (no sweep, blur or slide). */
-@keyframes page-fade-soft { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .page-transition { animation: page-fade-soft 500ms ease-out both; }
-  .page-transition-accent { display: none; }
+  .page-transition { animation: none; }
 }
 
 @keyframes polygon-float {
