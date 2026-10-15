@@ -4,7 +4,6 @@ import { ResourcePreview } from "@/components/ResourcePreview";
 import { HomeFAQ } from "@/components/HomeFAQ";
 import impactLogo from "@/assets/logo_color_impact.png.asset.json";
 import { AssessmentSteps } from "@/components/AssessmentSteps";
-import { Button } from "@/components/ui/button";
 import heroImg from "@/assets/hero-photo.webp.asset.json";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import dypallLogo from "@/assets/DYPALL-logo.png.asset.json";
@@ -211,7 +210,6 @@ function Landing() {
               <h2 className="section-title text-primary">About the IMPACT project</h2>
               <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">IMPACT is a European collaboration working to strengthen Local Youth Councils and meaningful youth participation. The platform brings together assessment, reflection, practical action planning and shared resources so councils and the people supporting them can identify opportunities for growth and take their next steps.</p>
               <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">Delivered by DYPALL Network, Bataljong, Fundació Ferrer i Guàrdia and Nuva, with co-funding from the European Union.</p>
-              <Button asChild variant="link" className="mt-5 px-0"><a href="/faq">Questions about IMPACT?</a></Button>
             </div>
             <img src={impactLogo.url} alt="IMPACT project logo" loading="lazy" className="h-auto w-[260px] max-w-full justify-self-center" />
           </div>
