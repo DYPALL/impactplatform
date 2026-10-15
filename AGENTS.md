@@ -21,3 +21,4 @@
 - Publication cards share a browser-safe cover mockup view across Home and Resource Hub; presentation preserves original artwork and publisher links without modifying resource records.
 - Non-video resource covers use the shared mockup; a browser-safe asset mapping swaps adapted covers without changing original downloads or catalogue metadata. Covers flagged landscape in src/lib/publication-covers.ts render as a horizontal book variant; all others render upright.
 - A route file whose path is a prefix of another route (e.g. /resource-hub vs /resource-hub/$id) is a layout and must render <Outlet />; its own page content lives in a matching .index.tsx, otherwise the parent swallows nested pages and they never render.
+- Resource cards show only a three-line clamped summary with no expand control; the full description lives on the resource detail page, whose cover uses the mockup's larger panel-free variant.
