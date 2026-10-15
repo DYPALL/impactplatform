@@ -4,7 +4,6 @@ import { ResourcePreview } from "@/components/ResourcePreview";
 import { HomeFAQ } from "@/components/HomeFAQ";
 import impactLogo from "@/assets/logo_color_impact.png.asset.json";
 import { AssessmentSteps } from "@/components/AssessmentSteps";
-import { Button } from "@/components/ui/button";
 import heroImg from "@/assets/hero-photo.webp.asset.json";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import dypallLogo from "@/assets/DYPALL-logo.png.asset.json";
