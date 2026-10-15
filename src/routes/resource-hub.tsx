@@ -30,7 +30,7 @@ type ResourceRow = {
   author: string | null;
   publication_date: string | null;
 
-  resource_type: "publication" | "video" | "template" | "session_outline" | "document";
+  resource_type: "publication" | "video" | "guideline_manual";
   area: "representativeness" | "governance" | "empowerment" | "results" | "general";
 };
 
@@ -51,10 +51,8 @@ const areaFilters: { key: AreaKey; label: string; color: string }[] = [
 const typeFilters: { key: TypeKey; label: string }[] = [
   { key: "all", label: "All" },
   { key: "publication", label: "Publications" },
+  { key: "guideline_manual", label: "Guidelines / Manuals" },
   { key: "video", label: "Videos" },
-  { key: "template", label: "Templates" },
-  { key: "session_outline", label: "Session Outlines" },
-  { key: "document", label: "Documents" },
 ];
 
 const sortOptions: { key: SortKey; label: string }[] = [
@@ -68,9 +66,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
 const typeLabel: Record<ResourceRow["resource_type"], string> = {
   publication: "Publication",
   video: "Video",
-  template: "Template",
-  session_outline: "Session Outline",
-  document: "Document",
+  guideline_manual: "Guideline / Manual",
 };
 
 const typeStyle: Record<
@@ -79,9 +75,7 @@ const typeStyle: Record<
 > = {
   publication: { bg: "rgba(232,67,147,0.15)", icon: "publication" },
   video: { bg: "rgba(80,33,129,0.10)", icon: "video" },
-  template: { bg: "rgba(244,162,97,0.15)", icon: "file" },
-  session_outline: { bg: "rgba(80,33,129,0.10)", icon: "publication" },
-  document: { bg: "rgba(33,156,158,0.10)", icon: "file" },
+  guideline_manual: { bg: "rgba(33,156,158,0.10)", icon: "file" },
 };
 
 function SearchIcon() {
@@ -289,7 +283,7 @@ function ResourceHubPage() {
           <div className="relative z-10 mx-auto max-w-[1440px] px-6 py-14 lg:px-[120px] lg:py-[56px]">
             <h1 className="text-4xl font-extrabold leading-[1.1] text-white lg:text-[48px]">Resource Hub</h1>
             <p className="mt-3 max-w-[760px] text-[18px] leading-[1.6] text-white/80">
-              Explore publications, videos, templates, session outlines and documents to support your Local Youth Council's work.
+              Explore publications, guidelines and manuals, and videos to support your Local Youth Council's work.
             </p>
           </div>
         </section>
