@@ -1,4 +1,5 @@
 # Platform updates
+- [x] Adapt the two remaining horizontal publication previews into upright covers; verified both load in portrait format in the catalogue while original downloads remain unchanged.
 - [x] Correct skipped document mockups and transparent cover borders; verified 20 loaded catalogue mockups, seven Home mockups, no mobile overflow or page errors; genuine landscape formats remain intact.
 - [x] Show catalogue publication covers as book mockups in Resource Hub and Home; verified all nine catalogue covers load, mobile has no overflow, and Home displays mockups without page errors.
 - [x] Smooth Home FAQ opening/closing, place project logo right of text, and correct continuous resource carousel movement; browser-verified animation, playback, hover pause, reduced motion and mobile layout.
