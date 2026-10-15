@@ -50,7 +50,7 @@ export function Header() {
 
   return (
     <header className={`relative w-full border-b border-[color:var(--impact-border)] bg-white ${pathname === "/dashboard" ? "hidden" : ""}`}>
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8 xl:px-[120px]">
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8 xl:px-12 2xl:px-[120px]">
         <Link to="/" className="flex shrink-0 items-center">
           <img src={logoAsset.url} alt="IMPACT logo" className="h-8 w-auto" />
         </Link>
