@@ -250,7 +250,7 @@ function RoseChart({ results, indicators, locked }: { results: IndicatorResult[]
 
 function FlipCard({ text }: { text: string }) {
   return (
-    <div className="rounded-xl bg-white p-4 ring-1 ring-black/5">
+    <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/10">
       <p className="text-[12px] leading-snug text-[#1f2937]">{text}</p>
     </div>
   );
