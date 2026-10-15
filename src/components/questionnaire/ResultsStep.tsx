@@ -359,8 +359,8 @@ function IndicatorCard({
             </p>
             <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
               <div className="grid gap-4 sm:grid-cols-3">
-                {(content.reflection[result.level] ?? []).map((q, i) => (
-                  <FlipCard key={q} index={i} text={q} />
+                {(content.reflection[result.level] ?? []).map((q) => (
+                  <FlipCard key={q} text={q} />
                 ))}
               </div>
             </div>
