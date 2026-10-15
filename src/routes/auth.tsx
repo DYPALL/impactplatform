@@ -94,7 +94,6 @@ function SendIcon() {
   );
 }
 
-
 /* ---------- Page ---------- */
 
 function AuthPage() {
