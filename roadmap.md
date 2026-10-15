@@ -1,5 +1,5 @@
 # Platform updates
-- [ ] Fix signed-in My Assessments navigation so the header stays in place until the dashboard replaces the current page.
+- [x] Fix signed-in My Assessments navigation; browser-verified the header keeps its full height while the outgoing page is visible and disappears only when the dashboard renders with the account's saved assessments.
 - [x] Remove navigation flicker; verified Home, Resource Hub, Start assessing and Message navigation keeps the outgoing page visible, with no blank frames or page errors; reduced motion disables the entrance animation.
 - [x] Adapt the two remaining horizontal publication previews into upright covers; verified both load in portrait format in the catalogue while original downloads remain unchanged.
 - [x] Correct skipped document mockups and transparent cover borders; verified 20 loaded catalogue mockups, seven Home mockups, no mobile overflow or page errors; genuine landscape formats remain intact.
