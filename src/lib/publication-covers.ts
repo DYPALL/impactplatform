@@ -1,4 +1,4 @@
-import toolkit from "@/assets/publication-covers/cover-14.asset.json";
+import realToolkitUpgrading from "@/assets/publication-covers/real-toolkit-upgrading.png.asset.json";
 import realGuidelines from "@/assets/publication-covers/real-qualitative-guidelines.png.asset.json";
 import realGoodPractices from "@/assets/publication-covers/real-good-practices.png.asset.json";
 import realModels from "@/assets/publication-covers/real-models-mechanisms.png.asset.json";
@@ -14,7 +14,7 @@ const trimmedCovers: Record<string, string> = {
   "cover-models-mechanisms.png": realModels.url,
   "cover-image-5.png": realCharter.url,
   "cover-image-8.png": realToolbox.url,
-  "cover-image-6.png": toolkit.url,
+  "cover-image-6.png": realToolkitUpgrading.url,
   "cover-7.png": realMapping.url,
 };
 
