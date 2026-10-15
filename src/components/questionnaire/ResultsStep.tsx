@@ -250,7 +250,7 @@ function RoseChart({ results, indicators, locked }: { results: IndicatorResult[]
 
 function FlipCard({ text }: { text: string }) {
   return (
-    <div className="rounded-xl bg-white p-4 ring-1 ring-black/5">
+    <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/10">
       <p className="text-[12px] leading-snug text-[#1f2937]">{text}</p>
     </div>
   );
@@ -351,7 +351,7 @@ function IndicatorCard({
             <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
               <CircleHelp size={24} style={{ color: theme.accent }} /> Reflection Questions
             </p>
-            <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
+            <div className="mt-3 p-5">
               <div className="grid gap-4 sm:grid-cols-3">
                 {(content.reflection[result.level] ?? []).map((q) => (
                   <FlipCard key={q} text={q} />
