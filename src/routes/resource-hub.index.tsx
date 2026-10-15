@@ -142,8 +142,6 @@ function CheckGlyph() {
 }
 
 function ResourceCard({ resource }: { resource: ResourceRow }) {
-  const [expanded, setExpanded] = useState(false);
-  const isLong = (resource.description?.length ?? 0) > 180;
   const style = typeStyle[resource.resource_type] ?? { bg: "rgba(80,33,129,0.10)", icon: "file" as const };
   const year = resource.publication_date ? new Date(resource.publication_date).getFullYear() : null;
 
@@ -177,18 +175,7 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
           </p>
         )}
         <div className="flex-1">
-          <p className="text-[14px] leading-[1.7] text-[#6b7280]">
-            {isLong && !expanded ? `${resource.description.slice(0, 160).trimEnd()}…` : resource.description}
-          </p>
-          {isLong && (
-            <button
-              type="button"
-              onClick={() => setExpanded((v) => !v)}
-              className="mt-1 text-[13px] font-bold text-[color:var(--impact-purple)] underline underline-offset-2 transition hover:opacity-80"
-            >
-              {expanded ? "Read less" : "Read more"}
-            </button>
-          )}
+          <p className="line-clamp-3 text-[14px] leading-[1.7] text-[#6b7280]">{resource.description}</p>
         </div>
 
         <Button asChild className="mt-1 w-fit rounded-full px-5 py-2.5 text-[14px] font-bold">

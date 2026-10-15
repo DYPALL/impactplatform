@@ -3,12 +3,21 @@ import { BookOpen } from "lucide-react";
 import { publicationCoverSource, publicationCoverIsLandscape } from "@/lib/publication-covers";
 
 /** Keeps publisher artwork intact while adding a presentational book binding. */
-export function PublicationMockup({ src, title }: { src: string; title: string }) {
+export function PublicationMockup({
+  src,
+  title,
+  size = "card",
+}: {
+  src: string;
+  title: string;
+  size?: "card" | "detail";
+}) {
   const [failed, setFailed] = useState(false);
   const landscape = publicationCoverIsLandscape(src);
+  const detail = size === "detail";
 
   return (
-    <div className="publication-mockup-stage">
+    <div className={`publication-mockup-stage${detail ? " publication-mockup-stage--detail" : ""}`}>
       {failed ? (
         <BookOpen className="h-12 w-12 text-primary" aria-label={title} />
       ) : (
