@@ -1,4 +1,5 @@
 # Platform updates
+- [ ] Show catalogue publication covers as book mockups in Resource Hub and Home; preserve artwork and verify both views.
 - [x] Smooth Home FAQ opening/closing, place project logo right of text, and correct continuous resource carousel movement; browser-verified animation, playback, hover pause, reduced motion and mobile layout.
 - [x] Improve Home audience copy, resource preview carousel, fifth Action Plan step, and existing project information.
 - [x] Add footer-linked FAQs and Resource Hub resource-sharing contact link with message prefill. Existing contact submission is still presentation-only; delivery was not implemented.
