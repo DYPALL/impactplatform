@@ -18,8 +18,8 @@ export function Polygon({
   floatDelay?: number;
   style?: React.CSSProperties;
 }) {
-  const duration = floatDuration ?? 7 + (size % 5);
-  const delay = floatDelay ?? (size % 7) * -0.6;
+  const duration = floatDuration ?? 5 + (size % 4);
+  const delay = floatDelay ?? (size % 7) * -0.5;
   const ref = useRef<HTMLDivElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
 
