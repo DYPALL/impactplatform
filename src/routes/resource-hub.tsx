@@ -11,9 +11,9 @@ export const Route = createFileRoute("/resource-hub")({
   head: () => ({
     meta: [
       { title: "Resource Hub — IMPACT" },
-      { name: "description", content: "Practical resources, publications, videos and templates for Local Youth Councils." },
+      { name: "description", content: "Practical publications, guidelines, manuals and videos for Local Youth Councils." },
       { property: "og:title", content: "Resource Hub — IMPACT" },
-      { property: "og:description", content: "Practical resources, publications, videos and templates for Local Youth Councils." },
+      { property: "og:description", content: "Practical publications, guidelines, manuals and videos for Local Youth Councils." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
