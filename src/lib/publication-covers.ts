@@ -6,11 +6,12 @@ import realModels from "@/assets/publication-covers/real-models-mechanisms.png.a
 import realToolbox from "@/assets/publication-covers/real-toolbox-democracy.png.asset.json";
 import realMapping from "@/assets/publication-covers/real-mapping-practices.png.asset.json";
 import realCharter from "@/assets/publication-covers/real-quality-charter.png.asset.json";
+import realAnalysisPolicy from "@/assets/publication-covers/real-analysis-policy.png.asset.json";
 
 const trimmedCovers: Record<string, string> = {
   "cover-good-practices.png": realGoodPractices.url,
   "cover-qualitative-guidelines.png": realGuidelines.url,
-  "cover-3.png": analysis.url,
+  "cover-3.png": realAnalysisPolicy.url,
   "cover-models-mechanisms.png": realModels.url,
   "cover-image-5.png": realCharter.url,
   "cover-image-8.png": realToolbox.url,
