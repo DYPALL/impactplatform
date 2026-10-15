@@ -20,6 +20,7 @@ import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authentic
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as QuestionnaireAreaRouteImport } from './routes/questionnaire.$area'
+import { Route as ResourceHubIdRouteImport } from './routes/resource-hub.$id'
 import { Route as AuthenticatedActionPlanAssessmentIdRouteImport } from './routes/_authenticated/action-plan.$assessmentId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedResultsIdRouteImport } from './routes/_authenticated/results.$id'
@@ -81,6 +82,11 @@ const QuestionnaireAreaRoute = QuestionnaireAreaRouteImport.update({
   path: '/questionnaire/$area',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResourceHubIdRoute = ResourceHubIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ResourceHubRoute,
+} as any)
 const AuthenticatedActionPlanAssessmentIdRoute =
   AuthenticatedActionPlanAssessmentIdRouteImport.update({
     id: '/action-plan/$assessmentId',
@@ -120,13 +126,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
-  '/resource-hub': typeof ResourceHubRoute
+  '/resource-hub': typeof ResourceHubRouteWithChildren
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/questionnaire/$area': typeof QuestionnaireAreaRoute
+  '/resource-hub/$id': typeof ResourceHubIdRoute
   '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -138,12 +145,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
-  '/resource-hub': typeof ResourceHubRoute
+  '/resource-hub': typeof ResourceHubRouteWithChildren
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/questionnaire/$area': typeof QuestionnaireAreaRoute
+  '/resource-hub/$id': typeof ResourceHubIdRoute
   '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -157,13 +165,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
-  '/resource-hub': typeof ResourceHubRoute
+  '/resource-hub': typeof ResourceHubRouteWithChildren
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/questionnaire/$area': typeof QuestionnaireAreaRoute
+  '/resource-hub/$id': typeof ResourceHubIdRoute
   '/_authenticated/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
   '/_authenticated/results/$id': typeof AuthenticatedResultsIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/questionnaire/$area'
+    | '/resource-hub/$id'
     | '/action-plan/$assessmentId'
     | '/results/$id'
     | '/admin/'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/questionnaire/$area'
+    | '/resource-hub/$id'
     | '/action-plan/$assessmentId'
     | '/results/$id'
     | '/admin'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/questionnaire/$area'
+    | '/resource-hub/$id'
     | '/_authenticated/action-plan/$assessmentId'
     | '/_authenticated/results/$id'
     | '/_authenticated/admin/'
@@ -233,7 +245,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   FaqRoute: typeof FaqRoute
-  ResourceHubRoute: typeof ResourceHubRoute
+  ResourceHubRoute: typeof ResourceHubRouteWithChildren
   SendUsAMessageRoute: typeof SendUsAMessageRoute
   StartAssessingRoute: typeof StartAssessingRoute
   QuestionnaireAreaRoute: typeof QuestionnaireAreaRoute
@@ -317,6 +329,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/questionnaire/$area'
       preLoaderRoute: typeof QuestionnaireAreaRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/resource-hub/$id': {
+      id: '/resource-hub/$id'
+      path: '/$id'
+      fullPath: '/resource-hub/$id'
+      preLoaderRoute: typeof ResourceHubIdRouteImport
+      parentRoute: typeof ResourceHubRoute
     }
     '/_authenticated/action-plan/$assessmentId': {
       id: '/_authenticated/action-plan/$assessmentId'
@@ -405,12 +424,24 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface ResourceHubRouteChildren {
+  ResourceHubIdRoute: typeof ResourceHubIdRoute
+}
+
+const ResourceHubRouteChildren: ResourceHubRouteChildren = {
+  ResourceHubIdRoute: ResourceHubIdRoute,
+}
+
+const ResourceHubRouteWithChildren = ResourceHubRoute._addFileChildren(
+  ResourceHubRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   FaqRoute: FaqRoute,
-  ResourceHubRoute: ResourceHubRoute,
+  ResourceHubRoute: ResourceHubRouteWithChildren,
   SendUsAMessageRoute: SendUsAMessageRoute,
   StartAssessingRoute: StartAssessingRoute,
   QuestionnaireAreaRoute: QuestionnaireAreaRoute,

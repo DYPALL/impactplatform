@@ -191,21 +191,14 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
           )}
         </div>
 
-        {resource.url ? (
-          <a
-            href={resource.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-1 inline-flex w-fit items-center gap-2 rounded-lg bg-[color:var(--impact-purple)] px-4 py-2.5 text-[14px] font-bold text-white shadow-[0_4px_12px_-4px_rgba(80,33,129,0.35)] transition hover:opacity-90"
-          >
-            Open Resource
-            <ArrowRight color="#ffffff" />
-          </a>
-        ) : (
-          <span className="mt-1 inline-flex w-fit items-center gap-2 rounded-lg border border-[#e5e7eb] bg-[#f9fafb] px-4 py-2.5 text-[14px] font-bold text-[#9ca3af]">
-            No link available
-          </span>
-        )}
+        <Link
+          to="/resource-hub/$id"
+          params={{ id: resource.id }}
+          className="mt-1 inline-flex w-fit items-center gap-2 rounded-lg bg-[color:var(--impact-purple)] px-4 py-2.5 text-[14px] font-bold text-white shadow-[0_4px_12px_-4px_rgba(80,33,129,0.35)] transition hover:opacity-90"
+        >
+          View Resource
+          <ArrowRight color="#ffffff" />
+        </Link>
       </div>
     </article>
   );
