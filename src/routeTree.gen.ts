@@ -20,6 +20,7 @@ import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authentic
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as QuestionnaireAreaRouteImport } from './routes/questionnaire.$area'
+import { Route as ResourceHubIndexRouteImport } from './routes/resource-hub.index'
 import { Route as ResourceHubIdRouteImport } from './routes/resource-hub.$id'
 import { Route as AuthenticatedActionPlanAssessmentIdRouteImport } from './routes/_authenticated/action-plan.$assessmentId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
@@ -82,6 +83,11 @@ const QuestionnaireAreaRoute = QuestionnaireAreaRouteImport.update({
   path: '/questionnaire/$area',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResourceHubIndexRoute = ResourceHubIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ResourceHubRoute,
+} as any)
 const ResourceHubIdRoute = ResourceHubIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/questionnaire/$area': typeof QuestionnaireAreaRoute
   '/resource-hub/$id': typeof ResourceHubIdRoute
+  '/resource-hub/': typeof ResourceHubIndexRoute
   '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -145,13 +152,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
-  '/resource-hub': typeof ResourceHubRouteWithChildren
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/questionnaire/$area': typeof QuestionnaireAreaRoute
   '/resource-hub/$id': typeof ResourceHubIdRoute
+  '/resource-hub': typeof ResourceHubIndexRoute
   '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -173,6 +180,7 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/questionnaire/$area': typeof QuestionnaireAreaRoute
   '/resource-hub/$id': typeof ResourceHubIdRoute
+  '/resource-hub/': typeof ResourceHubIndexRoute
   '/_authenticated/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
   '/_authenticated/results/$id': typeof AuthenticatedResultsIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -194,6 +202,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/questionnaire/$area'
     | '/resource-hub/$id'
+    | '/resource-hub/'
     | '/action-plan/$assessmentId'
     | '/results/$id'
     | '/admin/'
@@ -205,13 +214,13 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/faq'
-    | '/resource-hub'
     | '/send-us-a-message'
     | '/start-assessing'
     | '/dashboard'
     | '/profile'
     | '/questionnaire/$area'
     | '/resource-hub/$id'
+    | '/resource-hub'
     | '/action-plan/$assessmentId'
     | '/results/$id'
     | '/admin'
@@ -232,6 +241,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/questionnaire/$area'
     | '/resource-hub/$id'
+    | '/resource-hub/'
     | '/_authenticated/action-plan/$assessmentId'
     | '/_authenticated/results/$id'
     | '/_authenticated/admin/'
@@ -330,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuestionnaireAreaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resource-hub/': {
+      id: '/resource-hub/'
+      path: '/'
+      fullPath: '/resource-hub/'
+      preLoaderRoute: typeof ResourceHubIndexRouteImport
+      parentRoute: typeof ResourceHubRoute
+    }
     '/resource-hub/$id': {
       id: '/resource-hub/$id'
       path: '/$id'
@@ -426,10 +443,12 @@ const AuthenticatedRouteRouteWithChildren =
 
 interface ResourceHubRouteChildren {
   ResourceHubIdRoute: typeof ResourceHubIdRoute
+  ResourceHubIndexRoute: typeof ResourceHubIndexRoute
 }
 
 const ResourceHubRouteChildren: ResourceHubRouteChildren = {
   ResourceHubIdRoute: ResourceHubIdRoute,
+  ResourceHubIndexRoute: ResourceHubIndexRoute,
 }
 
 const ResourceHubRouteWithChildren = ResourceHubRoute._addFileChildren(
