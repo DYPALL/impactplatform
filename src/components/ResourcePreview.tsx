@@ -90,7 +90,7 @@ export function ResourcePreview() {
     };
   }, [carousel, autoScroll, hovering, focused, reducedMotion, data.length]);
   const cards = data.map(r => <div key={r.id} className="min-w-0 shrink-0 grow-0 basis-[304px] pl-6 md:basis-[344px]"><article className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card">
-    {r.image_url ? (r.resource_type === "publication" ? <PublicationMockup key={r.image_url} src={r.image_url} title={r.title} /> : <img src={r.image_url} alt={r.title} loading="lazy" className="h-[220px] w-full object-cover" />) : <div className="flex h-[220px] items-center justify-center bg-muted"><BookOpen className="h-12 w-12 text-secondary" /></div>}
+    {r.image_url ? (r.resource_type !== "video" ? <PublicationMockup key={r.image_url} src={r.image_url} title={r.title} /> : <img src={r.image_url} alt={r.title} loading="lazy" className="h-[220px] w-full object-cover" />) : <div className="flex h-[220px] items-center justify-center bg-muted"><BookOpen className="h-12 w-12 text-secondary" /></div>}
     <div className="flex flex-1 flex-col p-5"><p className="text-xs capitalize text-muted-foreground">{r.resource_type.replaceAll("_", " ")}</p><h3 className="mt-2 min-h-16 text-lg leading-snug text-foreground">{r.title}</h3>{r.url && <Button asChild variant="link" className="mt-auto px-0 pt-3"><a href={r.url} target="_blank" rel="noopener noreferrer">Open resource <ArrowRight /></a></Button>}</div>
   </article></div>);
   const track = <div className="-ml-6 flex touch-pan-y">{cards}</div>;
