@@ -351,7 +351,7 @@ function IndicatorCard({
             <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
               <CircleHelp size={24} style={{ color: theme.accent }} /> Reflection Questions
             </p>
-            <div className="mt-3 rounded-xl bg-[#F6F3FB] p-5">
+            <div className="mt-3 p-5">
               <div className="grid gap-4 sm:grid-cols-3">
                 {(content.reflection[result.level] ?? []).map((q) => (
                   <FlipCard key={q} text={q} />
