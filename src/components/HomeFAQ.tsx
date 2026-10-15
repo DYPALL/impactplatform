@@ -10,7 +10,6 @@ export function HomeFAQ() {
         <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-xl font-extrabold leading-none text-primary-foreground">?</span>
         Frequently asked questions
       </h2>
-      <p className="mt-3 text-base text-muted-foreground">Local Youth Councils, assessments and your next steps.</p>
       <div className="mt-8 border-t border-border">
         {FAQ_QUESTIONS.map(([question, answer], index) => {
           const open = openQuestion === index;
