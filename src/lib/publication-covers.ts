@@ -1,4 +1,3 @@
-import analysis from "@/assets/publication-covers/cover-6.asset.json";
 import toolkit from "@/assets/publication-covers/cover-14.asset.json";
 import realGuidelines from "@/assets/publication-covers/real-qualitative-guidelines.png.asset.json";
 import realGoodPractices from "@/assets/publication-covers/real-good-practices.png.asset.json";
