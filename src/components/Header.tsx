@@ -37,7 +37,7 @@ export function Header() {
   const isPublic = pathname !== "/dashboard" && !pathname.startsWith("/admin");
 
   const navLinkBase =
-    "inline-flex items-center gap-2 rounded-full px-3 py-2 text-[15px] font-bold transition-colors duration-200";
+    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-2 text-[14px] font-bold transition-colors duration-200 lg:gap-2 lg:px-3 xl:text-[15px]";
 
   const activePill = (active: boolean) =>
     active
@@ -50,8 +50,8 @@ export function Header() {
 
   return (
     <header className={`relative w-full border-b border-[color:var(--impact-border)] bg-white ${pathname === "/dashboard" ? "hidden" : ""}`}>
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-5 lg:px-[120px]">
-        <Link to="/" className="flex items-center">
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8 xl:px-[120px]">
+        <Link to="/" className="flex shrink-0 items-center">
           <img src={logoAsset.url} alt="IMPACT logo" className="h-8 w-auto" />
         </Link>
 
@@ -66,8 +66,8 @@ export function Header() {
           </button>
         )}
 
-        <nav className="hidden flex-1 items-center justify-end lg:flex">
-          <div className="flex items-center gap-7">
+        <nav className="hidden min-w-0 flex-1 items-center justify-end lg:flex">
+          <div className="flex items-center gap-3 xl:gap-6">
             <Link
               to="/"
               className={linkClass("/")}
@@ -155,7 +155,7 @@ export function Header() {
           </div>
 
           {user ? (
-            <div className="ml-10 flex items-center gap-3">
+            <div className="ml-2 flex items-center gap-2 xl:ml-6 xl:gap-3">
               {isAdmin && (
                 <Link
                   to="/admin"
@@ -168,7 +168,7 @@ export function Header() {
 
               <button
                 onClick={() => signOut()}
-                className="inline-flex h-11 items-center gap-1.5 rounded-full bg-[color:var(--impact-surface-muted)] px-3 text-[13px] font-semibold text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white"
+                className="inline-flex h-11 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-[color:var(--impact-surface-muted)] px-3 text-[13px] font-semibold text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white"
               >
                 <LogOut size={16} />
                 Sign out
@@ -177,7 +177,7 @@ export function Header() {
           ) : (
             <Link
               to="/auth"
-              className="ml-10 inline-flex h-11 items-center gap-2 rounded-full bg-[color:var(--impact-purple)] px-[18px] text-[14px] font-bold text-white transition hover:opacity-90"
+              className="ml-2 inline-flex h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-[color:var(--impact-purple)] px-[18px] text-[14px] font-bold text-white transition hover:opacity-90 xl:ml-6"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
