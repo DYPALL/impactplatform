@@ -341,7 +341,7 @@ function IndicatorCard({
         className="mt-4 text-xs"
       >
         {isOpen ? "Hide reflection & next steps" : "Discover your next steps"}
-        <ChevronDown className={isOpen ? "rotate-180" : ""} />
+        <ChevronDown className={`transition-transform duration-500 ${isOpen ? "rotate-180" : ""}`} />
       </Button>
 
       <div
