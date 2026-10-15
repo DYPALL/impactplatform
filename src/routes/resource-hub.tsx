@@ -156,11 +156,7 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
     <article className="flex flex-col overflow-hidden rounded-[16px] border border-[#e5e7eb] bg-white shadow-[0_6px_18px_-6px_rgba(0,0,0,0.05)]">
       <div className="relative flex h-[220px] w-full items-center justify-center overflow-hidden" style={{ backgroundColor: style.bg }}>
         {resource.image_url ? (
-          resource.resource_type !== "video" ? (
-            <PublicationMockup key={resource.image_url} src={resource.image_url} title={resource.title} />
-          ) : (
-            <img src={resource.image_url} alt={resource.title} loading="lazy" className="h-full w-full object-cover" />
-          )
+          <PublicationMockup key={resource.image_url} src={resource.image_url} title={resource.title} />
         ) : (
           <div className="flex h-[220px] items-center justify-center">
             {style.icon === "publication" && <PublicationIcon />}

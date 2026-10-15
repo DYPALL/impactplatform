@@ -19,6 +19,7 @@ const trimmedCovers: Record<string, string> = {
 };
 
 const landscapeCovers = new Set([realMapping.url, realCharter.url]);
+const landscapeFilenames = new Set(["cover-image-7.png"]);
 
 export function publicationCoverSource(source: string) {
   const filename = source.split("/").pop()?.split("?")[0];
@@ -27,5 +28,7 @@ export function publicationCoverSource(source: string) {
 
 /** True when the resolved cover artwork is landscape and should render as a horizontal book. */
 export function publicationCoverIsLandscape(source: string) {
+  const filename = source.split("/").pop()?.split("?")[0];
+  if (filename && landscapeFilenames.has(filename)) return true;
   return landscapeCovers.has(publicationCoverSource(source));
 }
