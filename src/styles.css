@@ -228,6 +228,24 @@
 .home-faq-chevron { transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1); }
 [data-state="open"] > .home-faq-chevron { transform: rotate(180deg); }
 
+.results-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows 480ms cubic-bezier(0.22, 1, 0.36, 1), opacity 320ms ease, visibility 480ms;
+}
+.results-reveal[data-state="open"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+}
+.results-reveal-copy {
+  transform: translateY(-8px);
+  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.results-reveal[data-state="open"] .results-reveal-copy { transform: translateY(0); }
+
 .page-transition {
   animation: page-fade-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
   transform-origin: center top;
