@@ -18,3 +18,4 @@
 - Share FAQ copy between the FAQ page and Home accordion through a browser-safe data module to prevent divergent answers.
 - Blank Action Plan exports are static same-origin editable spreadsheets, independent of a user's saved plan.
 - Home's five assessment steps live in a dedicated browser-safe Embla view so card navigation and explanatory copy stay separate from the rest of Home.
+- Publication cards share a browser-safe cover mockup view across Home and Resource Hub; presentation preserves original artwork and publisher links without modifying resource records.

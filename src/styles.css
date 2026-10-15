@@ -311,3 +311,59 @@
   line-height: 1.15;
   font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.25rem);
 }
+
+:root {
+  --publication-stage: color-mix(in oklab, var(--secondary) 7%, var(--card));
+  --publication-paper: oklch(0.98 0.004 90);
+  --publication-page-line: oklch(0.82 0.008 90);
+  --publication-shadow: oklch(0.18 0.02 265 / 22%);
+  --publication-binding-shade: oklch(0.1 0 0 / 26%);
+  --publication-binding-light: oklch(1 0 0 / 30%);
+}
+.dark {
+  --publication-stage: color-mix(in oklab, var(--secondary) 16%, var(--card));
+  --publication-shadow: oklch(0.05 0 0 / 45%);
+}
+.publication-mockup-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 220px;
+  width: 100%;
+  flex-shrink: 0;
+  background: var(--publication-stage);
+  perspective: 850px;
+  overflow: hidden;
+}
+.publication-mockup-book {
+  position: relative;
+  max-width: 190px;
+  transform: rotateY(-18deg) rotateZ(-4deg);
+  box-shadow: 12px 14px 17px -6px var(--publication-shadow);
+}
+.publication-mockup-book::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  bottom: -2px;
+  right: -8px;
+  width: 8px;
+  background: repeating-linear-gradient(to right, var(--publication-paper) 0 2px, var(--publication-page-line) 2px 3px);
+  transform: skewY(18deg);
+  transform-origin: left top;
+  border-radius: 0 2px 2px 0;
+}
+.publication-mockup-cover {
+  display: block;
+  max-height: 174px;
+  max-width: 190px;
+  width: auto;
+  height: auto;
+  border-radius: 1px 2px 2px 1px;
+}
+.publication-mockup-binding {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, var(--publication-binding-shade), transparent 3%, var(--publication-binding-light) 4%, transparent 7%);
+}
