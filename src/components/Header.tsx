@@ -37,7 +37,7 @@ export function Header() {
   const isPublic = pathname !== "/dashboard" && !pathname.startsWith("/admin");
 
   const navLinkBase =
-    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-2 text-[14px] font-bold transition-colors duration-200 lg:gap-2 lg:px-3 xl:text-[15px]";
+    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2 py-2 text-[13px] font-bold transition-colors duration-200 xl:px-3 xl:text-[14px] 2xl:px-3.5 2xl:text-[15px]";
 
   const activePill = (active: boolean) =>
     active
@@ -67,7 +67,7 @@ export function Header() {
         )}
 
         <nav className="hidden min-w-0 flex-1 items-center justify-end lg:flex">
-          <div className="flex items-center gap-3 xl:gap-6">
+          <div className="flex items-center gap-1.5 xl:gap-3 2xl:gap-5">
             <Link
               to="/"
               className={linkClass("/")}
@@ -155,7 +155,7 @@ export function Header() {
           </div>
 
           {user ? (
-            <div className="ml-2 flex items-center gap-2 xl:ml-6 xl:gap-3">
+            <div className="ml-1.5 flex items-center gap-1.5 xl:ml-4 xl:gap-2 2xl:ml-6 2xl:gap-3">
               {isAdmin && (
                 <Link
                   to="/admin"
@@ -177,7 +177,7 @@ export function Header() {
           ) : (
             <Link
               to="/auth"
-              className="ml-2 inline-flex h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-[color:var(--impact-purple)] px-[18px] text-[14px] font-bold text-white transition hover:opacity-90 xl:ml-6"
+              className="ml-1.5 inline-flex h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-[color:var(--impact-purple)] px-3 text-[13px] font-bold text-white transition hover:opacity-90 xl:ml-4 xl:px-[18px] xl:text-[14px] 2xl:ml-6"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
