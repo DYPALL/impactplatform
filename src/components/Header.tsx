@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 const adminCache: { userId: string | null; value: boolean } = { userId: null, value: false };
 
 export function Header() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pathname = useRouterState({ select: (s) => s.matches.at(-1)?.pathname ?? "/" });
   const { user, signOut } = useAuth();
   const [isAdmin, setIsAdmin] = useState(() => adminCache.value);
 
