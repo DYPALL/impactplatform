@@ -263,6 +263,7 @@ export type Database = {
         | "template"
         | "session_outline"
         | "document"
+        | "guideline_manual"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -405,6 +406,7 @@ export const Constants = {
         "template",
         "session_outline",
         "document",
+        "guideline_manual",
       ],
     },
   },

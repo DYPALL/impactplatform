@@ -11,9 +11,9 @@ export const Route = createFileRoute("/resource-hub")({
   head: () => ({
     meta: [
       { title: "Resource Hub — IMPACT" },
-      { name: "description", content: "Practical resources, publications, videos and templates for Local Youth Councils." },
+      { name: "description", content: "Practical publications, guidelines, manuals and videos for Local Youth Councils." },
       { property: "og:title", content: "Resource Hub — IMPACT" },
-      { property: "og:description", content: "Practical resources, publications, videos and templates for Local Youth Councils." },
+      { property: "og:description", content: "Practical publications, guidelines, manuals and videos for Local Youth Councils." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -30,7 +30,7 @@ type ResourceRow = {
   author: string | null;
   publication_date: string | null;
 
-  resource_type: "publication" | "video" | "template" | "session_outline" | "document";
+  resource_type: "publication" | "video" | "guideline_manual";
   area: "representativeness" | "governance" | "empowerment" | "results" | "general";
 };
 
@@ -51,10 +51,8 @@ const areaFilters: { key: AreaKey; label: string; color: string }[] = [
 const typeFilters: { key: TypeKey; label: string }[] = [
   { key: "all", label: "All" },
   { key: "publication", label: "Publications" },
+  { key: "guideline_manual", label: "Guidelines / Manuals" },
   { key: "video", label: "Videos" },
-  { key: "template", label: "Templates" },
-  { key: "session_outline", label: "Session Outlines" },
-  { key: "document", label: "Documents" },
 ];
 
 const sortOptions: { key: SortKey; label: string }[] = [
@@ -68,9 +66,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
 const typeLabel: Record<ResourceRow["resource_type"], string> = {
   publication: "Publication",
   video: "Video",
-  template: "Template",
-  session_outline: "Session Outline",
-  document: "Document",
+  guideline_manual: "Guideline / Manual",
 };
 
 const typeStyle: Record<
@@ -79,9 +75,7 @@ const typeStyle: Record<
 > = {
   publication: { bg: "rgba(232,67,147,0.15)", icon: "publication" },
   video: { bg: "rgba(80,33,129,0.10)", icon: "video" },
-  template: { bg: "rgba(244,162,97,0.15)", icon: "file" },
-  session_outline: { bg: "rgba(80,33,129,0.10)", icon: "publication" },
-  document: { bg: "rgba(33,156,158,0.10)", icon: "file" },
+  guideline_manual: { bg: "rgba(33,156,158,0.10)", icon: "file" },
 };
 
 function SearchIcon() {
@@ -150,7 +144,7 @@ function CheckGlyph() {
 function ResourceCard({ resource }: { resource: ResourceRow }) {
   const [expanded, setExpanded] = useState(false);
   const isLong = (resource.description?.length ?? 0) > 180;
-  const style = typeStyle[resource.resource_type];
+  const style = typeStyle[resource.resource_type] ?? { bg: "rgba(80,33,129,0.10)", icon: "file" as const };
   const year = resource.publication_date ? new Date(resource.publication_date).getFullYear() : null;
 
   const metaParts = [
@@ -178,7 +172,7 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
 
       <div className="flex flex-1 flex-col gap-[12px] p-[20px]">
         <span className="w-fit rounded-full border border-[#e5e7eb] bg-[#eee] px-[10px] py-[6px] text-[12px] font-bold text-[#444]">
-          {typeLabel[resource.resource_type]}
+          {typeLabel[resource.resource_type] ?? resource.resource_type.replaceAll("_", " ")}
         </span>
         <h3 className="text-[18px] font-bold leading-[1.3] text-[#111827]">{resource.title}</h3>
         {metaParts.length > 0 && (
@@ -289,7 +283,7 @@ function ResourceHubPage() {
           <div className="relative z-10 mx-auto max-w-[1440px] px-6 py-14 lg:px-[120px] lg:py-[56px]">
             <h1 className="text-4xl font-extrabold leading-[1.1] text-white lg:text-[48px]">Resource Hub</h1>
             <p className="mt-3 max-w-[760px] text-[18px] leading-[1.6] text-white/80">
-              Explore publications, videos, templates, session outlines and documents to support your Local Youth Council's work.
+              Explore publications, guidelines and manuals, and videos to support your Local Youth Council's work.
             </p>
           </div>
         </section>
@@ -424,7 +418,7 @@ function ResourceHubPage() {
             </div>
           )}
         </section>
-        <section className="bg-muted/40"><div className="mx-auto max-w-[1440px] px-6 py-12 lg:px-[120px]"><h2 className="text-2xl text-primary">Know a resource worth sharing?</h2><p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Help grow our collection. Share a publication, video, template or session outline — including resources in other languages — with the IMPACT team.</p><Button asChild className="mt-5"><Link to="/send-us-a-message" search={{ subject: "resource" }}>Suggest a resource</Link></Button></div></section>
+        <section className="bg-muted/40"><div className="mx-auto max-w-[1440px] px-6 py-12 lg:px-[120px]"><h2 className="text-2xl text-primary">Know a resource worth sharing?</h2><p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Help grow our collection. Share a publication, video, guideline or manual — including resources in other languages — with the IMPACT team.</p><Button asChild className="mt-5"><Link to="/send-us-a-message" search={{ subject: "resource" }}>Suggest a resource</Link></Button></div></section>
       </main>
 
       <Footer />

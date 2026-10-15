@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { UploadCloud, X, ChevronRight, Calendar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-type ResourceType = "publication" | "video" | "template" | "session_outline" | "document";
+type ResourceType = "publication" | "video" | "guideline_manual";
 type ResourceArea = "representativeness" | "governance" | "empowerment" | "results" | "general";
 
 const AREAS: { key: ResourceArea; label: string }[] = [
@@ -18,9 +18,7 @@ const AREAS: { key: ResourceArea; label: string }[] = [
 const TYPES: { key: ResourceType; label: string }[] = [
   { key: "publication", label: "Publication" },
   { key: "video", label: "Video" },
-  { key: "template", label: "Template" },
-  { key: "session_outline", label: "Session Outline" },
-  { key: "document", label: "Document" },
+  { key: "guideline_manual", label: "Guideline / Manual" },
 ];
 
 export function ResourceForm({ mode, resourceId }: { mode: "create" | "edit"; resourceId?: string }) {
