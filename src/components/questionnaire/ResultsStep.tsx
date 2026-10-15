@@ -571,6 +571,13 @@ export function ResultsStep({
         </div>
       </div>
 
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        {!locked && onSave && <Button disabled={saveStatus === "saving"} onClick={async () => { setSaveStatus("saving"); try { setSaveStatus(await onSave() ? "saved" : "error"); } catch { setSaveStatus("error"); } }}><Save />{saveStatus === "saving" ? "Saving…" : saveStatus === "saved" ? "Results saved" : "Save results"}</Button>}
+        {onEdit ? <Button variant="outline" onClick={onEdit}><Pencil />Edit your answers</Button> : assessmentId && <Button asChild variant="outline"><Link to="/questionnaire/$area" params={{ area: areaKey }} search={{ id: assessmentId }}><Pencil />Edit your answers</Link></Button>}
+        {!locked && assessmentId && <p className="text-xs text-muted-foreground">Results saved automatically in My Assessments.</p>}
+        {saveStatus === "error" && <p role="alert" className="text-xs text-destructive">Could not save your results. Please try again.</p>}
+      </div>
+
       {/* CTA */}
       <div
         className="mt-10 grid items-center gap-6 overflow-hidden rounded-2xl p-8 md:grid-cols-[minmax(0,1fr)_320px]"
