@@ -127,7 +127,9 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // Match identity changes only when the next page is ready to render;
+  // location changes earlier and would animate/remount the outgoing page.
+  const pathname = useRouterState({ select: (s) => s.matches.at(-1)?.pathname ?? "/" });
 
   useEffect(() => {
     let unsub: (() => void) | undefined;
@@ -148,7 +150,6 @@ function RootComponent() {
       {!pathname.startsWith("/auth") && !pathname.startsWith("/questionnaire") && !pathname.startsWith("/results") && <Header />}
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <div key={pathname} className="page-transition-frame">
-        <div className="page-transition-accent" aria-hidden="true" />
         <div className="page-transition">
           <Outlet />
         </div>

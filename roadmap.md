@@ -1,4 +1,5 @@
 # Platform updates
+- [x] Remove navigation flicker; verified Home, Resource Hub, Start assessing and Message navigation keeps the outgoing page visible, with no blank frames or page errors; reduced motion disables the entrance animation.
 - [x] Adapt the two remaining horizontal publication previews into upright covers; verified both load in portrait format in the catalogue while original downloads remain unchanged.
 - [x] Correct skipped document mockups and transparent cover borders; verified 20 loaded catalogue mockups, seven Home mockups, no mobile overflow or page errors; genuine landscape formats remain intact.
 - [x] Show catalogue publication covers as book mockups in Resource Hub and Home; verified all nine catalogue covers load, mobile has no overflow, and Home displays mockups without page errors.
