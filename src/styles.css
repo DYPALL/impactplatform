@@ -367,3 +367,12 @@
   pointer-events: none;
   background: linear-gradient(to right, var(--publication-binding-shade), transparent 3%, var(--publication-binding-light) 4%, transparent 7%);
 }
+.publication-mockup-book--landscape {
+  max-width: 248px;
+  transform: rotateY(-14deg) rotateZ(-2deg);
+}
+.publication-mockup-cover--landscape {
+  max-height: 150px;
+  max-width: 238px;
+  border-radius: 2px 1px 1px 2px;
+}
