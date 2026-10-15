@@ -344,8 +344,14 @@ function IndicatorCard({
         <ChevronDown className={isOpen ? "rotate-180" : ""} />
       </Button>
 
-      {isOpen && (
-        <div className="mt-6 space-y-7">
+      <div
+        aria-hidden={!isOpen}
+        inert={!isOpen}
+        className="results-reveal"
+        data-state={isOpen ? "open" : "closed"}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div className="results-reveal-copy mt-6 space-y-7">
 
           <div>
             <p className="flex items-center gap-2 text-[13px] font-extrabold text-[#111827]">
@@ -403,8 +409,9 @@ function IndicatorCard({
             </div>
           </div>
 
+          </div>
         </div>
-      )}
+      </div>
     </article>
   );
 }
