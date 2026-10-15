@@ -27,6 +27,10 @@ export function Polygon({
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.style.animation = "none";
+      return;
+    }
     const phase = (Date.now() / 1000) % duration;
     el.style.animationDelay = `${delay - phase}s`;
   }, [duration, delay]);
