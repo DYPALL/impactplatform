@@ -37,7 +37,7 @@ export function Header() {
   const isPublic = pathname !== "/dashboard" && !pathname.startsWith("/admin");
 
   const navLinkBase =
-    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2 py-2 text-[13px] font-bold transition-colors duration-200 xl:px-2.5 xl:text-[14px] 2xl:px-3.5 2xl:text-[15px]";
+    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-1.5 py-2 text-[12px] font-bold transition-colors duration-200 xl:px-2.5 xl:text-[14px] 2xl:px-3.5 2xl:text-[15px]";
 
   const activePill = (active: boolean) =>
     active
@@ -50,7 +50,7 @@ export function Header() {
 
   return (
     <header className={`relative w-full border-b border-[color:var(--impact-border)] bg-white ${pathname === "/dashboard" ? "hidden" : ""}`}>
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-5 sm:px-6 lg:px-8 xl:px-12 2xl:px-[120px]">
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-5 sm:px-6 xl:px-12 2xl:px-[120px]">
         <Link to="/" className="flex shrink-0 items-center">
           <img src={logoAsset.url} alt="IMPACT logo" className="h-8 w-auto" />
         </Link>
@@ -67,7 +67,7 @@ export function Header() {
         )}
 
         <nav className="hidden min-w-0 flex-1 items-center justify-end lg:flex">
-          <div className="flex items-center gap-1.5 xl:gap-2 2xl:gap-5">
+          <div className="flex items-center gap-1 xl:gap-2 2xl:gap-5">
             <Link
               to="/"
               className={linkClass("/")}
@@ -124,6 +124,19 @@ export function Header() {
               Start assessing
             </Link>
 
+            {user && (
+              <Link
+                to="/dashboard"
+                className={linkClass("/dashboard")}
+              >
+                <svg width="16" height="18" viewBox="0 0 24 24" fill="none" stroke={pathname === "/dashboard" ? "#ffffff" : "#502181"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                My Assessments
+              </Link>
+            )}
+
             <Link
               to="/send-us-a-message"
               className={linkClass("/send-us-a-message")}
@@ -137,21 +150,6 @@ export function Header() {
               Send us a message
             </Link>
 
-            {user && (
-              <Link
-                to="/dashboard"
-                className={linkClass("/dashboard")}
-              >
-                <svg width="16" height="18" viewBox="0 0 24 24" fill="none" stroke={pathname === "/dashboard" ? "#ffffff" : "#502181"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="8" y1="13" x2="16" y2="13" />
-                  <line x1="8" y1="17" x2="16" y2="17" />
-                  <line x1="8" y1="9" x2="10" y2="9" />
-                </svg>
-                My Assessments
-              </Link>
-            )}
           </div>
 
           {user ? (
@@ -168,10 +166,10 @@ export function Header() {
 
               <button
                 onClick={() => signOut()}
-                className="inline-flex h-11 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-[color:var(--impact-surface-muted)] px-3 text-[13px] font-semibold text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white"
+                className="inline-flex h-11 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-[color:var(--impact-surface-muted)] px-2.5 text-[13px] font-semibold text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-purple)] hover:text-white xl:px-3"
               >
                 <LogOut size={16} />
-                Sign out
+                <span className="hidden xl:inline">Sign out</span>
               </button>
             </div>
           ) : (
