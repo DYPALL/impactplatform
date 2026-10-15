@@ -37,7 +37,7 @@ export function Header() {
   const isPublic = pathname !== "/dashboard" && !pathname.startsWith("/admin");
 
   const navLinkBase =
-    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2 py-2 text-[13px] font-bold transition-colors duration-200 xl:px-3 xl:text-[14px] 2xl:px-3.5 2xl:text-[15px]";
+    "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2 py-2 text-[13px] font-bold transition-colors duration-200 xl:px-2.5 xl:text-[14px] 2xl:px-3.5 2xl:text-[15px]";
 
   const activePill = (active: boolean) =>
     active
@@ -67,7 +67,7 @@ export function Header() {
         )}
 
         <nav className="hidden min-w-0 flex-1 items-center justify-end lg:flex">
-          <div className="flex items-center gap-1.5 xl:gap-3 2xl:gap-5">
+          <div className="flex items-center gap-1.5 xl:gap-2 2xl:gap-5">
             <Link
               to="/"
               className={linkClass("/")}
