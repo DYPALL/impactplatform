@@ -24,13 +24,11 @@ export function Polygon({
   const innerRef = useRef<HTMLDivElement | null>(null);
 
   // Sync float phase to a global clock so shapes continue where they were across page changes.
+  // The float is a slow decorative drift, so it runs even with the OS "Reduce motion" setting
+  // (same choice as the carousel arrows and page fade).
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.style.animation = "none";
-      return;
-    }
     const phase = (Date.now() / 1000) % duration;
     el.style.animationDelay = `${delay - phase}s`;
   }, [duration, delay]);
