@@ -248,16 +248,10 @@ function RoseChart({ results, indicators, locked }: { results: IndicatorResult[]
 
 /* -------------------------------- Flip card --------------------------------- */
 
-function FlipCard({ index, text }: { index: number; text: string }) {
-  const theme = useAreaTheme();
+function FlipCard({ text }: { text: string }) {
   return (
-    <div className="overflow-hidden rounded-xl bg-white ring-1 ring-black/5">
-      <div className="p-4 text-white" style={{ backgroundColor: theme.accent }}>
-        <p className="text-[15px] font-extrabold uppercase tracking-wide">Question {index + 1}</p>
-      </div>
-      <div className="flex items-center p-4">
-        <p className="text-[12px] leading-snug text-[#1f2937]">{text}</p>
-      </div>
+    <div className="rounded-xl bg-white p-4 ring-1 ring-black/5">
+      <p className="text-[12px] leading-snug text-[#1f2937]">{text}</p>
     </div>
   );
 }
