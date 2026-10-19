@@ -73,11 +73,11 @@ function ContactPage() {
               <svg width="16" height="16" viewBox="0 0 100 100" aria-hidden>
                 <polygon points="50,5 95,80 5,80" fill="#502181" />
               </svg>
-              <h2 className="text-[24px] font-bold text-[color:var(--impact-purple)]">Get in Touch</h2>
+              <h2 className="text-[24px] font-bold text-[color:var(--impact-purple)]">Get in touch</h2>
             </div>
 
             <p className="mb-8 text-[15px] leading-[1.6] text-[#6b7280]">
-              Fill in the form below with your details and message. Whether you
+              Fill in the form below with your contact details and message. Whether you
               need support, have a suggestion, or simply want to learn more
               about IMPACT, we are here to help.
             </p>
@@ -143,7 +143,7 @@ function ContactPage() {
                 type="submit"
                 className="mt-2 h-[56px] w-full rounded-full bg-[color:var(--impact-purple)] text-[15px] font-bold text-white transition hover:opacity-90"
               >
-                Send Message
+                Send message
               </button>
             </form>
           </div>

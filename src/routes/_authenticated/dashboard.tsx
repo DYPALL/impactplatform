@@ -204,7 +204,7 @@ function Dashboard() {
           </button>
 
           <h2 className="mt-8 text-[16px] font-extrabold text-white">
-            Quick Links
+            Quick links
           </h2>
           <nav className="mt-4 grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-2">
             <QuickLink to="/" label="Home" icon="home" />
@@ -213,11 +213,11 @@ function Dashboard() {
           </nav>
 
           <h2 className="mt-8 text-[16px] font-extrabold text-white">
-            Recent Activity
+            Recent activity
           </h2>
           {assessments.length === 0 ? (
             <p className="mt-3 text-[13px] text-white/70">
-              No activity yet — start your first questionnaire.
+              No activity yet - start your first questionnaire.
             </p>
           ) : (
             <ul className="mt-4 space-y-4">
@@ -270,10 +270,10 @@ function Dashboard() {
       <main className="min-w-0 flex-1 px-5 pb-24 pt-8 lg:px-8 lg:pb-16 lg:pt-10">
         <div className="mx-auto max-w-[1080px]">
           <h2 className="text-[30px] font-extrabold leading-tight text-[color:var(--impact-purple)] lg:text-[38px]">
-            Start Your Assessment
+            Start your assessment
           </h2>
           <p className="mt-2 max-w-3xl text-[15px] text-[color:var(--impact-ink-muted)]">
-            Choose a thematic area to launch a self-assessment. You can pause anytime, revisit past
+            Choose a thematic area to start a self-assessment. You can pause and save anytime, revisit past
             questionnaires and build action plans as you go.
           </p>
 
