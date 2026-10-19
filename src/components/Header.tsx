@@ -8,7 +8,10 @@ import { supabase } from "@/integrations/supabase/client";
 const adminCache: { userId: string | null; value: boolean } = { userId: null, value: false };
 
 export function Header() {
-  const pathname = useRouterState({ select: (s) => s.matches.at(-1)?.pathname ?? "/" });
+  const rawPathname = useRouterState({ select: (s) => s.matches.at(-1)?.pathname ?? "/" });
+  // Index routes under a layout report a trailing slash (e.g. "/resource-hub/"); normalize so
+  // active-pill comparisons match the link paths.
+  const pathname = rawPathname.replace(/\/+$/, "") || "/";
   const { user, signOut } = useAuth();
   const [isAdmin, setIsAdmin] = useState(() => adminCache.value);
 
@@ -63,7 +66,7 @@ export function Header() {
   );
 
   const assessmentIcon = (
-    <svg width="17" height="18" viewBox="2 0 20 22" fill="none" stroke={pathname === "/start-assessing" ? "#ffffff" : "#502181"} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg width="17" height="18" viewBox="2 0 20 24" fill="none" stroke={pathname === "/start-assessing" ? "#ffffff" : "#502181"} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
       <path d="M14 2v6h4z" fill={pathname === "/start-assessing" ? "#ffffff" : "#502181"} />
       <line x1="8" y1="13" x2="16" y2="13" />
