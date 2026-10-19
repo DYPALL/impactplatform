@@ -50,7 +50,7 @@ export const Route = createFileRoute("/_authenticated/action-plan/$assessmentId"
 
 const TABS = [
   { key: "intro", label: "Introduction", icon: Lightbulb },
-  { key: "model", label: "Goal & Steps", icon: Target },
+  { key: "indicators", label: "Indicators & Steps", icon: Target },
   { key: "steps", label: "Action Steps", icon: ListChecks },
 ] as const;
 
@@ -60,7 +60,6 @@ function ActionPlanPage() {
   const { assessmentId } = Route.useParams();
   const [areaKey, setAreaKey] = useState("representativeness");
   const [tab, setTab] = useState<TabKey>("intro");
-  const [goal, setGoal] = useState("");
   const [steps, setSteps] = useState<ActionPlanStep[]>([]);
   
   const [loaded, setLoaded] = useState(false);
@@ -82,7 +81,6 @@ function ActionPlanPage() {
       if (!active) return;
       if (data?.area) setAreaKey(data.area as string);
       if (plan) {
-        setGoal(plan.goal);
         setSteps(plan.steps);
       }
       setLoaded(true);
@@ -101,11 +99,11 @@ function ActionPlanPage() {
     }
     setSaving(true);
     const t = setTimeout(async () => {
-      await saveActionPlan(assessmentId, areaKey, { goal, steps });
+      await saveActionPlan(assessmentId, areaKey, { steps });
       setSaving(false);
     }, 700);
     return () => clearTimeout(t);
-  }, [goal, steps, loaded, assessmentId, areaKey]);
+  }, [steps, loaded, assessmentId, areaKey]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, ActionPlanStep[]>();
@@ -175,15 +173,14 @@ function ActionPlanPage() {
         <div className="mt-6">
           {tab === "intro" && <Introduction accent={theme.accent} />}
 
-          {tab === "model" && (
-            <GoalAndSteps
+          {tab === "indicators" && (
+            <IndicatorsAndSteps
               accent={theme.accent}
               soft={theme.soft}
               border={theme.border}
               areaName={area.name}
-              goal={goal}
-              setGoal={setGoal}
               grouped={grouped}
+              update={update}
             />
           )}
 

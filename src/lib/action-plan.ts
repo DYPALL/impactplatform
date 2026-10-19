@@ -21,21 +21,8 @@ export type ActionPlan = {
   id: string;
   assessment_id: string;
   area: string;
-  model: string;
-  goal: string;
   steps: ActionPlanStep[];
 };
-
-export const ENGAGEMENT_MODELS = [
-  "Youth Ad-hoc Meetings",
-  "Youth Consultation Forum",
-  "Youth Advisory Board",
-  "Youth Council",
-  "Youth Parliament",
-  "Youth Participatory Budgeting",
-  "Youth-led Working Groups",
-  "Youth Delegates in Municipal Bodies",
-];
 
 export const PROGRESS_OPTIONS = ["Not Started", "In Progress", "Completed", "On Hold"];
 
@@ -88,7 +75,7 @@ function normalizeSteps(raw: unknown): ActionPlanStep[] {
 export async function loadActionPlan(assessmentId: string): Promise<ActionPlan | null> {
   const { data } = await supabase
     .from("action_plans")
-    .select("id, assessment_id, area, model, goal, steps")
+    .select("id, assessment_id, area, steps")
     .eq("assessment_id", assessmentId)
     .maybeSingle();
   if (!data) return null;
@@ -96,8 +83,6 @@ export async function loadActionPlan(assessmentId: string): Promise<ActionPlan |
     id: data.id,
     assessment_id: data.assessment_id,
     area: data.area as string,
-    model: data.model ?? "",
-    goal: data.goal ?? "",
     steps: normalizeSteps(data.steps),
   };
 }
@@ -105,7 +90,7 @@ export async function loadActionPlan(assessmentId: string): Promise<ActionPlan |
 export async function saveActionPlan(
   assessmentId: string,
   area: string,
-  patch: { model?: string; goal?: string; steps?: ActionPlanStep[] }
+  patch: { steps?: ActionPlanStep[] }
 ) {
   const { data: userData } = await supabase.auth.getUser();
   const uid = userData.user?.id;
@@ -116,8 +101,6 @@ export async function saveActionPlan(
     user_id: uid,
     assessment_id: assessmentId,
     area: area as never,
-    model: patch.model ?? existing?.model ?? "",
-    goal: patch.goal ?? existing?.goal ?? "",
     steps: (patch.steps ?? existing?.steps ?? []) as never,
   };
 

@@ -1,0 +1,2 @@
+COMMENT ON COLUMN public.action_plans.goal IS 'DEPRECATED: action plans no longer have a goal field; plans are organised by indicator with selected action steps';
+COMMENT ON COLUMN public.action_plans.model IS 'DEPRECATED: mechanism selection removed; users choose indicators and action steps instead';
