@@ -82,10 +82,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "IMPACT — Digital platform for Local Youth Councils" },
+      { title: "IMPACT — European Platform for Local Youth Council Quality Development" },
       { name: "description", content: "IMPACT helps Local Youth Councils measure their impact, identify opportunities for growth, and access practical guidance and resources." },
       { name: "author", content: "IMPACT Consortium" },
-      { property: "og:title", content: "IMPACT — Digital platform for Local Youth Councils" },
+      { property: "og:title", content: "IMPACT — European Platform for Local Youth Council Quality Development" },
       { property: "og:description", content: "IMPACT helps Local Youth Councils measure their impact, identify opportunities for growth, and access practical guidance and resources." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

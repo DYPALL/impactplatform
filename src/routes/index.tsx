@@ -17,13 +17,13 @@ import { HowToGetStartedModal } from "@/components/HowToGetStartedModal";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "IMPACT — Digital platform for Local Youth Councils" },
+      { title: "IMPACT — European Platform for Local Youth Council Quality Development" },
       {
         name: "description",
         content:
           "IMPACT helps Local Youth Councils measure their impact, identify opportunities for growth, and access practical guidance and resources.",
       },
-      { property: "og:title", content: "IMPACT — Digital platform for Local Youth Councils" },
+      { property: "og:title", content: "IMPACT — European Platform for Local Youth Council Quality Development" },
       {
         property: "og:description",
         content:
@@ -73,7 +73,7 @@ function Hero() {
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-10 px-6 py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-24 lg:pl-[120px] lg:pr-0">
         <div className="relative z-10 max-w-[680px]">
           <h1 className="text-4xl leading-[1.1] text-white sm:text-5xl lg:text-[56px]">
-            What is IMPACT digital platform?
+            IMPACT - a platform to evaluate and improve your Local Youth Council
           </h1>
           <p className="mt-5 max-w-[560px] text-[18px] leading-[1.6] text-white/80">
             For Local Youth Councils and the people supporting them: assess your council, reflect on your results and build a practical action plan. Our public Resource Hub also welcomes youth workers, municipalities, educators and anyone interested in meaningful youth participation.

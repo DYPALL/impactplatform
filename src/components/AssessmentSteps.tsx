@@ -11,10 +11,10 @@ import actionPhoto from "@/assets/cta-photo.webp.asset.json";
 
 const steps = [
   { title: "Start assessing", body: "Choose your starting point. Create an account when you are ready to unlock your full results and save your progress.", image: step1.url, tone: "steps-purple" },
-  { title: "Pick a focus area", body: "Choose one of the IMPACT thematic areas to start with, or run the full self-assessment across all dimensions.", image: step2.url, tone: "steps-teal" },
-  { title: "Answer the questionnaire", body: "Rate your council against each indicator. It takes 15–30 minutes and you can save your progress anytime.", image: step3.url, tone: "steps-orange" },
-  { title: "Review your results", body: "Explore your visual scoreboard, then Sign-up for detailed feedback and reflection questions saved to your account.", image: step4.url, tone: "steps-pink" },
-  { title: "Build your action plan", body: "Select your next steps, set a goal and organise who will do what, when and with which resources.", image: actionPhoto.url, tone: "steps-plum" },
+  { title: "Pick a focus area", body: "Choose one of the four assessment areas to start with. You can always come back and complete the assessment for the other areas as well.", image: step2.url, tone: "steps-teal" },
+  { title: "Answer the questionnaire", body: "Assess your Local Youth Council in the chosen area by answering a set of questions. It takes 15-30 minutes to complete one area and you can save your progress anytime.", image: step3.url, tone: "steps-orange" },
+  { title: "Review your results", body: "Get your results in a visual scoreboard, followed by reflection questions and a list of action steps you can use to tailor your action plan and share it with your team later.", image: step4.url, tone: "steps-pink" },
+  { title: "Create your action plan", body: "Select a number of actions that will help your youth council to grow.", image: actionPhoto.url, tone: "steps-plum" },
 ];
 
 export function AssessmentSteps() {

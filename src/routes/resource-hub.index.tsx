@@ -184,7 +184,7 @@ function ResourceCard({ resource }: { resource: ResourceRow }) {
           className="mt-1 w-fit rounded-full border-2 border-[color:var(--impact-purple)] bg-transparent px-5 py-2.5 text-[14px] font-bold text-[color:var(--impact-purple)] shadow-none hover:bg-[color:var(--impact-purple)] hover:text-white"
         >
           <Link to="/resource-hub/$id" params={{ id: resource.id }}>
-            View Resource
+            View resource
             <ArrowRight color="currentColor" />
           </Link>
         </Button>
@@ -385,7 +385,7 @@ function ResourceHubPage() {
             <p className="text-center text-[15px] text-[#6b7280]">Loading resources…</p>
           ) : filtered.length === 0 ? (
             <div className="rounded-[16px] border border-dashed border-[#e5e7eb] p-12 text-center">
-              <p className="text-[16px] font-bold text-[#111827]">No resources match your filters</p>
+              <p className="text-[16px] font-bold text-[#111827]">None of the resources match your filters</p>
               <p className="mt-2 text-[14px] text-[#6b7280]">Try clearing your search or choosing different areas or types.</p>
             </div>
           ) : (
