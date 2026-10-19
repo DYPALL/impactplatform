@@ -71,7 +71,7 @@ function Hero() {
 
 
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-10 px-6 py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-24 lg:pl-[120px] lg:pr-0">
-        <div className="relative z-10 max-w-[680px]">
+        <div className="relative z-10 max-w-[680px] lg:min-w-0 lg:flex-1">
           <h1 className="text-4xl leading-[1.1] text-white sm:text-5xl lg:text-[56px]">
             IMPACT - a platform to evaluate and improve your Local Youth Council
           </h1>
@@ -94,13 +94,13 @@ function Hero() {
             <HowToGetStartedModal open={guideOpen} onOpenChange={setGuideOpen} />
           </div>
         </div>
-        <div className="relative z-10 w-full max-w-[597px] lg:mr-0 lg:w-[46%]">
+        <div className="relative z-10 w-full max-w-[597px] lg:mr-0 lg:w-[46%] lg:shrink-0">
           <img
             src={heroImg.url}
             alt="Youth council members collaborating"
             width={970}
             height={644}
-            className="h-auto w-full rounded-l-2xl object-cover shadow-2xl"
+            className="hero-photo-fade h-auto w-full rounded-l-2xl object-cover"
           />
         </div>
       </div>
