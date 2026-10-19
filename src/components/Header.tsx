@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Settings, LogOut, Menu, X } from "lucide-react";
+import { Settings, LogOut } from "lucide-react";
 import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,7 +11,6 @@ export function Header() {
   const pathname = useRouterState({ select: (s) => s.matches.at(-1)?.pathname ?? "/" });
   const { user, signOut } = useAuth();
   const [isAdmin, setIsAdmin] = useState(() => adminCache.value);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -34,11 +33,6 @@ export function Header() {
         setIsAdmin(admin);
       });
   }, [user]);
-
-  // Close the mobile menu whenever the route changes.
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
 
   const navLinkBase =
     "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-1.5 py-2 text-[12px] font-bold transition-colors duration-200 xl:px-2.5 xl:text-[14px] 2xl:px-3.5 2xl:text-[15px]";
@@ -111,13 +105,6 @@ export function Header() {
     </svg>
   );
 
-  const mobileLinkClass = (path: string) =>
-    `flex w-full items-center gap-2.5 rounded-xl px-4 py-3 text-[15px] font-bold transition-colors duration-200 ${
-      pathname === path
-        ? "bg-[color:var(--impact-green)] text-white"
-        : "text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-surface-muted)] hover:text-[color:var(--impact-purple)]"
-    }`;
-
   return (
     <header className={`relative w-full border-b border-[color:var(--impact-border)] bg-white ${pathname === "/dashboard" ? "hidden" : ""}`}>
       <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-4 py-5 sm:px-6 xl:px-12 2xl:px-[120px]">
@@ -189,84 +176,8 @@ export function Header() {
           )}
         </nav>
 
-        <button
-          type="button"
-          onClick={() => setMenuOpen((open) => !open)}
-          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[color:var(--impact-purple)] transition-colors hover:bg-[color:var(--impact-surface-muted)] lg:hidden"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-        >
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
       </div>
 
-      {menuOpen && (
-        <nav className="border-t border-[color:var(--impact-border)] bg-white lg:hidden" aria-label="Mobile">
-          <div className="mx-auto flex max-w-[1440px] flex-col gap-1 px-4 py-3 sm:px-6">
-            <Link to="/" className={mobileLinkClass("/")}>
-              {homeIcon}
-              Home
-            </Link>
-            <Link to="/start-assessing" className={mobileLinkClass("/start-assessing")}>
-              {assessmentIcon}
-              Assessment Tool
-            </Link>
-            {user && (
-              <Link to="/dashboard" className={mobileLinkClass("/dashboard")}>
-                {myAssessmentsIcon}
-                My Assessments
-              </Link>
-            )}
-            <Link to="/resource-hub" className={mobileLinkClass("/resource-hub")}>
-              {resourceHubIcon}
-              Resource Hub
-            </Link>
-            <Link to="/send-us-a-message" className={mobileLinkClass("/send-us-a-message")}>
-              {messageIcon}
-              Send us a message
-            </Link>
-
-            <div className="mt-2 border-t border-[color:var(--impact-border)] pt-3">
-              {user ? (
-                <div className="flex flex-col gap-1">
-                  {isAdmin && (
-                    <Link
-                      to="/admin"
-                      className={`flex w-full items-center gap-2.5 rounded-xl px-4 py-3 text-[15px] font-bold transition-colors duration-200 ${
-                        pathname.startsWith("/admin")
-                          ? "bg-[color:var(--impact-orange)] text-white"
-                          : "text-[color:var(--impact-ink)] hover:bg-[color:var(--impact-surface-muted)] hover:text-[color:var(--impact-purple)]"
-                      }`}
-                    >
-                      <Settings size={16} />
-                      Admin panel
-                    </Link>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => signOut()}
-                    className="flex w-full items-center gap-2.5 rounded-xl px-4 py-3 text-left text-[15px] font-bold text-[color:var(--impact-ink)] transition-colors duration-200 hover:bg-[color:var(--impact-surface-muted)] hover:text-[color:var(--impact-purple)]"
-                  >
-                    <LogOut size={16} />
-                    Sign out
-                  </button>
-                </div>
-              ) : (
-                <Link
-                  to="/auth"
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[color:var(--impact-purple)] px-4 py-3 text-[15px] font-bold text-white transition hover:opacity-90"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                  Log-in / Sign-up
-                </Link>
-              )}
-            </div>
-          </div>
-        </nav>
-      )}
     </header>
   );
 }
