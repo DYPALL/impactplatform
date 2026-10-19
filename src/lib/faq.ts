@@ -5,6 +5,6 @@ export const FAQ_QUESTIONS = [
   ["Do I need an account?", "You can start an assessment and see its visual overview without an account. Sign-up unlocks detailed feedback, reflection questions and the Action Plan builder, and saves your assessment to My Assessments."],
   ["Where are my results saved?", "Completed assessments are saved automatically to My Assessments when you are logged in. Before Log-in, progress stays in the browser you used. After you Log-in or complete Sign-up, that progress can be saved to your account."],
   ["Can I change my answers?", "Yes. Choose Edit your answers on your results page, or edit a completed assessment from My Assessments. Your scores update when you save your changes."],
-  ["How do I create an Action Plan?", "Choose up to three action steps for each indicator in your full results. The selected steps appear in the Action Plan builder, where you can add your goal, responsibilities, timing and resources. An editable blank spreadsheet template is also available."],
+  ["How do I create an Action Plan?", "Choose up to three action steps for each indicator in your full results. The selected steps appear in the Action Plan builder, where you can choose which steps to include and add responsibilities, timing and resources. An editable blank spreadsheet template is also available."],
   ["Can I use resources without an account?", "Yes. The Resource Hub is public. Each resource opens at its original source, where access and download availability are determined by the publisher."],
 ] as const;
