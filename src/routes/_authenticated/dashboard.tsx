@@ -100,7 +100,9 @@ type AssessmentRow = {
 function Dashboard() {
   const { user } = Route.useRouteContext() as { user: { id: string; email?: string } };
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({
+    [AREAS[0].key]: true,
+  });
   const [assessments, setAssessments] = useState<AssessmentRow[]>([]);
   const [guideModalOpen, setGuideModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
