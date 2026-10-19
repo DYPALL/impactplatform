@@ -95,7 +95,7 @@ export function Header() {
             >
               <svg width="17" height="18" viewBox="2 0 20 22" fill="none" stroke={pathname === "/start-assessing" ? "#ffffff" : "#502181"} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
+                <path d="M14 2v6h4z" fill={pathname === "/start-assessing" ? "#ffffff" : "#502181"} />
                 <line x1="8" y1="13" x2="16" y2="13" />
                 <line x1="8" y1="17" x2="16" y2="17" />
                 <line x1="8" y1="9" x2="10" y2="9" />
