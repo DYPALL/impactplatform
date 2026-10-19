@@ -122,10 +122,12 @@ export function Header() {
               Home
             </Link>
 
-            <Link to="/start-assessing" className={linkClass("/start-assessing")}>
-              {assessmentIcon}
-              Assessment Tool
-            </Link>
+            {!user && (
+              <Link to="/start-assessing" className={linkClass("/start-assessing")}>
+                {assessmentIcon}
+                Assessment Tool
+              </Link>
+            )}
 
             {user && (
               <Link to="/dashboard" className={linkClass("/dashboard")}>
