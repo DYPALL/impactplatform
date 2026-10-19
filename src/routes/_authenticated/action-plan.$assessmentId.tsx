@@ -50,7 +50,7 @@ export const Route = createFileRoute("/_authenticated/action-plan/$assessmentId"
 
 const TABS = [
   { key: "intro", label: "Introduction", icon: Lightbulb },
-  { key: "model", label: "Goal & Steps", icon: Target },
+  { key: "indicators", label: "Indicators & Steps", icon: Target },
   { key: "steps", label: "Action Steps", icon: ListChecks },
 ] as const;
 
@@ -60,7 +60,6 @@ function ActionPlanPage() {
   const { assessmentId } = Route.useParams();
   const [areaKey, setAreaKey] = useState("representativeness");
   const [tab, setTab] = useState<TabKey>("intro");
-  const [goal, setGoal] = useState("");
   const [steps, setSteps] = useState<ActionPlanStep[]>([]);
   
   const [loaded, setLoaded] = useState(false);
@@ -82,7 +81,6 @@ function ActionPlanPage() {
       if (!active) return;
       if (data?.area) setAreaKey(data.area as string);
       if (plan) {
-        setGoal(plan.goal);
         setSteps(plan.steps);
       }
       setLoaded(true);
@@ -101,11 +99,11 @@ function ActionPlanPage() {
     }
     setSaving(true);
     const t = setTimeout(async () => {
-      await saveActionPlan(assessmentId, areaKey, { goal, steps });
+      await saveActionPlan(assessmentId, areaKey, { steps });
       setSaving(false);
     }, 700);
     return () => clearTimeout(t);
-  }, [goal, steps, loaded, assessmentId, areaKey]);
+  }, [steps, loaded, assessmentId, areaKey]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, ActionPlanStep[]>();
@@ -175,15 +173,14 @@ function ActionPlanPage() {
         <div className="mt-6">
           {tab === "intro" && <Introduction accent={theme.accent} />}
 
-          {tab === "model" && (
-            <GoalAndSteps
+          {tab === "indicators" && (
+            <IndicatorsAndSteps
               accent={theme.accent}
               soft={theme.soft}
               border={theme.border}
               areaName={area.name}
-              goal={goal}
-              setGoal={setGoal}
               grouped={grouped}
+              update={update}
             />
           )}
 
@@ -246,7 +243,8 @@ function Introduction({ accent }: { accent: string }) {
         </p>
         <p>
           Based on your answers to the IMPACT self-assessment, you selected up to three recommended action steps per
-          indicator. Those steps have been imported here automatically.
+          indicator. Those steps have been imported here automatically — tick the ones you want to include in your
+          plan.
         </p>
         <p>
           This template supports you in planning concrete steps. It helps you organise <strong>what</strong> needs to be
@@ -267,24 +265,22 @@ function Introduction({ accent }: { accent: string }) {
   );
 }
 
-/* ------------------------------- Goal & Steps -------------------------------- */
+/* ---------------------------- Indicators & Steps ----------------------------- */
 
-function GoalAndSteps({
+function IndicatorsAndSteps({
   accent,
   soft,
   border,
   areaName,
-  goal,
-  setGoal,
   grouped,
+  update,
 }: {
   accent: string;
   soft: string;
   border: string;
   areaName: string;
-  goal: string;
-  setGoal: (v: string) => void;
   grouped: [string, ActionPlanStep[]][];
+  update: (id: string, patch: Partial<ActionPlanStep>) => void;
 }) {
   return (
     <section className="rounded-3xl bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-8">
@@ -299,6 +295,10 @@ function GoalAndSteps({
           </span>
           Indicators & selected action steps
         </p>
+        <p className="mt-2 text-[12px] leading-relaxed text-[#6b7280]">
+          These are the indicators you chose to work on, with the action steps you pre-selected in your results. Tick
+          the steps you want to include in your plan — you can change this anytime.
+        </p>
         {grouped.length === 0 ? (
           <p className="mt-4 text-[13px] text-[#6b7280]">
             You have not selected any action steps yet. Go back to your results and tick up to 3 recommended steps per
@@ -311,11 +311,20 @@ function GoalAndSteps({
                 <p className="text-[13px] font-extrabold" style={{ color: accent }}>
                   {indicator}
                 </p>
-                <ul className="mt-2 space-y-1.5">
+                <ul className="mt-2 space-y-2">
                   {list.map((s) => (
-                    <li key={s.id} className="flex items-start gap-2 text-[12px] leading-snug text-[#374151]">
-                      <Check size={14} className="mt-[2px] shrink-0" style={{ color: accent }} />
-                      <span className={s.included ? "font-semibold text-[#111827]" : "text-[#9ca3af]"}>{s.action}</span>
+                    <li key={s.id} className="flex items-start gap-2.5 text-[12px] leading-snug text-[#374151]">
+                      <input
+                        type="checkbox"
+                        checked={s.included}
+                        onChange={(e) => update(s.id, { included: e.target.checked })}
+                        style={{ accentColor: accent }}
+                        className="mt-[1px] h-[15px] w-[15px] shrink-0 cursor-pointer"
+                        aria-label={`Include "${s.action}" in my plan`}
+                      />
+                      <span className={s.included ? "font-semibold text-[#111827]" : "text-[#9ca3af] line-through decoration-[#d1d5db]"}>
+                        {s.action}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -323,28 +332,6 @@ function GoalAndSteps({
             ))}
           </div>
         )}
-      </div>
-
-      <div className="mt-5 rounded-2xl p-5 md:p-6" style={{ backgroundColor: soft, border: `1px solid ${border}` }}>
-        <p className="flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-wide" style={{ color: accent }}>
-          <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f4a261] text-[#1f2937]">
-            <Lightbulb size={15} />
-          </span>
-          Goal
-        </p>
-        <textarea
-          value={goal}
-          maxLength={300}
-          onChange={(e) => setGoal(e.target.value)}
-          placeholder="A clear statement of the overall objective the action plan aims to achieve."
-          className="mt-4 h-28 w-full resize-none rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[13px] text-[#111827] placeholder:italic placeholder:text-[#9ca3af]"
-        />
-        <p className="mt-1 text-right text-[11px] font-semibold" style={{ color: accent }}>
-          {goal.length}/300
-        </p>
-        <p className="mt-2 text-[12px] italic text-[#6b7280]">
-          E.g. To establish a Youth Advisory Board within my municipality by the end of 2026
-        </p>
       </div>
     </section>
   );
