@@ -398,3 +398,10 @@
   max-height: 300px;
   max-width: 450px;
 }
+
+/* Hero photo: its own framing ends across the subjects' thighs, so dissolve the
+   hard bottom edge into the hero background instead of leaving a severed line. */
+.hero-photo-fade {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, rgba(0,0,0,0.55) 82%, transparent 99%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, rgba(0,0,0,0.55) 82%, transparent 99%);
+}
