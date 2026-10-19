@@ -94,13 +94,13 @@ function Hero() {
             <HowToGetStartedModal open={guideOpen} onOpenChange={setGuideOpen} />
           </div>
         </div>
-        <div className="relative z-10 w-full max-w-[597px] lg:mr-0">
+        <div className="relative z-10 w-full max-w-[597px] lg:mr-0 lg:w-[46%]">
           <img
             src={heroImg.url}
             alt="Youth council members collaborating"
-            width={1200}
-            height={800}
-            className="h-[280px] w-full rounded-l-2xl object-cover shadow-2xl sm:h-[360px] lg:h-[397px]"
+            width={970}
+            height={644}
+            className="h-auto w-full rounded-l-2xl object-cover shadow-2xl"
           />
         </div>
       </div>
