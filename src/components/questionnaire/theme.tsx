@@ -10,7 +10,7 @@ export type AreaTheme = {
 export const AREA_THEMES: Record<string, AreaTheme> = {
   representativeness: { accent: "#502181", soft: "#F7F4FC", border: "#E3DBF0", row: "#F3EDF9" },
   governance: { accent: "#D97A2B", soft: "#FDF4EC", border: "#F6DCC2", row: "#FBEEDF" },
-  empowerment: { accent: "#FF66C5", soft: "#FFF0F8", border: "#FFD0EA", row: "#FFE6F4" },
+  empowerment: { accent: "#E94B8A", soft: "#FDF1F6", border: "#F9CDDE", row: "#FBE2EC" },
   results: { accent: "#219C9E", soft: "#E8F7F7", border: "#BCE3E3", row: "#D7F0F0" },
 };
 
