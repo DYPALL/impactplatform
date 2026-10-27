@@ -434,6 +434,8 @@ function IndicatorsAndSteps({
   border,
   areaName,
   grouped,
+  indicators,
+  onToggleIndicator,
   update,
 }: {
   accent: string;
@@ -441,11 +443,16 @@ function IndicatorsAndSteps({
   border: string;
   areaName: string;
   grouped: [string, ActionPlanStep[]][];
+  indicators: string[] | null;
+  onToggleIndicator: (key: string, on: boolean) => void;
   update: (id: string, patch: Partial<ActionPlanStep>) => void;
 }) {
+  const selected = indicators ?? grouped.map(([k]) => k);
+
   return (
     <section className="rounded-3xl bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-8">
-      <p className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: accent }}>
+      <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Area of assessment</p>
+      <p className="mt-1 text-[15px] font-extrabold" style={{ color: accent }}>
         {areaName}
       </p>
 
@@ -454,11 +461,11 @@ function IndicatorsAndSteps({
           <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f4a261] text-[#1f2937]">
             <ListChecks size={15} />
           </span>
-          Indicators & selected action steps
+          Select action steps
         </p>
         <p className="mt-2 text-[12px] leading-relaxed text-[#6b7280]">
-          These are the indicators you chose to work on, with the action steps you pre-selected in your results. Tick
-          the steps you want to include in your plan. You can change this anytime.
+          These are the indicators you chose to work on, with the action steps you pre-selected in your results. Untick
+          an indicator or a step to leave it out of your plan. You can change this anytime.
         </p>
         {grouped.length === 0 ? (
           <p className="mt-4 text-[13px] text-[#6b7280]">
@@ -467,30 +474,50 @@ function IndicatorsAndSteps({
           </p>
         ) : (
           <div className="mt-4 space-y-4">
-            {grouped.map(([indicator, list]) => (
-              <div key={indicator} className="rounded-xl bg-white p-4 ring-1 ring-black/5">
-                <p className="text-[13px] font-extrabold" style={{ color: accent }}>
-                  {indicator}
-                </p>
-                <ul className="mt-2 space-y-2">
-                  {list.map((s) => (
-                    <li key={s.id} className="flex items-start gap-2.5 text-[12px] leading-snug text-[#374151]">
-                      <input
-                        type="checkbox"
-                        checked={s.included}
-                        onChange={(e) => update(s.id, { included: e.target.checked })}
-                        style={{ accentColor: accent }}
-                        className="mt-[1px] h-[15px] w-[15px] shrink-0 cursor-pointer"
-                        aria-label={`Include "${s.action}" in my plan`}
-                      />
-                      <span className={s.included ? "font-semibold text-[#111827]" : "text-[#9ca3af] line-through decoration-[#d1d5db]"}>
-                        {s.action}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {grouped.map(([indicator, list]) => {
+              const on = selected.includes(indicator);
+              const code = indicatorCode(indicator);
+              return (
+                <div key={indicator} className="rounded-xl bg-white p-4 ring-1 ring-black/5">
+                  <label className="flex cursor-pointer items-center gap-2.5">
+                    <input
+                      type="checkbox"
+                      checked={on}
+                      onChange={(e) => onToggleIndicator(indicator, e.target.checked)}
+                      style={{ accentColor: accent }}
+                      className="h-[15px] w-[15px] cursor-pointer"
+                      aria-label={`Include Indicator ${code} in my plan`}
+                    />
+                    <p className="text-[13px] font-extrabold" style={{ color: on ? accent : "#9ca3af" }}>
+                      Indicator {code}
+                    </p>
+                  </label>
+                  <ul className="mt-2 space-y-2">
+                    {list.map((s) => (
+                      <li key={s.id} className="flex items-start gap-2.5 text-[12px] leading-snug text-[#374151]">
+                        <input
+                          type="checkbox"
+                          checked={s.included}
+                          onChange={(e) => update(s.id, { included: e.target.checked })}
+                          style={{ accentColor: accent }}
+                          className="mt-[1px] h-[15px] w-[15px] shrink-0 cursor-pointer"
+                          aria-label={`Include "${s.action}" in my plan`}
+                        />
+                        <span
+                          className={
+                            on && s.included
+                              ? "font-semibold text-[#111827]"
+                              : "text-[#9ca3af] line-through decoration-[#d1d5db]"
+                          }
+                        >
+                          {s.action}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
