@@ -170,14 +170,7 @@ function ActionPlanPage() {
         </div>
 
         <div className="mt-6">
-          {tab === "intro" && (
-            <Introduction
-              accent={theme.accent}
-              canExport={steps.some((s) => s.included)}
-              onStart={() => setTab("indicators")}
-              onExport={() => window.print()}
-            />
-          )}
+          {tab === "intro" && <Introduction accent={theme.accent} onStart={() => setTab("indicators")} />}
 
           {tab === "indicators" && (
             <IndicatorsAndSteps
@@ -200,6 +193,8 @@ function ActionPlanPage() {
               update={update}
               assessmentId={assessmentId}
               areaName={area.name}
+              canExport={steps.some((s) => s.included)}
+              onExport={() => window.print()}
             />
           )}
         </div>
@@ -242,17 +237,7 @@ function ActionPlanPage() {
 
 /* -------------------------------- Introduction ------------------------------- */
 
-function Introduction({
-  accent,
-  canExport,
-  onStart,
-  onExport,
-}: {
-  accent: string;
-  canExport: boolean;
-  onStart: () => void;
-  onExport: () => void;
-}) {
+function Introduction({ accent, onStart }: { accent: string; onStart: () => void }) {
   return (
     <section className="rounded-3xl p-8 md:p-12" style={{ backgroundColor: accent }}>
       <h1 className="text-center text-[30px] font-extrabold tracking-tight text-[#f4a261]">ACTION PLAN</h1>
@@ -264,7 +249,7 @@ function Introduction({
         </p>
         <p className="mt-4">
           Based on your answers to the IMPACT self-assessment, you selected up to three recommended action steps per
-          indicator. Those steps have been imported here automatically — tick the ones you want to include in your plan.
+          indicator. Tick the ones you want to include in your plan.
         </p>
         <p className="mt-4">You can complete the plan in either of two ways:</p>
       </div>
