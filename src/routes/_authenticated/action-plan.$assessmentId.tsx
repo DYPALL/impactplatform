@@ -745,21 +745,6 @@ function ActionSteps({
               />
             </Field>
           </div>
-
-          <div className="flex flex-wrap gap-4 pt-2 text-[11px] font-semibold text-[#9ca3af]">
-            <span className="inline-flex items-center gap-1.5">
-              <Box size={13} /> Resources
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <AlertTriangle size={13} /> Risks
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <BarChart3 size={13} /> Progress
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <MessageSquare size={13} /> Notes
-            </span>
-          </div>
         </div>
 
         <div className="mt-6 rounded-2xl bg-[#F6F6F8] p-5 text-center ring-1 ring-black/5">
