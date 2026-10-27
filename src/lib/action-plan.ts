@@ -54,6 +54,14 @@ export function indicatorCode(indicator: string) {
   return indicator.split(" ")[0] || indicator;
 }
 
+/** The indicator's wording, with the leading code removed (e.g. "1.4 Have a budget" -> "Have a budget"). */
+export function indicatorName(indicator: string) {
+  const code = indicatorCode(indicator);
+  const name = indicator.slice(code.length).trim();
+  return name || indicator;
+}
+
+
 function normalizeIndicators(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
   return raw.map((v) => String(v)).filter((v) => v);

@@ -19,6 +19,8 @@ import { themeForArea } from "@/components/questionnaire/theme";
 import {
   PROGRESS_OPTIONS,
   indicatorCode,
+  indicatorName,
+
   loadActionPlan,
   saveActionPlan,
   type ActionPlanStep,
@@ -477,20 +479,30 @@ function IndicatorsAndSteps({
             {grouped.map(([indicator, list]) => {
               const on = selected.includes(indicator);
               const code = indicatorCode(indicator);
+              const name = indicatorName(indicator);
               return (
                 <div key={indicator} className="rounded-xl bg-white p-4 ring-1 ring-black/5">
-                  <label className="flex cursor-pointer items-center gap-2.5">
+                  <label className="flex cursor-pointer items-start gap-2.5">
                     <input
                       type="checkbox"
                       checked={on}
                       onChange={(e) => onToggleIndicator(indicator, e.target.checked)}
                       style={{ accentColor: accent }}
-                      className="h-[15px] w-[15px] cursor-pointer"
-                      aria-label={`Include Indicator ${code} in my plan`}
+                      className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer"
+                      aria-label={`Include Indicator ${code}${name !== code ? ` ${name}` : ""} in my plan`}
                     />
-                    <p className="text-[13px] font-extrabold" style={{ color: on ? accent : "#9ca3af" }}>
-                      Indicator {code}
+                    <p className="text-[13px] leading-snug">
+                      <span className="font-extrabold" style={{ color: on ? accent : "#9ca3af" }}>
+                        Indicator {code}
+                      </span>
+                      {name !== code && (
+                        <span className={on ? "font-semibold text-[#111827]" : "font-semibold text-[#9ca3af]"}>
+                          {" "}
+                          {name}
+                        </span>
+                      )}
                     </p>
+
                   </label>
                   <ul className="mt-2 space-y-2">
                     {list.map((s) => (
@@ -637,7 +649,7 @@ function ActionSteps({
                   : { backgroundColor: soft, color: accent, border: `1px solid ${border}` }
               }
             >
-              Indicator {indicatorCode(key)}
+              Indicator {key}
             </button>
           );
         })}
@@ -678,7 +690,7 @@ function ActionSteps({
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4" style={{ backgroundColor: soft }}>
             <div className="min-w-0">
               <p className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: accent }}>
-                Indicator {indicatorCode(current.indicator)}
+                Indicator {current.indicator}
               </p>
               <p className="mt-1 text-[13px] font-bold text-[#111827]">{current.action}</p>
             </div>
