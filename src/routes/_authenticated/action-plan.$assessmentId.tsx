@@ -1,21 +1,20 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  AlertTriangle,
   ArrowLeft,
-  BarChart3,
-  Box,
+  Check,
   ChevronLeft,
   ChevronRight,
+  Download,
   Lightbulb,
   ListChecks,
-  MessageSquare,
+  PenLine,
+  Printer,
+  Save,
   Target,
-  Check,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TutorialSlot } from "@/components/TutorialSlot";
-import { CheckCircle2, Download, PenLine, Printer } from "lucide-react";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
@@ -745,21 +744,6 @@ function ActionSteps({
               />
             </Field>
           </div>
-
-          <div className="flex flex-wrap gap-4 pt-2 text-[11px] font-semibold text-[#9ca3af]">
-            <span className="inline-flex items-center gap-1.5">
-              <Box size={13} /> Resources
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <AlertTriangle size={13} /> Risks
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <BarChart3 size={13} /> Progress
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <MessageSquare size={13} /> Notes
-            </span>
-          </div>
         </div>
 
         <div className="mt-6 rounded-2xl bg-[#F6F6F8] p-5 text-center ring-1 ring-black/5">
@@ -784,7 +768,7 @@ function ActionSteps({
               className="inline-flex items-center gap-1.5 rounded-full border bg-white px-6 py-2.5 text-[12px] font-bold transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-50"
               style={{ borderColor: accent, color: accent }}
             >
-              <CheckCircle2 size={14} /> {saving ? "Saving…" : "Save and continue later"}
+              <Save size={14} /> {saving ? "Saving…" : "Save and continue later"}
             </button>
           </div>
         </div>
