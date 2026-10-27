@@ -253,7 +253,7 @@ function ActionPlanPage() {
 function Introduction({ accent, onStart }: { accent: string; onStart: () => void }) {
   return (
     <section className="rounded-3xl p-8 md:p-12" style={{ backgroundColor: accent }}>
-      <h1 className="text-center text-[30px] font-extrabold tracking-tight text-[#f4a261]">ACTION PLAN</h1>
+      <h1 className="text-center text-[30px] font-extrabold tracking-tight text-[#f4a261]">Build your action plan</h1>
 
       <div className="mx-auto mt-6 max-w-[760px] rounded-2xl bg-white/10 p-6 text-[13px] leading-relaxed text-white md:p-8">
         <p>
@@ -339,7 +339,7 @@ function PlanPrintSheet({ areaName, grouped }: { areaName: string; grouped: [str
     <div className="plan-print-sheet">
       <div className="plan-print-head">
         <p className="plan-print-kicker">IMPACT · European Platform for Local Youth Councils</p>
-        <h1>ACTION PLAN</h1>
+        <h1>Build your action plan</h1>
         <p className="plan-print-meta">
           <span>
             <strong>Area of assessment:</strong> {areaName}
