@@ -21,6 +21,7 @@ export type ActionPlan = {
   id: string;
   assessment_id: string;
   area: string;
+  indicators: string[];
   steps: ActionPlanStep[];
 };
 
@@ -49,6 +50,15 @@ export function makeStep(code: string, indicator: string, action: string): Actio
   };
 }
 
+export function indicatorCode(indicator: string) {
+  return indicator.split(" ")[0] || indicator;
+}
+
+function normalizeIndicators(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((v) => String(v)).filter((v) => v);
+}
+
 function normalizeSteps(raw: unknown): ActionPlanStep[] {
   if (!Array.isArray(raw)) return [];
   return raw
@@ -75,7 +85,7 @@ function normalizeSteps(raw: unknown): ActionPlanStep[] {
 export async function loadActionPlan(assessmentId: string): Promise<ActionPlan | null> {
   const { data } = await supabase
     .from("action_plans")
-    .select("id, assessment_id, area, steps")
+    .select("id, assessment_id, area, steps, indicators")
     .eq("assessment_id", assessmentId)
     .maybeSingle();
   if (!data) return null;
@@ -83,6 +93,7 @@ export async function loadActionPlan(assessmentId: string): Promise<ActionPlan |
     id: data.id,
     assessment_id: data.assessment_id,
     area: data.area as string,
+    indicators: normalizeIndicators(data.indicators),
     steps: normalizeSteps(data.steps),
   };
 }
@@ -90,7 +101,7 @@ export async function loadActionPlan(assessmentId: string): Promise<ActionPlan |
 export async function saveActionPlan(
   assessmentId: string,
   area: string,
-  patch: { steps?: ActionPlanStep[] }
+  patch: { steps?: ActionPlanStep[]; indicators?: string[] }
 ) {
   const { data: userData } = await supabase.auth.getUser();
   const uid = userData.user?.id;
@@ -101,6 +112,7 @@ export async function saveActionPlan(
     user_id: uid,
     assessment_id: assessmentId,
     area: area as never,
+    indicators: (patch.indicators ?? existing?.indicators ?? []) as never,
     steps: (patch.steps ?? existing?.steps ?? []) as never,
   };
 
