@@ -61,7 +61,6 @@ function ActionPlanPage() {
   const [areaKey, setAreaKey] = useState("representativeness");
   const [tab, setTab] = useState<TabKey>("intro");
   const [steps, setSteps] = useState<ActionPlanStep[]>([]);
-  const [indicatorKeys, setIndicatorKeys] = useState<string[] | null>(null);
   
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -78,21 +77,12 @@ function ActionPlanPage() {
         .select("area")
         .eq("id", assessmentId)
         .maybeSingle();
-      const resolvedArea = (data?.area as string) ?? "representativeness";
       const plan = await loadActionPlan(assessmentId);
       if (!active) return;
       if (data?.area) setAreaKey(data.area as string);
       if (plan) {
         const mapped = plan.steps.map((s) => (s.what ? s : { ...s, what: s.action.slice(0, 120) }));
         setSteps(mapped);
-        const keys = Array.from(new Set(mapped.map((s) => s.indicator)));
-        if (plan.indicators.length > 0) {
-          setIndicatorKeys(plan.indicators);
-        } else if (keys.length > 0) {
-          // Older plans have no saved indicator list: derive it from the steps once and store it.
-          setIndicatorKeys(keys);
-          void saveActionPlan(assessmentId, resolvedArea, { indicators: keys });
-        }
       }
       setLoaded(true);
     })();
@@ -110,11 +100,11 @@ function ActionPlanPage() {
     }
     setSaving(true);
     const t = setTimeout(async () => {
-      await saveActionPlan(assessmentId, areaKey, { steps, indicators: indicatorKeys ?? [] });
+      await saveActionPlan(assessmentId, areaKey, { steps });
       setSaving(false);
     }, 700);
     return () => clearTimeout(t);
-  }, [steps, indicatorKeys, loaded, assessmentId, areaKey]);
+  }, [steps, loaded, assessmentId, areaKey]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, ActionPlanStep[]>();
@@ -126,16 +116,7 @@ function ActionPlanPage() {
     return [...map.entries()];
   }, [steps]);
 
-  const groupedActive = useMemo(
-    () => (indicatorKeys ? grouped.filter(([k]) => indicatorKeys.includes(k)) : grouped),
-    [grouped, indicatorKeys]
-  );
-
-  const toggleIndicator = (key: string, on: boolean) =>
-    setIndicatorKeys((prev) => {
-      const base = prev ?? grouped.map(([k]) => k);
-      return on ? Array.from(new Set([...base, key])) : base.filter((k) => k !== key);
-    });
+  const groupedActive = grouped;
 
   const update = (id: string, patch: Partial<ActionPlanStep>) =>
     setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
@@ -213,8 +194,7 @@ function ActionPlanPage() {
               border={theme.border}
               areaName={area.name}
               grouped={grouped}
-              indicators={indicatorKeys}
-              onToggleIndicator={toggleIndicator}
+              update={update}
             />
           )}
 
@@ -435,18 +415,15 @@ function IndicatorsAndSteps({
   border,
   areaName,
   grouped,
-  indicators,
-  onToggleIndicator,
+  update,
 }: {
   accent: string;
   soft: string;
   border: string;
   areaName: string;
   grouped: [string, ActionPlanStep[]][];
-  indicators: string[] | null;
-  onToggleIndicator: (key: string, on: boolean) => void;
+  update: (id: string, patch: Partial<ActionPlanStep>) => void;
 }) {
-  const selected = indicators ?? grouped.map(([k]) => k);
 
   return (
     <section className="rounded-3xl bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-8">
@@ -460,11 +437,11 @@ function IndicatorsAndSteps({
           <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f4a261] text-[#1f2937]">
             <ListChecks size={15} />
           </span>
-          Select indicators
+          Select action steps
         </p>
         <p className="mt-2 text-[12px] leading-relaxed text-[#6b7280]">
-          These are the indicators you chose to work on, with the action steps you pre-selected in your results. Untick
-          an indicator to leave it and its steps out of your plan. You can change this anytime.
+          These are the indicators you chose to work on, with the action steps you pre-selected in your results. Tick
+          the steps you want in your plan. You can change this anytime.
         </p>
         {grouped.length === 0 ? (
           <p className="mt-4 text-[13px] text-[#6b7280]">
@@ -474,44 +451,30 @@ function IndicatorsAndSteps({
         ) : (
           <div className="mt-4 space-y-4">
             {grouped.map(([indicator, list]) => {
-              const on = selected.includes(indicator);
               const code = indicatorCode(indicator);
               const name = indicatorName(indicator);
               return (
                 <div key={indicator} className="rounded-xl bg-white p-4 ring-1 ring-black/5">
-                  <label className="flex cursor-pointer items-start gap-2.5">
-                    <input
-                      type="checkbox"
-                      checked={on}
-                      onChange={(e) => onToggleIndicator(indicator, e.target.checked)}
-                      style={{ accentColor: accent }}
-                      className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer"
-                      aria-label={`Include Indicator ${code}${name !== code ? ` ${name}` : ""} in my plan`}
-                    />
-                    <p className="text-[13px] leading-snug">
-                      <span className="font-extrabold" style={{ color: on ? accent : "#9ca3af" }}>
-                        Indicator {code}
-                      </span>
-                      {name !== code && (
-                        <span className={on ? "font-semibold text-[#111827]" : "font-semibold text-[#9ca3af]"}>
-                          {" "}
-                          {name}
-                        </span>
-                      )}
-                    </p>
-
-                  </label>
-                  <ul className="mt-2 space-y-2">
+                  <p className="text-[13px] leading-snug">
+                    <span className="font-extrabold" style={{ color: accent }}>
+                      Indicator {code}
+                    </span>
+                    {name !== code && <span className="font-semibold text-[#111827]"> {name}</span>}
+                  </p>
+                  <ul className="mt-3 space-y-2">
                     {list.map((s) => (
                       <li key={s.id} className="flex items-start gap-2.5 text-[12px] leading-snug">
-                        <span
-                          aria-hidden
-                          className="mt-[7px] h-[5px] w-[5px] shrink-0 rounded-full"
-                          style={{ backgroundColor: on && s.included ? accent : "#d1d5db" }}
+                        <input
+                          type="checkbox"
+                          checked={s.included}
+                          onChange={(e) => update(s.id, { included: e.target.checked })}
+                          style={{ accentColor: accent }}
+                          className="mt-[1px] h-[15px] w-[15px] shrink-0 cursor-pointer"
+                          aria-label={`Include "${s.action}" in my plan`}
                         />
                         <span
                           className={
-                            on && s.included
+                            s.included
                               ? "font-semibold text-[#111827]"
                               : "text-[#9ca3af] line-through decoration-[#d1d5db]"
                           }
