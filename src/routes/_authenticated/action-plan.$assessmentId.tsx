@@ -81,7 +81,7 @@ function ActionPlanPage() {
       if (!active) return;
       if (data?.area) setAreaKey(data.area as string);
       if (plan) {
-        setSteps(plan.steps);
+        setSteps(plan.steps.map((s) => (s.what ? s : { ...s, what: s.action.slice(0, 120) })));
       }
       setLoaded(true);
     })();
@@ -416,8 +416,12 @@ function ActionSteps({
 
   return (
     <section className="rounded-3xl bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-8">
+      <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Area of assessment</p>
+      <p className="mt-1 text-[15px] font-extrabold" style={{ color: accent }}>{areaName}</p>
+
       {/* Indicator selector bar */}
-      <div className="flex flex-wrap gap-2">
+      <p className="mt-5 text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Indicator</p>
+      <div className="mt-2 flex flex-wrap gap-2">
         {grouped.map(([key]) => {
           const on = key === (activeIndicator?.[0] ?? "");
           return (
@@ -442,7 +446,8 @@ function ActionSteps({
       </div>
 
       {/* Step selector bar */}
-      <div className="mt-3 flex flex-wrap gap-2">
+      <p className="mt-5 text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Action step</p>
+      <div className="mt-2 flex flex-wrap gap-2">
         {indicatorSteps.map((s, i) => {
           const on = s.id === current?.id;
           return (
