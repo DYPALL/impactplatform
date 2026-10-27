@@ -1,21 +1,20 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  AlertTriangle,
   ArrowLeft,
-  BarChart3,
-  Box,
+  Check,
   ChevronLeft,
   ChevronRight,
+  Download,
   Lightbulb,
   ListChecks,
-  MessageSquare,
+  PenLine,
+  Printer,
+  Save,
   Target,
-  Check,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TutorialSlot } from "@/components/TutorialSlot";
-import { Download, PenLine, Printer, Save } from "lucide-react";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
