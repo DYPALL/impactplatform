@@ -762,19 +762,31 @@ function ActionSteps({
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col items-center gap-3 rounded-2xl bg-[#F6F6F8] p-5 text-center ring-1 ring-black/5">
+        <div className="mt-6 rounded-2xl bg-[#F6F6F8] p-5 text-center ring-1 ring-black/5">
           <p className="text-[12px] font-semibold text-[#374151]">
-            Finished writing your plan? Export a PDF copy of it to print or share with your team.
+            Choose what to do next. Export a PDF copy of your plan to print or share with your team, or
+            save your progress and come back to it later.
           </p>
-          <button
-            type="button"
-            onClick={onExport}
-            disabled={!canExport}
-            className="inline-flex items-center gap-1.5 rounded-full px-6 py-2.5 text-[12px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
-            style={{ backgroundColor: accent }}
-          >
-            <Printer size={14} /> Export your plan
-          </button>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={onExport}
+              disabled={!canExport}
+              className="inline-flex items-center gap-1.5 rounded-full px-6 py-2.5 text-[12px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              style={{ backgroundColor: accent }}
+            >
+              <Printer size={14} /> Export your plan
+            </button>
+            <button
+              type="button"
+              onClick={onSaveLater}
+              disabled={saving}
+              className="inline-flex items-center gap-1.5 rounded-full border bg-white px-6 py-2.5 text-[12px] font-bold transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-50"
+              style={{ borderColor: accent, color: accent }}
+            >
+              <CheckCircle2 size={14} /> {saving ? "Saving…" : "Save and continue later"}
+            </button>
+          </div>
         </div>
         </>
       )}
