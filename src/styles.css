@@ -527,6 +527,7 @@
     font-size: 11px;
     color: #111827;
     margin-top: 2px;
+    min-height: 18px;
     white-space: pre-wrap;
   }
   .plan-print-empty {
