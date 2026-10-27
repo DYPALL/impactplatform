@@ -155,7 +155,8 @@ function ActionPlanPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#FAFAFB] pb-24">
+    <>
+      <div className="min-h-screen bg-[#FAFAFB] pb-24 screen-only">
       <div className="mx-auto max-w-[1080px] px-4 pt-6 md:px-8">
         <div className="flex items-center justify-between gap-3">
           <BackLink />
@@ -164,14 +165,20 @@ function ActionPlanPage() {
           </span>
         </div>
 
-        <div className="mt-5 flex justify-end"><Button asChild variant="outline"><a href="/downloads/IMPACT-blank-action-plan.pdf" download><Download />Download blank template</a></Button></div>
         <TutorialSlot tutorial="actionPlan" />
         <div className="mt-6">
           <Tabs />
         </div>
 
         <div className="mt-6">
-          {tab === "intro" && <Introduction accent={theme.accent} />}
+          {tab === "intro" && (
+            <Introduction
+              accent={theme.accent}
+              canExport={steps.some((s) => s.included)}
+              onStart={() => setTab("indicators")}
+              onExport={() => window.print()}
+            />
+          )}
 
           {tab === "indicators" && (
             <IndicatorsAndSteps
@@ -227,7 +234,10 @@ function ActionPlanPage() {
           <BackLink />
         </div>
       </div>
-    </div>
+      </div>
+
+      <PlanPrintSheet areaName={area.name} grouped={grouped} />
+    </>
   );
 }
 
