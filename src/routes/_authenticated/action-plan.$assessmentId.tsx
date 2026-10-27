@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TutorialSlot } from "@/components/TutorialSlot";
-import { CheckCircle2, Download, PenLine, Printer } from "lucide-react";
+import { Download, PenLine, Printer, Save } from "lucide-react";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
@@ -769,7 +769,7 @@ function ActionSteps({
               className="inline-flex items-center gap-1.5 rounded-full border bg-white px-6 py-2.5 text-[12px] font-bold transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-50"
               style={{ borderColor: accent, color: accent }}
             >
-              <CheckCircle2 size={14} /> {saving ? "Saving…" : "Save and continue later"}
+              <Save size={14} /> {saving ? "Saving…" : "Save and continue later"}
             </button>
           </div>
         </div>
