@@ -18,6 +18,7 @@ import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
   PROGRESS_OPTIONS,
+  indicatorCode,
   loadActionPlan,
   saveActionPlan,
   type ActionPlanStep,
@@ -47,7 +48,7 @@ export const Route = createFileRoute("/_authenticated/action-plan/$assessmentId"
 
 const TABS = [
   { key: "intro", label: "Introduction", icon: Lightbulb },
-  { key: "indicators", label: "Indicators & Steps", icon: Target },
+  { key: "indicators", label: "Indicators", icon: Target },
   { key: "steps", label: "Action Steps", icon: ListChecks },
 ] as const;
 
@@ -58,6 +59,7 @@ function ActionPlanPage() {
   const [areaKey, setAreaKey] = useState("representativeness");
   const [tab, setTab] = useState<TabKey>("intro");
   const [steps, setSteps] = useState<ActionPlanStep[]>([]);
+  const [indicatorKeys, setIndicatorKeys] = useState<string[] | null>(null);
   
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -74,11 +76,21 @@ function ActionPlanPage() {
         .select("area")
         .eq("id", assessmentId)
         .maybeSingle();
+      const resolvedArea = (data?.area as string) ?? "representativeness";
       const plan = await loadActionPlan(assessmentId);
       if (!active) return;
       if (data?.area) setAreaKey(data.area as string);
       if (plan) {
-        setSteps(plan.steps.map((s) => (s.what ? s : { ...s, what: s.action.slice(0, 120) })));
+        const mapped = plan.steps.map((s) => (s.what ? s : { ...s, what: s.action.slice(0, 120) }));
+        setSteps(mapped);
+        const keys = Array.from(new Set(mapped.map((s) => s.indicator)));
+        if (plan.indicators.length > 0) {
+          setIndicatorKeys(plan.indicators);
+        } else if (keys.length > 0) {
+          // Older plans have no saved indicator list: derive it from the steps once and store it.
+          setIndicatorKeys(keys);
+          void saveActionPlan(assessmentId, resolvedArea, { indicators: keys });
+        }
       }
       setLoaded(true);
     })();
@@ -96,11 +108,11 @@ function ActionPlanPage() {
     }
     setSaving(true);
     const t = setTimeout(async () => {
-      await saveActionPlan(assessmentId, areaKey, { steps });
+      await saveActionPlan(assessmentId, areaKey, { steps, indicators: indicatorKeys ?? [] });
       setSaving(false);
     }, 700);
     return () => clearTimeout(t);
-  }, [steps, loaded, assessmentId, areaKey]);
+  }, [steps, indicatorKeys, loaded, assessmentId, areaKey]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, ActionPlanStep[]>();
