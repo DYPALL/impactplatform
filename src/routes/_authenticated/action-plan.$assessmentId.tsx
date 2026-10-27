@@ -637,7 +637,7 @@ function ActionSteps({
                   : { backgroundColor: soft, color: accent, border: `1px solid ${border}` }
               }
             >
-              {key}
+              Indicator {indicatorCode(key)}
             </button>
           );
         })}
@@ -678,7 +678,7 @@ function ActionSteps({
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4" style={{ backgroundColor: soft }}>
             <div className="min-w-0">
               <p className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: accent }}>
-                {current.indicator}
+                Indicator {indicatorCode(current.indicator)}
               </p>
               <p className="mt-1 text-[13px] font-bold text-[#111827]">{current.action}</p>
             </div>
