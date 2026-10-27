@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TutorialSlot } from "@/components/TutorialSlot";
-import { Download, PenLine, Printer } from "lucide-react";
+import { CheckCircle2, Download, PenLine, Printer } from "lucide-react";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
@@ -518,6 +518,8 @@ function ActionSteps({
   areaName,
   canExport,
   onExport,
+  saving,
+  onSaveLater,
 }: {
   accent: string;
   soft: string;
@@ -529,6 +531,8 @@ function ActionSteps({
   areaName: string;
   canExport: boolean;
   onExport: () => void;
+  saving: boolean;
+  onSaveLater: () => void;
 }) {
   const [indicator, setIndicator] = useState<string>("");
   const [stepId, setStepId] = useState<string>("");
