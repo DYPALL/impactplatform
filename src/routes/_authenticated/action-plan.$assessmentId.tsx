@@ -14,9 +14,8 @@ import {
   Check,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { TutorialSlot } from "@/components/TutorialSlot";
-import { Download } from "lucide-react";
+import { Download, PenLine, Printer } from "lucide-react";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
