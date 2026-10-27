@@ -255,7 +255,7 @@ function Introduction({ accent, onStart }: { accent: string; onStart: () => void
     <section className="rounded-3xl p-8 md:p-12" style={{ backgroundColor: accent }}>
       <h1 className="text-center text-[30px] font-extrabold tracking-tight text-[#f4a261]">Build your action plan</h1>
 
-      <div className="mx-auto mt-6 max-w-[760px] rounded-2xl bg-white/10 p-6 text-[13px] leading-relaxed text-white md:p-8">
+      <div className="mx-auto mt-6 max-w-[760px] text-[13px] leading-relaxed text-white">
         <p>
           This is your <strong>ACTION PLAN</strong>, designed to help you move from assessment to implementation as you
           begin to strengthen youth engagement in your Local Youth Council.
@@ -306,7 +306,7 @@ function Introduction({ accent, onStart }: { accent: string; onStart: () => void
         </div>
       </div>
 
-      <div className="mx-auto mt-5 max-w-[760px] space-y-4 rounded-2xl bg-white/10 p-6 text-[13px] leading-relaxed text-white md:p-8">
+      <div className="mx-auto mt-8 max-w-[760px] space-y-4 text-[13px] leading-relaxed text-white">
         <p>
           Either way, the plan supports you in organising <strong>what</strong> needs to be done, <strong>who</strong>{" "}
           will be involved, <strong>when</strong> each step should happen, what <strong>resources</strong> you need, and
