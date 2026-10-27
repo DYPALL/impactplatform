@@ -17,6 +17,7 @@
 - Prebundle the carousel Auto Scroll plugin in Vite at startup to avoid late dependency optimization replacing React bundles in an open preview.
 - Share FAQ copy between the FAQ page and Home accordion through a browser-safe data module to prevent divergent answers.
 - Blank Action Plan exports are a static same-origin fillable, printable PDF, independent of a user's saved plan.
+- A saved Action Plan exports through a dedicated print-only view (.plan-print-sheet) while the screen page carries .screen-only and is hidden by the print stylesheet; keep both lists of fields in step so a printed plan matches what the editor shows.
 - Home's five assessment steps live in a dedicated browser-safe Embla view so card navigation and explanatory copy stay separate from the rest of Home.
 - Publication cards share a browser-safe cover mockup view across Home and Resource Hub; presentation preserves original artwork and publisher links without modifying resource records.
 - Non-video resource covers use the shared mockup; a browser-safe asset mapping swaps adapted covers without changing original downloads or catalogue metadata. Covers flagged landscape in src/lib/publication-covers.ts render as a horizontal book variant; all others render upright.
