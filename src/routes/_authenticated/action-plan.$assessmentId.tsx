@@ -215,7 +215,6 @@ function ActionPlanPage() {
               grouped={grouped}
               indicators={indicatorKeys}
               onToggleIndicator={toggleIndicator}
-              update={update}
             />
           )}
 
@@ -438,7 +437,6 @@ function IndicatorsAndSteps({
   grouped,
   indicators,
   onToggleIndicator,
-  update,
 }: {
   accent: string;
   soft: string;
@@ -447,7 +445,6 @@ function IndicatorsAndSteps({
   grouped: [string, ActionPlanStep[]][];
   indicators: string[] | null;
   onToggleIndicator: (key: string, on: boolean) => void;
-  update: (id: string, patch: Partial<ActionPlanStep>) => void;
 }) {
   const selected = indicators ?? grouped.map(([k]) => k);
 
@@ -463,11 +460,11 @@ function IndicatorsAndSteps({
           <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f4a261] text-[#1f2937]">
             <ListChecks size={15} />
           </span>
-          Select action steps
+          Select indicators
         </p>
         <p className="mt-2 text-[12px] leading-relaxed text-[#6b7280]">
           These are the indicators you chose to work on, with the action steps you pre-selected in your results. Untick
-          an indicator or a step to leave it out of your plan. You can change this anytime.
+          an indicator to leave it and its steps out of your plan. You can change this anytime.
         </p>
         {grouped.length === 0 ? (
           <p className="mt-4 text-[13px] text-[#6b7280]">
@@ -506,14 +503,11 @@ function IndicatorsAndSteps({
                   </label>
                   <ul className="mt-2 space-y-2">
                     {list.map((s) => (
-                      <li key={s.id} className="flex items-start gap-2.5 text-[12px] leading-snug text-[#374151]">
-                        <input
-                          type="checkbox"
-                          checked={s.included}
-                          onChange={(e) => update(s.id, { included: e.target.checked })}
-                          style={{ accentColor: accent }}
-                          className="mt-[1px] h-[15px] w-[15px] shrink-0 cursor-pointer"
-                          aria-label={`Include "${s.action}" in my plan`}
+                      <li key={s.id} className="flex items-start gap-2.5 text-[12px] leading-snug">
+                        <span
+                          aria-hidden
+                          className="mt-[7px] h-[5px] w-[5px] shrink-0 rounded-full"
+                          style={{ backgroundColor: on && s.included ? accent : "#d1d5db" }}
                         />
                         <span
                           className={
