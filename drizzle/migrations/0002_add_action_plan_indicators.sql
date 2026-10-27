@@ -1,0 +1,2 @@
+ALTER TABLE public.action_plans ADD COLUMN indicators jsonb NOT NULL DEFAULT '[]'::jsonb;
+COMMENT ON COLUMN public.action_plans.indicators IS 'Indicator keys (e.g. "1.4 Legitimacy") the user kept selected in the Indicators tab; empty means all indicators from steps are selected.';

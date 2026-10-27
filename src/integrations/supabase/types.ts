@@ -21,6 +21,7 @@ export type Database = {
           created_at: string
           goal: string
           id: string
+          indicators: Json
           model: string
           steps: Json
           updated_at: string
@@ -32,6 +33,7 @@ export type Database = {
           created_at?: string
           goal?: string
           id?: string
+          indicators?: Json
           model?: string
           steps?: Json
           updated_at?: string
@@ -43,6 +45,7 @@ export type Database = {
           created_at?: string
           goal?: string
           id?: string
+          indicators?: Json
           model?: string
           steps?: Json
           updated_at?: string

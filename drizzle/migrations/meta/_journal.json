@@ -15,6 +15,13 @@
       "when": 1792424408471,
       "tag": "0001_deprecate_action_plan_goal_model",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793111208015,
+      "tag": "0002_add_action_plan_indicators",
+      "breakpoints": true
     }
   ]
 }
