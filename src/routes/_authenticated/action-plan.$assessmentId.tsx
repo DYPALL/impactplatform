@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
@@ -117,6 +117,18 @@ function ActionPlanPage() {
   const update = (id: string, patch: Partial<ActionPlanStep>) =>
     setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
 
+  const navigate = useNavigate();
+
+  const saveAndLeave = async () => {
+    setSaving(true);
+    try {
+      await saveActionPlan(assessmentId, areaKey, { steps });
+    } finally {
+      setSaving(false);
+    }
+    navigate({ to: "/dashboard" });
+  };
+
   const tabIndex = TABS.findIndex((t) => t.key === tab);
 
   const Tabs = () => (
@@ -195,6 +207,8 @@ function ActionPlanPage() {
               areaName={area.name}
               canExport={steps.some((s) => s.included)}
               onExport={() => window.print()}
+              saving={saving}
+              onSaveLater={() => void saveAndLeave()}
             />
           )}
         </div>
