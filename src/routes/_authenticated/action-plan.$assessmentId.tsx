@@ -18,6 +18,7 @@ import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
   PROGRESS_OPTIONS,
+  indicatorCode,
   loadActionPlan,
   saveActionPlan,
   type ActionPlanStep,
@@ -47,7 +48,7 @@ export const Route = createFileRoute("/_authenticated/action-plan/$assessmentId"
 
 const TABS = [
   { key: "intro", label: "Introduction", icon: Lightbulb },
-  { key: "indicators", label: "Indicators & Steps", icon: Target },
+  { key: "indicators", label: "Indicators", icon: Target },
   { key: "steps", label: "Action Steps", icon: ListChecks },
 ] as const;
 
@@ -58,6 +59,7 @@ function ActionPlanPage() {
   const [areaKey, setAreaKey] = useState("representativeness");
   const [tab, setTab] = useState<TabKey>("intro");
   const [steps, setSteps] = useState<ActionPlanStep[]>([]);
+  const [indicatorKeys, setIndicatorKeys] = useState<string[] | null>(null);
   
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -74,11 +76,21 @@ function ActionPlanPage() {
         .select("area")
         .eq("id", assessmentId)
         .maybeSingle();
+      const resolvedArea = (data?.area as string) ?? "representativeness";
       const plan = await loadActionPlan(assessmentId);
       if (!active) return;
       if (data?.area) setAreaKey(data.area as string);
       if (plan) {
-        setSteps(plan.steps.map((s) => (s.what ? s : { ...s, what: s.action.slice(0, 120) })));
+        const mapped = plan.steps.map((s) => (s.what ? s : { ...s, what: s.action.slice(0, 120) }));
+        setSteps(mapped);
+        const keys = Array.from(new Set(mapped.map((s) => s.indicator)));
+        if (plan.indicators.length > 0) {
+          setIndicatorKeys(plan.indicators);
+        } else if (keys.length > 0) {
+          // Older plans have no saved indicator list: derive it from the steps once and store it.
+          setIndicatorKeys(keys);
+          void saveActionPlan(assessmentId, resolvedArea, { indicators: keys });
+        }
       }
       setLoaded(true);
     })();
@@ -96,11 +108,11 @@ function ActionPlanPage() {
     }
     setSaving(true);
     const t = setTimeout(async () => {
-      await saveActionPlan(assessmentId, areaKey, { steps });
+      await saveActionPlan(assessmentId, areaKey, { steps, indicators: indicatorKeys ?? [] });
       setSaving(false);
     }, 700);
     return () => clearTimeout(t);
-  }, [steps, loaded, assessmentId, areaKey]);
+  }, [steps, indicatorKeys, loaded, assessmentId, areaKey]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, ActionPlanStep[]>();
@@ -111,6 +123,17 @@ function ActionPlanPage() {
     }
     return [...map.entries()];
   }, [steps]);
+
+  const groupedActive = useMemo(
+    () => (indicatorKeys ? grouped.filter(([k]) => indicatorKeys.includes(k)) : grouped),
+    [grouped, indicatorKeys]
+  );
+
+  const toggleIndicator = (key: string, on: boolean) =>
+    setIndicatorKeys((prev) => {
+      const base = prev ?? grouped.map(([k]) => k);
+      return on ? Array.from(new Set([...base, key])) : base.filter((k) => k !== key);
+    });
 
   const update = (id: string, patch: Partial<ActionPlanStep>) =>
     setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
@@ -188,6 +211,8 @@ function ActionPlanPage() {
               border={theme.border}
               areaName={area.name}
               grouped={grouped}
+              indicators={indicatorKeys}
+              onToggleIndicator={toggleIndicator}
               update={update}
             />
           )}
@@ -198,11 +223,11 @@ function ActionPlanPage() {
               soft={theme.soft}
               border={theme.border}
               steps={steps}
-              grouped={grouped}
+              grouped={groupedActive}
               update={update}
               assessmentId={assessmentId}
               areaName={area.name}
-              canExport={steps.some((s) => s.included)}
+              canExport={groupedActive.some(([, list]) => list.some((s) => s.included))}
               onExport={() => window.print()}
               saving={saving}
               onSaveLater={() => void saveAndLeave()}
@@ -241,7 +266,7 @@ function ActionPlanPage() {
       </div>
       </div>
 
-      <PlanPrintSheet areaName={area.name} grouped={grouped} />
+      <PlanPrintSheet areaName={area.name} grouped={groupedActive} />
     </>
   );
 }
@@ -409,6 +434,8 @@ function IndicatorsAndSteps({
   border,
   areaName,
   grouped,
+  indicators,
+  onToggleIndicator,
   update,
 }: {
   accent: string;
@@ -416,11 +443,16 @@ function IndicatorsAndSteps({
   border: string;
   areaName: string;
   grouped: [string, ActionPlanStep[]][];
+  indicators: string[] | null;
+  onToggleIndicator: (key: string, on: boolean) => void;
   update: (id: string, patch: Partial<ActionPlanStep>) => void;
 }) {
+  const selected = indicators ?? grouped.map(([k]) => k);
+
   return (
     <section className="rounded-3xl bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-8">
-      <p className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: accent }}>
+      <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Area of assessment</p>
+      <p className="mt-1 text-[15px] font-extrabold" style={{ color: accent }}>
         {areaName}
       </p>
 
@@ -429,11 +461,11 @@ function IndicatorsAndSteps({
           <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f4a261] text-[#1f2937]">
             <ListChecks size={15} />
           </span>
-          Indicators & selected action steps
+          Select action steps
         </p>
         <p className="mt-2 text-[12px] leading-relaxed text-[#6b7280]">
-          These are the indicators you chose to work on, with the action steps you pre-selected in your results. Tick
-          the steps you want to include in your plan. You can change this anytime.
+          These are the indicators you chose to work on, with the action steps you pre-selected in your results. Untick
+          an indicator or a step to leave it out of your plan. You can change this anytime.
         </p>
         {grouped.length === 0 ? (
           <p className="mt-4 text-[13px] text-[#6b7280]">
@@ -442,30 +474,50 @@ function IndicatorsAndSteps({
           </p>
         ) : (
           <div className="mt-4 space-y-4">
-            {grouped.map(([indicator, list]) => (
-              <div key={indicator} className="rounded-xl bg-white p-4 ring-1 ring-black/5">
-                <p className="text-[13px] font-extrabold" style={{ color: accent }}>
-                  {indicator}
-                </p>
-                <ul className="mt-2 space-y-2">
-                  {list.map((s) => (
-                    <li key={s.id} className="flex items-start gap-2.5 text-[12px] leading-snug text-[#374151]">
-                      <input
-                        type="checkbox"
-                        checked={s.included}
-                        onChange={(e) => update(s.id, { included: e.target.checked })}
-                        style={{ accentColor: accent }}
-                        className="mt-[1px] h-[15px] w-[15px] shrink-0 cursor-pointer"
-                        aria-label={`Include "${s.action}" in my plan`}
-                      />
-                      <span className={s.included ? "font-semibold text-[#111827]" : "text-[#9ca3af] line-through decoration-[#d1d5db]"}>
-                        {s.action}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {grouped.map(([indicator, list]) => {
+              const on = selected.includes(indicator);
+              const code = indicatorCode(indicator);
+              return (
+                <div key={indicator} className="rounded-xl bg-white p-4 ring-1 ring-black/5">
+                  <label className="flex cursor-pointer items-center gap-2.5">
+                    <input
+                      type="checkbox"
+                      checked={on}
+                      onChange={(e) => onToggleIndicator(indicator, e.target.checked)}
+                      style={{ accentColor: accent }}
+                      className="h-[15px] w-[15px] cursor-pointer"
+                      aria-label={`Include Indicator ${code} in my plan`}
+                    />
+                    <p className="text-[13px] font-extrabold" style={{ color: on ? accent : "#9ca3af" }}>
+                      Indicator {code}
+                    </p>
+                  </label>
+                  <ul className="mt-2 space-y-2">
+                    {list.map((s) => (
+                      <li key={s.id} className="flex items-start gap-2.5 text-[12px] leading-snug text-[#374151]">
+                        <input
+                          type="checkbox"
+                          checked={s.included}
+                          onChange={(e) => update(s.id, { included: e.target.checked })}
+                          style={{ accentColor: accent }}
+                          className="mt-[1px] h-[15px] w-[15px] shrink-0 cursor-pointer"
+                          aria-label={`Include "${s.action}" in my plan`}
+                        />
+                        <span
+                          className={
+                            on && s.included
+                              ? "font-semibold text-[#111827]"
+                              : "text-[#9ca3af] line-through decoration-[#d1d5db]"
+                          }
+                        >
+                          {s.action}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -585,7 +637,7 @@ function ActionSteps({
                   : { backgroundColor: soft, color: accent, border: `1px solid ${border}` }
               }
             >
-              {key}
+              Indicator {indicatorCode(key)}
             </button>
           );
         })}
@@ -626,7 +678,7 @@ function ActionSteps({
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4" style={{ backgroundColor: soft }}>
             <div className="min-w-0">
               <p className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: accent }}>
-                {current.indicator}
+                Indicator {indicatorCode(current.indicator)}
               </p>
               <p className="mt-1 text-[13px] font-bold text-[#111827]">{current.action}</p>
             </div>
