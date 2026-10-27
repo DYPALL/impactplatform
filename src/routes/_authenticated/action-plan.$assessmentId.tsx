@@ -606,6 +606,7 @@ function ActionSteps({
       </div>
 
       {current && (
+        <>
         <div className="mt-6 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4" style={{ backgroundColor: soft }}>
             <div className="min-w-0">
@@ -757,6 +758,7 @@ function ActionSteps({
             <Printer size={14} /> Export your plan
           </button>
         </div>
+        </>
       )}
     </section>
   );
