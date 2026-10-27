@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TutorialSlot } from "@/components/TutorialSlot";
 import step1 from "@/assets/step-1.webp.asset.json";
 import step2 from "@/assets/step-2.webp.asset.json";
 import step3 from "@/assets/step-3.webp.asset.json";
@@ -53,7 +52,6 @@ export function AssessmentSteps() {
                   <h3 className="text-[22px] font-semibold leading-tight tracking-normal">{step.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed">{step.body}</p>
                 </div>
-                {index === 4 && <TutorialSlot tutorial="actionPlan" />}
               </article>
             ))}
           </div>

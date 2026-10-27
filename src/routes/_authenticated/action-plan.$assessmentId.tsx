@@ -14,7 +14,6 @@ import {
   Target,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { TutorialSlot } from "@/components/TutorialSlot";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
@@ -175,7 +174,6 @@ function ActionPlanPage() {
           </span>
         </div>
 
-        <TutorialSlot tutorial="actionPlan" />
         <div className="mt-6">
           <Tabs />
         </div>
