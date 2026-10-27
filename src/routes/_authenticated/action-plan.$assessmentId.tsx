@@ -124,6 +124,17 @@ function ActionPlanPage() {
     return [...map.entries()];
   }, [steps]);
 
+  const groupedActive = useMemo(
+    () => (indicatorKeys ? grouped.filter(([k]) => indicatorKeys.includes(k)) : grouped),
+    [grouped, indicatorKeys]
+  );
+
+  const toggleIndicator = (key: string, on: boolean) =>
+    setIndicatorKeys((prev) => {
+      const base = prev ?? grouped.map(([k]) => k);
+      return on ? Array.from(new Set([...base, key])) : base.filter((k) => k !== key);
+    });
+
   const update = (id: string, patch: Partial<ActionPlanStep>) =>
     setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
 
@@ -200,6 +211,8 @@ function ActionPlanPage() {
               border={theme.border}
               areaName={area.name}
               grouped={grouped}
+              indicators={indicatorKeys}
+              onToggleIndicator={toggleIndicator}
               update={update}
             />
           )}
@@ -210,11 +223,11 @@ function ActionPlanPage() {
               soft={theme.soft}
               border={theme.border}
               steps={steps}
-              grouped={grouped}
+              grouped={groupedActive}
               update={update}
               assessmentId={assessmentId}
               areaName={area.name}
-              canExport={steps.some((s) => s.included)}
+              canExport={groupedActive.some(([, list]) => list.some((s) => s.included))}
               onExport={() => window.print()}
               saving={saving}
               onSaveLater={() => void saveAndLeave()}
@@ -253,7 +266,7 @@ function ActionPlanPage() {
       </div>
       </div>
 
-      <PlanPrintSheet areaName={area.name} grouped={grouped} />
+      <PlanPrintSheet areaName={area.name} grouped={groupedActive} />
     </>
   );
 }
