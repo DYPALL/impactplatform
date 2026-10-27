@@ -193,6 +193,7 @@ function ActionPlanPage() {
               grouped={grouped}
               update={update}
               assessmentId={assessmentId}
+              areaName={area.name}
             />
           )}
         </div>
@@ -376,6 +377,7 @@ function ActionSteps({
   grouped,
   update,
   assessmentId,
+  areaName,
 }: {
   accent: string;
   soft: string;
@@ -384,6 +386,7 @@ function ActionSteps({
   grouped: [string, ActionPlanStep[]][];
   update: (id: string, patch: Partial<ActionPlanStep>) => void;
   assessmentId: string;
+  areaName: string;
 }) {
   const [indicator, setIndicator] = useState<string>("");
   const [stepId, setStepId] = useState<string>("");
