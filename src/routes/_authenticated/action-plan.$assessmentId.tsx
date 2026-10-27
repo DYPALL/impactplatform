@@ -19,6 +19,8 @@ import { themeForArea } from "@/components/questionnaire/theme";
 import {
   PROGRESS_OPTIONS,
   indicatorCode,
+  indicatorName,
+
   loadActionPlan,
   saveActionPlan,
   type ActionPlanStep,
