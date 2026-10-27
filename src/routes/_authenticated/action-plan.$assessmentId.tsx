@@ -479,20 +479,30 @@ function IndicatorsAndSteps({
             {grouped.map(([indicator, list]) => {
               const on = selected.includes(indicator);
               const code = indicatorCode(indicator);
+              const name = indicatorName(indicator);
               return (
                 <div key={indicator} className="rounded-xl bg-white p-4 ring-1 ring-black/5">
-                  <label className="flex cursor-pointer items-center gap-2.5">
+                  <label className="flex cursor-pointer items-start gap-2.5">
                     <input
                       type="checkbox"
                       checked={on}
                       onChange={(e) => onToggleIndicator(indicator, e.target.checked)}
                       style={{ accentColor: accent }}
-                      className="h-[15px] w-[15px] cursor-pointer"
-                      aria-label={`Include Indicator ${code} in my plan`}
+                      className="mt-[2px] h-[15px] w-[15px] shrink-0 cursor-pointer"
+                      aria-label={`Include Indicator ${code}${name !== code ? ` ${name}` : ""} in my plan`}
                     />
-                    <p className="text-[13px] font-extrabold" style={{ color: on ? accent : "#9ca3af" }}>
-                      Indicator {code}
+                    <p className="text-[13px] leading-snug">
+                      <span className="font-extrabold" style={{ color: on ? accent : "#9ca3af" }}>
+                        Indicator {code}
+                      </span>
+                      {name !== code && (
+                        <span className={on ? "font-semibold text-[#111827]" : "font-semibold text-[#9ca3af]"}>
+                          {" "}
+                          {name}
+                        </span>
+                      )}
                     </p>
+
                   </label>
                   <ul className="mt-2 space-y-2">
                     {list.map((s) => (
