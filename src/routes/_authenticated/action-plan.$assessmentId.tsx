@@ -14,9 +14,8 @@ import {
   Check,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { TutorialSlot } from "@/components/TutorialSlot";
-import { Download } from "lucide-react";
+import { Download, PenLine, Printer } from "lucide-react";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
@@ -155,7 +154,8 @@ function ActionPlanPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#FAFAFB] pb-24">
+    <>
+      <div className="min-h-screen bg-[#FAFAFB] pb-24 screen-only">
       <div className="mx-auto max-w-[1080px] px-4 pt-6 md:px-8">
         <div className="flex items-center justify-between gap-3">
           <BackLink />
@@ -164,14 +164,20 @@ function ActionPlanPage() {
           </span>
         </div>
 
-        <div className="mt-5 flex justify-end"><Button asChild variant="outline"><a href="/downloads/IMPACT-blank-action-plan.pdf" download><Download />Download blank template</a></Button></div>
         <TutorialSlot tutorial="actionPlan" />
         <div className="mt-6">
           <Tabs />
         </div>
 
         <div className="mt-6">
-          {tab === "intro" && <Introduction accent={theme.accent} />}
+          {tab === "intro" && (
+            <Introduction
+              accent={theme.accent}
+              canExport={steps.some((s) => s.included)}
+              onStart={() => setTab("indicators")}
+              onExport={() => window.print()}
+            />
+          )}
 
           {tab === "indicators" && (
             <IndicatorsAndSteps
@@ -227,42 +233,185 @@ function ActionPlanPage() {
           <BackLink />
         </div>
       </div>
-    </div>
+      </div>
+
+      <PlanPrintSheet areaName={area.name} grouped={grouped} />
+    </>
   );
 }
 
 /* -------------------------------- Introduction ------------------------------- */
 
-function Introduction({ accent }: { accent: string }) {
+function Introduction({
+  accent,
+  canExport,
+  onStart,
+  onExport,
+}: {
+  accent: string;
+  canExport: boolean;
+  onStart: () => void;
+  onExport: () => void;
+}) {
   return (
     <section className="rounded-3xl p-8 md:p-12" style={{ backgroundColor: accent }}>
       <h1 className="text-center text-[30px] font-extrabold tracking-tight text-[#f4a261]">ACTION PLAN</h1>
-      <div className="mx-auto mt-6 max-w-[720px] space-y-4 rounded-2xl bg-white/10 p-6 text-[13px] leading-relaxed text-white md:p-8">
+
+      <div className="mx-auto mt-6 max-w-[760px] rounded-2xl bg-white/10 p-6 text-[13px] leading-relaxed text-white md:p-8">
         <p>
-          This is a template for an <strong>ACTION PLAN</strong>, designed to help you move from assessment to
-          implementation as you begin to strengthen youth engagement in your Local Youth Council.
+          This is your <strong>ACTION PLAN</strong>, designed to help you move from assessment to implementation as you
+          begin to strengthen youth engagement in your Local Youth Council.
         </p>
-        <p>
+        <p className="mt-4">
           Based on your answers to the IMPACT self-assessment, you selected up to three recommended action steps per
-          indicator. Those steps have been imported here automatically — tick the ones you want to include in your
-          plan.
+          indicator. Those steps have been imported here automatically — tick the ones you want to include in your plan.
         </p>
+        <p className="mt-4">You can complete the plan in either of two ways:</p>
+      </div>
+
+      <div className="mx-auto mt-5 grid max-w-[760px] gap-4 md:grid-cols-2">
+        <div className="flex flex-col rounded-2xl bg-white/10 p-6">
+          <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#f4a261]">Option 1</p>
+          <p className="mt-1 text-[15px] font-extrabold text-white">Fill it in here</p>
+          <p className="mt-2 flex-1 text-[12px] leading-relaxed text-white/90">
+            Work through the tabs below and your answers are saved automatically as you type. When your plan is ready,
+            export a PDF copy of it to print or share with your team.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={onStart}
+              className="inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-[12px] font-bold transition hover:opacity-90"
+              style={{ color: accent }}
+            >
+              <PenLine size={14} /> Start filling in
+            </button>
+            <button
+              type="button"
+              onClick={onExport}
+              disabled={!canExport}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/70 px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Printer size={14} /> Export your plan
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-col rounded-2xl bg-white/10 p-6">
+          <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#f4a261]">Option 2</p>
+          <p className="mt-1 text-[15px] font-extrabold text-white">Fill it in with colleagues</p>
+          <p className="mt-2 flex-1 text-[12px] leading-relaxed text-white/90">
+            Prefer to plan together on paper? Download the blank template, print it, and write your action steps by hand
+            with colleagues and young people.
+          </p>
+          <div className="mt-4">
+            <a
+              href="/downloads/IMPACT-blank-action-plan.pdf"
+              download
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#f4a261] px-5 py-2.5 text-[12px] font-bold text-[#1f2937] transition hover:opacity-90"
+            >
+              <Download size={14} /> Download blank template
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto mt-5 max-w-[760px] space-y-4 rounded-2xl bg-white/10 p-6 text-[13px] leading-relaxed text-white md:p-8">
         <p>
-          This template supports you in planning concrete steps. It helps you organise <strong>what</strong> needs to be
-          done, <strong>who</strong> will be involved, <strong>when</strong> each step should happen, what{" "}
-          <strong>resources</strong> you need, and how you will measure <strong>progress</strong>.
+          Either way, the plan supports you in organising <strong>what</strong> needs to be done, <strong>who</strong>{" "}
+          will be involved, <strong>when</strong> each step should happen, what <strong>resources</strong> you need, and
+          how you will measure <strong>progress</strong>.
         </p>
         <p>
           We recommend involving all relevant stakeholders (young people, staff members, municipality representatives,
           etc.) in completing this plan.
         </p>
       </div>
+
       <div className="mt-8 flex justify-center">
         <span className="rounded-xl bg-[#f4a261] px-6 py-3 text-[13px] font-extrabold text-[#1f2937]">
           GOOD LUCK WITH THE IMPLEMENTATION!
         </span>
       </div>
     </section>
+  );
+}
+
+/* ------------------------------- Print / export -------------------------------- */
+
+function PlanPrintSheet({ areaName, grouped }: { areaName: string; grouped: [string, ActionPlanStep[]][] }) {
+  const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+  const groups = grouped
+    .map(([indicator, list]) => [indicator, list.filter((s) => s.included)] as [string, ActionPlanStep[]])
+    .filter(([, list]) => list.length > 0);
+
+  return (
+    <div className="plan-print-sheet">
+      <div className="plan-print-head">
+        <p className="plan-print-kicker">IMPACT — European Platform for Local Youth Councils</p>
+        <h1>ACTION PLAN</h1>
+        <p className="plan-print-meta">
+          <span>
+            <strong>Area of assessment:</strong> {areaName}
+          </span>
+          <span>
+            <strong>Date:</strong> {today}
+          </span>
+        </p>
+      </div>
+
+      {groups.length === 0 && <p className="plan-print-empty">No action steps are included in this plan yet.</p>}
+
+      {groups.map(([indicator, list]) => (
+        <div key={indicator} className="plan-print-group">
+          <h2>{indicator}</h2>
+          {list.map((s, i) => (
+            <div key={s.id} className="plan-print-step">
+              <p className="plan-print-step-title">
+                <span className="plan-print-num">{i + 1}</span>
+                <span>{s.action}</span>
+              </p>
+              <div className="plan-print-grid">
+                <div className="plan-print-field">
+                  <p>What?</p>
+                  <p className="plan-print-val">{s.what || "—"}</p>
+                </div>
+                <div className="plan-print-field">
+                  <p>How?</p>
+                  <p className="plan-print-val">{s.how || "—"}</p>
+                </div>
+                <div className="plan-print-field">
+                  <p>When? (begin → due)</p>
+                  <p className="plan-print-val">
+                    {s.start || "—"} → {s.due || "—"}
+                  </p>
+                </div>
+                <div className="plan-print-field">
+                  <p>Who?</p>
+                  <p className="plan-print-val">{s.who || "—"}</p>
+                </div>
+                <div className="plan-print-field">
+                  <p>Resources needed</p>
+                  <p className="plan-print-val">{s.resources || "—"}</p>
+                </div>
+                <div className="plan-print-field">
+                  <p>Potential risk</p>
+                  <p className="plan-print-val">{s.risk || "—"}</p>
+                </div>
+                <div className="plan-print-field">
+                  <p>Progress tracking</p>
+                  <p className="plan-print-val">{s.progress || "—"}</p>
+                </div>
+                <div className="plan-print-field">
+                  <p>Notes</p>
+                  <p className="plan-print-val">{s.notes || "—"}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
   );
 }
 
