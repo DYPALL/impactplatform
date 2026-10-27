@@ -170,14 +170,7 @@ function ActionPlanPage() {
         </div>
 
         <div className="mt-6">
-          {tab === "intro" && (
-            <Introduction
-              accent={theme.accent}
-              canExport={steps.some((s) => s.included)}
-              onStart={() => setTab("indicators")}
-              onExport={() => window.print()}
-            />
-          )}
+          {tab === "intro" && <Introduction accent={theme.accent} onStart={() => setTab("indicators")} />}
 
           {tab === "indicators" && (
             <IndicatorsAndSteps
@@ -200,6 +193,8 @@ function ActionPlanPage() {
               update={update}
               assessmentId={assessmentId}
               areaName={area.name}
+              canExport={steps.some((s) => s.included)}
+              onExport={() => window.print()}
             />
           )}
         </div>
@@ -242,17 +237,7 @@ function ActionPlanPage() {
 
 /* -------------------------------- Introduction ------------------------------- */
 
-function Introduction({
-  accent,
-  canExport,
-  onStart,
-  onExport,
-}: {
-  accent: string;
-  canExport: boolean;
-  onStart: () => void;
-  onExport: () => void;
-}) {
+function Introduction({ accent, onStart }: { accent: string; onStart: () => void }) {
   return (
     <section className="rounded-3xl p-8 md:p-12" style={{ backgroundColor: accent }}>
       <h1 className="text-center text-[30px] font-extrabold tracking-tight text-[#f4a261]">ACTION PLAN</h1>
@@ -264,7 +249,7 @@ function Introduction({
         </p>
         <p className="mt-4">
           Based on your answers to the IMPACT self-assessment, you selected up to three recommended action steps per
-          indicator. Those steps have been imported here automatically — tick the ones you want to include in your plan.
+          indicator. Those steps have been imported here automatically. Tick the ones you want to include in your plan.
         </p>
         <p className="mt-4">You can complete the plan in either of two ways:</p>
       </div>
@@ -274,8 +259,8 @@ function Introduction({
           <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#f4a261]">Option 1</p>
           <p className="mt-1 text-[15px] font-extrabold text-white">Fill it in here</p>
           <p className="mt-2 flex-1 text-[12px] leading-relaxed text-white/90">
-            Work through the tabs below and your answers are saved automatically as you type. When your plan is ready,
-            export a PDF copy of it to print or share with your team.
+            Work through the tabs below and your answers are saved automatically as you type. When you have finished
+            writing your plan, you will find the option to export a PDF copy at the end of it.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <button
@@ -285,14 +270,6 @@ function Introduction({
               style={{ color: accent }}
             >
               <PenLine size={14} /> Start filling in
-            </button>
-            <button
-              type="button"
-              onClick={onExport}
-              disabled={!canExport}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/70 px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <Printer size={14} /> Export your plan
             </button>
           </div>
         </div>
@@ -348,7 +325,7 @@ function PlanPrintSheet({ areaName, grouped }: { areaName: string; grouped: [str
   return (
     <div className="plan-print-sheet">
       <div className="plan-print-head">
-        <p className="plan-print-kicker">IMPACT — European Platform for Local Youth Councils</p>
+        <p className="plan-print-kicker">IMPACT · European Platform for Local Youth Councils</p>
         <h1>ACTION PLAN</h1>
         <p className="plan-print-meta">
           <span>
@@ -374,37 +351,35 @@ function PlanPrintSheet({ areaName, grouped }: { areaName: string; grouped: [str
               <div className="plan-print-grid">
                 <div className="plan-print-field">
                   <p>What?</p>
-                  <p className="plan-print-val">{s.what || "—"}</p>
+                  <p className="plan-print-val">{s.what}</p>
                 </div>
                 <div className="plan-print-field">
                   <p>How?</p>
-                  <p className="plan-print-val">{s.how || "—"}</p>
+                  <p className="plan-print-val">{s.how}</p>
                 </div>
                 <div className="plan-print-field">
-                  <p>When? (begin → due)</p>
-                  <p className="plan-print-val">
-                    {s.start || "—"} → {s.due || "—"}
-                  </p>
+                  <p>When? (begin / due)</p>
+                  <p className="plan-print-val">{[s.start, s.due].filter(Boolean).join(" / ")}</p>
                 </div>
                 <div className="plan-print-field">
                   <p>Who?</p>
-                  <p className="plan-print-val">{s.who || "—"}</p>
+                  <p className="plan-print-val">{s.who}</p>
                 </div>
                 <div className="plan-print-field">
                   <p>Resources needed</p>
-                  <p className="plan-print-val">{s.resources || "—"}</p>
+                  <p className="plan-print-val">{s.resources}</p>
                 </div>
                 <div className="plan-print-field">
                   <p>Potential risk</p>
-                  <p className="plan-print-val">{s.risk || "—"}</p>
+                  <p className="plan-print-val">{s.risk}</p>
                 </div>
                 <div className="plan-print-field">
                   <p>Progress tracking</p>
-                  <p className="plan-print-val">{s.progress || "—"}</p>
+                  <p className="plan-print-val">{s.progress}</p>
                 </div>
                 <div className="plan-print-field">
                   <p>Notes</p>
-                  <p className="plan-print-val">{s.notes || "—"}</p>
+                  <p className="plan-print-val">{s.notes}</p>
                 </div>
               </div>
             </div>
@@ -447,12 +422,12 @@ function IndicatorsAndSteps({
         </p>
         <p className="mt-2 text-[12px] leading-relaxed text-[#6b7280]">
           These are the indicators you chose to work on, with the action steps you pre-selected in your results. Tick
-          the steps you want to include in your plan — you can change this anytime.
+          the steps you want to include in your plan. You can change this anytime.
         </p>
         {grouped.length === 0 ? (
           <p className="mt-4 text-[13px] text-[#6b7280]">
             You have not selected any action steps yet. Go back to your results and tick up to 3 recommended steps per
-            indicator — they will appear here automatically.
+            indicator. They will appear here automatically.
           </p>
         ) : (
           <div className="mt-4 space-y-4">
@@ -527,6 +502,8 @@ function ActionSteps({
   update,
   assessmentId,
   areaName,
+  canExport,
+  onExport,
 }: {
   accent: string;
   soft: string;
@@ -536,6 +513,8 @@ function ActionSteps({
   update: (id: string, patch: Partial<ActionPlanStep>) => void;
   assessmentId: string;
   areaName: string;
+  canExport: boolean;
+  onExport: () => void;
 }) {
   const [indicator, setIndicator] = useState<string>("");
   const [stepId, setStepId] = useState<string>("");
@@ -627,6 +606,7 @@ function ActionSteps({
       </div>
 
       {current && (
+        <>
         <div className="mt-6 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4" style={{ backgroundColor: soft }}>
             <div className="min-w-0">
@@ -763,6 +743,22 @@ function ActionSteps({
             </span>
           </div>
         </div>
+
+        <div className="mt-6 flex flex-col items-center gap-3 rounded-2xl bg-[#F6F6F8] p-5 text-center ring-1 ring-black/5">
+          <p className="text-[12px] font-semibold text-[#374151]">
+            Finished writing your plan? Export a PDF copy of it to print or share with your team.
+          </p>
+          <button
+            type="button"
+            onClick={onExport}
+            disabled={!canExport}
+            className="inline-flex items-center gap-1.5 rounded-full px-6 py-2.5 text-[12px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+            style={{ backgroundColor: accent }}
+          >
+            <Printer size={14} /> Export your plan
+          </button>
+        </div>
+        </>
       )}
     </section>
   );
