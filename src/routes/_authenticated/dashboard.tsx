@@ -475,9 +475,57 @@ function AreaCard({
               {items.map((it, idx) => (
                 <li key={it.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-4">
                   <div className="min-w-0">
-                    <p className="text-[15px] font-extrabold text-[color:var(--impact-ink)]">
-                      Assessment {idx + 1}
-                    </p>
+                    {renamingId === it.id ? (
+                      <form
+                        className="flex items-center gap-1.5"
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          void commitRename(it.id);
+                        }}
+                      >
+                        <input
+                          autoFocus
+                          value={renameValue}
+                          onChange={(e) => setRenameValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Escape") setRenamingId(null);
+                          }}
+                          maxLength={80}
+                          aria-label="Assessment name"
+                          className="w-full max-w-[240px] rounded-full border-2 px-3 py-1 text-[14px] font-bold text-[color:var(--impact-ink)] outline-none"
+                          style={{ borderColor: area.color }}
+                        />
+                        <button
+                          type="submit"
+                          aria-label="Save name"
+                          className="rounded-full p-1.5 text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-[color:var(--impact-green)]"
+                        >
+                          <Check size={16} />
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Cancel rename"
+                          onClick={() => setRenamingId(null)}
+                          className="rounded-full p-1.5 text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-red-600"
+                        >
+                          <X size={16} />
+                        </button>
+                      </form>
+                    ) : (
+                      <div className="flex items-center gap-1.5">
+                        <p className="truncate text-[15px] font-extrabold text-[color:var(--impact-ink)]">
+                          {it.title?.trim() || `Assessment ${idx + 1}`}
+                        </p>
+                        <button
+                          type="button"
+                          aria-label={`Rename assessment ${idx + 1}`}
+                          onClick={() => startRename(it, `Assessment ${idx + 1}`)}
+                          className="shrink-0 rounded-full p-1.5 text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-[color:var(--impact-purple)]"
+                        >
+                          <Pencil size={14} />
+                        </button>
+                      </div>
+                    )}
                     <p className="text-[12px] text-[color:var(--impact-ink-muted)]">
                       Last updated:{" "}
                       {new Date(it.completed_at ?? it.updated_at).toLocaleString(undefined, {
