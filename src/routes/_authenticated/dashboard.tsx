@@ -237,37 +237,6 @@ function Dashboard() {
             <QuickLink to="/send-us-a-message" label="Send us a message" icon="message" />
           </nav>
 
-          <h2 className="mt-8 text-[16px] font-extrabold text-white">
-            Recent activity
-          </h2>
-          {assessments.length === 0 ? (
-            <p className="mt-3 text-[13px] text-white/70">
-              No activity yet - start your first questionnaire.
-            </p>
-          ) : (
-            <ul className="mt-4 space-y-4">
-              {assessments.slice(0, 4).map((it) => {
-                const a = AREAS.find((x) => x.key === it.area);
-                return (
-                  <li key={it.id} className="flex gap-3">
-                    <span
-                      className="mt-[7px] h-2 w-2 shrink-0 rounded-full"
-                      style={{ backgroundColor: "#ffffff" }}
-                    />
-                    <div className="min-w-0">
-                      <p className="truncate text-[13px] font-bold text-white">
-                        {a?.title ?? it.area}
-                      </p>
-                      <p className="text-[12px] text-white/70">
-                        {it.status === "completed" ? "Completed" : "In progress"} ·{" "}
-                        {new Date(it.updated_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
 
           <div className="mt-8 hidden border-t border-white/15 pt-6 lg:block">
             {isAdmin && (
