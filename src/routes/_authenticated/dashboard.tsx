@@ -472,6 +472,14 @@ function AreaCard({
                           See results
                         </Link>
                         <Link
+                          to="/action-plan/$assessmentId"
+                          params={{ assessmentId: it.id }}
+                          className="rounded-full border-2 bg-white px-4 py-2 text-[12px] font-bold transition hover:opacity-80"
+                          style={{ borderColor: area.color, color: area.color }}
+                        >
+                          Action plan
+                        </Link>
+                        <Link
                           to="/questionnaire/$area"
                           params={{ area: area.key }}
                           search={{ id: it.id }}
