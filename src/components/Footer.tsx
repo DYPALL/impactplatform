@@ -2,6 +2,9 @@ import { Link } from "@tanstack/react-router";
 import whiteLogoAsset from "@/assets/IMPACT_Logo_white.png.asset.json";
 import cofundLogo from "@/assets/cofund-eu-white.png.asset.json";
 
+const EU_DISCLAIMER =
+  "Funded by the European Union's programme Erasmus+. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the Finnish National Agency for Education. Neither the European Union nor the EDUFI can be held responsible for them.";
+
 export function Footer() {
   return (
     <footer className="w-full bg-[color:var(--impact-purple-dark)] text-white">
@@ -11,11 +14,6 @@ export function Footer() {
           <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70">
             A platform to evaluate and improve your Local Youth Council
           </p>
-          <img
-            src={cofundLogo.url}
-            alt="Co-funded by the European Union"
-            className="mt-6 h-10 w-auto"
-          />
         </div>
         <div>
           <h4 className="text-sm font-bold uppercase tracking-wide text-white/80">
@@ -97,8 +95,15 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="mx-auto max-w-[1440px] px-6 py-6 text-xs text-white/60 lg:px-[120px]">
-          © {new Date().getFullYear()} IMPACT Consortium
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-6 py-6 md:flex-row md:items-center md:justify-between lg:px-[120px]">
+          <p className="max-w-3xl text-xs leading-relaxed text-white/60">
+            {EU_DISCLAIMER}
+          </p>
+          <img
+            src={cofundLogo.url}
+            alt="Co-funded by the European Union"
+            className="h-10 w-auto shrink-0"
+          />
         </div>
       </div>
     </footer>
