@@ -23,7 +23,7 @@ export function PublicationMockup({
       ) : (
         <div className={`publication-mockup-book${landscape ? " publication-mockup-book--landscape" : ""}`}>
           <img
-            src={publicationCoverSource(src)}
+            src={detail ? publicationCoverSource(src) : publicationCoverThumb(src)}
             alt={title}
             loading="lazy"
             className={`publication-mockup-cover${landscape ? " publication-mockup-cover--landscape" : ""}`}
