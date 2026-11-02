@@ -317,6 +317,7 @@ function Dashboard() {
                 onToggle={() => setExpanded((e) => ({ ...e, [a.key]: !e[a.key] }))}
                 onDelete={handleDelete}
                 onRename={handleRename}
+                planIds={planIds}
               />
             ))}
           </div>
@@ -401,6 +402,7 @@ function AreaCard({
   onToggle,
   onDelete,
   onRename,
+  planIds,
 }: {
   area: AreaDef;
   items: AssessmentRow[];
@@ -408,6 +410,7 @@ function AreaCard({
   onToggle: () => void;
   onDelete: (id: string) => void;
   onRename: (id: string, title: string) => Promise<boolean>;
+  planIds: Set<string>;
 }) {
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
@@ -557,14 +560,16 @@ function AreaCard({
                         >
                           See results
                         </Link>
-                        <Link
-                          to="/action-plan/$assessmentId"
-                          params={{ assessmentId: it.id }}
-                          className="rounded-full border-2 bg-white px-4 py-2 text-[12px] font-bold transition hover:opacity-80"
-                          style={{ borderColor: area.color, color: area.color }}
-                        >
-                          Action plan
-                        </Link>
+                        {planIds.has(it.id) && (
+                          <Link
+                            to="/action-plan/$assessmentId"
+                            params={{ assessmentId: it.id }}
+                            className="rounded-full border-2 bg-white px-4 py-2 text-[12px] font-bold transition hover:opacity-80"
+                            style={{ borderColor: area.color, color: area.color }}
+                          >
+                            Action plan
+                          </Link>
+                        )}
                         <Link
                           to="/questionnaire/$area"
                           params={{ area: area.key }}
