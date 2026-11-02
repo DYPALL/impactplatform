@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BookOpen } from "lucide-react";
-import { publicationCoverSource, publicationCoverIsLandscape } from "@/lib/publication-covers";
+import { publicationCoverSource, publicationCoverThumb, publicationCoverIsLandscape } from "@/lib/publication-covers";
 
 /** Keeps publisher artwork intact while adding a presentational book binding. */
 export function PublicationMockup({
