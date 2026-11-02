@@ -105,6 +105,7 @@ function Dashboard() {
     [AREAS[0].key]: true,
   });
   const [assessments, setAssessments] = useState<AssessmentRow[]>([]);
+  const [planIds, setPlanIds] = useState<Set<string>>(new Set());
   const [guideModalOpen, setGuideModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const { signOut } = useAuth();
@@ -123,6 +124,14 @@ function Dashboard() {
       .eq("user_id", user.id)
       .order("updated_at", { ascending: false })
       .then(({ data }) => setAssessments((data as AssessmentRow[]) ?? []));
+
+    supabase
+      .from("action_plans")
+      .select("assessment_id")
+      .eq("user_id", user.id)
+      .then(({ data }) =>
+        setPlanIds(new Set((data ?? []).map((r) => r.assessment_id as string))),
+      );
 
     supabase
       .from("user_roles")
