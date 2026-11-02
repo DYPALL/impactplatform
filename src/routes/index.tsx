@@ -127,7 +127,7 @@ function CtaBanner() {
           <h2 className="section-title text-white">
             Ready to take action?
           </h2>
-          <p className="mt-3 text-[16px] leading-[1.6] text-white/85">
+          <p className="mt-3 text-[16px] leading-[1.6] text-white/85 [text-wrap:pretty]">
             Your results become an actionable plan. Save assessments to your account, revisit past results, and track how your council grows year on year.
           </p>
           <a
