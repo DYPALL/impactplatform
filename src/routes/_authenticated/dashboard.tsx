@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, LogOut, Settings, Trash2, User } from "lucide-react";
+import { Check, ChevronDown, LogOut, Pencil, Settings, Trash2, User, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -95,6 +95,7 @@ type AssessmentRow = {
   current_step: number;
   completed_at: string | null;
   updated_at: string;
+  title: string | null;
 };
 
 function Dashboard() {
@@ -118,7 +119,7 @@ function Dashboard() {
 
     supabase
       .from("assessments")
-      .select("id, area, status, current_step, completed_at, updated_at")
+      .select("id, area, status, current_step, completed_at, updated_at, title")
       .eq("user_id", user.id)
       .order("updated_at", { ascending: false })
       .then(({ data }) => setAssessments((data as AssessmentRow[]) ?? []));
@@ -134,6 +135,19 @@ function Dashboard() {
     if (!window.confirm("Delete this assessment? This cannot be undone.")) return;
     const { error } = await supabase.from("assessments").delete().eq("id", id);
     if (!error) setAssessments((rows) => rows.filter((r) => r.id !== id));
+  };
+
+  const handleRename = async (id: string, title: string) => {
+    const trimmed = title.trim();
+    const { error } = await supabase
+      .from("assessments")
+      .update({ title: trimmed || null })
+      .eq("id", id);
+    if (!error)
+      setAssessments((rows) =>
+        rows.map((r) => (r.id === id ? { ...r, title: trimmed || null } : r)),
+      );
+    return !error;
   };
 
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
@@ -293,6 +307,7 @@ function Dashboard() {
                 expanded={!!expanded[a.key]}
                 onToggle={() => setExpanded((e) => ({ ...e, [a.key]: !e[a.key] }))}
                 onDelete={handleDelete}
+                onRename={handleRename}
               />
             ))}
           </div>
@@ -376,13 +391,27 @@ function AreaCard({
   expanded,
   onToggle,
   onDelete,
+  onRename,
 }: {
   area: AreaDef;
   items: AssessmentRow[];
   expanded: boolean;
   onToggle: () => void;
   onDelete: (id: string) => void;
+  onRename: (id: string, title: string) => Promise<boolean>;
 }) {
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
+
+  const startRename = (it: AssessmentRow, fallback: string) => {
+    setRenamingId(it.id);
+    setRenameValue(it.title ?? fallback);
+  };
+
+  const commitRename = async (id: string) => {
+    const ok = await onRename(id, renameValue);
+    if (ok) setRenamingId(null);
+  };
   return (
     <article
       className="rounded-[32px] p-6 md:p-8"
@@ -446,9 +475,57 @@ function AreaCard({
               {items.map((it, idx) => (
                 <li key={it.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-4">
                   <div className="min-w-0">
-                    <p className="text-[15px] font-extrabold text-[color:var(--impact-ink)]">
-                      Assessment {idx + 1}
-                    </p>
+                    {renamingId === it.id ? (
+                      <form
+                        className="flex items-center gap-1.5"
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          void commitRename(it.id);
+                        }}
+                      >
+                        <input
+                          autoFocus
+                          value={renameValue}
+                          onChange={(e) => setRenameValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Escape") setRenamingId(null);
+                          }}
+                          maxLength={80}
+                          aria-label="Assessment name"
+                          className="w-full max-w-[240px] rounded-full border-2 px-3 py-1 text-[14px] font-bold text-[color:var(--impact-ink)] outline-none"
+                          style={{ borderColor: area.color }}
+                        />
+                        <button
+                          type="submit"
+                          aria-label="Save name"
+                          className="rounded-full p-1.5 text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-[color:var(--impact-green)]"
+                        >
+                          <Check size={16} />
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Cancel rename"
+                          onClick={() => setRenamingId(null)}
+                          className="rounded-full p-1.5 text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-red-600"
+                        >
+                          <X size={16} />
+                        </button>
+                      </form>
+                    ) : (
+                      <div className="flex items-center gap-1.5">
+                        <p className="truncate text-[15px] font-extrabold text-[color:var(--impact-ink)]">
+                          {it.title?.trim() || `Assessment ${idx + 1}`}
+                        </p>
+                        <button
+                          type="button"
+                          aria-label={`Rename assessment ${idx + 1}`}
+                          onClick={() => startRename(it, `Assessment ${idx + 1}`)}
+                          className="shrink-0 rounded-full p-1.5 text-[color:var(--impact-ink-muted)] transition hover:bg-black/5 hover:text-[color:var(--impact-purple)]"
+                        >
+                          <Pencil size={14} />
+                        </button>
+                      </div>
+                    )}
                     <p className="text-[12px] text-[color:var(--impact-ink-muted)]">
                       Last updated:{" "}
                       {new Date(it.completed_at ?? it.updated_at).toLocaleString(undefined, {

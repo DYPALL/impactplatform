@@ -71,6 +71,7 @@ export type Database = {
           id: string
           percentages: Json
           status: string
+          title: string | null
           updated_at: string
           user_id: string
         }
@@ -83,6 +84,7 @@ export type Database = {
           id?: string
           percentages?: Json
           status?: string
+          title?: string | null
           updated_at?: string
           user_id: string
         }
@@ -95,6 +97,7 @@ export type Database = {
           id?: string
           percentages?: Json
           status?: string
+          title?: string | null
           updated_at?: string
           user_id?: string
         }
