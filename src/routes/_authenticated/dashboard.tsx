@@ -391,13 +391,27 @@ function AreaCard({
   expanded,
   onToggle,
   onDelete,
+  onRename,
 }: {
   area: AreaDef;
   items: AssessmentRow[];
   expanded: boolean;
   onToggle: () => void;
   onDelete: (id: string) => void;
+  onRename: (id: string, title: string) => Promise<boolean>;
 }) {
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
+
+  const startRename = (it: AssessmentRow, fallback: string) => {
+    setRenamingId(it.id);
+    setRenameValue(it.title ?? fallback);
+  };
+
+  const commitRename = async (id: string) => {
+    const ok = await onRename(id, renameValue);
+    if (ok) setRenamingId(null);
+  };
   return (
     <article
       className="rounded-[32px] p-6 md:p-8"
