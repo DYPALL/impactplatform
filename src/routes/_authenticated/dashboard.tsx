@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, LogOut, Settings, Trash2, User } from "lucide-react";
+import { Check, ChevronDown, LogOut, Pencil, Settings, Trash2, User, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -135,6 +135,19 @@ function Dashboard() {
     if (!window.confirm("Delete this assessment? This cannot be undone.")) return;
     const { error } = await supabase.from("assessments").delete().eq("id", id);
     if (!error) setAssessments((rows) => rows.filter((r) => r.id !== id));
+  };
+
+  const handleRename = async (id: string, title: string) => {
+    const trimmed = title.trim();
+    const { error } = await supabase
+      .from("assessments")
+      .update({ title: trimmed || null })
+      .eq("id", id);
+    if (!error)
+      setAssessments((rows) =>
+        rows.map((r) => (r.id === id ? { ...r, title: trimmed || null } : r)),
+      );
+    return !error;
   };
 
   const firstName = (profile?.full_name || user.email || "there").split(" ")[0];
@@ -294,6 +307,7 @@ function Dashboard() {
                 expanded={!!expanded[a.key]}
                 onToggle={() => setExpanded((e) => ({ ...e, [a.key]: !e[a.key] }))}
                 onDelete={handleDelete}
+                onRename={handleRename}
               />
             ))}
           </div>
