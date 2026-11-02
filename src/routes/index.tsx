@@ -125,17 +125,18 @@ function CtaBanner() {
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-12 px-6 py-20 lg:flex-row lg:gap-16 lg:py-[72px] lg:pl-[120px] lg:pr-0">
         <div className="relative z-10 max-w-[560px]">
           <h2 className="section-title text-white">
-            Keep your progress in one place?
+            Ready to take action?
           </h2>
           <p className="mt-3 text-[16px] leading-[1.6] text-white/85">
-            Sign-up to unlock your full assessment feedback, save results automatically, revisit previous questionnaires and turn selected steps into an action plan.
+            Your results become an actionable plan. Save assessments to your account, revisit past results, and track how your council grows year on year.
           </p>
           <a
-            href="/auth"
+            href="/start-assessing"
             className="mt-8 inline-flex h-14 items-center justify-center rounded-full bg-[color:var(--impact-purple)] px-7 text-[15px] font-bold text-white transition hover:opacity-90"
           >
-            Sign-up
+            Start your assessment
           </a>
+
         </div>
         <div className="relative z-10 w-full max-w-[520px]">
           <img
