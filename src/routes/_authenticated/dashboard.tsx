@@ -95,6 +95,7 @@ type AssessmentRow = {
   current_step: number;
   completed_at: string | null;
   updated_at: string;
+  title: string | null;
 };
 
 function Dashboard() {
@@ -118,7 +119,7 @@ function Dashboard() {
 
     supabase
       .from("assessments")
-      .select("id, area, status, current_step, completed_at, updated_at")
+      .select("id, area, status, current_step, completed_at, updated_at, title")
       .eq("user_id", user.id)
       .order("updated_at", { ascending: false })
       .then(({ data }) => setAssessments((data as AssessmentRow[]) ?? []));
