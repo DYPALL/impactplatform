@@ -510,34 +510,66 @@ const PublicHeader = () => (
   </header>
 );
 
-/* ---- STEP 1: start without an account ---- */
+/* ---- STEP 1: Assessment Tool page, pick one of four questionnaires ---- */
 function ScreenStart() {
+  const areas = [
+    { n: 1, title: "Representativeness and Inclusion", bg: "#F4F1F7", fg: "#502181" },
+    { n: 2, title: "Governance and Transparency", bg: "#FBF3EA", fg: "#B85E10" },
+    { n: 3, title: "Influence and Impact", bg: "#FCF0F5", fg: "#B02063" },
+    { n: 4, title: "Capacity and Sustainability", bg: "#EDF7F7", fg: "#12706F" },
+  ];
   return (
     <div className="h2g-screen">
-      <PublicHeader />
-      <div className="h2g-auth">
-        <aside className="h2g-auth-l">
-          <div className="h2g-poly" style={{ width: 120, height: 120, top: "62%", right: -20, transform: "rotate(-18deg)" }}>
-            <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(255,255,255,0.08)" /></svg>
-          </div>
-          <div className="h2g-poly" style={{ width: 70, height: 70, top: "72%", right: 90, transform: "rotate(35deg)" }}>
-            <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(244,162,97,0.5)" /></svg>
-          </div>
-          <div className="h2g-poly" style={{ width: 90, height: 90, top: "78%", left: -30, transform: "rotate(210deg)" }}>
-            <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(233,75,138,0.35)" /></svg>
-          </div>
-          <h1>A platform to evaluate and improve your Local Youth Council</h1>
-          <p>Start without an account. Sign up when you are ready to view your full results.</p>
-        </aside>
-        <section className="h2g-auth-r">
-          <div className="h2g-form relative">
-            <h2 className="text-4xl text-primary">Start assessing</h2>
-            <p className="mt-5 text-lg leading-relaxed text-muted-foreground">Choose an area and answer the questions at your own pace. No account is needed to begin.</p>
-            <div className="h2g-submit">Start your assessment</div>
-            <Pointer style={{ right: 60, bottom: 4, animation: "h2g-tap2 3.4s ease-in-out infinite" }} />
-          </div>
-        </section>
+      <header className="h2g-header">
+        <div className="inner" style={{ justifyContent: "flex-end" }}>
+          <nav className="h2g-nav-links">
+            <a href="#">Home</a>
+            <a href="#" style={{ background: "rgba(33,156,158,.18)", borderRadius: 999, padding: "4px 12px" }}>Assessment Tool</a>
+            <a href="#">Resource Hub</a>
+            <a href="#">Send us a message</a>
+            <span className="pill">Log-in / Sign-up</span>
+          </nav>
+        </div>
+      </header>
+      <div style={{ background: "var(--impact-purple)", color: "#fff", padding: "28px 40px" }}>
+        <h2 style={{ fontSize: 30, fontWeight: 800, margin: 0 }}>Assessment Tool</h2>
+        <p style={{ marginTop: 8, opacity: 0.85 }}>Choose one of the four areas to assess. No account is needed to begin.</p>
       </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, padding: "28px 40px" }}>
+        {areas.map((a) => (
+          <article
+            key={a.n}
+            style={{
+              position: "relative", background: a.bg, borderRadius: 18, padding: 22, minHeight: 130,
+              animation: a.n === 3 ? "h2g-s1-pick 4s ease-in-out infinite" : undefined,
+            }}
+          >
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, color: a.fg }}>AREA {a.n}</span>
+            <h3 style={{ fontSize: 19, fontWeight: 800, color: a.fg, margin: "6px 0 14px" }}>{a.title}</h3>
+            <span style={{ display: "inline-block", background: a.fg, color: "#fff", borderRadius: 999, padding: "6px 14px", fontSize: 13, fontWeight: 600 }}>Start assessment</span>
+            {a.n === 3 && (
+              <Pointer style={{ left: 120, bottom: 4, animation: "h2g-s1-tap 4s cubic-bezier(.3,.8,.3,1) infinite" }} />
+            )}
+          </article>
+        ))}
+      </div>
+      <style>{`
+        @keyframes h2g-s1-tap{
+          0%{transform:translate(-260px,-160px);opacity:0}
+          10%{opacity:1}
+          25%{transform:translate(-40px,-200px)}
+          45%{transform:translate(0,0);opacity:1}
+          52%{transform:translate(0,5px)}
+          60%,80%{transform:translate(0,0);opacity:1}
+          95%,100%{opacity:0}
+        }
+        @keyframes h2g-s1-pick{
+          0%,48%{box-shadow:none;transform:scale(1)}
+          55%{box-shadow:0 0 0 3px rgba(233,75,138,.5);transform:scale(.98)}
+          62%,88%{box-shadow:0 0 0 3px rgba(233,75,138,.5);transform:scale(1.02)}
+          100%{box-shadow:none;transform:scale(1)}
+        }
+      `}</style>
     </div>
   );
 }
