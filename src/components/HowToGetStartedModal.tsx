@@ -510,64 +510,43 @@ const PublicHeader = () => (
   </header>
 );
 
-/* ---- STEP 1: Assessment Tool page, pick one of four questionnaires ---- */
+/* ---- STEP 1: Home hero, user clicks "Start your assessment" ---- */
 function ScreenStart() {
-  const areas = [
-    { n: 1, title: "Representativeness and Inclusion", bg: "#F4F1F7", fg: "#502181" },
-    { n: 2, title: "Governance and Transparency", bg: "#FBF3EA", fg: "#B85E10" },
-    { n: 3, title: "Influence and Impact", bg: "#FCF0F5", fg: "#B02063" },
-    { n: 4, title: "Capacity and Sustainability", bg: "#EDF7F7", fg: "#12706F" },
-  ];
   return (
     <div className="h2g-screen">
-      <header className="h2g-header">
-        <div className="inner" style={{ justifyContent: "flex-end" }}>
-          <nav className="h2g-nav-links">
-            <a href="#">Home</a>
-            <a href="#" style={{ background: "rgba(33,156,158,.18)", borderRadius: 999, padding: "4px 12px" }}>Assessment Tool</a>
-            <a href="#">Resource Hub</a>
-            <a href="#">Send us a message</a>
-            <span className="pill">Log-in / Sign-up</span>
-          </nav>
+      <PublicHeader />
+      <div style={{ position: "relative", overflow: "hidden", background: "var(--impact-purple)", color: "#fff", padding: "70px 48px 90px", minHeight: 420 }}>
+        <div className="h2g-poly" style={{ width: 140, height: 140, top: 30, right: 40, transform: "rotate(-18deg)" }}>
+          <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(244,162,97,0.55)" /></svg>
         </div>
-      </header>
-      <div style={{ background: "var(--impact-purple)", color: "#fff", padding: "28px 40px" }}>
-        <h2 style={{ fontSize: 30, fontWeight: 800, margin: 0 }}>Assessment Tool</h2>
-        <p style={{ marginTop: 8, opacity: 0.85 }}>Choose one of the four areas to assess. No account is needed to begin.</p>
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, padding: "28px 40px" }}>
-        {areas.map((a) => (
-          <article
-            key={a.n}
-            style={{
-              position: "relative", background: a.bg, borderRadius: 18, padding: 22, minHeight: 130,
-              animation: a.n === 3 ? "h2g-s1-pick 4s ease-in-out infinite" : undefined,
-            }}
-          >
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, color: a.fg }}>AREA {a.n}</span>
-            <h3 style={{ fontSize: 19, fontWeight: 800, color: a.fg, margin: "6px 0 14px" }}>{a.title}</h3>
-            <span style={{ display: "inline-block", background: a.fg, color: "#fff", borderRadius: 999, padding: "6px 14px", fontSize: 13, fontWeight: 600 }}>Start assessment</span>
-            {a.n === 3 && (
-              <Pointer style={{ left: 120, bottom: 4, animation: "h2g-s1-tap 4s cubic-bezier(.3,.8,.3,1) infinite" }} />
-            )}
-          </article>
-        ))}
+        <div className="h2g-poly" style={{ width: 90, height: 90, bottom: 30, right: 200, transform: "rotate(35deg)" }}>
+          <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(233,75,138,0.5)" /></svg>
+        </div>
+        <div className="h2g-poly" style={{ width: 110, height: 110, bottom: -30, left: -20, transform: "rotate(210deg)" }}>
+          <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(33,156,158,0.5)" /></svg>
+        </div>
+        <div style={{ position: "relative", maxWidth: 560 }}>
+          <h1 style={{ fontSize: 40, fontWeight: 800, lineHeight: 1.1, margin: 0 }}>A platform to evaluate and improve your Local Youth Council</h1>
+          <p style={{ marginTop: 16, fontSize: 17, opacity: 0.85 }}>Start without an account. Sign up when you are ready to view your full results.</p>
+          <div style={{ position: "relative", display: "inline-block", marginTop: 28 }}>
+            <span style={{ display: "inline-block", background: "#fff", color: "var(--impact-purple)", borderRadius: 999, padding: "14px 28px", fontWeight: 700, fontSize: 16, animation: "h2g-s1-press 3.6s ease-in-out infinite" }}>Start your assessment</span>
+            <Pointer style={{ right: 20, bottom: -18, animation: "h2g-s1-tap 3.6s cubic-bezier(.3,.8,.3,1) infinite" }} />
+          </div>
+        </div>
       </div>
       <style>{`
         @keyframes h2g-s1-tap{
-          0%{transform:translate(-260px,-160px);opacity:0}
-          10%{opacity:1}
-          25%{transform:translate(-40px,-200px)}
+          0%{transform:translate(260px,140px);opacity:0}
+          15%{opacity:1}
           45%{transform:translate(0,0);opacity:1}
           52%{transform:translate(0,5px)}
           60%,80%{transform:translate(0,0);opacity:1}
           95%,100%{opacity:0}
         }
-        @keyframes h2g-s1-pick{
-          0%,48%{box-shadow:none;transform:scale(1)}
-          55%{box-shadow:0 0 0 3px rgba(233,75,138,.5);transform:scale(.98)}
-          62%,88%{box-shadow:0 0 0 3px rgba(233,75,138,.5);transform:scale(1.02)}
-          100%{box-shadow:none;transform:scale(1)}
+        @keyframes h2g-s1-press{
+          0%,46%{transform:scale(1)}
+          52%{transform:scale(.95)}
+          60%,100%{transform:scale(1)}
         }
       `}</style>
     </div>
