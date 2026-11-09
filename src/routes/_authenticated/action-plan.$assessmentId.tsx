@@ -15,6 +15,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ActionPlanPrintSheet } from "@/components/ActionPlanPrintSheet";
+import { downloadActionPlanPdf } from "@/lib/action-plan-pdf";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
@@ -210,7 +211,7 @@ function ActionPlanPage() {
               assessmentId={assessmentId}
               areaName={area.name}
               canExport={groupedActive.some(([, list]) => list.some((s) => s.included))}
-              onExport={() => window.print()}
+              onExport={() => void downloadActionPlanPdf(area.name, steps)}
               saving={saving}
               onSaveLater={() => void saveAndLeave()}
             />
@@ -657,7 +658,7 @@ function ActionSteps({
 
         <div className="mt-6 rounded-2xl bg-[#F6F6F8] p-5 text-center ring-1 ring-black/5">
           <p className="text-[12px] font-semibold text-[#374151]">
-            Choose what to do next. Export your plan and choose Save as PDF in the print window to print or share with your team, or
+            Choose what to do next. Export your plan to download it as a PDF you can print or share with your team, or
             save your progress and come back to it later.
           </p>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
