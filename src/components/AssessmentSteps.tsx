@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HowToGetStartedModal } from "@/components/HowToGetStartedModal";
 import step1 from "@/assets/step-1.webp.asset.json";
 import step2 from "@/assets/step-2.webp.asset.json";
 import step3 from "@/assets/step-3.webp.asset.json";
@@ -9,10 +10,10 @@ import step4 from "@/assets/step-4.webp.asset.json";
 import actionPhoto from "@/assets/cta-photo.webp.asset.json";
 
 const steps = [
-  { title: "Start assessing", body: "Choose your starting point. Create an account when you are ready to unlock your full results and save your progress.", image: step1.url, tone: "steps-purple" },
+  { title: "Start assessing", body: "Start your assessment without an account. Sign up later, when you are ready to view your full results and save your assessment.", image: step1.url, tone: "steps-purple" },
   { title: "Pick a focus area", body: "Choose one of the four assessment areas to start with. You can always come back and complete the assessment for the other areas as well.", image: step2.url, tone: "steps-teal" },
   { title: "Answer the questionnaire", body: "Assess your Local Youth Council in the chosen area by answering a set of questions. It takes 15-30 minutes to complete one area and you can save your progress anytime.", image: step3.url, tone: "steps-orange" },
-  { title: "Review your results", body: "Get your results in a visual scoreboard, followed by reflection questions and a list of action steps you can use to tailor your action plan and share it with your team later.", image: step4.url, tone: "steps-pink" },
+  { title: "Review your results", body: "See your visual scoreboard, then sign up or log in to unlock your full results, reflection questions and recommended action steps.", image: step4.url, tone: "steps-pink" },
   { title: "Create your action plan", body: "Select a number of actions that will help your youth council to grow.", image: actionPhoto.url, tone: "steps-plum" },
 ];
 
@@ -20,6 +21,8 @@ export function AssessmentSteps() {
   const [carouselRef, carousel] = useEmblaCarousel({ align: "start", duration: 40, containScroll: "trimSnaps" });
   const [selected, setSelected] = useState(0);
   const [canNext, setCanNext] = useState(true);
+  const [guideStep, setGuideStep] = useState(0);
+  const [guideOpen, setGuideOpen] = useState(false);
   const sync = useCallback(() => {
     if (!carousel) return;
     setSelected(carousel.selectedScrollSnap());
@@ -44,6 +47,7 @@ export function AssessmentSteps() {
           <div className="flex touch-pan-y gap-5">
             {steps.map((step, index) => (
               <article key={step.title} className={`assessment-step-card ${step.tone} relative min-w-0 shrink-0 basis-full overflow-hidden rounded-[28px] p-5 sm:basis-[calc((100%_-_20px)/2)] lg:basis-[calc((100%_-_40px)/3)]`} aria-label={`Step ${index + 1}: ${step.title}`}>
+                <Button variant="ghost" className="absolute inset-0 z-10 h-full w-full rounded-[28px] hover:bg-transparent focus-visible:ring-inset" aria-label={`Open animated guide: ${step.title}`} onClick={() => { setGuideStep(index); setGuideOpen(true); }} />
                 <div className="flex items-start justify-between gap-4">
                   <span className="rounded-full border border-current px-3 py-1 text-xs font-medium">Step {String(index + 1).padStart(2, "0")}</span>
                   <img src={step.image} alt={step.title} loading="lazy" className="h-[146px] w-[46%] rounded-2xl object-cover" />
@@ -67,6 +71,7 @@ export function AssessmentSteps() {
           </div>
         </div>
         <div className="mt-9 flex justify-center"><Button asChild size="lg" className="h-12 rounded-full px-8"><a href="/start-assessing">Start your assessment <ArrowUpRight /></a></Button></div>
+        <HowToGetStartedModal open={guideOpen} onOpenChange={setGuideOpen} initialStep={guideStep} />
       </div>
     </section>
   );

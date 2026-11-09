@@ -3,11 +3,11 @@
    -----------------------------------------------------------------------------
    A "How to get started" wizard modal for the IMPACT platform.
 
-   • 4 steps. Each step shows a faithful, self-looping animation of the real
-     screen (auth → dashboard → questionnaire → results) beside its instructions.
+   • 5 steps. Each step shows a self-looping animation
+     (start → focus area → questionnaire → results → action plan).
    • Each animation LOOPS forever until the user clicks "Next".
    • "Back" returns to the previous step; on the LAST step the primary button
-     reads "Start your assessment" and navigates to /auth.
+     reads "Start your assessment" and navigates to /start-assessing.
 
    HOW TO WIRE IT UP
    -----------------------------------------------------------------------------
@@ -39,6 +39,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -509,8 +510,8 @@ const PublicHeader = () => (
   </header>
 );
 
-/* ---- STEP 1: create account ---- */
-function ScreenAuth() {
+/* ---- STEP 1: start without an account ---- */
+function ScreenStart() {
   return (
     <div className="h2g-screen">
       <PublicHeader />
@@ -525,38 +526,15 @@ function ScreenAuth() {
           <div className="h2g-poly" style={{ width: 90, height: 90, top: "78%", left: -30, transform: "rotate(210deg)" }}>
             <svg viewBox="0 0 100 100"><polygon points="50,5 95,80 5,80" fill="rgba(233,75,138,0.35)" /></svg>
           </div>
-          <h1>Sign-up your council</h1>
-          <p>Sign-up your Local Youth Council to save assessments and revisit results anytime.</p>
+          <h1>A platform to evaluate and improve your Local Youth Council</h1>
+          <p>Start without an account. Sign up when you are ready to view your full results.</p>
         </aside>
         <section className="h2g-auth-r">
-          <div className="h2g-form">
-            <div className="h2g-tabs">
-              <span>Log-in</span>
-              <span className="on">Sign-up</span>
-            </div>
-            <div className="h2g-fld">
-              <label>Full name *</label>
-              <div className="box"><Typed text="António Boto" chars={12} delay={0.2} /></div>
-            </div>
-            <div className="h2g-fld">
-              <label>Local Youth Council</label>
-              <div className="box"><Typed text="DYPALL Network" chars={14} delay={1.1} /></div>
-            </div>
-            <div className="h2g-grid2">
-              <div className="h2g-fld">
-                <label>Country *</label>
-                <div className="box"><Typed text="Portugal" chars={8} delay={2.0} /></div>
-              </div>
-              <div className="h2g-fld">
-                <label>City *</label>
-                <div className="box"><Typed text="Lisbon" chars={6} delay={2.5} /></div>
-              </div>
-            </div>
-            <div className="h2g-fld">
-              <label>Email address</label>
-              <div className="box"><Typed text="antonio.boto@dypall.com" chars={23} delay={3.0} /></div>
-            </div>
-            <div className="h2g-submit">Sign-up</div>
+          <div className="h2g-form relative">
+            <h2 className="text-4xl text-primary">Start assessing</h2>
+            <p className="mt-5 text-lg leading-relaxed text-muted-foreground">Choose an area and answer the questions at your own pace. No account is needed to begin.</p>
+            <div className="h2g-submit">Start your assessment</div>
+            <Pointer style={{ right: 60, bottom: 4, animation: "h2g-tap2 3.4s ease-in-out infinite" }} />
           </div>
         </section>
       </div>
@@ -608,7 +586,7 @@ function ScreenDashboard() {
   return (
     <div className="h2g-screen">
       <div className="h2g-dash">
-        <aside>
+        <aside aria-hidden="true" className="hidden">
           <div className="pp">
             <div className="av">
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
@@ -628,7 +606,7 @@ function ScreenDashboard() {
         </aside>
         <main>
           <h2>Start Your Assessment</h2>
-          <p className="lede">Choose a thematic area to launch a self-assessment. You can pause anytime, revisit past questionnaires and build action plans as you go.</p>
+          <p className="lede">Choose one of the four assessment areas. You can start without signing up.</p>
 
           {areas.map((a) => (
             <article
@@ -705,7 +683,7 @@ function ScreenQuestionnaire() {
         <div className="top">
           <span style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m12 19-7-7 7-7M19 12H5" /></svg>
-            Back to Dashboard
+            Back to assessment areas
           </span>
           <span className="sq">Save &amp; Quit</span>
           <div className="rt">
@@ -888,17 +866,46 @@ function ScreenResults() {
 /* =============================================================================
    Step metadata + main component
    ============================================================================ */
-const SCREENS = [ScreenAuth, ScreenDashboard, ScreenQuestionnaire, ScreenResults];
+function ScreenActionPlan() {
+  return (
+    <div className="h2g-screen bg-background p-16 text-foreground">
+      <div className="mb-8 border-b border-border pb-8">
+        <h1 className="text-5xl text-primary">Build your action plan</h1>
+        <p className="mt-4 text-xl text-muted-foreground">Area of assessment: Representativeness</p>
+      </div>
+      <div className="grid grid-cols-2 gap-12">
+        <section>
+          <h2 className="text-3xl text-primary">Select action steps</h2>
+          <h3 className="mt-8 text-xl">Indicator 1.1 Diversity of Membership</h3>
+          <div className="h2g-steps">
+            <div className="st on"><span className="bx h2g-r1" />Map the demographics of local youth and compare them with your membership.</div>
+            <div className="st on"><span className="bx h2g-r2" />Run open call-outs in schools, youth clubs and online spaces you don't usually reach.</div>
+          </div>
+        </section>
+        <section>
+          <h2 className="text-3xl text-primary">Action Steps</h2>
+          <div className="h2g-fld"><label>What?</label><div className="box">Map the demographics of local youth and compare them with your membership.</div></div>
+          <div className="h2g-fld"><label>How?</label><div className="box"><Typed text="Consult local youth" chars={18} delay={0.3} /></div></div>
+          <div className="h2g-fld"><label>Who?</label><div className="box"><Typed text="Council members" chars={15} delay={1.5} /></div></div>
+          <div className="h2g-fld"><label>When?</label><div className="box"><Typed text="Next month" chars={10} delay={2.5} /></div></div>
+          <div className="mt-8 flex gap-4 text-lg font-semibold text-primary"><span>Export your plan</span><span>Save and continue later</span></div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+const SCREENS = [ScreenStart, ScreenDashboard, ScreenQuestionnaire, ScreenResults, ScreenActionPlan];
 
 const STEP_META = [
   {
     kicker: "Step one",
-    title: "Create your account",
+    title: "Start assessing",
     color: "var(--impact-purple)",
     desc: (
       <>
-        Register your Local Youth Council so results, action plans and reflections
-        are stored securely in one place.
+        Start the assessment without an account. Sign up later, when you want to
+        view your full results, save assessments and build your action plan.
       </>
     ),
   },
@@ -931,19 +938,27 @@ const STEP_META = [
     color: "var(--impact-green)",
     desc: (
       <>
-        Get a visual scoreboard, reflection prompts and recommended action steps
-        that become your council's action plan.
+        See your visual scoreboard without an account. Sign up or log in to
+        unlock your full results, reflection prompts and recommended action steps.
       </>
     ),
+  },
+  {
+    kicker: "Step five",
+    title: "Create your action plan",
+    color: "var(--impact-purple)",
+    desc: <>Choose which recommended action steps to include, add how, when and who, then export your plan or save and continue later.</>,
   },
 ];
 
 export function HowToGetStartedModal({
   open,
   onOpenChange,
+  initialStep = 0,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
+  initialStep?: number;
 }) {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
@@ -953,12 +968,12 @@ export function HowToGetStartedModal({
   const Screen = SCREENS[step];
   const meta = STEP_META[step];
 
-  const typingKeyframes = useTypingKeyframes([12, 14, 23, 8, 6]);
+  const typingKeyframes = useTypingKeyframes([18, 15, 10]);
 
-  // reset to step 1 each time the modal opens
+  // Open the scene corresponding to the clicked Home step.
   useEffect(() => {
-    if (open) setStep(0);
-  }, [open]);
+    if (open) setStep(Math.max(0, Math.min(SCREENS.length - 1, initialStep)));
+  }, [open, initialStep]);
 
   // scale the 1440×810 canvas to fit its stage (width AND height)
   useEffect(() => {
@@ -1000,7 +1015,7 @@ export function HowToGetStartedModal({
   const handleNext = () => {
     if (isLast) {
       onOpenChange(false);
-      navigate({ to: "/auth" });
+      navigate({ to: "/start-assessing" });
     } else {
       setStep((s) => s + 1);
     }
@@ -1063,16 +1078,16 @@ export function HowToGetStartedModal({
             <div className="h2g-spacer" />
 
             <div className="h2g-nav">
-              <button className="h2g-back" onClick={() => setStep((s) => s - 1)} disabled={step === 0}>
+              <Button variant="outline" className="h2g-back" onClick={() => setStep((s) => s - 1)} disabled={step === 0}>
                 Back
-              </button>
-              <button className="h2g-next" onClick={handleNext}>
+              </Button>
+              <Button className="h2g-next" onClick={handleNext}>
                 {isLast ? "Start your assessment" : "Next"}
-              </button>
+              </Button>
             </div>
 
             <div className="h2g-skip">
-              <button onClick={() => onOpenChange(false)}>Skip for now</button>
+              <Button variant="link" onClick={() => onOpenChange(false)}>Skip for now</Button>
             </div>
           </aside>
         </div>
