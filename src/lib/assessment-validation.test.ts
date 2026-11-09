@@ -1,7 +1,9 @@
-/// <reference types="bun" />
-import { describe, expect, test } from "bun:test";
+import { describe, it as test } from "node:test";
+import { strict as assert } from "node:assert";
 import { AREAS } from "../components/questionnaire/content";
 import { firstUnansweredIndicator, isIndicatorAnswered, type MatrixState, type ScaleState } from "./assessment-validation";
+
+const expect = (actual: unknown) => ({ toBe: (expected: unknown) => assert.equal(actual, expected) });
 
 describe("mandatory assessment answers", () => {
   for (const area of Object.values(AREAS)) {
