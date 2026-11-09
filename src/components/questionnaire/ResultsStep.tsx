@@ -8,6 +8,7 @@ import { AREAS, type QIndicator } from "./content";
 import { AreaThemeProvider, themeForArea, useAreaTheme } from "./theme";
 import { ScoreMeter } from "./ScoreMeter";
 import { loadActionPlan, makeStep, saveActionPlan, stepId, type ActionPlanStep } from "@/lib/action-plan";
+import { rememberResultsReturn } from "@/lib/results-auth-return";
 
 
 
@@ -534,7 +535,8 @@ export function ResultsStep({
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <Link
               to="/auth"
-              search={{ mode: "signup" }}
+              search={{ mode: "signup", resultArea: areaKey }}
+              onClick={() => rememberResultsReturn(areaKey)}
               className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-[13px] font-bold transition hover:opacity-90"
               style={{ color: theme.accent }}
             >
@@ -542,6 +544,8 @@ export function ResultsStep({
             </Link>
             <Link
               to="/auth"
+              search={{ resultArea: areaKey }}
+              onClick={() => rememberResultsReturn(areaKey)}
               className="inline-flex items-center rounded-full border border-white/70 px-6 py-3 text-[13px] font-bold text-white transition hover:bg-white/10"
             >
               Log-in

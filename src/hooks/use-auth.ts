@@ -14,7 +14,7 @@ function setCached(u: User | null) {
   cachedUser = u;
   cachedLoading = false;
   listeners.forEach((l) => l(u));
-  if (u) void claimGuestAssessment(u.id);
+  if (u) void claimGuestAssessment(u.id).catch(() => { /* Auth page reports claim failures and leaves the guest assessment intact. */ });
 }
 
 function start() {

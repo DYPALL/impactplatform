@@ -1,6 +1,8 @@
 import { claimGuestAssessment } from "@/lib/guest-assessment";
 import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { clearResultsReturn, matchesResultsReturn, pendingResultsReturn, rememberResultsReturn, resultsReturnArea } from "@/lib/results-auth-return";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
@@ -9,7 +11,7 @@ import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import cofundLogo from "@/assets/cofund-eu-white.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (search: Record<string, unknown>): { mode?: "signup" } => ({ mode: search.mode === "signup" ? "signup" : undefined }),
+  validateSearch: (search: Record<string, unknown>): { mode?: "signup"; resultArea?: string } => ({ mode: search.mode === "signup" ? "signup" : undefined, resultArea: resultsReturnArea(search.resultArea) }),
   head: () => ({
     meta: [
       { title: "Log-in — IMPACT" },
@@ -104,12 +106,36 @@ function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const router = useRouter();
+  const { user } = useAuth();
+  const returning = useRef(false);
+  const [notice, setNotice] = useState<string | null>(null);
+
+  const finishAuthentication = useCallback(async (userId: string) => {
+    if (returning.current) return;
+    returning.current = true;
+    try {
+      const requestedArea = search.resultArea ?? pendingResultsReturn();
+      const claimed = await claimGuestAssessment(userId);
+      await router.invalidate();
+      if (matchesResultsReturn(requestedArea, claimed) && claimed) {
+        clearResultsReturn();
+        await navigate({ to: "/results/$id", params: { id: claimed.id }, replace: true });
+      } else if (requestedArea) {
+        setError("Your assessment results could not be restored. Please try again.");
+        returning.current = false;
+      } else {
+        await navigate({ to: "/dashboard", replace: true });
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Your assessment could not be restored. Please try again.");
+      returning.current = false;
+    }
+  }, [search.resultArea, router, navigate]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard", replace: true });
-    });
-  }, [navigate]);
+    if (search.resultArea) rememberResultsReturn(search.resultArea);
+    if (user) void finishAuthentication(user.id);
+  }, [user, search.resultArea, finishAuthentication]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -129,16 +155,15 @@ function AuthPage() {
         const { error } = await supabase.auth.signUp({
           email, password,
           options: {
-            emailRedirectTo: `${window.location.origin}/dashboard`,
+            emailRedirectTo: `${window.location.origin}/auth${search.resultArea ? `?resultArea=${encodeURIComponent(search.resultArea)}` : ""}`,
             data: meta,
           },
         });
         if (error) { setError(error.message); return; }
       }
       const { data: sess } = await supabase.auth.getSession();
-      if (sess.session) await claimGuestAssessment(sess.session.user.id);
-      router.invalidate();
-      navigate({ to: "/dashboard", replace: true });
+      if (sess.session) await finishAuthentication(sess.session.user.id);
+      else setNotice("Check your email to confirm your account. Your assessment will be ready when you return.");
     } finally {
       setBusy(false);
     }
@@ -149,12 +174,12 @@ function AuthPage() {
     setBusy(true);
     try {
       const result = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: window.location.origin,
+        redirect_uri: `${window.location.origin}/auth${search.resultArea ? `?resultArea=${encodeURIComponent(search.resultArea)}` : ""}`,
       });
       if (result.error) { setError(result.error.message || "Social log-in failed"); return; }
       if (result.redirected) return;
-      router.invalidate();
-      navigate({ to: "/dashboard", replace: true });
+      const { data } = await supabase.auth.getSession();
+      if (data.session) await finishAuthentication(data.session.user.id);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Log-in failed");
     } finally {
@@ -329,6 +354,7 @@ function AuthPage() {
               )}
 
               {error && <p className="text-sm text-red-600">{error}</p>}
+              {notice && <p role="status" className="text-sm text-muted-foreground">{notice}</p>}
 
               <button
                 type="submit"
