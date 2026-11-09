@@ -19,15 +19,49 @@ async function loadPng(src: string) {
 }
 
 /** Builds the saved plan as a downloadable A4 PDF, one action step per page. */
-export async function downloadActionPlanPdf(areaName: string, steps: ActionPlanStep[]) {
+const hex = (h: string): [number, number, number] => {
+  const n = parseInt(h.replace("#", ""), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+};
+
+export async function downloadActionPlanPdf(
+  areaName: string,
+  assessmentName: string,
+  steps: ActionPlanStep[],
+  accentHex = "#502181",
+) {
   const { jsPDF } = await import("jspdf");
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const logo = await loadPng(impactLogo.url).catch(() => null);
   const pages = actionPlanExportPages(steps);
   const W = 210, M = 16, inner = W - M * 2;
 
-  pages.forEach((page, i) => {
-    if (i > 0) doc.addPage();
+  // Colourful cover: area colour, brand triangles, logo, area and assessment name.
+  const accent = hex(accentHex);
+  doc.setFillColor(...accent).rect(0, 0, 210, 297, "F");
+  const tri = (c: string, pts: number[]) => {
+    doc.setFillColor(...hex(c));
+    doc.triangle(pts[0], pts[1], pts[2], pts[3], pts[4], pts[5], "F");
+  };
+  tri("#F4A261", [150, 0, 210, 0, 210, 70]);
+  tri("#E94B8A", [175, 40, 210, 95, 160, 110]);
+  tri("#219C9E", [0, 230, 55, 297, 0, 297]);
+  tri("#F4A261", [40, 255, 90, 297, 20, 297]);
+  tri(accentHex === "#502181" ? "#E94B8A" : "#502181", [170, 230, 210, 205, 210, 265]);
+  if (logo) {
+    doc.setFillColor(255, 255, 255).roundedRect(M, 22, 58, 12 + 46 * logo.ratio, 4, 4, "F");
+    doc.addImage(logo.data, "PNG", M + 6, 28, 46, 46 * logo.ratio);
+  }
+  doc.setTextColor(255, 255, 255).setFont("helvetica", "bold").setFontSize(38);
+  doc.text(["Build your", "action plan"], M, 120);
+  doc.setFillColor(255, 255, 255).roundedRect(M, 150, inner, 62, 4, 4, "F");
+  doc.setTextColor(...accent).setFontSize(10).text("AREA OF ASSESSMENT", M + 8, 162);
+  doc.setTextColor(...INK).setFontSize(17).text(doc.splitTextToSize(areaName, inner - 16), M + 8, 171);
+  doc.setTextColor(...accent).setFontSize(10).text("ASSESSMENT", M + 8, 192);
+  doc.setTextColor(...INK).setFontSize(17).text(doc.splitTextToSize(assessmentName, inner - 16).slice(0, 1), M + 8, 201);
+
+  pages.forEach((page) => {
+    doc.addPage();
     let y = M;
     if (logo) { doc.addImage(logo.data, "PNG", M, y, 27, 27 * logo.ratio); y += 27 * logo.ratio + 5; }
     doc.setFont("helvetica", "bold").setFontSize(18).setTextColor(...INK);
@@ -40,6 +74,7 @@ export async function downloadActionPlanPdf(areaName: string, steps: ActionPlanS
       doc.text(lines, M + lw, y); y += 5 * Math.max(1, lines.length);
     };
     meta("Area of assessment:", areaName);
+    meta("Assessment:", assessmentName);
     meta("Indicator:", page.indicator ?? "");
     doc.setDrawColor(...PURPLE).setLineWidth(0.6).line(M, y, W - M, y); y += 8;
 
@@ -64,6 +99,6 @@ export async function downloadActionPlanPdf(areaName: string, steps: ActionPlanS
     });
   });
 
-  const name = `IMPACT-action-plan-${areaName.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.pdf`;
+  const name = `IMPACT-action-plan-${`${areaName} ${assessmentName}`.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.pdf`;
   doc.save(name);
 }

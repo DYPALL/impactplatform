@@ -65,6 +65,7 @@ function ActionPlanPage() {
   const [steps, setSteps] = useState<ActionPlanStep[]>([]);
   
   const [loaded, setLoaded] = useState(false);
+  const [assessmentName, setAssessmentName] = useState("Assessment");
   const [saving, setSaving] = useState(false);
   const skipSave = useRef(true);
 
@@ -76,9 +77,20 @@ function ActionPlanPage() {
     (async () => {
       const { data } = await supabase
         .from("assessments")
-        .select("area")
+        .select("area, title, user_id")
         .eq("id", assessmentId)
         .maybeSingle();
+      if (data?.area) {
+        // Same default naming as My Assessments: "Assessment N" by position in the area list.
+        const { data: siblings } = await supabase
+          .from("assessments")
+          .select("id")
+          .eq("user_id", data.user_id)
+          .eq("area", data.area)
+          .order("updated_at", { ascending: false });
+        const idx = (siblings ?? []).findIndex((r) => r.id === assessmentId);
+        if (active) setAssessmentName(data.title?.trim() || `Assessment ${idx >= 0 ? idx + 1 : 1}`);
+      }
       const plan = await loadActionPlan(assessmentId);
       if (!active) return;
       if (data?.area) setAreaKey(data.area as string);
@@ -211,7 +223,7 @@ function ActionPlanPage() {
               assessmentId={assessmentId}
               areaName={area.name}
               canExport={groupedActive.some(([, list]) => list.some((s) => s.included))}
-              onExport={() => void downloadActionPlanPdf(area.name, steps)}
+              onExport={() => void downloadActionPlanPdf(area.name, assessmentName, steps, theme.accent)}
               saving={saving}
               onSaveLater={() => void saveAndLeave()}
             />
