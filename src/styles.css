@@ -443,95 +443,19 @@
     background: #fff !important;
   }
 
-  .plan-print-head {
-    border-bottom: 2px solid #502181;
-    padding-bottom: 10px;
-    margin-bottom: 14px;
-  }
-  .plan-print-kicker {
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #502181;
-    font-weight: 700;
-  }
-  .plan-print-head h1 {
-    font-size: 22px;
-    font-weight: 800;
-    color: #111827;
-    margin-top: 2px;
-  }
-  .plan-print-meta {
-    display: flex;
-    gap: 18px;
-    margin-top: 6px;
-    font-size: 11px;
-    color: #374151;
-  }
-  .plan-print-group {
-    margin-top: 16px;
-  }
-  .plan-print-group h2 {
-    font-size: 13px;
-    font-weight: 800;
-    color: #502181;
-    border-bottom: 1px solid #d1d5db;
-    padding-bottom: 4px;
-    break-after: avoid;
-  }
-  .plan-print-step {
-    break-inside: avoid;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 10px;
-    margin-top: 8px;
-  }
-  .plan-print-step-title {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    font-size: 12px;
-    font-weight: 700;
-    color: #111827;
-  }
-  .plan-print-num {
-    display: inline-grid;
-    place-items: center;
-    width: 18px;
-    height: 18px;
-    border: 1px solid #502181;
-    border-radius: 999px;
-    font-size: 10px;
-    color: #502181;
-    flex: none;
-  }
-  .plan-print-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 8px;
-  }
-  .plan-print-field {
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    padding: 6px 8px;
-  }
-  .plan-print-field p:first-child {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-weight: 700;
-    color: #6b7280;
-  }
-  .plan-print-val {
-    font-size: 11px;
-    color: #111827;
-    margin-top: 2px;
-    min-height: 18px;
-    white-space: pre-wrap;
-  }
-  .plan-print-empty {
-    font-size: 12px;
-    color: #374151;
-  }
+  .plan-print-sheet { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .plan-print-page { min-height: 263mm; break-after: page; break-inside: avoid; }
+  .plan-print-page:last-child { break-after: auto; }
+  .plan-print-head { border-bottom: 2px solid var(--impact-purple); padding-bottom: 10px; margin-bottom: 14px; }
+  .plan-print-logo { width: 27mm; height: auto; margin-bottom: 8px; }
+  .plan-print-head h1 { font-size: 22px; font-weight: 800; color: var(--impact-ink); }
+  .plan-print-meta, .plan-print-indicator { margin-top: 6px; font-size: 11px; color: var(--impact-ink); }
+  .plan-print-step-title { display: flex; gap: 12px; align-items: start; padding: 12px 0; font-size: 12px; color: var(--impact-ink); }
+  .plan-print-step-title p { margin-top: 4px; }
+  .plan-print-num { display: inline-grid; place-items: center; width: 25px; height: 25px; border: 1px solid var(--impact-purple); border-radius: 999px; font-size: 12px; color: var(--impact-purple); flex: none; }
+  .plan-print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .plan-print-field { border: 1px solid var(--impact-border); border-radius: 4px; padding: 10px 12px; min-height: 40mm; break-inside: avoid; }
+  .plan-print-field p:first-child { font-size: 10px; font-weight: 700; color: var(--impact-purple); }
+  .plan-print-val { font-size: 11px; line-height: 1.5; color: var(--impact-ink); margin-top: 6px; min-height: 14mm; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .plan-print-writing { height: 13mm; border-bottom: 1px solid var(--impact-border); }
 }

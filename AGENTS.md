@@ -18,6 +18,7 @@
 - Share FAQ copy between the FAQ page and Home accordion through a browser-safe data module to prevent divergent answers.
 - Blank Action Plan exports are a static same-origin fillable, printable PDF, independent of a user's saved plan.
 - A saved Action Plan exports through a dedicated print-only view (.plan-print-sheet) while the screen page carries .screen-only and is hidden by the print stylesheet; keep both lists of fields in step so a printed plan matches what the editor shows.
+- Included action steps map through a browser-safe export model to separate A4 print pages with all online fields and handwriting space; static catalogue downloads remain same-origin links rather than private generated exports.
 - Home's five assessment steps live in a dedicated browser-safe Embla view so card navigation and explanatory copy stay separate from the rest of Home.
 - Home step cards and the main getting-started button reuse the same five-scene animated guide with an initial-step prop, so each entry opens the matching scene without duplicating walkthroughs.
 - Questionnaire navigation and completion share browser-safe answer validation, so all matrix rows and deliberate slider selections are checked consistently, including resumed assessments; partial drafts remain saveable.

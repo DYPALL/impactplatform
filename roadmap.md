@@ -1,4 +1,7 @@
 # Platform updates
+- [x] Simplify Action Plan introduction to one online start button; verified the guided online entry and absence of the blank-template choice.
+- [x] Move the blank printable template to a public Resource Hub resource; downloaded the existing seven-page fillable PDF while signed out.
+- [x] Export each included action step on its own prefilled page with writing space; tested included-only pages and online values, exported a real two-step plan, and visually checked both A4 pages with no clipping or overlap.
 - [x] Return Log-in and Sign-up from guest results to the exact saved assessment; both entries were browser-tested with the requesting user's restored session, persisted full results and reload readback. Confirmation/social return paths are implemented, but live email confirmation and provider sign-in were not exercised.
 - [x] Require every assessment question before proceeding or submitting; preserve saving incomplete drafts. All four areas pass validation tests, and a browser assessment confirmed partial matrices, untouched sliders and the unanswered final question are blocked before completed results.
 - [x] Clarify guest-first assessment signup and open the matching animated guide from each of Home's five steps; verified all five popups, mobile layout, main guide reset, and guest navigation to assessment areas with no page errors.

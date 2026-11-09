@@ -4,6 +4,8 @@ import { Footer } from "@/components/Footer";
 import { Polygon } from "@/components/Polygon";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicationMockup } from "@/components/PublicationMockup";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 
 export const Route = createFileRoute("/resource-hub/$id")({
   head: () => ({
@@ -191,7 +193,7 @@ function ResourceDetailPage() {
 
               <div className="mt-2">
                 {resource.url ? (
-                  <a
+                  resource.url.startsWith("/downloads/") ? <Button asChild className="rounded-full"><a href={resource.url} download><Download />Download PDF template</a></Button> : <a
                     href={resource.url}
                     target="_blank"
                     rel="noopener noreferrer"
