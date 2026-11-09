@@ -1,4 +1,5 @@
 # Platform updates
+- [x] Require every assessment question before proceeding or submitting; preserve saving incomplete drafts. All four areas pass validation tests, and a browser assessment confirmed partial matrices, untouched sliders and the unanswered final question are blocked before completed results.
 - [x] Clarify guest-first assessment signup and open the matching animated guide from each of Home's five steps; verified all five popups, mobile layout, main guide reset, and guest navigation to assessment areas with no page errors.
 - [x] Fix signed-in My Assessments navigation; browser-verified the header keeps its full height while the outgoing page is visible and disappears only when the dashboard renders with the account's saved assessments.
 - [x] Remove navigation flicker; verified Home, Resource Hub, Start assessing and Message navigation keeps the outgoing page visible, with no blank frames or page errors; reduced motion disables the entrance animation.

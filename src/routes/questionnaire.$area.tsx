@@ -8,6 +8,7 @@ import { AREAS, type QIndicator } from "@/components/questionnaire/content";
 import { AreaThemeProvider, themeForArea, useAreaTheme } from "@/components/questionnaire/theme";
 import { useAuth } from "@/hooks/use-auth";
 import { loadGuest, saveGuest } from "@/lib/guest-assessment";
+import { firstUnansweredIndicator, isIndicatorAnswered, type Answer, type MatrixState, type ScaleState } from "@/lib/assessment-validation";
 
 type ResourceArea = Database["public"]["Enums"]["resource_area"];
 
@@ -30,17 +31,12 @@ export const Route = createFileRoute("/questionnaire/$area")({
 });
 
 
-type Answer = "yes" | "no" | "na";
-
 const LEVEL_STYLE = [
   { color: "#E14B45", soft: "#FDECEB" },
   { color: "#E8913C", soft: "#FDF1E5" },
   { color: "#E5C13F", soft: "#FCF7E4" },
   { color: "#33A06A", soft: "#E9F6EF" },
 ];
-
-type MatrixState = Record<number, Record<number, Answer>>;
-type ScaleState = Record<number, { value: number; na: boolean; touched: boolean }>;
 
 /** Old area-1 payloads used named keys — map them onto indicator indexes. */
 function migrateLegacy(a: Record<string, unknown>): { matrix: MatrixState; scale: ScaleState } {
@@ -159,12 +155,18 @@ function QuestionnairePage() {
     matrix?: MatrixState;
     scale?: ScaleState;
   }) => {
+    const m = opts.matrix ?? matrix;
+    const s = opts.scale ?? scale;
+    const unanswered = firstUnansweredIndicator(indicators, m, s);
+    if (opts.completed && unanswered !== -1) {
+      setStep(unanswered + 1);
+      setError("Please answer every question before viewing your results.");
+      return null;
+    }
     setSaving(true);
     const { data: sess } = await supabase.auth.getSession();
     const userId = sess.session?.user.id;
     if (!userId) {
-      const m = opts.matrix ?? matrix;
-      const s = opts.scale ?? scale;
       saveGuest({
         area,
         step: opts.step,
@@ -175,9 +177,7 @@ function QuestionnairePage() {
       setSaving(false);
       return null;
     }
-    const done = opts.completed || isEditing;
-    const m = opts.matrix ?? matrix;
-    const s = opts.scale ?? scale;
+    const done = Boolean(opts.completed || (isEditing && unanswered === -1));
     const payload = {
       user_id: userId,
       area: area as "representativeness" | "governance" | "empowerment" | "results" | "general",
@@ -204,32 +204,30 @@ function QuestionnairePage() {
 
   const current: QIndicator | undefined = indicators[step - 1];
 
-  // Slider questions default to "Not at all" (value 0) so the user can simply tap Next.
-  useEffect(() => {
-    if (current?.type === "slider" && scale[step - 1] === undefined) {
-      setScale((prev) => ({ ...prev, [step - 1]: { value: 0, na: false, touched: true } }));
-    }
-  }, [current, step]);
-
   const canAdvance = () => {
     if (!current) return true;
-    if (current.type === "matrix") return Object.keys(matrix[step - 1] ?? {}).length > 0;
-    const s = scale[step - 1];
-    // Slider questions default to value 0 ("Not at all"), so any numeric value is valid.
-    return Boolean(s && (s.na || typeof s.value === "number"));
+    return isIndicatorAnswered(current, step - 1, matrix, scale);
   };
 
   const handleNext = async () => {
     if (!canAdvance()) {
       setError(
         current?.type === "slider"
-          ? "Please choose a level on the slider, or skip this question."
-          : "Please answer at least one criterion before continuing.",
+          ? "Please choose a level before continuing."
+          : "Please answer every criterion before continuing.",
       );
       return;
     }
     setError(null);
     const next = step + 1;
+    if (next === TOTAL_STEPS) {
+      const unanswered = firstUnansweredIndicator(indicators, matrix, scale);
+      if (unanswered !== -1) {
+        setStep(unanswered + 1);
+        setError("Please answer every question before viewing your results.");
+        return;
+      }
+    }
     const savedId = await persist({ step: next, completed: next === TOTAL_STEPS });
     if (user && !savedId) return;
     setStep(next);
@@ -291,9 +289,10 @@ function QuestionnairePage() {
             key={current.code}
             indicator={current}
             answers={matrix[step - 1] ?? {}}
-            setAnswers={(fn) =>
-              setMatrix((m) => ({ ...m, [step - 1]: fn(m[step - 1] ?? {}) }))
-            }
+            setAnswers={(fn) => {
+              setMatrix((m) => ({ ...m, [step - 1]: fn(m[step - 1] ?? {}) }));
+              setError(null);
+            }}
           />
         )}
         {current && current.type === "slider" && (
@@ -301,22 +300,10 @@ function QuestionnairePage() {
             key={current.code}
             indicator={current}
             value={scale[step - 1]?.value ?? 0}
-            na={Boolean(scale[step - 1]?.na)}
+            answered={Boolean(scale[step - 1]?.touched && !scale[step - 1]?.na)}
             onChange={(v) => {
               setScale((s) => ({ ...s, [step - 1]: { value: v, na: false, touched: true } }));
               setError(null);
-            }}
-            onSkip={async () => {
-              const nextScale: ScaleState = {
-                ...scale,
-                [step - 1]: { value: 0, na: true, touched: false },
-              };
-              setScale(nextScale);
-              setError(null);
-              const next = step + 1;
-              const savedId = await persist({ step: next, completed: next === TOTAL_STEPS, scale: nextScale });
-              if (user && !savedId) return;
-              setStep(next);
             }}
           />
         )}
@@ -326,7 +313,7 @@ function QuestionnairePage() {
         {step < TOTAL_STEPS && (
           <div className="mt-10">
             {error && (
-              <p className="mb-4 rounded-xl bg-[#FDECEB] px-4 py-3 text-[13px] font-semibold text-[#B3382F]">
+              <p role="alert" className="mb-4 rounded-xl bg-destructive/10 px-4 py-3 text-[13px] font-semibold text-destructive">
                 {error}
               </p>
             )}
@@ -533,14 +520,12 @@ function SliderQuestion({
   indicator,
   value,
   onChange,
-  na,
-  onSkip,
+  answered,
 }: {
   indicator: QIndicator;
   value: number;
   onChange: (v: number) => void;
-  na: boolean;
-  onSkip: () => void;
+  answered: boolean;
 }) {
   const theme = useAreaTheme();
   const levels = indicator.levels;
@@ -557,21 +542,11 @@ function SliderQuestion({
         question={indicator.question}
       />
 
-      <div className="mt-4 flex justify-end">
-        <button
-          type="button"
-          onClick={onSkip}
-          className="inline-flex items-center gap-2 rounded-full border border-[#d1d5db] bg-white px-4 py-2 text-[13px] font-semibold text-[#6b7280] transition hover:opacity-80"
-        >
-          Skip this question
-        </button>
-      </div>
-
       <p className="mt-8 text-[12px] font-bold uppercase tracking-wide" style={{ color: theme.accent }}>
         Use the slider to choose what fits best for your case
       </p>
 
-      <div className={`mt-14 ${na ? "pointer-events-none opacity-40" : ""}`}>
+      <div className="mt-14">
         <div
           className="relative h-[44px] touch-none select-none"
           onPointerDown={(e) => {
@@ -581,7 +556,7 @@ function SliderQuestion({
               last,
               Math.max(0, Math.floor(((e.clientX - rect.left) / rect.width) * levels.length)),
             );
-            if (idx !== value) onChange(idx);
+            onChange(idx);
           }}
           onPointerMove={(e) => {
             if (e.buttons === 0 && e.pointerType === "mouse") return;
@@ -613,7 +588,7 @@ function SliderQuestion({
 
           {/* Thumb */}
           <div
-            className="pointer-events-none absolute top-1/2 flex h-[28px] w-[28px] -translate-x-1/2 -translate-y-1/2 transform-gpu items-center justify-center rounded-[8px] border border-[#E5E7EB] bg-white transition-[left] duration-200 ease-out"
+            className={`pointer-events-none absolute top-1/2 flex h-[28px] w-[28px] -translate-x-1/2 -translate-y-1/2 transform-gpu items-center justify-center rounded-[8px] border border-[#E5E7EB] bg-white transition-[left] duration-200 ease-out ${answered ? "" : "invisible"}`}
             style={{
               left: `${((value + 0.5) / levels.length) * 100}%`,
               boxShadow: "0 6px 14px rgba(0,0,0,0.16)",
@@ -643,14 +618,14 @@ function SliderQuestion({
               type="button"
               onClick={() => onChange(i)}
               className="flex-1 text-center text-[14px] font-semibold transition"
-              style={{ color: i === value ? LEVEL_STYLE[i]?.color : "#9ca3af" }}
+              style={{ color: answered && i === value ? LEVEL_STYLE[i]?.color : "#9ca3af" }}
             >
               {l.label}
             </button>
           ))}
         </div>
 
-        <div
+        {answered && <div
           className="mt-10 rounded-2xl border p-6 transition-colors duration-300"
           style={{ backgroundColor: style.soft, borderColor: style.color }}
         >
@@ -658,7 +633,7 @@ function SliderQuestion({
             Selected level: {level.label}
           </p>
           <p className="mt-2 text-[15px] leading-relaxed text-[#1f2937]">{level.text}</p>
-        </div>
+        </div>}
       </div>
     </section>
   );
