@@ -17,6 +17,7 @@
 - Prebundle the carousel Auto Scroll plugin in Vite at startup to avoid late dependency optimization replacing React bundles in an open preview.
 - Share FAQ copy between the FAQ page and Home accordion through a browser-safe data module to prevent divergent answers.
 - Blank Action Plan exports are a static same-origin fillable, printable PDF, independent of a user's saved plan.
+- Regenerate the static blank Action Plan with the shared PDF renderer's blank mode, retaining write-in fields and using its actual first-page raster for the catalogue cover, so blank and saved layouts stay aligned.
 - A saved Action Plan exports through a dedicated print-only view (.plan-print-sheet) while the screen page carries .screen-only and is hidden by the print stylesheet; keep both lists of fields in step so a printed plan matches what the editor shows.
 - Included action steps map through a browser-safe export model to separate A4 print pages with all online fields and handwriting space; static catalogue downloads remain same-origin links rather than private generated exports.
 - Home's five assessment steps live in a dedicated browser-safe Embla view so card navigation and explanatory copy stay separate from the rest of Home.

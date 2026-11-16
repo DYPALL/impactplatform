@@ -33,8 +33,9 @@ export async function downloadActionPlanPdf(
   assessmentName: string,
   steps: ActionPlanStep[],
   accentHex = "#502181",
+  blank = false,
 ) {
-  const { jsPDF } = await import("jspdf");
+  const { jsPDF, AcroFormTextField } = await import("jspdf");
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const logo = await loadPng(impactLogo.url).catch(() => null);
   const pages = actionPlanExportPages(steps);
@@ -47,6 +48,24 @@ export async function downloadActionPlanPdf(
     }
   }
   const W = 210, M = 16, inner = W - M * 2;
+  const writeIn = (name: string, x: number, y: number, width: number, height: number, multiline = false) => {
+    const field = new AcroFormTextField();
+    field.fieldName = name;
+    field.x = x;
+    field.y = y;
+    field.width = width;
+    field.height = height;
+    field.multiline = multiline;
+    field.fontSize = 11;
+    field.maxFontSize = 11;
+    doc.addField(field);
+  };
+  const coverValue = (name: string, value: string, y: number) => {
+    if (blank) {
+      doc.setDrawColor(...BORDER).setLineWidth(0.3).line(M + 8, y + 2, W - M - 8, y + 2);
+      writeIn(name, M + 8, y - 6, inner - 16, 8);
+    } else doc.text(doc.splitTextToSize(value, inner - 16).slice(0, 1), M + 8, y);
+  };
 
   // Colourful cover: area colour, brand triangles, logo, area and assessment name.
   const accent = hex(accentHex);
@@ -68,9 +87,11 @@ export async function downloadActionPlanPdf(
   doc.text(["Build your", "action plan"], M, 120);
   doc.setFillColor(255, 255, 255).roundedRect(M, 150, inner, 62, 4, 4, "F");
   doc.setTextColor(...accent).setFontSize(10).text("AREA OF ASSESSMENT", M + 8, 162);
-  doc.setTextColor(...INK).setFontSize(17).text(doc.splitTextToSize(areaName, inner - 16), M + 8, 171);
+  doc.setTextColor(...INK).setFontSize(17);
+  coverValue("cover_area", areaName, 171);
   doc.setTextColor(...accent).setFontSize(10).text("ASSESSMENT", M + 8, 192);
-  doc.setTextColor(...INK).setFontSize(17).text(doc.splitTextToSize(assessmentName, inner - 16).slice(0, 1), M + 8, 201);
+  doc.setTextColor(...INK).setFontSize(17);
+  coverValue("cover_assessment", assessmentName, 201);
 
   pages.forEach((page) => {
     doc.addPage();
@@ -80,35 +101,48 @@ export async function downloadActionPlanPdf(
     doc.setFillColor(...HIGHLIGHT).roundedRect(M, y, inner, 19, 2, 2, "F");
     doc.setFont("helvetica", "bold").setFontSize(8).setTextColor(...PURPLE);
     doc.text("AREA OF ASSESSMENT", M + 5, y + 6);
-    doc.setFontSize(13).text(areaName, M + 5, y + 13);
+    doc.setFontSize(13);
+    if (blank) {
+      doc.setDrawColor(...BORDER).line(M + 5, y + 15, W - M - 5, y + 15);
+      writeIn(`area_${page.number}`, M + 5, y + 7, inner - 10, 8);
+    } else doc.text(areaName, M + 5, y + 13);
     y += 26;
     doc.setFontSize(10);
     const meta = (label: string, value: string) => {
       doc.setFont("helvetica", "bold").text(label, M, y);
       const lw = doc.getTextWidth(label) + 2;
       const lines = doc.setFont("helvetica", "normal").splitTextToSize(value || "", inner - lw);
-      doc.text(lines, M + lw, y); y += 5 * Math.max(1, lines.length);
+      if (blank) {
+        doc.setDrawColor(...BORDER).line(M + lw, y + 1, W - M, y + 1);
+        writeIn(`${label}_${page.number}`, M + lw, y - 5, inner - lw, 6);
+      } else doc.text(lines, M + lw, y);
+      y += 5 * Math.max(1, lines.length);
     };
     meta("Assessment:", assessmentName);
     meta("Indicator:", page.indicator ?? "");
     y += 3;
     const act = doc.setFont("helvetica", "bold").setFontSize(11).splitTextToSize(page.action ?? "", inner - 25);
-    const actionHeight = 16 + 5 * act.length;
+    const actionHeight = blank ? 27 : 16 + 5 * act.length;
     doc.setFillColor(...PURPLE).roundedRect(M, y, inner, actionHeight, 2, 2, "F");
     doc.setFillColor(255, 255, 255).circle(M + 8, y + 9, 4.5, "F");
-    doc.setTextColor(...PURPLE).setFontSize(10).text(String(page.number), M + 8, y + 10.2, { align: "center" });
+    if (blank) writeIn(`step_number_${page.number}`, M + 5, y + 6, 6, 6);
+    else doc.setTextColor(...PURPLE).setFontSize(10).text(String(page.number), M + 8, y + 10.2, { align: "center" });
     doc.setTextColor(255, 255, 255).setFontSize(9).text("ACTION STEP", M + 17, y + 7);
-    doc.setFontSize(11).text(act, M + 17, y + 14);
+    if (blank) {
+      doc.setFillColor(255, 255, 255).roundedRect(M + 17, y + 10, inner - 22, 12, 1, 1, "F");
+      doc.setDrawColor(...BORDER).line(M + 20, y + 20, W - M - 8, y + 20);
+      writeIn(`action_${page.number}`, M + 20, y + 11, inner - 28, 9);
+    } else doc.setFontSize(11).text(act, M + 17, y + 14);
     y += actionHeight + 7;
 
     const gap = 5, colW = (inner - gap) / 2;
-    const rows = Math.ceil(page.fields.length / 2);
+    const fields = blank ? page.fields.filter(([label]) => label !== "Progress tracking") : page.fields;
+    const rows = Math.ceil(fields.length / 2);
     const boxH = Math.min(52, (297 - M - y - gap * (rows - 1)) / rows);
-    page.fields.forEach(([label, value], f) => {
+    fields.forEach(([label, value], f) => {
       const x = M + (f % 2) * (colW + gap), by = y + Math.floor(f / 2) * (boxH + gap);
-      const isWhat = f === 0;
-      doc.setDrawColor(...(isWhat ? PURPLE : BORDER)).setLineWidth(isWhat ? 0.6 : 0.3);
-      doc.setFillColor(...HIGHLIGHT).roundedRect(x, by, colW, boxH, 1.5, 1.5, isWhat ? "FD" : "S");
+      doc.setDrawColor(...BORDER).setLineWidth(0.3);
+      doc.setFillColor(255, 255, 255).roundedRect(x, by, colW, boxH, 1.5, 1.5, "FD");
       doc.setDrawColor(...BORDER).setLineWidth(0.3);
       const icon = fieldIcons.get(label);
       if (icon) doc.addImage(icon, "PNG", x + 4, by + 2.5, 4.5, 4.5);
@@ -118,9 +152,16 @@ export async function downloadActionPlanPdf(
       doc.text(lines, x + 4, by + 12);
       let ly = by + 12 + lines.length * 4.4 + 4;
       for (; ly < by + boxH - 3; ly += 7) doc.line(x + 4, ly, x + colW - 4, ly);
+      if (blank) writeIn(`field_${page.number}_${f}`, x + 4, by + 8, colW - 8, boxH - 12, true);
     });
   });
 
-  const name = `IMPACT-action-plan-${`${areaName} ${assessmentName}`.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.pdf`;
+  const name = blank ? "IMPACT-blank-action-plan.pdf" : `IMPACT-action-plan-${`${areaName} ${assessmentName}`.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.pdf`;
   doc.save(name);
+}
+
+/** Regenerate the static catalogue template using the same layout as saved plans. */
+export async function downloadBlankActionPlanPdf() {
+  const steps: ActionPlanStep[] = Array.from({ length: 6 }, (_, i) => ({ id: `blank-${i}`, code: "", indicator: "", action: "", what: "", how: "", start: "", due: "", who: "", resources: "", risk: "", progress: "", notes: "", included: true }));
+  await downloadActionPlanPdf("", "", steps, "#502181", true);
 }

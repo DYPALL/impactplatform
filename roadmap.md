@@ -1,4 +1,5 @@
 # Platform updates
+- [x] Match blank Action Plan PDF to saved export, add write-in lines and matching icons, remove What highlighting, and use the actual PDF cover in the Resource Hub; visually checked both PDFs, public cover/download and all 74 blank fields, with export tests passing.
 - [x] Add administrator-only account listing, country filters and protected test-account creation/deletion; verified real admin listing, creation, filtering, deletion and reload, signed-out redirects, and three permission tests.
 - [ ] Verify password-reset email delivery and completed recovery: controls and public recovery page are implemented, but the email service rejected the synthetic test address; requires a deliverable test mailbox and publication of the new recovery page.
 - [x] Add matching icons to all eight online Action Plan writing fields and exported PDF fields; verified the saved plan, mobile width and actual three-page download, with export tests passing.

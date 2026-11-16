@@ -27,6 +27,7 @@ import thumbCoverImage8 from "@/assets/publication-covers/thumbs/cover-image-8-t
 import thumbCoverModelsMechanisms from "@/assets/publication-covers/thumbs/cover-models-mechanisms-thumb.asset.json";
 import thumbCoverQualitativeGuidelines from "@/assets/publication-covers/thumbs/cover-qualitative-guidelines-thumb.asset.json";
 import thumbIdeathonCover from "@/assets/publication-covers/thumbs/ideathon-cover-thumb.asset.json";
+import blankPlanThumb from "@/assets/publication-covers/thumbs/blank-action-plan-cover-thumb.asset.json";
 
 const trimmedCovers: Record<string, string> = {
   "cover-good-practices.png": realGoodPractices.url,
@@ -42,6 +43,7 @@ const trimmedCovers: Record<string, string> = {
 // Lightweight WebP versions of every cover (already trimmed-swapped where needed),
 // used on cards so listing pages don't download full-resolution artwork.
 const coverThumbs: Record<string, string> = {
+  "blank-action-plan-cover.webp": blankPlanThumb.url,
   "cover-1.png": thumbCover1.url,
   "cover-10.png": thumbCover10.url,
   "cover-2.png": thumbCover2.url,
