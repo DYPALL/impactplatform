@@ -306,7 +306,6 @@
 .plan-score.score-level-2 { --plan-score-color: var(--score-mostly); --plan-score-soft: var(--score-mostly-soft); }
 .plan-score.score-level-3 { --plan-score-color: var(--score-fully); --plan-score-soft: var(--score-fully-soft); }
 .plan-score { background: var(--plan-score-soft); border-color: var(--plan-score-color); }
-.plan-score-action { border-left: 3px solid var(--plan-score-color, var(--border)); }
 .plan-score-selector { color: var(--foreground); background: var(--plan-score-soft, var(--muted)); border: 1px solid var(--plan-score-color, var(--border)); }
 .plan-score-selector:hover { background: var(--plan-score-soft, var(--muted)); color: var(--foreground); }
 .plan-score-selector[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--plan-score-color, var(--primary)); }
