@@ -21,7 +21,7 @@
 - A saved Action Plan exports through a dedicated print-only view (.plan-print-sheet) while the screen page carries .screen-only and is hidden by the print stylesheet; keep both lists of fields in step so a printed plan matches what the editor shows.
 - Included action steps map through a browser-safe export model to separate A4 print pages with all online fields and handwriting space; static catalogue downloads remain same-origin links rather than private generated exports.
 - Home's five assessment steps live in a dedicated browser-safe Embla view so card navigation and explanatory copy stay separate from the rest of Home.
-- Home step cards and the main getting-started button reuse the same five-scene animated guide with an initial-step prop, so each entry opens the matching scene without duplicating walkthroughs.
+- Home step cards, the main getting-started button and the dashboard guide reuse the same five-scene animated guide with an initial-step prop, so entries stay consistent without duplicate walkthroughs or placeholder players.
 - Questionnaire navigation and completion share browser-safe answer validation, so all matrix rows and deliberate slider selections are checked consistently, including resumed assessments; partial drafts remain saveable.
 - Results authentication stores an allowlisted area intent and waits for the owner-scoped guest claim ID before navigating to saved results; email/social callbacks return through public auth, and owner-bound claim receipts survive reloads without duplicate inserts.
 - Publication cards share a browser-safe cover mockup view across Home and Resource Hub; presentation preserves original artwork and publisher links without modifying resource records.

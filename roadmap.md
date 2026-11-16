@@ -1,4 +1,5 @@
 # Platform updates
+- [x] Replace the outdated dashboard guide with Home's shared five-step animated walkthrough; verified all five scenes, Back, closing, reset on reopening and desktop/mobile fit in the signed-in dashboard.
 - [x] Match online Action Plan indicators, their action steps and selectors to saved result battery-level colours; writing fields and exports remain unchanged.
 - [x] Replace test-account creation with ordinary user-account creation; retain verification and legacy test-only deletion protections.
 - [x] Match blank Action Plan PDF to saved export, add write-in lines and matching icons, remove What highlighting, and use the actual PDF cover in the Resource Hub; visually checked both PDFs, public cover/download and all 74 blank fields, with export tests passing.

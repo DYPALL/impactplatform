@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import logoWhite from "@/assets/IMPACT_Logo_white.png.asset.json";
-import OnboardingGuideModal from "@/components/OnboardingGuideModal";
+import { HowToGetStartedModal } from "@/components/HowToGetStartedModal";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -271,9 +271,9 @@ function Dashboard() {
             questionnaires and build action plans as you go.
           </p>
 
-          <OnboardingGuideModal
+          <HowToGetStartedModal
             open={guideModalOpen}
-            onClose={() => setGuideModalOpen(false)}
+            onOpenChange={setGuideModalOpen}
           />
 
           <div className="mt-8 space-y-6">
