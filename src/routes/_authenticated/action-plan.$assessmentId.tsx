@@ -194,65 +194,65 @@ function ActionPlanPage() {
           </span>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 rounded-3xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-6">
           <Tabs />
-        </div>
 
-        <div className="mt-6">
-          {tab === "intro" && <Introduction accent={theme.accent} onStart={() => setTab("indicators")} />}
+          <div className="mt-5">
+            {tab === "intro" && <Introduction accent={theme.accent} onStart={() => setTab("indicators")} />}
 
-          {tab === "indicators" && (
-            <IndicatorsAndSteps
-              accent={theme.accent}
-              soft={theme.soft}
-              border={theme.border}
-              areaName={area.name}
-              grouped={grouped}
-              update={update}
-            />
-          )}
+            {tab === "indicators" && (
+              <IndicatorsAndSteps
+                accent={theme.accent}
+                soft={theme.soft}
+                border={theme.border}
+                areaName={area.name}
+                grouped={grouped}
+                update={update}
+              />
+            )}
 
-          {tab === "steps" && (
-            <ActionSteps
-              accent={theme.accent}
-              soft={theme.soft}
-              border={theme.border}
-              steps={steps}
-              grouped={groupedActive}
-              update={update}
-              assessmentId={assessmentId}
-              areaName={area.name}
-              canExport={groupedActive.some(([, list]) => list.some((s) => s.included))}
-              onExport={() => void downloadActionPlanPdf(area.name, assessmentName, steps, theme.accent)}
-              saving={saving}
-              onSaveLater={() => void saveAndLeave()}
-            />
-          )}
-        </div>
+            {tab === "steps" && (
+              <ActionSteps
+                accent={theme.accent}
+                soft={theme.soft}
+                border={theme.border}
+                steps={steps}
+                grouped={groupedActive}
+                update={update}
+                assessmentId={assessmentId}
+                areaName={area.name}
+                canExport={groupedActive.some(([, list]) => list.some((s) => s.included))}
+                onExport={() => void downloadActionPlanPdf(area.name, assessmentName, steps, theme.accent)}
+                saving={saving}
+                onSaveLater={() => void saveAndLeave()}
+              />
+            )}
+          </div>
 
-        <div className="mt-6">
-          <Tabs />
-        </div>
+          <div className="mt-6 border-t border-black/5 pt-5">
+            <Tabs />
+          </div>
 
-        <div className="mt-8 flex items-center justify-between">
-          <button
-            type="button"
-            disabled={tabIndex === 0}
-            onClick={() => setTab(TABS[Math.max(0, tabIndex - 1)]!.key)}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E7EB] bg-white px-4 py-2 text-[12px] font-semibold text-[#374151] transition hover:bg-[#F6F6F8] disabled:opacity-40"
-          >
-            <ChevronLeft size={14} /> Previous
-          </button>
-          <span className="text-[12px] text-[#6b7280]">{tabIndex + 1} / {TABS.length}</span>
-          <button
-            type="button"
-            disabled={tabIndex === TABS.length - 1}
-            onClick={() => setTab(TABS[Math.min(TABS.length - 1, tabIndex + 1)]!.key)}
-            className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-[12px] font-bold text-white transition hover:opacity-90 disabled:opacity-40"
-            style={{ backgroundColor: theme.accent }}
-          >
-            Next <ChevronRight size={14} />
-          </button>
+          <div className="mt-5 flex items-center justify-between">
+            <button
+              type="button"
+              disabled={tabIndex === 0}
+              onClick={() => setTab(TABS[Math.max(0, tabIndex - 1)]!.key)}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E7EB] bg-white px-4 py-2 text-[12px] font-semibold text-[#374151] transition hover:bg-[#F6F6F8] disabled:opacity-40"
+            >
+              <ChevronLeft size={14} /> Previous
+            </button>
+            <span className="text-[12px] text-[#6b7280]">{tabIndex + 1} / {TABS.length}</span>
+            <button
+              type="button"
+              disabled={tabIndex === TABS.length - 1}
+              onClick={() => setTab(TABS[Math.min(TABS.length - 1, tabIndex + 1)]!.key)}
+              className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-[12px] font-bold text-white transition hover:opacity-90 disabled:opacity-40"
+              style={{ backgroundColor: theme.accent }}
+            >
+              Next <ChevronRight size={14} />
+            </button>
+          </div>
         </div>
 
         <div className="mt-8">
@@ -270,7 +270,7 @@ function ActionPlanPage() {
 
 function Introduction({ accent, onStart }: { accent: string; onStart: () => void }) {
   return (
-    <section className="rounded-3xl p-8 md:p-12" style={{ backgroundColor: accent }}>
+    <section className="rounded-2xl p-6 md:p-9" style={{ backgroundColor: accent }}>
       <h1 className="text-center text-[30px] font-extrabold tracking-tight text-[#f4a261]">Build your action plan</h1>
 
       <div className="mx-auto mt-6 max-w-[760px] text-[13px] leading-relaxed text-white">
@@ -329,7 +329,7 @@ function IndicatorsAndSteps({
 }) {
 
   return (
-    <section className="rounded-3xl bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-8">
+    <section>
       <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Area of assessment</p>
       <p className="mt-1 text-[15px] font-extrabold" style={{ color: accent }}>
         {areaName}
@@ -467,7 +467,7 @@ function ActionSteps({
 
   if (steps.length === 0) {
     return (
-      <section className="rounded-3xl bg-white p-8 text-center shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5">
+      <section className="rounded-2xl p-8 text-center" style={{ backgroundColor: soft }}>
         <p className="text-[14px] font-bold text-[#111827]">No action steps yet</p>
         <p className="mx-auto mt-2 max-w-[420px] text-[13px] text-[#6b7280]">
           Select up to 3 recommended action steps per indicator on your results page and they will be imported here.
@@ -485,7 +485,7 @@ function ActionSteps({
   }
 
   return (
-    <section className="rounded-3xl bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-8">
+    <section>
       <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Area of assessment</p>
       <p className="mt-1 text-[15px] font-extrabold" style={{ color: accent }}>{areaName}</p>
 
