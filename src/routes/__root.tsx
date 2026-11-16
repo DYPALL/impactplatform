@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { markFailedImage } from "@/lib/failed-image";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { Header } from "@/components/Header";
 import { CompleteCouncilProfile } from "@/components/CompleteCouncilProfile";
@@ -135,14 +136,13 @@ function RootComponent() {
   // photo that fails to load keeps its box as a neutral block instead of a
   // broken image icon.
   useEffect(() => {
-    const flag = (img: HTMLImageElement) => { img.dataset.imgFailed = "1"; };
     const onError = (e: Event) => {
       const el = e.target as HTMLElement | null;
-      if (el && el.tagName === "IMG") flag(el as HTMLImageElement);
+      if (el && el.tagName === "IMG") markFailedImage(el as HTMLImageElement);
     };
     document.addEventListener("error", onError, true);
     document.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
-      if (img.complete && img.naturalWidth === 0) flag(img);
+      if (img.complete && img.naturalWidth === 0) markFailedImage(img);
     });
     return () => document.removeEventListener("error", onError, true);
   }, []);
