@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
+  CheckCircle2,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { FlowingPolygons } from "@/components/FlowingPolygons";
 import { ActionPlanPrintSheet } from "@/components/ActionPlanPrintSheet";
 import { downloadActionPlanPdf } from "@/lib/action-plan-pdf";
 import { AREAS } from "@/components/questionnaire/content";
@@ -70,7 +72,7 @@ function ActionPlanPage() {
   const skipSave = useRef(true);
 
   const theme = themeForArea(areaKey);
-  const area = AREAS[areaKey] ?? AREAS["representativeness"]!;
+  const area = AREAS[areaKey] ?? AREAS["representativeness"];
 
   useEffect(() => {
     let active = true;
@@ -150,34 +152,31 @@ function ActionPlanPage() {
   const tabIndex = TABS.findIndex((t) => t.key === tab);
 
   const Tabs = () => (
-    <div className="flex flex-wrap items-center justify-center gap-2">
-      {TABS.map((t) => {
+    <nav aria-label="Action plan stages" className="plan-stage-nav">
+      {TABS.map((t, index) => {
         const Icon = t.icon;
         const on = t.key === tab;
         return (
-          <button
+          <Button
             key={t.key}
-            type="button"
+            variant="ghost"
             onClick={() => setTab(t.key)}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold transition"
-            style={
-              on
-                ? { backgroundColor: theme.accent, color: "#fff" }
-                : { backgroundColor: "#fff", color: theme.accent, border: `1px solid ${theme.border}` }
-            }
+            aria-current={on ? "step" : undefined}
+            className={`plan-stage ${on ? "plan-stage--active" : ""}`}
           >
-            <Icon size={14} /> {t.label}
-          </button>
+            <span className="plan-stage-icon"><Icon size={18} /></span>
+            <span className="min-w-0 text-left"><span className="plan-stage-number">Step 0{index + 1}</span><span className="block">{t.label}</span></span>
+          </Button>
         );
       })}
-    </div>
+    </nav>
   );
 
   const BackLink = () => (
     <Link
       to="/results/$id"
       params={{ id: assessmentId }}
-      className="inline-flex items-center gap-2 text-[13px] font-bold text-[#374151] transition hover:opacity-70"
+      className="inline-flex items-center gap-2 text-[13px] font-bold text-foreground transition hover:opacity-70"
     >
       <ArrowLeft size={16} /> Back to Results
     </Link>
@@ -185,19 +184,24 @@ function ActionPlanPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[#FAFAFB] pb-24 screen-only">
+      <div className="plan-workspace min-h-screen bg-muted/40 pb-24 screen-only">
       <div className="mx-auto max-w-[1080px] px-4 pt-6 md:px-8">
         <div className="flex items-center justify-between gap-3">
           <BackLink />
-          <span className="text-[11px] font-semibold text-[#9ca3af]">
-            {saving ? "Saving…" : loaded ? "All changes saved" : "Loading…"}
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+            <CheckCircle2 size={14} className="text-secondary" /> {saving ? "Saving…" : loaded ? "All changes saved" : "Loading…"}
           </span>
         </div>
 
-        <div className="mt-6 rounded-3xl bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.05)] ring-1 ring-black/5 md:p-6">
+        <div className="plan-shell mt-6 overflow-hidden rounded-3xl border border-border bg-card">
+          <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-5 md:px-8">
+            <div><p className="text-xs font-semibold text-muted-foreground">{assessmentName}</p><h1 className="mt-1 text-2xl font-bold tracking-normal text-primary">Build your action plan</h1></div>
+            <span className="rounded-full bg-secondary/10 px-4 py-2 text-xs font-semibold text-secondary">{area.name}</span>
+          </header>
+          <div className="p-4 md:p-8">
           <Tabs />
 
-          <div className="mt-5">
+          <div className="mt-7">
             {tab === "intro" && <Introduction accent={theme.accent} onStart={() => setTab("indicators")} />}
 
             {tab === "indicators" && (
@@ -229,29 +233,18 @@ function ActionPlanPage() {
             )}
           </div>
 
-          <div className="mt-6 border-t border-black/5 pt-5">
+          <footer className="mt-8 border-t border-border pt-5">
             <Tabs />
-          </div>
-
-          <div className="mt-5 flex items-center justify-between">
-            <button
-              type="button"
-              disabled={tabIndex === 0}
-              onClick={() => setTab(TABS[Math.max(0, tabIndex - 1)]!.key)}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E7EB] bg-white px-4 py-2 text-[12px] font-semibold text-[#374151] transition hover:bg-[#F6F6F8] disabled:opacity-40"
-            >
-              <ChevronLeft size={14} /> Previous
-            </button>
-            <span className="text-[12px] text-[#6b7280]">{tabIndex + 1} / {TABS.length}</span>
-            <button
-              type="button"
-              disabled={tabIndex === TABS.length - 1}
-              onClick={() => setTab(TABS[Math.min(TABS.length - 1, tabIndex + 1)]!.key)}
-              className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-[12px] font-bold text-white transition hover:opacity-90 disabled:opacity-40"
-              style={{ backgroundColor: theme.accent }}
-            >
-              Next <ChevronRight size={14} />
-            </button>
+            <div className="mt-5 flex items-center justify-between gap-3">
+              <Button variant="outline" disabled={tabIndex === 0} onClick={() => { const previous = TABS[tabIndex - 1]; if (previous) setTab(previous.key); }} className="rounded-full px-5 text-primary">
+                <ChevronLeft size={16} /> Previous
+              </Button>
+              <span className="text-xs font-medium text-muted-foreground">{tabIndex + 1} / {TABS.length}</span>
+              <Button disabled={tabIndex === TABS.length - 1} onClick={() => { const next = TABS[tabIndex + 1]; if (next) setTab(next.key); }} className="rounded-full px-6">
+                Next <ChevronRight size={16} />
+              </Button>
+            </div>
+          </footer>
           </div>
         </div>
 
@@ -270,10 +263,12 @@ function ActionPlanPage() {
 
 function Introduction({ accent, onStart }: { accent: string; onStart: () => void }) {
   return (
-    <section className="rounded-2xl p-6 md:p-9" style={{ backgroundColor: accent }}>
-      <h1 className="text-center text-[30px] font-extrabold tracking-tight text-[#f4a261]">Build your action plan</h1>
+    <section className="relative overflow-hidden rounded-2xl bg-primary p-6 text-primary-foreground md:p-9">
+      <FlowingPolygons variant="compact" />
+      <div className="relative z-10">
+      <span className="inline-flex items-center gap-2 text-sm font-semibold text-accent"><Lightbulb size={18} /> From reflection to action</span>
 
-      <div className="mx-auto mt-6 max-w-[760px] text-[13px] leading-relaxed text-white">
+      <div className="mt-5 max-w-[760px] text-sm leading-relaxed text-primary-foreground">
         <p>
           This is your <strong>ACTION PLAN</strong>, designed to help you move from assessment to implementation as you
           begin to strengthen youth engagement in your Local Youth Council.
@@ -284,12 +279,12 @@ function Introduction({ accent, onStart }: { accent: string; onStart: () => void
         </p>
       </div>
 
-      <div className="mx-auto mt-6 max-w-[760px]">
+      <div className="mt-6 max-w-[760px]">
         <p className="text-[13px] leading-relaxed text-primary-foreground">Work through the guided steps below. Your answers are saved automatically as you type. At the end, export your prefilled plan with one action step per page, or save and continue later.</p>
         <Button variant="secondary" onClick={onStart} className="mt-5 rounded-full"><PenLine size={14} /> Start filling in online</Button>
       </div>
 
-      <div className="mx-auto mt-8 max-w-[760px] space-y-4 text-[13px] leading-relaxed text-white">
+      <div className="mt-7 max-w-[760px] space-y-4 text-sm leading-relaxed text-primary-foreground/85">
         <p>
           The plan supports you in organising <strong>what</strong> needs to be done, <strong>who</strong>{" "}
           will be involved, <strong>when</strong> each step should happen, what <strong>resources</strong> you need, and
@@ -301,10 +296,11 @@ function Introduction({ accent, onStart }: { accent: string; onStart: () => void
         </p>
       </div>
 
-      <div className="mt-8 flex justify-center">
-        <span className="rounded-xl bg-[#f4a261] px-6 py-3 text-[13px] font-extrabold text-[#1f2937]">
+      <div className="mt-7 border-t border-primary-foreground/20 pt-5">
+        <span className="text-xs font-bold text-accent">
           GOOD LUCK WITH THE IMPLEMENTATION!
         </span>
+      </div>
       </div>
     </section>
   );
@@ -330,24 +326,24 @@ function IndicatorsAndSteps({
 
   return (
     <section>
-      <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Area of assessment</p>
-      <p className="mt-1 text-[15px] font-extrabold" style={{ color: accent }}>
+      <p className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">Area of assessment</p>
+      <p className="mt-1 text-[15px] font-extrabold" style={{ color: "var(--primary)" }}>
         {areaName}
       </p>
 
-      <div className="mt-5 rounded-2xl p-5 md:p-6" style={{ backgroundColor: soft, border: `1px solid ${border}` }}>
-        <p className="flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-wide" style={{ color: accent }}>
-          <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f4a261] text-[#1f2937]">
+      <div className="mt-5 border-t border-border pt-6">
+        <p className="flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-wide" style={{ color: "var(--primary)" }}>
+          <span className="grid h-7 w-7 place-items-center rounded-full bg-accent text-accent-foreground">
             <ListChecks size={15} />
           </span>
           Select action steps
         </p>
-        <p className="mt-2 text-[12px] leading-relaxed text-[#6b7280]">
+        <p className="mt-2 text-[12px] leading-relaxed text-muted-foreground">
           These are the indicators you chose to work on, with the action steps you pre-selected in your results. Tick
           the steps you want in your plan. You can change this anytime.
         </p>
         {grouped.length === 0 ? (
-          <p className="mt-4 text-[13px] text-[#6b7280]">
+          <p className="mt-4 text-[13px] text-muted-foreground">
             You have not selected any action steps yet. Go back to your results and tick up to 3 recommended steps per
             indicator. They will appear here automatically.
           </p>
@@ -357,12 +353,12 @@ function IndicatorsAndSteps({
               const code = indicatorCode(indicator);
               const name = indicatorName(indicator);
               return (
-                <div key={indicator} className="rounded-xl bg-white p-4 ring-1 ring-black/5">
+                <div key={indicator} className="rounded-lg border border-border bg-card p-5">
                   <p className="text-[13px] leading-snug">
-                    <span className="font-extrabold" style={{ color: accent }}>
+                    <span className="font-extrabold" style={{ color: "var(--primary)" }}>
                       Indicator {code}
                     </span>
-                    {name !== code && <span className="font-semibold text-[#111827]"> {name}</span>}
+                    {name !== code && <span className="font-semibold text-foreground"> {name}</span>}
                   </p>
                   <ul className="mt-3 space-y-2">
                     {list.map((s) => (
@@ -371,15 +367,15 @@ function IndicatorsAndSteps({
                           type="checkbox"
                           checked={s.included}
                           onChange={(e) => update(s.id, { included: e.target.checked })}
-                          style={{ accentColor: accent }}
+                          style={{ accentColor: "var(--primary)" }}
                           className="mt-[1px] h-[15px] w-[15px] shrink-0 cursor-pointer"
                           aria-label={`Include "${s.action}" in my plan`}
                         />
                         <span
                           className={
                             s.included
-                              ? "font-semibold text-[#111827]"
-                              : "text-[#9ca3af] line-through decoration-[#d1d5db]"
+                              ? "font-semibold text-foreground"
+                              : "text-muted-foreground line-through decoration-border"
                           }
                         >
                           {s.action}
@@ -413,14 +409,14 @@ function Field({
   count?: string;
 }) {
   return (
-    <div className="rounded-2xl bg-[#F6F6F8] p-4 md:p-5">
-      <p className="text-[12px] font-extrabold uppercase tracking-wide" style={{ color: accent }}>
+    <div className="border-t border-border pt-5">
+      <p className="text-[12px] font-extrabold uppercase tracking-wide" style={{ color: "var(--primary)" }}>
         {label}
       </p>
-      {hint && <p className="mt-1 text-[12px] font-semibold text-[#374151]">{hint}</p>}
+      {hint && <p className="mt-1 text-[12px] font-semibold text-foreground">{hint}</p>}
       <div className="mt-2">{children}</div>
       {count && (
-        <p className="mt-1 text-right text-[11px] font-semibold" style={{ color: accent }}>
+        <p className="mt-1 text-right text-[11px] font-semibold" style={{ color: "var(--primary)" }}>
           {count}
         </p>
       )}
@@ -463,20 +459,20 @@ function ActionSteps({
   const current = indicatorSteps.find((s) => s.id === stepId) ?? indicatorSteps[0];
 
   const inputCls =
-    "w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-[13px] text-[#111827] placeholder:italic placeholder:text-[#9ca3af]";
+    "w-full rounded-lg border border-input bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/25 focus:border-primary transition-colors";
 
   if (steps.length === 0) {
     return (
-      <section className="rounded-2xl p-8 text-center" style={{ backgroundColor: soft }}>
-        <p className="text-[14px] font-bold text-[#111827]">No action steps yet</p>
-        <p className="mx-auto mt-2 max-w-[420px] text-[13px] text-[#6b7280]">
+      <section className="rounded-2xl p-8 text-center" style={{ backgroundColor: "var(--plan-soft)" }}>
+        <p className="text-[14px] font-bold text-foreground">No action steps yet</p>
+        <p className="mx-auto mt-2 max-w-[420px] text-[13px] text-muted-foreground">
           Select up to 3 recommended action steps per indicator on your results page and they will be imported here.
         </p>
         <Link
           to="/results/$id"
           params={{ id: assessmentId }}
-          className="mt-5 inline-flex rounded-full px-5 py-2.5 text-[12px] font-bold text-white"
-          style={{ backgroundColor: accent }}
+          className="mt-5 inline-flex rounded-full px-5 py-2.5 text-[12px] font-bold text-primary-foreground"
+          style={{ backgroundColor: "var(--primary)" }}
         >
           Go to my results
         </Link>
@@ -486,16 +482,16 @@ function ActionSteps({
 
   return (
     <section>
-      <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Area of assessment</p>
-      <p className="mt-1 text-[15px] font-extrabold" style={{ color: accent }}>{areaName}</p>
+      <p className="text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">Area of assessment</p>
+      <p className="mt-1 text-[15px] font-extrabold" style={{ color: "var(--primary)" }}>{areaName}</p>
 
       {/* Indicator selector bar */}
-      <p className="mt-5 text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Indicator</p>
+      <p className="mt-5 text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">Indicator</p>
       <div className="mt-2 flex flex-wrap gap-2">
         {grouped.map(([key]) => {
           const on = key === (activeIndicator?.[0] ?? "");
           return (
-            <button
+            <Button
               key={key}
               type="button"
               onClick={() => {
@@ -505,41 +501,41 @@ function ActionSteps({
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold transition"
               style={
                 on
-                  ? { backgroundColor: accent, color: "#fff" }
-                  : { backgroundColor: soft, color: accent, border: `1px solid ${border}` }
+                  ? { backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }
+                  : { backgroundColor: "var(--plan-soft)", color: "var(--primary)", border: "1px solid var(--border)" }
               }
             >
               Indicator {key}
-            </button>
+            </Button>
           );
         })}
       </div>
 
       {/* Step selector bar */}
-      <p className="mt-5 text-[11px] font-extrabold uppercase tracking-wider text-[#6b7280]">Action step</p>
+      <p className="mt-5 text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground">Action step</p>
       <div className="mt-2 flex flex-wrap gap-2">
         {indicatorSteps.map((s, i) => {
           const on = s.id === current?.id;
           return (
-            <button
+            <Button
               key={s.id}
               type="button"
               onClick={() => setStepId(s.id)}
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold transition"
               style={
                 on
-                  ? { backgroundColor: accent, color: "#fff" }
-                  : { backgroundColor: soft, color: accent, border: `1px solid ${border}`, opacity: s.included ? 1 : 0.5 }
+                  ? { backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }
+                  : { backgroundColor: "var(--plan-soft)", color: "var(--primary)", border: "1px solid var(--border)", opacity: s.included ? 1 : 0.5 }
               }
             >
               <span
                 className="grid h-4 w-4 place-items-center rounded-full border"
-                style={{ borderColor: on ? "#fff" : accent, backgroundColor: s.included ? (on ? "#fff" : accent) : "transparent" }}
+                style={{ borderColor: on ? "var(--primary-foreground)" : "var(--primary)", backgroundColor: s.included ? (on ? "var(--primary-foreground)" : "var(--primary)") : "transparent" }}
               >
-                {s.included && <Check size={10} color={on ? accent : "#fff"} />}
+                {s.included && <Check size={10} color={on ? "var(--primary)" : "var(--primary-foreground)"} />}
               </span>
               Action step {i + 1}
-            </button>
+            </Button>
           );
         })}
       </div>
@@ -547,19 +543,19 @@ function ActionSteps({
       {current && (
         <>
         <div className="mt-6 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4" style={{ backgroundColor: soft }}>
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4" style={{ backgroundColor: "var(--plan-soft)" }}>
             <div className="min-w-0">
-              <p className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: accent }}>
+              <p className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: "var(--primary)" }}>
                 Indicator {current.indicator}
               </p>
-              <p className="mt-1 text-[13px] font-bold text-[#111827]">{current.action}</p>
+              <p className="mt-1 text-[13px] font-bold text-foreground">{current.action}</p>
             </div>
-            <label className="flex shrink-0 cursor-pointer items-center gap-2 text-[12px] font-semibold text-[#374151]">
+            <label className="flex shrink-0 cursor-pointer items-center gap-2 text-[12px] font-semibold text-foreground">
               <input
                 type="checkbox"
                 checked={current.included}
                 onChange={(e) => update(current.id, { included: e.target.checked })}
-                style={{ accentColor: accent }}
+                style={{ accentColor: "var(--primary)" }}
                 className="h-[15px] w-[15px]"
               />
               Include in my plan
@@ -590,7 +586,7 @@ function ActionSteps({
             <Field label="When?" accent={accent}>
               <div className="space-y-3">
                 <div>
-                  <p className="mb-1 text-[12px] font-semibold text-[#374151]">Date to begin</p>
+                  <p className="mb-1 text-[12px] font-semibold text-foreground">Date to begin</p>
                   <input
                     type="date"
                     value={current.start}
@@ -599,7 +595,7 @@ function ActionSteps({
                   />
                 </div>
                 <div>
-                  <p className="mb-1 text-[12px] font-semibold text-[#374151]">Due date</p>
+                  <p className="mb-1 text-[12px] font-semibold text-foreground">Due date</p>
                   <input
                     type="date"
                     value={current.due}
@@ -668,30 +664,30 @@ function ActionSteps({
           </div>
         </div>
 
-        <div className="mt-6 rounded-2xl bg-[#F6F6F8] p-5 text-center ring-1 ring-black/5">
-          <p className="text-[12px] font-semibold text-[#374151]">
+        <div className="mt-8 border-t border-border pt-6 text-center">
+          <p className="text-[12px] font-semibold text-foreground">
             Choose what to do next. Export your plan to download it as a PDF you can print or share with your team, or
             save your progress and come back to it later.
           </p>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-            <button
+            <Button
               type="button"
               onClick={onExport}
               disabled={!canExport}
-              className="inline-flex items-center gap-1.5 rounded-full px-6 py-2.5 text-[12px] font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
-              style={{ backgroundColor: accent }}
+              className="inline-flex items-center gap-1.5 rounded-full px-6 py-2.5 text-[12px] font-bold text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+              style={{ backgroundColor: "var(--primary)" }}
             >
               <Printer size={14} /> Export your plan
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={onSaveLater}
               disabled={saving}
-              className="inline-flex items-center gap-1.5 rounded-full border bg-white px-6 py-2.5 text-[12px] font-bold transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-50"
-              style={{ borderColor: accent, color: accent }}
+              className="inline-flex items-center gap-1.5 rounded-full border bg-card px-6 py-2.5 text-[12px] font-bold transition hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+              style={{ borderColor: accent, color: "var(--primary)" }}
             >
               <Save size={14} /> {saving ? "Saving…" : "Save and continue later"}
-            </button>
+            </Button>
           </div>
         </div>
         </>

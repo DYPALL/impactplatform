@@ -326,6 +326,36 @@ img[data-img-failed="1"] {
 .steps-pink { background: var(--steps-pink); }
 .steps-plum { background: var(--steps-plum); }
 
+:root {
+  --plan-soft: color-mix(in oklab, var(--primary) 7%, var(--card));
+  --plan-shadow: 0 12px 40px color-mix(in oklab, var(--impact-purple) 6%, transparent);
+}
+.plan-workspace { letter-spacing: 0; }
+.plan-shell { box-shadow: var(--plan-shadow); }
+.plan-stage-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.plan-stage {
+  height: 72px;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  white-space: normal;
+  font-size: 13px;
+  font-weight: 600;
+}
+.plan-stage:hover { background: var(--plan-soft); color: var(--primary); }
+.plan-stage--active, .plan-stage--active:hover { background: var(--primary); color: var(--primary-foreground); }
+.plan-stage-icon { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: var(--card); color: var(--primary); }
+.plan-stage-number { display: block; margin-bottom: 2px; font-size: 10px; font-weight: 500; opacity: .75; }
+@media (max-width: 600px) {
+  .plan-stage { height: 86px; flex-direction: column; gap: 5px; padding: 8px 4px; font-size: 11px; }
+  .plan-stage span.text-left { text-align: center; }
+  .plan-stage-icon { width: 28px; height: 28px; }
+  .plan-stage-number { display: none; }
+}
+
 /* One shared heading scale for every home page section. */
 @utility section-title {
   font-family: var(--font-heading);
