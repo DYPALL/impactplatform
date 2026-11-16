@@ -1,5 +1,6 @@
 import type { ActionPlanStep } from "@/lib/action-plan";
 import { actionPlanExportPages } from "@/lib/action-plan-export";
+import { actionPlanFieldIconSvg } from "@/lib/action-plan-field-icons";
 import impactLogo from "@/assets/logo_color_impact.png.asset.json";
 
 const PURPLE: [number, number, number] = [80, 33, 129];
@@ -37,6 +38,14 @@ export async function downloadActionPlanPdf(
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const logo = await loadPng(impactLogo.url).catch(() => null);
   const pages = actionPlanExportPages(steps);
+  const fieldIcons = new Map<string, string>();
+  for (const [label] of pages[0]?.fields ?? []) {
+    const svg = actionPlanFieldIconSvg(label, accentHex);
+    if (svg) {
+      const image = await loadPng(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`);
+      fieldIcons.set(label, image.data);
+    }
+  }
   const W = 210, M = 16, inner = W - M * 2;
 
   // Colourful cover: area colour, brand triangles, logo, area and assessment name.
@@ -101,7 +110,9 @@ export async function downloadActionPlanPdf(
       doc.setDrawColor(...(isWhat ? PURPLE : BORDER)).setLineWidth(isWhat ? 0.6 : 0.3);
       doc.setFillColor(...HIGHLIGHT).roundedRect(x, by, colW, boxH, 1.5, 1.5, isWhat ? "FD" : "S");
       doc.setDrawColor(...BORDER).setLineWidth(0.3);
-      doc.setTextColor(...PURPLE).setFont("helvetica", "bold").setFontSize(9).text(label, x + 4, by + 6);
+      const icon = fieldIcons.get(label);
+      if (icon) doc.addImage(icon, "PNG", x + 4, by + 2.5, 4.5, 4.5);
+      doc.setTextColor(...PURPLE).setFont("helvetica", "bold").setFontSize(9).text(label, x + (icon ? 10 : 4), by + 6);
       doc.setTextColor(...INK).setFont("helvetica", "normal").setFontSize(9.5);
       const lines = doc.splitTextToSize(String(value ?? ""), colW - 8).slice(0, Math.floor((boxH - 12) / 4.4));
       doc.text(lines, x + 4, by + 12);

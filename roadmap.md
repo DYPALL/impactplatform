@@ -1,4 +1,5 @@
 # Platform updates
+- [x] Add matching icons to all eight online Action Plan writing fields and exported PDF fields; verified the saved plan, mobile width and actual three-page download, with export tests passing.
 - [x] Turn Home's "How to start assessing?" cards one at a time on a loop with the next card peeking at the edge, plus a "Step X of 5" label; verified auto-advance, wrap-around, hover/focus/off-screen/reduced-motion pause, and one card per arrow click at 390/834/1024/1280 px.
 - [x] Simplify Action Plan introduction to one online start button; verified the guided online entry and absence of the blank-template choice.
 - [x] Move the blank printable template to a public Resource Hub resource; downloaded the existing seven-page fillable PDF while signed out.

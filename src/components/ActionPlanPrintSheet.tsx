@@ -1,5 +1,6 @@
 import { actionPlanExportPages } from "@/lib/action-plan-export";
 import type { ActionPlanStep } from "@/lib/action-plan";
+import { ActionPlanFieldIcon } from "@/lib/action-plan-field-icons";
 import impactLogo from "@/assets/logo_color_impact.png.asset.json";
 
 export function ActionPlanPrintSheet({ areaName, steps }: { areaName: string; steps: ActionPlanStep[] }) {
@@ -14,7 +15,7 @@ export function ActionPlanPrintSheet({ areaName, steps }: { areaName: string; st
       </div>
       <div className="plan-print-step-title"><span className="plan-print-num">{page.number}</span><div><strong>Action step</strong><p>{page.action}</p></div></div>
       <div className="plan-print-grid">
-        {page.fields.map(([label, value]) => <div key={label} className="plan-print-field"><p>{label}</p><p className="plan-print-val">{value}</p><div className="plan-print-writing" aria-hidden="true" /></div>)}
+        {page.fields.map(([label, value]) => <div key={label} className="plan-print-field"><p className="flex items-center gap-2"><ActionPlanFieldIcon label={label} className="shrink-0" />{label}</p><p className="plan-print-val">{value}</p><div className="plan-print-writing" aria-hidden="true" /></div>)}
       </div>
     </section>)}
   </div>;

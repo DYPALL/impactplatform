@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ActionPlanPrintSheet } from "@/components/ActionPlanPrintSheet";
 import { downloadActionPlanPdf } from "@/lib/action-plan-pdf";
+import { ActionPlanFieldIcon } from "@/lib/action-plan-field-icons";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
 import {
@@ -406,7 +407,8 @@ function Field({
 }) {
   return (
     <div className="border-t border-border pt-5">
-      <p className="text-[12px] font-extrabold uppercase tracking-wide" style={{ color: "var(--primary)" }}>
+      <p className="flex items-center gap-2 text-[12px] font-extrabold uppercase tracking-wide" style={{ color: "var(--primary)" }}>
+        <ActionPlanFieldIcon label={label} className="shrink-0" />
         {label}
       </p>
       {hint && <p className="mt-1 text-[12px] font-semibold text-foreground">{hint}</p>}

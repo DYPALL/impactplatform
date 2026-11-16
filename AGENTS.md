@@ -29,3 +29,4 @@
 - Resource cards show only a three-line clamped summary with no expand control; the full description lives on the resource detail page, whose cover uses the mockup's larger panel-free variant.
 - Key page entrance transitions and shared navigation visibility to committed route matches, not the pending URL, and keep content visible throughout; this prevents the outgoing page flashing or shifting before its replacement is ready.
 - Action Plan stage navigation and writing fields stay inside one workspace shell and use shared Button controls and semantic style tokens, so the guided editor remains visually consistent with the platform.
+- Action Plan field icons share browser-safe SVG artwork across the editor, print sheet and PDF rasterization, so exports show the same field cues as the online plan.
