@@ -10,7 +10,7 @@ import bataljongLogo from "@/assets/Bataljong-logo.png.asset.json";
 import fundacioLogo from "@/assets/Fundacio-logo.png.asset.json";
 import nuvaLogo from "@/assets/Nuva-logo.png.asset.json";
 import { Footer } from "@/components/Footer";
-import { Polygon } from "@/components/Polygon";
+import { FlowingPolygons } from "@/components/FlowingPolygons";
 import { HowToGetStartedModal } from "@/components/HowToGetStartedModal";
 
 export const Route = createFileRoute("/")({
@@ -46,28 +46,8 @@ function Hero() {
       {/* Animated gradient wash */}
       <div className="hero-gradient" aria-hidden="true" />
 
-      {/* Triangles drift across the whole hero in mixed directions, tumbling as they go.
-          The strong pink/orange ones stay in the bands above the headline and below the
-          buttons; the faint white ones are pale enough to pass behind the copy. Hidden
-          below the desktop breakpoint, where the column is narrow. */}
-      <Polygon className="hidden lg:block" direction="right" spin={1} size={92} rotate={-12} depth={0.5} color="rgba(255,255,255,0.10)" floatDuration={30} floatDelay={-3} style={{ top: "3%" }} />
-      <Polygon className="hidden lg:block" direction="right" spin={-1} size={64} rotate={-28} depth={1.3} color="rgba(233,75,138,0.40)" floatDuration={34} floatDelay={-27} style={{ top: "6%" }} />
-      <Polygon className="hidden lg:block" direction="right" spin={1.5} size={48} rotate={-10} depth={1.6} color="rgba(233,75,138,0.45)" floatDuration={28} floatDelay={-9} style={{ top: "11%" }} />
-      <Polygon className="hidden lg:block" direction="left" spin={-1} size={44} rotate={38} depth={1.8} color="rgba(244,162,97,0.45)" floatDuration={24} floatDelay={-13} style={{ top: "14%" }} />
-      <Polygon className="hidden lg:block" direction="left" spin={1} size={82} rotate={-48} depth={0.7} color="rgba(244,162,97,0.35)" floatDuration={32} floatDelay={-8} style={{ top: "17%" }} />
-      <Polygon className="hidden lg:block" direction="right" spin={-1} size={72} rotate={55} depth={1.0} color="rgba(255,255,255,0.12)" floatDuration={32} floatDelay={-14} style={{ top: "30%" }} />
-      <Polygon className="hidden lg:block" direction="left" spin={1} size={58} rotate={14} depth={1.2} color="rgba(255,255,255,0.14)" floatDuration={26} floatDelay={-18} style={{ top: "44%" }} />
-      <Polygon className="hidden lg:block" direction="right" spin={-1.5} size={42} rotate={-60} depth={1.7} color="rgba(255,255,255,0.15)" floatDuration={22} floatDelay={-4} style={{ top: "58%" }} />
-      <Polygon className="hidden lg:block" direction="left" spin={1} size={60} rotate={66} depth={1.1} color="rgba(255,255,255,0.11)" floatDuration={30} floatDelay={-25} style={{ top: "68%" }} />
-      <Polygon className="hidden lg:block" direction="up" spin={1} size={56} rotate={20} depth={1.1} color="rgba(255,255,255,0.11)" floatDuration={28} floatDelay={-6} style={{ left: "6%" }} />
-      <Polygon className="hidden lg:block" direction="down" spin={-1} size={50} rotate={-30} depth={1.4} color="rgba(255,255,255,0.13)" floatDuration={26} floatDelay={-12} style={{ left: "18%" }} />
-      <Polygon className="hidden lg:block" direction="up" spin={1.5} size={44} rotate={52} depth={1.6} color="rgba(255,255,255,0.12)" floatDuration={30} floatDelay={-20} style={{ left: "46%" }} />
-      <Polygon className="hidden lg:block" direction="down" spin={-1} size={66} rotate={-8} depth={0.9} color="rgba(255,255,255,0.10)" floatDuration={34} floatDelay={-9} style={{ left: "74%" }} />
-      <Polygon className="hidden lg:block" direction="up" spin={1} size={38} rotate={72} depth={2.0} color="rgba(255,255,255,0.15)" floatDuration={22} floatDelay={-16} style={{ left: "88%" }} />
-      <Polygon className="hidden lg:block" direction="right" spin={-1} size={50} rotate={-18} depth={1.5} color="rgba(233,75,138,0.40)" floatDuration={24} floatDelay={-8} style={{ top: "81%" }} />
-      <Polygon className="hidden lg:block" direction="left" spin={1} size={58} rotate={24} depth={1.2} color="rgba(233,75,138,0.50)" floatDuration={26} floatDelay={-4} style={{ top: "85%" }} />
-      <Polygon className="hidden lg:block" direction="right" spin={1.5} size={68} rotate={42} depth={0.9} color="rgba(244,162,97,0.40)" floatDuration={30} floatDelay={-18} style={{ top: "89%" }} />
-      <Polygon className="hidden lg:block" direction="left" spin={-1} size={40} rotate={-44} depth={1.9} color="rgba(244,162,97,0.50)" floatDuration={20} floatDelay={-15} style={{ top: "93%" }} />
+      {/* Triangles travel and tumble across the whole hero. */}
+      <FlowingPolygons variant="hero" />
 
 
 
@@ -107,13 +87,7 @@ function CtaBanner() {
       className="relative w-full overflow-hidden"
       style={{ backgroundColor: "var(--impact-green)" }}
     >
-      <Polygon size={146} rotate={-18} color="rgba(255,255,255,0.14)" style={{ top: 0, left: -68 }} />
-      <Polygon size={92} rotate={53} color="rgba(244,162,97,0.35)" style={{ top: 63, left: 156 }} />
-      <Polygon size={132} rotate={-40} color="rgba(255,255,255,0.10)" style={{ top: -55, left: "20%" }} />
-      <Polygon size={101} rotate={58} color="rgba(80,33,129,0.28)" style={{ top: 60, right: "22%" }} />
-      <Polygon size={95} rotate={22} color="rgba(255,255,255,0.14)" style={{ top: 148, right: 60 }} />
-      <Polygon size={47} rotate={-10} color="rgba(244,162,97,0.5)" style={{ top: 161, left: 17 }} />
-      <Polygon size={62} rotate={-30} color="rgba(255,255,255,0.15)" style={{ top: 176, left: "34%" }} />
+      <FlowingPolygons variant="cta" />
 
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-12 px-6 py-20 lg:flex-row lg:gap-16 lg:py-[72px] lg:pl-[120px] lg:pr-0">
         <div className="relative z-10 max-w-[560px]">

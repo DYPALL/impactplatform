@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Footer } from "@/components/Footer";
-import { Polygon } from "@/components/Polygon";
+import { FlowingPolygons } from "@/components/FlowingPolygons";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicationMockup } from "@/components/PublicationMockup";
 import { Button } from "@/components/ui/button";
@@ -132,12 +132,7 @@ function ResourceDetailPage() {
       <main>
         {/* Hero */}
         <section className="relative w-full overflow-hidden bg-[color:var(--impact-purple)]">
-          <Polygon size={77} rotate={-22} color="rgba(244,162,97,0.6)" style={{ top: 16, right: 220 }} />
-          <Polygon size={46} rotate={-22} color="rgba(244,162,97,0.75)" style={{ top: 24, right: 120 }} />
-          <Polygon size={35} rotate={-18} color="rgba(233,75,138,0.6)" style={{ top: 34, left: "62%" }} />
-          <Polygon size={54} rotate={-8} color="rgba(255,255,255,0.35)" style={{ top: 22, left: "47%" }} />
-          <Polygon size={23} rotate={10} color="rgba(255,255,255,0.6)" style={{ top: 52, left: "66%" }} />
-          <Polygon size={28} rotate={12} color="rgba(33,156,158,0.6)" style={{ top: 42, right: 56 }} />
+          <FlowingPolygons variant="compact" />
 
           <div className="relative z-10 mx-auto max-w-[1440px] px-6 py-10 lg:px-[120px]">
             <Link

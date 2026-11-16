@@ -6,7 +6,7 @@ import { clearResultsReturn, matchesResultsReturn, pendingResultsReturn, remembe
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
-import { Polygon } from "@/components/Polygon";
+import { FlowingPolygons } from "@/components/FlowingPolygons";
 import logoAsset from "@/assets/logo_color_impact.png.asset.json";
 import cofundLogo from "@/assets/cofund-eu-white.png.asset.json";
 
@@ -194,19 +194,7 @@ function AuthPage() {
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* Left purple panel */}
         <aside className="relative overflow-hidden bg-[color:var(--impact-purple)] px-8 py-14 text-white lg:w-[45%] lg:px-[80px] lg:py-16 xl:px-[120px]">
-          {/* Decorative triangle cluster — spread across the whole panel */}
-          <Polygon size={120} rotate={-18} color="rgba(255,255,255,0.08)" style={{ top: -18, right: -12 }} />
-          <Polygon size={70} rotate={35} color="rgba(244,162,97,0.55)" style={{ top: 60, right: 90 }} />
-          <Polygon size={40} rotate={-40} color="rgba(33,156,158,0.75)" style={{ top: 40, right: 200 }} />
-
-          <Polygon size={90} rotate={210} color="rgba(233,75,138,0.35)" style={{ top: "38%", left: -18 }} />
-          <Polygon size={54} rotate={15} color="rgba(255,255,255,0.18)" style={{ top: "46%", left: 70 }} />
-
-          <Polygon size={64} rotate={165} color="rgba(244,162,97,0.35)" style={{ top: "58%", right: 40 }} />
-          <Polygon size={32} rotate={-25} color="rgba(255,255,255,0.28)" style={{ top: "62%", right: 130 }} />
-
-          <Polygon size={140} rotate={200} color="rgba(0,0,0,0.18)" style={{ bottom: -26, right: -22 }} />
-          <Polygon size={48} rotate={-10} color="rgba(33,156,158,0.5)" style={{ bottom: 180, left: "45%" }} />
+          <FlowingPolygons variant="panel" />
 
           <div className="relative z-10 max-w-[420px]">
             <h1 className="text-[44px] font-extrabold leading-[1.05] tracking-tight lg:text-[52px]">

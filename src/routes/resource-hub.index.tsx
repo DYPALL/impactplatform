@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Footer } from "@/components/Footer";
-import { Polygon } from "@/components/Polygon";
+import { FlowingPolygons } from "@/components/FlowingPolygons";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicationMockup } from "@/components/PublicationMockup";
 
@@ -248,15 +248,7 @@ function ResourceHubPage() {
       <main>
         {/* Hero */}
         <section className="relative w-full overflow-hidden bg-[color:var(--impact-purple)]">
-          <Polygon size={46} rotate={-22} color="rgba(244,162,97,0.75)" style={{ top: 104, right: 120 }} />
-          <Polygon size={35} rotate={-18} color="rgba(233,75,138,0.6)" style={{ top: 111, left: "62%" }} />
-          <Polygon size={23} rotate={10} color="rgba(255,255,255,0.6)" style={{ top: 133, left: "72%" }} />
-          <Polygon size={77} rotate={-22} color="rgba(244,162,97,0.6)" style={{ top: 155, right: 220 }} />
-          <Polygon size={57} rotate={10} color="rgba(233,75,138,0.55)" style={{ top: 184, left: "68%" }} />
-          <Polygon size={44} rotate={12} color="rgba(255,255,255,0.5)" style={{ top: 210, left: "58%" }} />
-          <Polygon size={29} rotate={14} color="rgba(33,156,158,0.7)" style={{ top: 260, right: 120 }} />
-          <Polygon size={54} rotate={-8} color="rgba(255,255,255,0.4)" style={{ top: 292, right: 240 }} />
-          <Polygon size={137} rotate={28} color="rgba(244,162,97,0.5)" style={{ top: 275, left: "65%" }} />
+          <FlowingPolygons variant="banner" />
 
           <div className="relative z-10 mx-auto max-w-[1440px] px-6 py-14 lg:px-[120px] lg:py-[56px]">
             <h1 className="text-4xl font-extrabold leading-[1.1] text-white lg:text-[48px]">Resource Hub</h1>
