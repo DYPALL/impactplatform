@@ -74,6 +74,10 @@ const polygonFields = {
   ],
 } satisfies Record<string, PolygonSpec[]>;
 
+// Every shape in this file is defined in seconds per crossing. This multiplier
+// stretches those cycles: 1 = as specified, 1.7 = noticeably calmer drift.
+const SPEED = 1.7;
+
 export function FlowingPolygons({ variant }: { variant: keyof typeof polygonFields }) {
   return (
     <div
@@ -89,8 +93,8 @@ export function FlowingPolygons({ variant }: { variant: keyof typeof polygonFiel
           color={polygon.color}
           direction={polygon.direction}
           spin={polygon.spin}
-          floatDuration={polygon.duration}
-          floatDelay={polygon.delay}
+          floatDuration={polygon.duration * SPEED}
+          floatDelay={polygon.delay * SPEED}
           style={{ top: polygon.top, left: polygon.left }}
         />
       ))}

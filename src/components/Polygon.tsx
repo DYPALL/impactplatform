@@ -29,7 +29,7 @@ export function Polygon({
   spin?: number;
 }) {
   const crossing = Boolean(direction);
-  const duration = floatDuration ?? (crossing ? 26 : 5 + (size % 4));
+  const duration = floatDuration ?? (crossing ? 44 : 5 + (size % 4));
   const delay =
     floatDelay ??
     (crossing ? -duration * ((size % 13) / 13) : (size % 7) * -0.5);
