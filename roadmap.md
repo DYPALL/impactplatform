@@ -1,4 +1,6 @@
 # Platform updates
+- [x] Add administrator-only account listing, country filters and protected test-account creation/deletion; verified real admin listing, creation, filtering, deletion and reload, signed-out redirects, and three permission tests.
+- [ ] Verify password-reset email delivery and completed recovery: controls and public recovery page are implemented, but the email service rejected the synthetic test address; requires a deliverable test mailbox and publication of the new recovery page.
 - [x] Add matching icons to all eight online Action Plan writing fields and exported PDF fields; verified the saved plan, mobile width and actual three-page download, with export tests passing.
 - [x] Turn Home's "How to start assessing?" cards one at a time on a loop with the next card peeking at the edge, plus a "Step X of 5" label; verified auto-advance, wrap-around, hover/focus/off-screen/reduced-motion pause, and one card per arrow click at 390/834/1024/1280 px.
 - [x] Simplify Action Plan introduction to one online start button; verified the guided online entry and absence of the blank-template choice.

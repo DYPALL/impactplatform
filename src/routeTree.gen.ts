@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ResourceHubRouteImport } from './routes/resource-hub'
 import { Route as SendUsAMessageRouteImport } from './routes/send-us-a-message'
 import { Route as StartAssessingRouteImport } from './routes/start-assessing'
@@ -24,6 +25,7 @@ import { Route as ResourceHubIndexRouteImport } from './routes/resource-hub.inde
 import { Route as ResourceHubIdRouteImport } from './routes/resource-hub.$id'
 import { Route as AuthenticatedActionPlanAssessmentIdRouteImport } from './routes/_authenticated/action-plan.$assessmentId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminAccountsRouteImport } from './routes/_authenticated/admin/accounts'
 import { Route as AuthenticatedResultsIdRouteImport } from './routes/_authenticated/results.$id'
 import { Route as AuthenticatedAdminResourcesIndexRouteImport } from './routes/_authenticated/admin/resources.index'
 import { Route as AuthenticatedAdminResourcesNewRouteImport } from './routes/_authenticated/admin/resources.new'
@@ -46,6 +48,11 @@ const AuthRoute = AuthRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourceHubRoute = ResourceHubRouteImport.update({
@@ -104,6 +111,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminAccountsRoute =
+  AuthenticatedAdminAccountsRouteImport.update({
+    id: '/accounts',
+    path: '/accounts',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedResultsIdRoute = AuthenticatedResultsIdRouteImport.update({
   id: '/results/$id',
   path: '/results/$id',
@@ -132,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/resource-hub': typeof ResourceHubRouteWithChildren
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
@@ -142,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/resource-hub/$id': typeof ResourceHubIdRoute
   '/resource-hub/': typeof ResourceHubIndexRoute
   '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
+  '/admin/accounts': typeof AuthenticatedAdminAccountsRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
@@ -152,6 +167,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -160,6 +176,7 @@ export interface FileRoutesByTo {
   '/resource-hub/$id': typeof ResourceHubIdRoute
   '/resource-hub': typeof ResourceHubIndexRoute
   '/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
+  '/admin/accounts': typeof AuthenticatedAdminAccountsRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
@@ -172,6 +189,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/resource-hub': typeof ResourceHubRouteWithChildren
   '/send-us-a-message': typeof SendUsAMessageRoute
   '/start-assessing': typeof StartAssessingRoute
@@ -182,6 +200,7 @@ export interface FileRoutesById {
   '/resource-hub/$id': typeof ResourceHubIdRoute
   '/resource-hub/': typeof ResourceHubIndexRoute
   '/_authenticated/action-plan/$assessmentId': typeof AuthenticatedActionPlanAssessmentIdRoute
+  '/_authenticated/admin/accounts': typeof AuthenticatedAdminAccountsRoute
   '/_authenticated/results/$id': typeof AuthenticatedResultsIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/resources/new': typeof AuthenticatedAdminResourcesNewRoute
@@ -194,6 +213,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/faq'
+    | '/reset-password'
     | '/resource-hub'
     | '/send-us-a-message'
     | '/start-assessing'
@@ -204,6 +224,7 @@ export interface FileRouteTypes {
     | '/resource-hub/$id'
     | '/resource-hub/'
     | '/action-plan/$assessmentId'
+    | '/admin/accounts'
     | '/results/$id'
     | '/admin/'
     | '/admin/resources/new'
@@ -214,6 +235,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/faq'
+    | '/reset-password'
     | '/send-us-a-message'
     | '/start-assessing'
     | '/dashboard'
@@ -222,6 +244,7 @@ export interface FileRouteTypes {
     | '/resource-hub/$id'
     | '/resource-hub'
     | '/action-plan/$assessmentId'
+    | '/admin/accounts'
     | '/results/$id'
     | '/admin'
     | '/admin/resources/new'
@@ -233,6 +256,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/faq'
+    | '/reset-password'
     | '/resource-hub'
     | '/send-us-a-message'
     | '/start-assessing'
@@ -243,6 +267,7 @@ export interface FileRouteTypes {
     | '/resource-hub/$id'
     | '/resource-hub/'
     | '/_authenticated/action-plan/$assessmentId'
+    | '/_authenticated/admin/accounts'
     | '/_authenticated/results/$id'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/resources/new'
@@ -255,6 +280,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   FaqRoute: typeof FaqRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ResourceHubRoute: typeof ResourceHubRouteWithChildren
   SendUsAMessageRoute: typeof SendUsAMessageRoute
   StartAssessingRoute: typeof StartAssessingRoute
@@ -289,6 +315,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resource-hub': {
@@ -368,6 +401,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/accounts': {
+      id: '/_authenticated/admin/accounts'
+      path: '/accounts'
+      fullPath: '/admin/accounts'
+      preLoaderRoute: typeof AuthenticatedAdminAccountsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/results/$id': {
       id: '/_authenticated/results/$id'
       path: '/results/$id'
@@ -400,6 +440,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminAccountsRoute: typeof AuthenticatedAdminAccountsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminResourcesNewRoute: typeof AuthenticatedAdminResourcesNewRoute
   AuthenticatedAdminResourcesIndexRoute: typeof AuthenticatedAdminResourcesIndexRoute
@@ -408,6 +449,7 @@ interface AuthenticatedAdminRouteRouteChildren {
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminAccountsRoute: AuthenticatedAdminAccountsRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
     AuthenticatedAdminResourcesNewRoute: AuthenticatedAdminResourcesNewRoute,
     AuthenticatedAdminResourcesIndexRoute:
@@ -460,6 +502,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   FaqRoute: FaqRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ResourceHubRoute: ResourceHubRouteWithChildren,
   SendUsAMessageRoute: SendUsAMessageRoute,
   StartAssessingRoute: StartAssessingRoute,
