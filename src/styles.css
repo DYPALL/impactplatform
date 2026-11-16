@@ -296,7 +296,20 @@
   --score-partially-soft: #FDF1E5;
   --score-mostly-soft: #FCF7E4;
   --score-fully-soft: #E9F6EF;
+  --score-not-at-all: #E14B45;
+  --score-partially: #E8913C;
+  --score-mostly: #E5C13F;
+  --score-fully: #33A06A;
 }
+.plan-score.score-level-0 { --plan-score-color: var(--score-not-at-all); --plan-score-soft: var(--score-not-at-all-soft); }
+.plan-score.score-level-1 { --plan-score-color: var(--score-partially); --plan-score-soft: var(--score-partially-soft); }
+.plan-score.score-level-2 { --plan-score-color: var(--score-mostly); --plan-score-soft: var(--score-mostly-soft); }
+.plan-score.score-level-3 { --plan-score-color: var(--score-fully); --plan-score-soft: var(--score-fully-soft); }
+.plan-score { background: var(--plan-score-soft); border-color: var(--plan-score-color); }
+.plan-score-action { border-left: 3px solid var(--plan-score-color, var(--border)); }
+.plan-score-selector { color: var(--foreground); background: var(--plan-score-soft, var(--muted)); border: 1px solid var(--plan-score-color, var(--border)); }
+.plan-score-selector:hover { background: var(--plan-score-soft, var(--muted)); color: var(--foreground); }
+.plan-score-selector[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--plan-score-color, var(--primary)); }
 .indicator-result.score-level-0 { background-color: var(--score-not-at-all-soft); }
 .indicator-result.score-level-1 { background-color: var(--score-partially-soft); }
 .indicator-result.score-level-2 { background-color: var(--score-mostly-soft); }

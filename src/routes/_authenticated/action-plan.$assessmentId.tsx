@@ -20,6 +20,7 @@ import { downloadActionPlanPdf } from "@/lib/action-plan-pdf";
 import { ActionPlanFieldIcon } from "@/lib/action-plan-field-icons";
 import { AREAS } from "@/components/questionnaire/content";
 import { themeForArea } from "@/components/questionnaire/theme";
+import { levelFromPct } from "@/components/questionnaire/results-data";
 import {
   PROGRESS_OPTIONS,
   indicatorCode,
@@ -68,6 +69,7 @@ function ActionPlanPage() {
   
   const [loaded, setLoaded] = useState(false);
   const [assessmentName, setAssessmentName] = useState("Assessment");
+  const [scoreClasses, setScoreClasses] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const skipSave = useRef(true);
 
@@ -79,10 +81,16 @@ function ActionPlanPage() {
     (async () => {
       const { data } = await supabase
         .from("assessments")
-        .select("area, title, user_id")
+        .select("area, title, user_id, percentages")
         .eq("id", assessmentId)
         .maybeSingle();
       if (data?.area) {
+        const assessedArea = AREAS[data.area];
+        const percentages = Array.isArray(data.percentages) ? data.percentages : [];
+        if (active && assessedArea) setScoreClasses(Object.fromEntries(assessedArea.indicators.map((item, index) => {
+          const pct = percentages[index];
+          return [item.code, typeof pct === "number" && pct >= 0 ? `plan-score score-level-${levelFromPct(pct)}` : ""];
+        })));
         // Same default naming as My Assessments: "Assessment N" by position in the area list.
         const { data: siblings } = await supabase
           .from("assessments")
@@ -211,6 +219,7 @@ function ActionPlanPage() {
                 border={theme.border}
                 areaName={area.name}
                 grouped={grouped}
+                scoreClasses={scoreClasses}
                 update={update}
               />
             )}
@@ -222,6 +231,7 @@ function ActionPlanPage() {
                 border={theme.border}
                 steps={steps}
                 grouped={groupedActive}
+                scoreClasses={scoreClasses}
                 update={update}
                 assessmentId={assessmentId}
                 areaName={area.name}
@@ -306,6 +316,7 @@ function Introduction({ onStart }: { onStart: () => void }) {
 /* ---------------------------- Indicators & Steps ----------------------------- */
 
 function IndicatorsAndSteps({
+  scoreClasses,
   accent,
   soft,
   border,
@@ -313,6 +324,7 @@ function IndicatorsAndSteps({
   grouped,
   update,
 }: {
+  scoreClasses: Record<string, string>;
   accent: string;
   soft: string;
   border: string;
@@ -350,7 +362,7 @@ function IndicatorsAndSteps({
               const code = indicatorCode(indicator);
               const name = indicatorName(indicator);
               return (
-                <div key={indicator} className="rounded-lg border border-border bg-card p-5">
+                <div key={indicator} className={`rounded-lg border border-border bg-card p-5 ${scoreClasses[code] ?? ""}`}>
                   <p className="text-[13px] leading-snug">
                     <span className="font-extrabold" style={{ color: "var(--primary)" }}>
                       Indicator {code}
@@ -359,7 +371,7 @@ function IndicatorsAndSteps({
                   </p>
                   <ul className="mt-3 space-y-2">
                     {list.map((s) => (
-                      <li key={s.id} className="flex items-start gap-2.5 text-[12px] leading-snug">
+                      <li key={s.id} className="plan-score-action flex items-start gap-2.5 rounded-md p-2 text-[12px] leading-snug">
                         <input
                           type="checkbox"
                           checked={s.included}
@@ -423,6 +435,7 @@ function Field({
 }
 
 function ActionSteps({
+  scoreClasses,
   accent,
   soft,
   border,
@@ -436,6 +449,7 @@ function ActionSteps({
   saving,
   onSaveLater,
 }: {
+  scoreClasses: Record<string, string>;
   accent: string;
   soft: string;
   border: string;
@@ -496,12 +510,8 @@ function ActionSteps({
                 setIndicator(key);
                 setStepId("");
               }}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold transition"
-              style={
-                on
-                  ? { backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }
-                  : { backgroundColor: "var(--plan-soft)", color: "var(--primary)", border: "1px solid var(--border)" }
-              }
+              aria-pressed={on}
+              className={`plan-score-selector inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold transition ${scoreClasses[indicatorCode(key)] ?? ""}`}
             >
               Indicator {key}
             </Button>
@@ -519,12 +529,8 @@ function ActionSteps({
               key={s.id}
               type="button"
               onClick={() => setStepId(s.id)}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold transition"
-              style={
-                on
-                  ? { backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }
-                  : { backgroundColor: "var(--plan-soft)", color: "var(--primary)", border: "1px solid var(--border)", opacity: s.included ? 1 : 0.5 }
-              }
+              aria-pressed={on}
+              className={`plan-score-selector inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-bold transition ${scoreClasses[indicatorCode(s.indicator)] ?? ""} ${s.included ? "" : "opacity-50"}`}
             >
               <span
                 className="grid h-4 w-4 place-items-center rounded-full border"
@@ -541,7 +547,7 @@ function ActionSteps({
       {current && (
         <>
         <div className="mt-6 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4" style={{ backgroundColor: "var(--plan-soft)" }}>
+          <div className={`flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-4 ${scoreClasses[indicatorCode(current.indicator)] ?? "bg-muted"}`}>
             <div className="min-w-0">
               <p className="text-[11px] font-extrabold uppercase tracking-wider" style={{ color: "var(--primary)" }}>
                 Indicator {current.indicator}
