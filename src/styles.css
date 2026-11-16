@@ -314,6 +314,14 @@
 .assessment-step-card { min-height: 340px; color: var(--steps-ink); }
 /* Banner instances (e.g. results page) hug their own content. */
 .assessment-step-card--auto { min-height: 0; }
+
+/* A photo that fails to load (e.g. a brief asset-service outage) keeps its
+   box as a neutral block instead of a broken image icon. */
+img[data-img-failed="1"] {
+  background: var(--muted);
+  color: transparent;
+  font-size: 0;
+}
 .steps-purple { background: var(--steps-purple); }
 .steps-teal { background: var(--steps-teal); }
 .steps-orange { background: var(--steps-orange); }

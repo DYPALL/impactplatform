@@ -131,6 +131,22 @@ function RootComponent() {
   // location changes earlier and would animate/remount the outgoing page.
   const pathname = useRouterState({ select: (s) => s.matches.at(-1)?.pathname ?? "/" });
 
+  // If the image service is briefly unreachable, keep the page readable: a
+  // photo that fails to load keeps its box as a neutral block instead of a
+  // broken image icon.
+  useEffect(() => {
+    const flag = (img: HTMLImageElement) => { img.dataset.imgFailed = "1"; };
+    const onError = (e: Event) => {
+      const el = e.target as HTMLElement | null;
+      if (el && el.tagName === "IMG") flag(el as HTMLImageElement);
+    };
+    document.addEventListener("error", onError, true);
+    document.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
+      if (img.complete && img.naturalWidth === 0) flag(img);
+    });
+    return () => document.removeEventListener("error", onError, true);
+  }, []);
+
   useEffect(() => {
     let unsub: (() => void) | undefined;
     import("@/integrations/supabase/client").then(({ supabase }) => {
