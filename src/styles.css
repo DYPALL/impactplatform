@@ -321,6 +321,7 @@ img[data-img-failed="1"] {
   background: var(--muted);
   color: transparent;
   font-size: 0;
+  content: "";
 }
 .steps-purple { background: var(--steps-purple); }
 .steps-teal { background: var(--steps-teal); }
