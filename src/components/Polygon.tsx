@@ -9,6 +9,8 @@ export function Polygon({
   floatDelay,
   style,
   className,
+  flow = false,
+  reverse = false,
 }: {
   size?: number;
   color?: string;
@@ -19,21 +21,27 @@ export function Polygon({
   floatDelay?: number;
   style?: React.CSSProperties;
   className?: string;
+  /** drift all the way across the section instead of bobbing in place */
+  flow?: boolean;
+  /** travel right-to-left rather than left-to-right */
+  reverse?: boolean;
 }) {
-  const duration = floatDuration ?? 5 + (size % 4);
-  const delay = floatDelay ?? (size % 7) * -0.5;
+  const duration = floatDuration ?? (flow ? 26 : 5 + (size % 4));
+  const delay =
+    floatDelay ??
+    (flow ? -duration * ((size % 13) / 13) : (size % 7) * -0.5);
   const ref = useRef<HTMLDivElement | null>(null);
   const innerRef = useRef<HTMLDivElement | null>(null);
 
-  // Sync float phase to a global clock so shapes continue where they were across page changes.
-  // The float is a slow decorative drift, so it runs even with the OS "Reduce motion" setting
+  // Sync the drift phase to a global clock so shapes continue where they were across page changes.
+  // The drift is a slow decorative movement, so it runs even with the OS "Reduce motion" setting
   // (same choice as the carousel arrows and page fade).
   useLayoutEffect(() => {
-    const el = innerRef.current;
+    const el = flow ? ref.current : innerRef.current;
     if (!el) return;
     const phase = (Date.now() / 1000) % duration;
     el.style.animationDelay = `${delay - phase}s`;
-  }, [duration, delay]);
+  }, [duration, delay, flow]);
 
   return (
     <div
@@ -46,6 +54,13 @@ export function Polygon({
         height: size,
         willChange: "transform",
         transform: "translate3d(0, 0, 0)",
+        ...(flow
+          ? {
+              left: 0,
+              animation: `polygon-flow ${duration}s linear ${delay}s infinite`,
+              animationDirection: reverse ? "reverse" : "normal",
+            }
+          : {}),
         ...style,
       }}
     >
@@ -55,7 +70,11 @@ export function Polygon({
           width: "100%",
           height: "100%",
           transform: `rotate(${rotate}deg)`,
-          animation: `polygon-float ${duration}s ease-in-out ${delay}s infinite`,
+          ...(flow
+            ? {}
+            : {
+                animation: `polygon-float ${duration}s ease-in-out ${delay}s infinite`,
+              }),
         }}
       >
         <svg viewBox="0 0 100 100" width="100%" height="100%">
