@@ -6,7 +6,7 @@ import { Users, Search, UserPlus, Mail, Trash2, RefreshCw, FlaskConical } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { listAdminAccounts, createTestAccount, resetAccountPassword, deleteTestAccount } from "@/lib/admin-accounts.functions";
+import { listAdminAccounts, createUserAccount, resetAccountPassword, deleteTestAccount } from "@/lib/admin-accounts.functions";
 
 const accountQuery = queryOptions({ queryKey: ["admin-accounts"], queryFn: () => listAdminAccounts() });
 
@@ -29,7 +29,7 @@ type Account = Awaited<ReturnType<typeof listAdminAccounts>>[number];
 function AccountsPage() {
   const { data: accounts } = useSuspenseQuery(accountQuery);
   const queryClient = useQueryClient();
-  const createAccount = useServerFn(createTestAccount);
+  const createAccount = useServerFn(createUserAccount);
   const sendReset = useServerFn(resetAccountPassword);
   const removeAccount = useServerFn(deleteTestAccount);
   const [search, setSearch] = useState("");
@@ -59,7 +59,7 @@ function AccountsPage() {
     try {
       await createAccount({ data: { name: String(form.get("name")), email: String(form.get("email")), country: String(form.get("country")), password: String(form.get("password")) } });
       setCreating(false);
-      setNotice("Test account created. Email verification is still required; send a password reset email to let its owner set up access.");
+      setNotice("User account created. Send a password reset email so the user can verify their email and choose their own password.");
       await refresh();
     } catch (err) { setError(err instanceof Error ? err.message : "Could not create the account."); }
     finally { setBusy(false); }
@@ -82,7 +82,7 @@ function AccountsPage() {
   return <div className="min-w-0 text-foreground">
     <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
       <div><div className="flex items-center gap-3"><Users className="text-primary" /><h1 className="text-3xl font-extrabold text-primary">User accounts</h1></div><p className="mt-2 text-sm text-muted-foreground">{accounts.length} accounts · {accounts.filter(a => a.test).length} test accounts</p></div>
-      <div className="flex gap-2"><Button variant="outline" size="icon" title="Refresh accounts" aria-label="Refresh accounts" onClick={() => void refresh()}><RefreshCw /></Button><Button className="rounded-full" onClick={() => { setError(""); setCreating(true); }}><UserPlus /> Create test account</Button></div>
+      <div className="flex gap-2"><Button variant="outline" size="icon" title="Refresh accounts" aria-label="Refresh accounts" onClick={() => void refresh()}><RefreshCw /></Button><Button className="rounded-full" onClick={() => { setError(""); setCreating(true); }}><UserPlus /> Create account</Button></div>
     </div>
     {notice && <p role="status" className="mb-5 rounded-md border border-border bg-accent p-4 text-sm">{notice}</p>}
     {error && !creating && !action && <p role="alert" className="mb-5 text-sm text-destructive">{error}</p>}
@@ -103,9 +103,9 @@ function AccountsPage() {
       </table>{!rows.length && <p className="p-10 text-center text-muted-foreground">No accounts match these filters.</p>}
     </div>
     <div className="mt-5 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground"><p>{filtered.length} matching accounts</p><div className="flex items-center gap-3"><Button variant="outline" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</Button><span>{currentPage} / {totalPages}</span><Button variant="outline" disabled={currentPage === totalPages} onClick={() => setPage(currentPage + 1)}>Next</Button></div></div>
-    <Dialog open={creating} onOpenChange={value => { if (!busy) setCreating(value); }}><DialogContent><DialogHeader><DialogTitle>Create test account</DialogTitle><DialogDescription>This account will be marked for testing. Email verification remains required.</DialogDescription></DialogHeader><form onSubmit={handleCreate} className="space-y-4">
+    <Dialog open={creating} onOpenChange={value => { if (!busy) setCreating(value); }}><DialogContent><DialogHeader><DialogTitle>Create user account</DialogTitle><DialogDescription>Email verification remains required. After creating the account, send a password reset email so the user can choose their own password.</DialogDescription></DialogHeader><form onSubmit={handleCreate} className="space-y-4">
       <label className="block text-sm font-semibold">Name<Input name="name" required maxLength={100} className="mt-1" /></label><label className="block text-sm font-semibold">Email<Input name="email" type="email" autoComplete="off" required maxLength={255} className="mt-1" /></label><label className="block text-sm font-semibold">Country<Input name="country" required maxLength={80} className="mt-1" list="account-countries" /></label><datalist id="account-countries">{countries.map(c => <option key={c} value={c} />)}</datalist><label className="block text-sm font-semibold">Temporary password<Input name="password" type="password" autoComplete="new-password" required minLength={8} maxLength={72} className="mt-1" /></label>
-      {error && <p role="alert" className="text-sm text-destructive">{error}</p>}<DialogFooter><Button type="button" variant="outline" disabled={busy} onClick={() => setCreating(false)}>Cancel</Button><Button type="submit" disabled={busy}>{busy ? "Creating…" : "Create test account"}</Button></DialogFooter>
+      {error && <p role="alert" className="text-sm text-destructive">{error}</p>}<DialogFooter><Button type="button" variant="outline" disabled={busy} onClick={() => setCreating(false)}>Cancel</Button><Button type="submit" disabled={busy}>{busy ? "Creating…" : "Create account"}</Button></DialogFooter>
     </form></DialogContent></Dialog>
     <Dialog open={Boolean(action)} onOpenChange={value => { if (!value && !busy) setAction(null); }}><DialogContent><DialogHeader><DialogTitle>{action?.type === "delete" ? "Delete test account?" : "Send password reset email?"}</DialogTitle><DialogDescription>{action?.type === "delete" ? "This permanently deletes the marked test account and its associated data. Real user accounts cannot be deleted here." : "The account owner will receive a secure link to choose a new password."}</DialogDescription></DialogHeader><p className="break-all text-sm font-semibold">{action?.account.email}</p>{error && <p role="alert" className="text-sm text-destructive">{error}</p>}<DialogFooter><Button variant="outline" disabled={busy} onClick={() => setAction(null)}>Cancel</Button><Button variant={action?.type === "delete" ? "destructive" : "default"} disabled={busy} onClick={() => void confirmAction()}>{busy ? "Please wait…" : action?.type === "delete" ? "Delete test account" : "Send reset email"}</Button></DialogFooter></DialogContent></Dialog>
   </div>;

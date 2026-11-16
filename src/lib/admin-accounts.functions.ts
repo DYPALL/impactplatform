@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { requireAdminRole, requireDeletableTestAccount } from "./admin-accounts-policy";
+import { userAccountAttributes } from "./admin-account-creation";
 
 export const listAdminAccounts = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -26,7 +27,7 @@ export const listAdminAccounts = createServerFn({ method: "GET" })
     return accounts;
   });
 
-export const createTestAccount = createServerFn({ method: "POST" })
+export const createUserAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(input => z.object({ email: z.email().max(255), name: z.string().trim().min(1).max(100), country: z.string().trim().min(1).max(80), password: z.string().min(8).max(72) }).parse(input))
   .handler(async ({ data, context }) => {
@@ -34,11 +35,11 @@ export const createTestAccount = createServerFn({ method: "POST" })
     if (roleError) throw new Error("Could not verify administrator access.");
     requireAdminRole(roles ?? []);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.auth.admin.createUser({ email: data.email, password: data.password, email_confirm: false, user_metadata: { full_name: data.name, country: data.country }, app_metadata: { impact_test_account: true } });
+    const { error } = await supabaseAdmin.auth.admin.createUser(userAccountAttributes(data));
     if (error) {
       if (error.code === "weak_password") throw new Error(`Password rejected: ${error.message}`);
       if (error.code === "email_exists" || error.code === "user_already_exists") throw new Error("An account with this email already exists.");
-      throw new Error("Could not create this test account. Please try again or check the email address.");
+      throw new Error("Could not create this account. Please try again or check the email address.");
     }
     return { success: true };
   });
