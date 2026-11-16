@@ -584,42 +584,42 @@ export function ResultsStep({
       </div>
 
       {/* CTA: same card as Home's step 5, so the action plan reads as the next step */}
-      <article className="assessment-step-card steps-plum mt-10 overflow-hidden rounded-[28px] p-5">
-        <div className="flex items-start justify-between gap-4">
-          <span className="rounded-full border border-current px-3 py-1 text-xs font-medium">Step 05</span>
+      <article className="assessment-step-card assessment-step-card--auto steps-plum mt-10 overflow-hidden rounded-[28px] p-5">
+        <div className="grid items-center gap-6 md:grid-cols-[minmax(0,1fr)_42%]">
+          <div className="flex min-w-0 flex-col justify-center">
+            <span className="w-fit rounded-full border border-current px-3 py-1 text-xs font-medium">Step 05</span>
+            <h3 className="mt-4 text-[22px] font-semibold leading-tight tracking-normal">Ready to take action?</h3>
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-balance">
+              Build your personalized Action Plan based on your assessment results and start improving your LYC.
+            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+              {assessmentId ? (
+                <Button asChild size="lg" className="h-12 rounded-full px-7">
+                  <Link to="/action-plan/$assessmentId" params={{ assessmentId }}>
+                    Build your action plan <ArrowRight size={16} />
+                  </Link>
+                </Button>
+              ) : (
+                <Button asChild size="lg" className="h-12 rounded-full px-7">
+                  <Link to="/dashboard">
+                    Build your action plan <ArrowRight size={16} />
+                  </Link>
+                </Button>
+              )}
+              <Link
+                to="/dashboard"
+                className="text-[12px] font-semibold text-muted-foreground underline underline-offset-2 transition hover:text-foreground"
+              >
+                I will build my action plan later
+              </Link>
+            </div>
+          </div>
           <img
             src={ctaImg.url}
             alt="Young people collaborating in a local youth council workshop"
             loading="lazy"
-            className="h-[146px] w-[46%] shrink-0 rounded-2xl object-cover"
+            className="aspect-[3/2] w-full self-center rounded-2xl object-cover"
           />
-        </div>
-        <div className="mt-4">
-          <h3 className="text-[22px] font-semibold leading-tight tracking-normal">Ready to take action?</h3>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed">
-            Build your personalized Action Plan based on your assessment results and start improving your LYC.
-          </p>
-        </div>
-        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
-          {assessmentId ? (
-            <Button asChild size="lg" className="h-12 rounded-full px-7">
-              <Link to="/action-plan/$assessmentId" params={{ assessmentId }}>
-                Build your action plan <ArrowRight size={16} />
-              </Link>
-            </Button>
-          ) : (
-            <Button asChild size="lg" className="h-12 rounded-full px-7">
-              <Link to="/dashboard">
-                Build your action plan <ArrowRight size={16} />
-              </Link>
-            </Button>
-          )}
-          <Link
-            to="/dashboard"
-            className="text-[12px] font-semibold text-muted-foreground underline underline-offset-2 transition hover:text-foreground"
-          >
-            I will build my action plan later
-          </Link>
         </div>
       </article>
       </>
