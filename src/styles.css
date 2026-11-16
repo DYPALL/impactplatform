@@ -331,6 +331,11 @@ img[data-img-failed="1"] {
   --plan-shadow: 0 12px 40px color-mix(in oklab, var(--impact-purple) 6%, transparent);
 }
 .plan-workspace { letter-spacing: 0; }
+/* Introduction panel: light and readable, no drifting shapes over the copy. */
+.plan-intro {
+  background: var(--plan-soft);
+  border: 1px solid color-mix(in oklab, var(--primary) 12%, var(--border));
+}
 .plan-shell { box-shadow: var(--plan-shadow); }
 .plan-stage-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .plan-stage {

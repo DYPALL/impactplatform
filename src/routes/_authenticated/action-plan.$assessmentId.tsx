@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { FlowingPolygons } from "@/components/FlowingPolygons";
 import { ActionPlanPrintSheet } from "@/components/ActionPlanPrintSheet";
 import { downloadActionPlanPdf } from "@/lib/action-plan-pdf";
 import { AREAS } from "@/components/questionnaire/content";
@@ -202,7 +201,7 @@ function ActionPlanPage() {
           <Tabs />
 
           <div className="mt-7">
-            {tab === "intro" && <Introduction accent={theme.accent} onStart={() => setTab("indicators")} />}
+            {tab === "intro" && <Introduction onStart={() => setTab("indicators")} />}
 
             {tab === "indicators" && (
               <IndicatorsAndSteps
@@ -261,14 +260,12 @@ function ActionPlanPage() {
 
 /* -------------------------------- Introduction ------------------------------- */
 
-function Introduction({ accent, onStart }: { accent: string; onStart: () => void }) {
+function Introduction({ onStart }: { onStart: () => void }) {
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-primary p-6 text-primary-foreground md:p-9">
-      <FlowingPolygons variant="compact" />
-      <div className="relative z-10">
-      <span className="inline-flex items-center gap-2 text-sm font-semibold text-accent"><Lightbulb size={18} /> From reflection to action</span>
+    <section className="plan-intro rounded-2xl p-6 md:p-9">
+      <span className="inline-flex items-center gap-2 text-sm font-semibold text-secondary"><Lightbulb size={18} /> From reflection to action</span>
 
-      <div className="mt-5 max-w-[760px] text-sm leading-relaxed text-primary-foreground">
+      <div className="mt-5 max-w-[760px] text-sm leading-relaxed text-foreground">
         <p>
           This is your <strong>ACTION PLAN</strong>, designed to help you move from assessment to implementation as you
           begin to strengthen youth engagement in your Local Youth Council.
@@ -280,11 +277,11 @@ function Introduction({ accent, onStart }: { accent: string; onStart: () => void
       </div>
 
       <div className="mt-6 max-w-[760px]">
-        <p className="text-[13px] leading-relaxed text-primary-foreground">Work through the guided steps below. Your answers are saved automatically as you type. At the end, export your prefilled plan with one action step per page, or save and continue later.</p>
-        <Button variant="secondary" onClick={onStart} className="mt-5 rounded-full"><PenLine size={14} /> Start filling in online</Button>
+        <p className="text-[13px] leading-relaxed text-foreground/80">Work through the guided steps below. Your answers are saved automatically as you type. At the end, export your prefilled plan with one action step per page, or save and continue later.</p>
+        <Button onClick={onStart} className="mt-5 rounded-full"><PenLine size={14} /> Start filling in online</Button>
       </div>
 
-      <div className="mt-7 max-w-[760px] space-y-4 text-sm leading-relaxed text-primary-foreground/85">
+      <div className="mt-7 max-w-[760px] space-y-4 text-sm leading-relaxed text-foreground/80">
         <p>
           The plan supports you in organising <strong>what</strong> needs to be done, <strong>who</strong>{" "}
           will be involved, <strong>when</strong> each step should happen, what <strong>resources</strong> you need, and
@@ -296,11 +293,10 @@ function Introduction({ accent, onStart }: { accent: string; onStart: () => void
         </p>
       </div>
 
-      <div className="mt-7 border-t border-primary-foreground/20 pt-5">
-        <span className="text-xs font-bold text-accent">
+      <div className="mt-7 border-t border-border pt-5">
+        <span className="text-xs font-bold text-primary">
           GOOD LUCK WITH THE IMPLEMENTATION!
         </span>
-      </div>
       </div>
     </section>
   );
