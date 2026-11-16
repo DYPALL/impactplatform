@@ -5,6 +5,7 @@ import impactLogo from "@/assets/logo_color_impact.png.asset.json";
 const PURPLE: [number, number, number] = [80, 33, 129];
 const INK: [number, number, number] = [30, 27, 45];
 const BORDER: [number, number, number] = [210, 205, 220];
+const HIGHLIGHT: [number, number, number] = [242, 236, 248];
 
 async function loadPng(src: string) {
   const img = new Image();
@@ -14,7 +15,9 @@ async function loadPng(src: string) {
   const c = document.createElement("canvas");
   c.width = img.naturalWidth;
   c.height = img.naturalHeight;
-  c.getContext("2d")!.drawImage(img, 0, 0);
+  const context = c.getContext("2d");
+  if (!context) throw new Error("Unable to prepare the plan logo");
+  context.drawImage(img, 0, 0);
   return { data: c.toDataURL("image/png"), ratio: img.naturalHeight / img.naturalWidth };
 }
 
@@ -64,8 +67,12 @@ export async function downloadActionPlanPdf(
     doc.addPage();
     let y = M;
     if (logo) { doc.addImage(logo.data, "PNG", M, y, 27, 27 * logo.ratio); y += 27 * logo.ratio + 5; }
-    doc.setFont("helvetica", "bold").setFontSize(18).setTextColor(...INK);
-    doc.text("Build your action plan", M, y + 5); y += 11;
+    y += 3;
+    doc.setFillColor(...HIGHLIGHT).roundedRect(M, y, inner, 19, 2, 2, "F");
+    doc.setFont("helvetica", "bold").setFontSize(8).setTextColor(...PURPLE);
+    doc.text("AREA OF ASSESSMENT", M + 5, y + 6);
+    doc.setFontSize(13).text(areaName, M + 5, y + 13);
+    y += 26;
     doc.setFontSize(10);
     const meta = (label: string, value: string) => {
       doc.setFont("helvetica", "bold").text(label, M, y);
@@ -73,23 +80,27 @@ export async function downloadActionPlanPdf(
       const lines = doc.setFont("helvetica", "normal").splitTextToSize(value || "", inner - lw);
       doc.text(lines, M + lw, y); y += 5 * Math.max(1, lines.length);
     };
-    meta("Area of assessment:", areaName);
     meta("Assessment:", assessmentName);
     meta("Indicator:", page.indicator ?? "");
-    doc.setDrawColor(...PURPLE).setLineWidth(0.6).line(M, y, W - M, y); y += 8;
-
-    doc.setLineWidth(0.3).circle(M + 4, y - 1, 4.2);
-    doc.setTextColor(...PURPLE).setFontSize(10).text(String(page.number), M + 4, y + 0.5, { align: "center" });
-    doc.setTextColor(...INK).setFont("helvetica", "bold").text("Action step", M + 12, y - 1);
-    const act = doc.setFont("helvetica", "normal").splitTextToSize(page.action ?? "", inner - 12);
-    doc.text(act, M + 12, y + 4); y += 6 + 4.5 * act.length + 2;
+    y += 3;
+    const act = doc.setFont("helvetica", "bold").setFontSize(11).splitTextToSize(page.action ?? "", inner - 25);
+    const actionHeight = 16 + 5 * act.length;
+    doc.setFillColor(...PURPLE).roundedRect(M, y, inner, actionHeight, 2, 2, "F");
+    doc.setFillColor(255, 255, 255).circle(M + 8, y + 9, 4.5, "F");
+    doc.setTextColor(...PURPLE).setFontSize(10).text(String(page.number), M + 8, y + 10.2, { align: "center" });
+    doc.setTextColor(255, 255, 255).setFontSize(9).text("ACTION STEP", M + 17, y + 7);
+    doc.setFontSize(11).text(act, M + 17, y + 14);
+    y += actionHeight + 7;
 
     const gap = 5, colW = (inner - gap) / 2;
     const rows = Math.ceil(page.fields.length / 2);
     const boxH = Math.min(52, (297 - M - y - gap * (rows - 1)) / rows);
     page.fields.forEach(([label, value], f) => {
       const x = M + (f % 2) * (colW + gap), by = y + Math.floor(f / 2) * (boxH + gap);
-      doc.setDrawColor(...BORDER).setLineWidth(0.3).roundedRect(x, by, colW, boxH, 1.5, 1.5);
+      const isWhat = f === 0;
+      doc.setDrawColor(...(isWhat ? PURPLE : BORDER)).setLineWidth(isWhat ? 0.6 : 0.3);
+      doc.setFillColor(...HIGHLIGHT).roundedRect(x, by, colW, boxH, 1.5, 1.5, isWhat ? "FD" : "S");
+      doc.setDrawColor(...BORDER).setLineWidth(0.3);
       doc.setTextColor(...PURPLE).setFont("helvetica", "bold").setFontSize(9).text(label, x + 4, by + 6);
       doc.setTextColor(...INK).setFont("helvetica", "normal").setFontSize(9.5);
       const lines = doc.splitTextToSize(String(value ?? ""), colW - 8).slice(0, Math.floor((boxH - 12) / 4.4));
