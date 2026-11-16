@@ -4,7 +4,6 @@ import { ResourcePreview } from "@/components/ResourcePreview";
 import { HomeFAQ } from "@/components/HomeFAQ";
 import impactLogo from "@/assets/logo_color_impact.png.asset.json";
 import { AssessmentSteps } from "@/components/AssessmentSteps";
-import heroImg from "@/assets/hero-photo.webp.asset.json";
 import ctaImg from "@/assets/cta-photo.webp.asset.json";
 import dypallLogo from "@/assets/DYPALL-logo.png.asset.json";
 import bataljongLogo from "@/assets/Bataljong-logo.png.asset.json";
@@ -30,8 +29,6 @@ export const Route = createFileRoute("/")({
           "Assess, reflect and act. A comprehensive platform for Local Youth Councils to measure impact and plan next steps.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: heroImg.url },
-      { name: "twitter:image", content: heroImg.url },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
@@ -49,59 +46,52 @@ function Hero() {
       {/* Animated gradient wash */}
       <div className="hero-gradient" aria-hidden="true" />
 
-      {/* Floating polygons */}
-      <Polygon size={92} rotate={-12} depth={0.5} color="rgba(255,255,255,0.10)" style={{ top: "4%", left: "6%" }} />
-      <Polygon size={44} rotate={38} depth={1.8} color="rgba(244,162,97,0.45)" style={{ top: "14%", left: "18%" }} />
-      <Polygon size={64} rotate={-28} depth={1.3} color="rgba(233,75,138,0.40)" style={{ top: "8%", left: "34%" }} />
-      <Polygon size={38} rotate={72} depth={2.0} color="rgba(255,255,255,0.16)" style={{ top: "22%", left: "46%" }} />
-      <Polygon size={82} rotate={-48} depth={0.7} color="rgba(244,162,97,0.35)" style={{ top: "6%", left: "62%" }} />
-      <Polygon size={54} rotate={22} depth={1.4} color="rgba(255,255,255,0.14)" style={{ top: "18%", left: "78%" }} />
-      <Polygon size={48} rotate={-10} depth={1.6} color="rgba(233,75,138,0.45)" style={{ top: "10%", left: "90%" }} />
-      <Polygon size={72} rotate={55} depth={1.0} color="rgba(255,255,255,0.12)" style={{ top: "40%", left: "4%" }} />
-      <Polygon size={36} rotate={-36} depth={2.0} color="rgba(244,162,97,0.55)" style={{ top: "46%", left: "26%" }} />
-      <Polygon size={58} rotate={14} depth={1.2} color="rgba(233,75,138,0.50)" style={{ top: "56%", left: "14%" }} />
-      <Polygon size={42} rotate={-60} depth={1.7} color="rgba(255,255,255,0.15)" style={{ top: "62%", left: "38%" }} />
-      <Polygon size={68} rotate={42} depth={0.9} color="rgba(244,162,97,0.40)" style={{ top: "72%", left: "8%" }} />
-      <Polygon size={50} rotate={-18} depth={1.5} color="rgba(233,75,138,0.40)" style={{ top: "74%", left: "56%" }} />
-      <Polygon size={76} rotate={30} depth={0.8} color="rgba(255,255,255,0.13)" style={{ top: "58%", left: "70%" }} />
-      <Polygon size={40} rotate={-44} depth={1.9} color="rgba(244,162,97,0.50)" style={{ top: "78%", left: "84%" }} />
-      <Polygon size={60} rotate={66} depth={1.1} color="rgba(233,75,138,0.45)" style={{ top: "52%", left: "92%" }} />
-      <Polygon size={86} rotate={-6} depth={0.6} color="rgba(255,255,255,0.11)" style={{ top: "86%", left: "68%" }} />
+      {/* Floating polygons: clustered along the edges so the centred copy stays clear.
+          Below the desktop breakpoint the column is narrow, so the edge shapes are hidden. */}
+      <Polygon className="hidden lg:block" size={92} rotate={-12} depth={0.5} color="rgba(255,255,255,0.10)" style={{ top: "4%", left: "1%" }} />
+      <Polygon className="hidden lg:block" size={44} rotate={38} depth={1.8} color="rgba(244,162,97,0.45)" style={{ top: "16%", left: "4%" }} />
+      <Polygon className="hidden lg:block" size={72} rotate={55} depth={1.0} color="rgba(255,255,255,0.12)" style={{ top: "34%", left: "2%" }} />
+      <Polygon className="hidden lg:block" size={36} rotate={-36} depth={2.0} color="rgba(244,162,97,0.55)" style={{ top: "52%", left: "5%" }} />
+      <Polygon className="hidden lg:block" size={58} rotate={14} depth={1.2} color="rgba(233,75,138,0.50)" style={{ top: "68%", left: "3%" }} />
+      <Polygon className="hidden lg:block" size={68} rotate={42} depth={0.9} color="rgba(244,162,97,0.40)" style={{ top: "86%", left: "5%" }} />
+      <Polygon className="hidden lg:block" size={48} rotate={-10} depth={1.6} color="rgba(233,75,138,0.45)" style={{ top: "8%", left: "90%" }} />
+      <Polygon className="hidden lg:block" size={54} rotate={22} depth={1.4} color="rgba(255,255,255,0.14)" style={{ top: "22%", left: "90%" }} />
+      <Polygon className="hidden lg:block" size={60} rotate={66} depth={1.1} color="rgba(233,75,138,0.45)" style={{ top: "44%", left: "92%" }} />
+      <Polygon className="hidden lg:block" size={42} rotate={-60} depth={1.7} color="rgba(255,255,255,0.15)" style={{ top: "62%", left: "86%" }} />
+      <Polygon className="hidden lg:block" size={76} rotate={30} depth={0.8} color="rgba(255,255,255,0.13)" style={{ top: "78%", left: "91%" }} />
+      <Polygon className="hidden lg:block" size={86} rotate={-6} depth={0.6} color="rgba(255,255,255,0.11)" style={{ top: "90%", left: "74%" }} />
+      <Polygon className="hidden lg:block" size={64} rotate={-28} depth={1.3} color="rgba(233,75,138,0.40)" style={{ top: "2%", left: "34%" }} />
+      <Polygon className="hidden lg:block" size={82} rotate={-48} depth={0.7} color="rgba(244,162,97,0.35)" style={{ top: "1%", left: "62%" }} />
+      <Polygon className="hidden lg:block" size={50} rotate={-18} depth={1.5} color="rgba(233,75,138,0.40)" style={{ top: "92%", left: "40%" }} />
+      <Polygon className="hidden lg:block" size={40} rotate={-44} depth={1.9} color="rgba(244,162,97,0.50)" style={{ top: "88%", left: "58%" }} />
+      <Polygon className="hidden lg:block" size={38} rotate={72} depth={2.0} color="rgba(255,255,255,0.16)" style={{ top: "95%", left: "24%" }} />
 
 
 
-      <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-10 px-6 py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:py-24 lg:pl-[120px] lg:pr-0">
-        <div className="relative z-10 max-w-[680px] lg:min-w-0 lg:flex-1">
-          <h1 className="text-4xl leading-[1.1] text-white sm:text-5xl lg:text-[56px]">
-            A platform to evaluate and improve your Local Youth Council
-          </h1>
-          <p className="mt-5 max-w-[560px] text-[18px] leading-[1.6] text-white/80">
-            For Local Youth Councils and the people supporting them: assess your council, reflect on your results and build a practical action plan. Our public Resource Hub also welcomes youth workers, municipalities, educators and anyone interested in meaningful youth participation.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3.5">
-            <a
-              href="/start-assessing"
-              className="inline-flex h-[52px] items-center justify-center rounded-full bg-[color:var(--impact-green)] px-[22px] text-[15px] font-bold text-white transition hover:brightness-110"
-            >
-              Start your assessment
-            </a>
-            <button
-              onClick={() => setGuideOpen(true)}
-              className="inline-flex h-[52px] items-center justify-center rounded-full border border-[color:var(--impact-orange)] px-[22px] text-[15px] font-bold text-white transition hover:bg-white/10"
-            >
-              How to get started?
-            </button>
-            <HowToGetStartedModal open={guideOpen} onOpenChange={setGuideOpen} />
-          </div>
-        </div>
-        <div className="relative z-10 w-full max-w-[597px] lg:mr-0 lg:w-[46%] lg:shrink-0">
-          <img
-            src={heroImg.url}
-            alt="Youth council members collaborating"
-            width={970}
-            height={644}
-            className="hero-photo-fade h-auto w-full rounded-l-2xl object-cover"
-          />
+      <div className="relative z-10 mx-auto flex max-w-[1040px] flex-col items-center px-6 py-20 text-center lg:py-28">
+        <h1 className="text-[34px] leading-[1.12] text-white sm:text-5xl lg:text-[58px]">
+          How much real{" "}
+          <span className="hero-highlight">impact</span> is your Local Youth
+          Council making?
+        </h1>
+        <p className="mt-6 max-w-[660px] text-[17px] leading-[1.6] text-white/80 sm:text-[18px]">
+          A practical self-assessment and action-planning platform built for LYC
+          members and support staff to turn youth voices into real local change
+        </p>
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
+          <a
+            href="/start-assessing"
+            className="inline-flex h-[52px] items-center justify-center rounded-full bg-[color:var(--impact-green)] px-[26px] text-[15px] font-bold text-white transition hover:brightness-110"
+          >
+            Start your free assessment
+          </a>
+          <button
+            onClick={() => setGuideOpen(true)}
+            className="inline-flex h-[52px] items-center justify-center rounded-full border border-[color:var(--impact-orange)] px-[22px] text-[15px] font-bold text-white transition hover:bg-white/10"
+          >
+            How to get started?
+          </button>
+          <HowToGetStartedModal open={guideOpen} onOpenChange={setGuideOpen} />
         </div>
       </div>
     </section>

@@ -8,6 +8,7 @@ export function Polygon({
   floatDuration,
   floatDelay,
   style,
+  className,
 }: {
   size?: number;
   color?: string;
@@ -17,6 +18,7 @@ export function Polygon({
   floatDuration?: number;
   floatDelay?: number;
   style?: React.CSSProperties;
+  className?: string;
 }) {
   const duration = floatDuration ?? 5 + (size % 4);
   const delay = floatDelay ?? (size % 7) * -0.5;
@@ -37,6 +39,7 @@ export function Polygon({
     <div
       ref={ref}
       aria-hidden
+      className={className}
       style={{
         position: "absolute",
         width: size,
