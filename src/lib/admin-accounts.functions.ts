@@ -35,7 +35,11 @@ export const createTestAccount = createServerFn({ method: "POST" })
     requireAdminRole(roles ?? []);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.auth.admin.createUser({ email: data.email, password: data.password, email_confirm: false, user_metadata: { full_name: data.name, country: data.country }, app_metadata: { impact_test_account: true } });
-    if (error) throw new Error("Could not create this test account. Check the email is not already registered and the password meets requirements.");
+    if (error) {
+      if (error.code === "weak_password") throw new Error(`Password rejected: ${error.message}`);
+      if (error.code === "email_exists" || error.code === "user_already_exists") throw new Error("An account with this email already exists.");
+      throw new Error("Could not create this test account. Please try again or check the email address.");
+    }
     return { success: true };
   });
 
