@@ -248,11 +248,21 @@
   100% { translate: 0 6px; }
 }
 
-/* Triangles that drift all the way across the hero: a shape enters one edge and
-   leaves the other, so the movement reads as a current rather than a bob. */
-@keyframes polygon-flow {
+/* Triangles that drift across the hero: a shape enters one edge and leaves the
+   other, so the movement reads as a current rather than a bob. Horizontal travel
+   is measured in viewport widths, vertical travel in the section's own height. */
+@keyframes polygon-flow-x {
   from { transform: translateX(-100%); }
   to   { transform: translateX(100vw); }
+}
+@keyframes polygon-flow-y {
+  from { top: -20%; }
+  to   { top: 100%; }
+}
+/* One full turn per crossing so the shapes tumble as they travel. */
+@keyframes polygon-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
 @keyframes hero-wash {
