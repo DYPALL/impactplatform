@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { Check, ChevronDown, LogOut, Pencil, Settings, Trash2, User, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -440,9 +440,19 @@ function AreaCard({
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        className="mt-5 flex w-full items-center justify-center text-[color:var(--impact-ink-muted)] hover:text-[color:var(--impact-purple)]"
+        className="group mt-5 flex w-full items-center justify-center gap-3 rounded-full py-1.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--impact-purple)]"
+        style={{ "--area-color": area.color } as CSSProperties}
       >
-        <ChevronDown size={20} className={`transition-transform ${expanded ? "rotate-180" : ""}`} />
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-(--area-color) bg-(--impact-surface) shadow-sm transition-colors duration-200 group-hover:bg-(--area-color)">
+          <ChevronDown
+            size={22}
+            strokeWidth={2.75}
+            className={`text-(--area-color) transition-transform duration-300 group-hover:text-(--impact-surface) ${expanded ? "rotate-180" : ""}`}
+          />
+        </span>
+        <span className="text-[13px] font-bold" style={{ color: area.softText }}>
+          {expanded ? "Hide completed questionnaires" : "Show completed questionnaires"}
+        </span>
       </button>
 
       {expanded && (
