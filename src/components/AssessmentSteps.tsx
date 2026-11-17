@@ -18,7 +18,7 @@ const steps: Step[] = [
   { title: "Select a focus area", body: "Choose one of the four assessment areas to begin. You can always come back to complete the other three later.", image: step2.url, tone: "steps-teal" },
   { title: "Complete the questionnaire", body: "Reflect through guided questions. It takes 15-30 minutes per area, and you can pause and save anytime.", image: step3.url, tone: "steps-orange" },
   { title: "Check your analysis", body: "View your instant visual scoreboard, then log in or sign up to unlock reflection prompts and tailored recommendations.", bodySignedIn: "View your instant visual scoreboard, reflection prompts and tailored recommendations.", image: step4.url, tone: "steps-pink" },
-  { title: "Build your action plan", body: "Pick up to three concrete steps per indicator, assign owners and deadlines, and build a plan your council can follow.", image: actionPhoto.url, tone: "steps-plum" },
+  { title: "Build your action plan", body: "Pick up to three concrete steps per indicator, assign owners and deadlines, and build a plan your council can follow.", image: actionPhoto.url, tone: "steps-blue" },
 ];
 
 // The cards glide continuously, so the set is repeated to give the track enough

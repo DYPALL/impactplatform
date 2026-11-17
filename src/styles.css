@@ -319,7 +319,9 @@
   --steps-teal: color-mix(in oklab, var(--impact-green) 16%, white);
   --steps-orange: color-mix(in oklab, var(--impact-orange) 22%, white);
   --steps-pink: color-mix(in oklab, var(--impact-pink) 13%, white);
-  --steps-plum: color-mix(in oklab, var(--impact-purple) 22%, white);
+  /* Step 5 keeps its own hue: the old plum sat too close to Step 1's lavender
+     when the two cards sit side by side in the loop. */
+  --steps-blue: color-mix(in oklab, #2f6fb8 27%, white);
   --steps-ink: oklch(0.2 0.02 265);
 
 }
@@ -336,7 +338,7 @@ img[data-img-failed="1"] {
 .steps-teal { background: var(--steps-teal); }
 .steps-orange { background: var(--steps-orange); }
 .steps-pink { background: var(--steps-pink); }
-.steps-plum { background: var(--steps-plum); }
+.steps-blue { background: var(--steps-blue); }
 
 :root {
   --plan-soft: color-mix(in oklab, var(--primary) 7%, var(--card));
