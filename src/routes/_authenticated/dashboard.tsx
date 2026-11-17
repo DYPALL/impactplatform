@@ -167,12 +167,9 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
-      <header className="border-b border-[#E7E3EF] bg-white px-5 py-3 lg:px-8">
-        <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-x-4 gap-y-2">
-          <span className="text-[12px] font-extrabold uppercase tracking-[0.12em] text-[color:var(--impact-purple)]">
-            Quick links
-          </span>
-          <nav className="flex flex-wrap items-center gap-2">
+      <header className="bg-white px-5 py-3 lg:px-8">
+        <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-end gap-x-4 gap-y-2">
+          <nav className="flex flex-wrap items-center justify-end gap-2">
             <QuickLink to="/" label="Home" icon="home" />
             <QuickLink to="/resource-hub" label="Resource Hub" icon="resource-hub" />
             <QuickLink to="/send-us-a-message" label="Send us a message" icon="message" />
