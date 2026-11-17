@@ -135,7 +135,7 @@ export function AssessmentSteps() {
   const current = selected % steps.length;
 
   return (
-    <section ref={sectionRef} id="how" className="w-full bg-background py-16 lg:py-24" aria-labelledby="assessment-steps-title">
+    <section ref={sectionRef} id="how" className="w-full bg-background pt-12 pb-16 lg:pt-14 lg:pb-24" aria-labelledby="assessment-steps-title">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-[120px]">
         <div className="max-w-2xl">
           <h2 id="assessment-steps-title" className="section-title text-primary">How it works?</h2>
@@ -148,7 +148,7 @@ export function AssessmentSteps() {
           onFocusCapture={() => setFocused(true)}
           onBlurCapture={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}
         >
-          <div ref={carouselRef} aria-label="Assessment steps" aria-roledescription="carousel" className="mt-10 overflow-hidden">
+          <div ref={carouselRef} aria-label="Assessment steps" aria-roledescription="carousel" className="mt-6 overflow-hidden">
             <div className="flex touch-pan-y gap-5">
               {loopedSteps.map((step) => (
                 <article key={step.key} className={`assessment-step-card ${step.tone} relative min-w-0 shrink-0 basis-full overflow-hidden rounded-[28px] p-5 sm:basis-[calc((100%_-_20px)/2.15)] lg:basis-[calc((100%_-_40px)/3.2)]`} aria-label={`Step ${step.number}: ${step.title}`}>
