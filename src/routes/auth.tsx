@@ -202,10 +202,12 @@ function AuthPage() {
 
           <div className="relative z-10 max-w-[420px]">
             <h1 className="text-[44px] font-extrabold leading-[1.05] tracking-tight lg:text-[52px]">
-              {mode === "signin" ? "Log-in to continue" : "Sign-up your council"}
+              {notice !== null ? "One more step" : mode === "signin" ? "Log-in to continue" : "Sign-up your council"}
             </h1>
             <p className="mt-5 text-[15px] leading-relaxed text-white/85">
-              {mode === "signin"
+              {notice !== null
+                ? "Your account is ready as soon as you confirm your email address. Open the message we just sent you and click the link inside."
+                : mode === "signin"
                 ? "Log-in to revisit your saved assessments, review full results and continue your action plans."
                 : "Unlock detailed feedback and reflection questions, save assessments automatically and build action plans for your Local Youth Council."}
             </p>
@@ -229,9 +231,9 @@ function AuthPage() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[color:var(--impact-purple)]/10 text-[color:var(--impact-purple)]">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
               </div>
-              <h2 className="mt-6 text-[28px] font-extrabold text-[color:var(--impact-ink)]">Confirm your email</h2>
+              <h2 className="mt-6 text-[28px] font-extrabold text-[color:var(--impact-ink)]">Your account has been created successfully</h2>
               <p className="mt-3 text-[15px] leading-relaxed text-[color:var(--impact-ink)]/75">
-                We sent a confirmation link to {notice ? <strong>{notice}</strong> : "your email"}. Open it to activate your account. You'll come straight back here and continue with your assessment.
+                Confirm your email to activate it. We sent a confirmation link to {notice ? <strong>{notice}</strong> : "your email"} — open it to finish signing up. You'll come straight back here and continue with your assessment.
               </p>
               <p className="mt-3 text-[13px] text-[color:var(--impact-ink)]/60">Can't find it? Check your spam folder.</p>
               <button type="button" onClick={() => { setNotice(null); setMode("signin"); }} className="mt-8 rounded-full border border-[color:var(--impact-purple)] px-6 py-2.5 text-[14px] font-bold text-[color:var(--impact-purple)] hover:bg-[color:var(--impact-purple)]/5">Back to log-in</button>
