@@ -92,10 +92,10 @@ function CtaBanner() {
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-12 px-6 py-20 lg:flex-row lg:gap-16 lg:py-[72px] lg:pl-[120px] lg:pr-0">
         <div className="relative z-10 max-w-[560px]">
           <h2 className="section-title text-white">
-            Ready to take action?
+            Curious where your council stands?
           </h2>
           <p className="mt-3 text-[16px] leading-[1.6] text-white/85 [text-wrap:pretty]">
-            Your results become an actionable plan. Save assessments to your account, revisit past results, and track how your council grows year on year.
+            Try it on your own or reflect together as a team. Start with one focus area in 15–30 minutes and get an analysis of your strengths & gaps.
           </p>
           <a
             href="/start-assessing"
