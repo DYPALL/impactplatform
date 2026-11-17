@@ -3,17 +3,20 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HowToGetStartedModal } from "@/components/HowToGetStartedModal";
+import { useAuth } from "@/hooks/use-auth";
 import step1 from "@/assets/step-1.webp.asset.json";
 import step2 from "@/assets/step-2.webp.asset.json";
 import step3 from "@/assets/step-3.webp.asset.json";
 import step4 from "@/assets/step-4.webp.asset.json";
 import actionPhoto from "@/assets/cta-photo.webp.asset.json";
 
-const steps = [
+type Step = { title: string; body: string; bodySignedIn?: string; image: string; tone: string };
+
+const steps: Step[] = [
   { title: "Get started", body: "Jump right in with no account needed. Create a free profile later to save your progress and unlock your full analysis.", image: step1.url, tone: "steps-purple" },
   { title: "Select a focus area", body: "Choose one of the four assessment areas to begin. You can always come back to complete the other three later.", image: step2.url, tone: "steps-teal" },
   { title: "Complete the questionnaire", body: "Reflect through guided questions. It takes 15-30 minutes per area, and you can pause and save anytime.", image: step3.url, tone: "steps-orange" },
-  { title: "Check your analysis", body: "View your instant visual scoreboard, then log in or sign up to unlock reflection prompts and tailored recommendations.", image: step4.url, tone: "steps-pink" },
+  { title: "Check your analysis", body: "View your instant visual scoreboard, then log in or sign up to unlock reflection prompts and tailored recommendations.", bodySignedIn: "View your instant visual scoreboard, reflection prompts and tailored recommendations.", image: step4.url, tone: "steps-pink" },
   { title: "Build your action plan", body: "Pick up to three concrete steps per indicator, assign owners and deadlines, and build a plan your council can follow.", image: actionPhoto.url, tone: "steps-plum" },
 ];
 
@@ -21,6 +24,7 @@ const steps = [
 const STEP_HOLD_MS = 3400;
 
 export function AssessmentSteps() {
+  const { user } = useAuth();
   const sectionRef = useRef<HTMLElement>(null);
   const [carouselRef, carousel] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1, duration: 40 });
   const [selected, setSelected] = useState(0);
@@ -133,7 +137,7 @@ export function AssessmentSteps() {
                   </div>
                   <div className="mt-4">
                     <h3 className="text-[22px] font-semibold leading-tight tracking-normal">{step.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed">{step.body}</p>
+                    <p className="mt-2 text-sm leading-relaxed">{user ? step.bodySignedIn ?? step.body : step.body}</p>
                   </div>
                 </article>
               ))}

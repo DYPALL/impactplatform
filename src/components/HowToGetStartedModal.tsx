@@ -39,6 +39,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -908,7 +909,15 @@ function ScreenActionPlan() {
 
 const SCREENS = [ScreenStart, ScreenDashboard, ScreenQuestionnaire, ScreenResults, ScreenActionPlan];
 
-const STEP_META = [
+type StepMeta = {
+  kicker: string;
+  title: string;
+  color: string;
+  desc: React.ReactNode;
+  descSignedIn?: React.ReactNode;
+};
+
+const STEP_META: StepMeta[] = [
   {
     kicker: "Step one",
     title: "Start assessing",
@@ -953,6 +962,12 @@ const STEP_META = [
         unlock your full results, reflection prompts and recommended action steps.
       </>
     ),
+    descSignedIn: (
+      <>
+        View your instant visual scoreboard, reflection prompts and tailored
+        recommendations.
+      </>
+    ),
   },
   {
     kicker: "Step five",
@@ -972,6 +987,7 @@ export function HowToGetStartedModal({
   initialStep?: number;
 }) {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [step, setStep] = useState(0);
   const stageRef = React.useRef<HTMLDivElement>(null);
   const screensRef = React.useRef<HTMLDivElement>(null);
@@ -1073,7 +1089,7 @@ export function HowToGetStartedModal({
               {meta.kicker}
             </p>
             <h3>{meta.title}</h3>
-            <p className="h2g-desc">{meta.desc}</p>
+            <p className="h2g-desc">{user && meta.descSignedIn ? meta.descSignedIn : meta.desc}</p>
 
             <div className="h2g-dots">
               {SCREENS.map((_, i) => (
