@@ -12,7 +12,7 @@ export function Footer() {
         <div>
           <img src={whiteLogoAsset.url} alt="IMPACT logo" className="h-8 w-auto" />
           <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70">
-            A platform to evaluate and improve your Local Youth Council
+            Helping Local Youth Councils and support staff turn youth voices into real local impact
           </p>
         </div>
         <div>
