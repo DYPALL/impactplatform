@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 
 export function CompleteCouncilProfile() {
   const { user } = useAuth();
+  const pathname = useRouterState({ select: (s) => s.matches.at(-1)?.pathname ?? "/" });
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ council_name: "", council_role: "", country: "" });
   const [busy, setBusy] = useState(false);
@@ -14,6 +16,9 @@ export function CompleteCouncilProfile() {
     let active = true;
     setOpen(false);
     if (!user) return;
+    // The sign-in page shows its own success screen first; this step belongs to
+    // the app, so it waits until the visitor has left that page.
+    if (pathname.startsWith("/auth")) return;
     const providers = user.app_metadata?.providers;
     const social = (Array.isArray(providers) && providers.some((p: string) => p === "google" || p === "apple")) || user.identities?.some(identity => identity.provider === "google" || identity.provider === "apple");
     if (!social) return;
@@ -24,7 +29,7 @@ export function CompleteCouncilProfile() {
       setOpen(Object.values(next).some(value => !value.trim()));
     });
     return () => { active = false; };
-  }, [user?.id]);
+  }, [user?.id, pathname]);
   return <Dialog open={open}><DialogContent className="max-w-lg [&>button]:hidden" onEscapeKeyDown={e => e.preventDefault()} onPointerDownOutside={e => e.preventDefault()}>
     <DialogTitle>Tell us about your Local Youth Council</DialogTitle><DialogDescription>Complete your Sign-up to keep your assessments and action plans together.</DialogDescription>
     <form className="space-y-4" onSubmit={async e => {

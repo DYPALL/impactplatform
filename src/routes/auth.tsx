@@ -6,6 +6,7 @@ import { clearResultsReturn, matchesResultsReturn, pendingResultsReturn, remembe
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { isConfirmationRateLimit, isUnconfirmedEmailError } from "@/lib/auth-errors";
+import { isSocialAccount } from "@/lib/auth-account";
 import { lovable } from "@/integrations/lovable";
 import { FlowingPolygons } from "@/components/FlowingPolygons";
 import logoAsset from "@/assets/logo_color_impact.png.asset.json";
@@ -112,6 +113,7 @@ function AuthPage() {
   const [notice, setNotice] = useState<{ email: string; fromSignUp: boolean } | null>(null);
   const [resendNote, setResendNote] = useState<string | null>(null);
   const [resending, setResending] = useState(false);
+  const [welcome, setWelcome] = useState(false);
 
   const finishAuthentication = useCallback(async (userId: string) => {
     if (returning.current) return;
@@ -141,8 +143,12 @@ function AuthPage() {
 
   useEffect(() => {
     if (search.resultArea) rememberResultsReturn(search.resultArea);
-    if (user) void finishAuthentication(user.id);
-  }, [user, search.resultArea, finishAuthentication]);
+    if (!user || welcome) return;
+    // Google and Apple accounts arrive with a verified address, so they land on
+    // a success screen first; Continue carries them on to their results.
+    if (isSocialAccount(user)) { setWelcome(true); return; }
+    void finishAuthentication(user.id);
+  }, [user, search.resultArea, finishAuthentication, welcome]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -194,7 +200,9 @@ function AuthPage() {
       if (result.error) { setError(result.error.message || "Social log-in failed"); return; }
       if (result.redirected) return;
       const { data } = await supabase.auth.getSession();
-      if (data.session) await finishAuthentication(data.session.user.id);
+      // The session arrives through the auth listener, which shows the success
+      // screen; Continue is what carries the visitor into the app.
+      if (data.session) return;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Log-in failed");
     } finally {
@@ -241,10 +249,12 @@ function AuthPage() {
 
           <div className="relative z-10 max-w-[420px]">
             <h1 className="text-[44px] font-extrabold leading-[1.05] tracking-tight lg:text-[52px]">
-              {notice !== null ? "One more step" : mode === "signin" ? "Log-in to continue" : "Sign-up your council"}
+              {welcome ? "You're in" : notice !== null ? "One more step" : mode === "signin" ? "Log-in to continue" : "Sign-up your council"}
             </h1>
             <p className="mt-5 text-[15px] leading-relaxed text-white/85">
-              {notice !== null
+              {welcome
+                ? "Your account is ready. Continue to your saved assessments, results and action plans."
+                : notice !== null
                 ? "Your account is ready as soon as you confirm your email address. Open the message we just sent you and click the link inside."
                 : mode === "signin"
                 ? "Log-in to revisit your saved assessments, review full results and continue your action plans."
@@ -265,38 +275,56 @@ function AuthPage() {
 
         {/* Right form panel */}
         <section className="flex flex-1 items-center justify-center px-6 py-12 lg:px-16">
-          {notice !== null ? (
+          {notice !== null || welcome ? (
             <div role="status" className="w-full max-w-[440px] text-center">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[color:var(--impact-purple)]/10 text-[color:var(--impact-purple)]">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+                {welcome ? (
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="m8.2 12.4 2.6 2.6 5-5.6" /></svg>
+                ) : (
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+                )}
               </div>
               <h2 className="mt-6 text-[28px] font-extrabold text-[color:var(--impact-ink)]">
-                {notice.fromSignUp ? "Your account has been created successfully" : "Confirm your email to log in"}
+                {welcome ? "You're signed in successfully" : notice?.fromSignUp ? "Your account has been created successfully" : "Confirm your email to log in"}
               </h2>
               <p className="mt-3 text-[15px] leading-relaxed text-[color:var(--impact-ink)]/75">
-                {notice.fromSignUp ? (
-                  <>Confirm your email to activate it. We sent a confirmation link to <strong>{notice.email}</strong> — open it to finish signing up. You'll come straight back here and continue with your assessment.</>
+                {welcome ? (
+                  <>You're logged in as <strong>{user?.email ?? "your account"}</strong>. Continue to your saved assessments, results and action plans.</>
+                ) : notice?.fromSignUp ? (
+                  <>Confirm your email to activate it. We sent a confirmation link to <strong>{notice?.email}</strong> — open it to finish signing up. You'll come straight back here and continue with your assessment.</>
                 ) : (
-                  <>We can't log you in until your email address is confirmed. We sent a confirmation link to <strong>{notice.email}</strong> — open it to activate your account, then log in again.</>
+                  <>We can't log you in until your email address is confirmed. We sent a confirmation link to <strong>{notice?.email}</strong> — open it to activate your account, then log in again.</>
                 )}
               </p>
-              <p className="mt-3 text-[13px] text-[color:var(--impact-ink)]/60">Can't find it? Check your spam folder.</p>
-              {resendNote && (
+              {!welcome && <p className="mt-3 text-[13px] text-[color:var(--impact-ink)]/60">Can't find it? Check your spam folder.</p>}
+              {!welcome && resendNote && (
                 <p className="mt-4 text-[13px] font-bold text-[color:var(--impact-teal,#219c9e)]">
                   {resendNote}
                 </p>
               )}
               {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
               <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <button
-                  type="button"
-                  onClick={handleResendConfirmation}
-                  disabled={resending}
-                  className="rounded-full bg-[color:var(--impact-purple)] px-6 py-2.5 text-[14px] font-bold text-white transition hover:opacity-90 disabled:opacity-50"
-                >
-                  {resending ? "Sending…" : "Resend confirmation email"}
-                </button>
-                <button type="button" onClick={() => { setNotice(null); setResendNote(null); setMode("signin"); }} className="rounded-full border border-[color:var(--impact-purple)] px-6 py-2.5 text-[14px] font-bold text-[color:var(--impact-purple)] hover:bg-[color:var(--impact-purple)]/5">Back to log-in</button>
+                {welcome ? (
+                  <button
+                    type="button"
+                    onClick={() => { if (user) void finishAuthentication(user.id); }}
+                    className="rounded-full bg-[color:var(--impact-purple)] px-12 py-3 text-[14px] font-bold text-white transition hover:opacity-90"
+                  >
+                    Continue
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleResendConfirmation}
+                      disabled={resending}
+                      className="rounded-full bg-[color:var(--impact-purple)] px-6 py-2.5 text-[14px] font-bold text-white transition hover:opacity-90 disabled:opacity-50"
+                    >
+                      {resending ? "Sending…" : "Resend confirmation email"}
+                    </button>
+                    <button type="button" onClick={() => { setNotice(null); setResendNote(null); setMode("signin"); }} className="rounded-full border border-[color:var(--impact-purple)] px-6 py-2.5 text-[14px] font-bold text-[color:var(--impact-purple)] hover:bg-[color:var(--impact-purple)]/5">Back to log-in</button>
+                  </>
+                )}
               </div>
             </div>
           ) : (
