@@ -166,7 +166,21 @@ function Dashboard() {
   const openGuide = () => setGuideModalOpen(true);
 
   return (
-    <div className="min-h-screen bg-[#F4F5F7] lg:flex lg:gap-6 lg:p-6">
+    <div className="min-h-screen bg-[#F4F5F7]">
+      <header className="border-b border-[#E7E3EF] bg-white px-5 py-3 lg:px-8">
+        <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <span className="text-[12px] font-extrabold uppercase tracking-[0.12em] text-[color:var(--impact-purple)]">
+            Quick links
+          </span>
+          <nav className="flex flex-wrap items-center gap-2">
+            <QuickLink to="/" label="Home" icon="home" />
+            <QuickLink to="/resource-hub" label="Resource Hub" icon="resource-hub" />
+            <QuickLink to="/send-us-a-message" label="Send us a message" icon="message" />
+          </nav>
+        </div>
+      </header>
+
+      <div className="lg:flex lg:gap-6 lg:p-6">
       {/* Sidebar */}
       <aside className="shrink-0 bg-[color:var(--impact-purple)] lg:w-[340px] lg:rounded-[40px]">
         <div className="px-6 pb-8 pt-6 lg:px-7 lg:pb-10 lg:pt-7">
@@ -228,15 +242,6 @@ function Dashboard() {
             How to start assessing?
           </button>
 
-          <h2 className="mt-8 text-[16px] font-extrabold text-white">
-            Quick links
-          </h2>
-          <nav className="mt-4 grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-2">
-            <QuickLink to="/" label="Home" icon="home" />
-            <QuickLink to="/resource-hub" label="Resource Hub" icon="resource-hub" />
-            <QuickLink to="/send-us-a-message" label="Send us a message" icon="message" />
-          </nav>
-
 
           <div className="mt-8 hidden border-t border-white/15 pt-6 lg:block">
             {isAdmin && (
@@ -292,6 +297,7 @@ function Dashboard() {
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 }
@@ -306,7 +312,7 @@ function QuickLink({
   icon: "home" | "resource-hub" | "message";
 }) {
   const active = typeof window !== "undefined" && window.location.pathname === to;
-  const stroke = "#ffffff";
+  const stroke = "currentColor";
 
   const iconSvg = {
     home: (
@@ -354,9 +360,17 @@ function QuickLink({
   return (
     <Link
       to={to}
-      className={`flex flex-col items-center justify-center gap-2 rounded-2xl px-3 py-3 text-center text-[12px] font-bold leading-tight text-white transition lg:gap-2.5 lg:text-[14px] ${active ? "bg-white/25" : "bg-white/15 hover:bg-white/25"}`}
+      className={`inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-[13px] font-bold leading-tight transition ${
+        active
+          ? "bg-[color:var(--impact-purple)] text-white"
+          : "bg-[#EDE4F6] text-[color:var(--impact-purple)] hover:bg-[#E1D3F0]"
+      }`}
     >
-      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20">
+      <span
+        className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
+          active ? "bg-white/20" : "bg-white"
+        }`}
+      >
         {iconSvg[icon]}
       </span>
       <span>{label}</span>
