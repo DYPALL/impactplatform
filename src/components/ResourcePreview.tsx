@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import AutoScroll from "embla-carousel-auto-scroll";
+import { useEmblaAutoScroll } from "@/hooks/use-embla-auto-scroll";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
@@ -8,41 +8,8 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicationMockup } from "@/components/PublicationMockup";
 
-type AutoScrollPlugin = ReturnType<typeof AutoScroll>;
-
-// The auto-scroll plugin keeps its own reference to the carousel instance and throws
-// when play()/stop() run before it has been attached, or after that instance is gone.
-// Wrapping it keeps those calls inert outside the window where they are valid.
-function useAutoScroll() {
-  return useMemo(() => {
-    const raw = AutoScroll({ speed: 0.8, startDelay: 800, playOnInit: false, stopOnInteraction: false });
-    let attached = false;
-    const init: AutoScrollPlugin["init"] = (emblaApi, optionsHandler) => {
-      raw.init(emblaApi, optionsHandler);
-      attached = true;
-    };
-    const destroy = () => {
-      attached = false;
-      raw.destroy();
-    };
-    const guard = (run: () => void) => () => {
-      if (!attached) return;
-      try {
-        run();
-      } catch {
-        attached = false;
-      }
-    };
-    return {
-      plugin: { ...raw, init, destroy } as AutoScrollPlugin,
-      play: guard(() => raw.play()),
-      stop: guard(() => raw.stop()),
-    };
-  }, []);
-}
-
 export function ResourcePreview() {
-  const autoScroll = useAutoScroll();
+  const autoScroll = useEmblaAutoScroll();
   const [viewportRef, carousel] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1, duration: 36 }, [autoScroll.plugin]);
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false);
