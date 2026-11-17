@@ -123,6 +123,10 @@ function AuthPage() {
       } else if (requestedArea) {
         setError("Your assessment results could not be restored. Please try again.");
         returning.current = false;
+      } else if (claimed?.completed) {
+        await navigate({ to: "/results/$id", params: { id: claimed.id }, replace: true });
+      } else if (claimed) {
+        await navigate({ to: "/questionnaire/$area", params: { area: claimed.area }, search: { id: claimed.id }, replace: true });
       } else {
         await navigate({ to: "/dashboard", replace: true });
       }
@@ -163,7 +167,7 @@ function AuthPage() {
       }
       const { data: sess } = await supabase.auth.getSession();
       if (sess.session) await finishAuthentication(sess.session.user.id);
-      else setNotice("Check your email to confirm your account. Your assessment will be ready when you return.");
+      else setNotice(raw.email ?? "");
     } finally {
       setBusy(false);
     }
@@ -220,6 +224,19 @@ function AuthPage() {
 
         {/* Right form panel */}
         <section className="flex flex-1 items-center justify-center px-6 py-12 lg:px-16">
+          {notice !== null ? (
+            <div role="status" className="w-full max-w-[440px] text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[color:var(--impact-purple)]/10 text-[color:var(--impact-purple)]">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
+              </div>
+              <h2 className="mt-6 text-[28px] font-extrabold text-[color:var(--impact-ink)]">Confirm your email</h2>
+              <p className="mt-3 text-[15px] leading-relaxed text-[color:var(--impact-ink)]/75">
+                We sent a confirmation link to {notice ? <strong>{notice}</strong> : "your email"}. Open it to activate your account. You'll come straight back here and continue with your assessment.
+              </p>
+              <p className="mt-3 text-[13px] text-[color:var(--impact-ink)]/60">Can't find it? Check your spam folder.</p>
+              <button type="button" onClick={() => { setNotice(null); setMode("signin"); }} className="mt-8 rounded-full border border-[color:var(--impact-purple)] px-6 py-2.5 text-[14px] font-bold text-[color:var(--impact-purple)] hover:bg-[color:var(--impact-purple)]/5">Back to log-in</button>
+            </div>
+          ) : (
           <div className="w-full max-w-[440px]">
             {/* Tab switcher */}
             <div className="grid grid-cols-2 rounded-full bg-[#f2f2f5] p-1">
@@ -342,7 +359,6 @@ function AuthPage() {
               )}
 
               {error && <p className="text-sm text-red-600">{error}</p>}
-              {notice && <p role="status" className="text-sm text-muted-foreground">{notice}</p>}
 
               <button
                 type="submit"
@@ -364,6 +380,7 @@ function AuthPage() {
               </p>
             </form>
           </div>
+          )}
         </section>
       </div>
     </div>
