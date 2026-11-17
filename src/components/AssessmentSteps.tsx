@@ -10,11 +10,11 @@ import step4 from "@/assets/step-4.webp.asset.json";
 import actionPhoto from "@/assets/cta-photo.webp.asset.json";
 
 const steps = [
-  { title: "Start assessing", body: "Start your assessment without an account. Sign up later, when you are ready to view your full results and save your assessment.", image: step1.url, tone: "steps-purple" },
-  { title: "Pick a focus area", body: "Choose one of the four assessment areas to start with. You can always come back and complete the assessment for the other areas as well.", image: step2.url, tone: "steps-teal" },
-  { title: "Answer the questionnaire", body: "Assess your Local Youth Council in the chosen area by answering a set of questions. It takes 15-30 minutes to complete one area and you can save your progress anytime.", image: step3.url, tone: "steps-orange" },
-  { title: "Review your results", body: "See your visual scoreboard, then sign up or log in to unlock your full results, reflection questions and recommended action steps.", image: step4.url, tone: "steps-pink" },
-  { title: "Create your action plan", body: "Select a number of actions that will help your youth council to grow.", image: actionPhoto.url, tone: "steps-plum" },
+  { title: "Get started", body: "Jump right in with no account needed. Create a free profile later to save your progress and unlock your full analysis.", image: step1.url, tone: "steps-purple" },
+  { title: "Select a focus area", body: "Choose one of the four assessment areas to begin. You can always come back to complete the other three later.", image: step2.url, tone: "steps-teal" },
+  { title: "Complete the questionnaire", body: "Reflect through guided questions. It takes 15-30 minutes per area, and you can pause and save anytime.", image: step3.url, tone: "steps-orange" },
+  { title: "Check your analysis", body: "View your instant visual scoreboard, then log in or sign up to unlock reflection prompts and tailored recommendations.", image: step4.url, tone: "steps-pink" },
+  { title: "Build your action plan", body: "Pick up to three concrete steps per indicator, assign owners and deadlines, and build a plan your council can follow.", image: actionPhoto.url, tone: "steps-plum" },
 ];
 
 // How long a card sits still before the next one glides in.
@@ -112,8 +112,8 @@ export function AssessmentSteps() {
     <section ref={sectionRef} id="how" className="w-full bg-background py-16 lg:py-24" aria-labelledby="assessment-steps-title">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-[120px]">
         <div className="max-w-2xl">
-          <h2 id="assessment-steps-title" className="section-title text-primary">How to start assessing?</h2>
-          <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">Five simple steps to measure your Local Youth Council's impact, reflect together as a team, and turn results into concrete action.</p>
+          <h2 id="assessment-steps-title" className="section-title text-primary">How it works?</h2>
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">From self-assessment to action in 5 steps</p>
         </div>
 
         <div
