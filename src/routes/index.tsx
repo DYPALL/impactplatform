@@ -133,11 +133,11 @@ function Consortium() {
       <div className="mx-auto max-w-[1440px] px-6 py-20 lg:px-[120px] lg:py-24">
         <div className="max-w-4xl">
           <h2 className="section-title text-primary">
-            Partner's consortium
+            Who's behind IMPACT?
           </h2>
           <p className="mt-3 text-[16px] leading-[1.6] text-[color:var(--impact-ink-muted)]">
-            IMPACT is delivered by a European consortium of youth-focused
-            organisations working together to strengthen Local Youth Councils.
+            IMPACT is brought to life by a European partnership of youth-focused
+            organisations dedicated to making local youth participation work in practice.
           </p>
         </div>
         <div className="mt-7 grid grid-cols-2 gap-6 md:grid-cols-4">
@@ -171,16 +171,17 @@ function Landing() {
         <AssessmentSteps />
         <CtaBanner />
         <ResourcePreview />
-        <Consortium />
         <section id="about-impact" className="bg-background">
           <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-6 py-16 md:grid-cols-[minmax(0,1fr)_260px] lg:gap-16 lg:px-[120px]">
             <div>
-              <h2 className="section-title text-primary">About the IMPACT project</h2>
-              <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">IMPACT is a European collaboration working to strengthen Local Youth Councils and meaningful youth participation. The platform brings together assessment, reflection, practical action planning and shared resources so councils and the people supporting them can identify opportunities for growth and take their next steps.</p>
+              <h2 className="section-title text-primary">About the IMPACT platform</h2>
+              <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">IMPACT (European Platform for Quality Development of Local Youth Councils) is an interactive space built to help local youth councils (LYCs) evaluate and strengthen their work. By bringing together a self-assessment tool, Quality Guidelines with practical actions, and a tailored Action Plan builder, the platform supports higher quality, greater local impact, and continuous long-term growth.</p>
+              <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">The platform is developed within the framework of the IMPACT project funded by the Erasmus+ programme through the Finnish National Agency.</p>
             </div>
             <img src={impactLogo.url} alt="IMPACT project logo" loading="lazy" className="h-auto w-[260px] max-w-full justify-self-center" />
           </div>
         </section>
+        <Consortium />
         <HomeFAQ />
       </main>
       <Footer />
