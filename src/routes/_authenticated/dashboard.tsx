@@ -410,26 +410,24 @@ function AreaCard({
       className="rounded-[32px] p-6 md:p-8"
       style={{ backgroundColor: area.panelBg }}
     >
-      <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-        <div className="min-w-0 flex-1">
-          <span
-            className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-bold tracking-wide"
-            style={{ backgroundColor: area.softBg, color: area.softText }}
-          >
-            {area.badge}
-          </span>
-          <h3 className="mt-3 text-[22px] font-extrabold text-[color:var(--impact-ink)]">
-            {area.title}
-          </h3>
-          <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-[color:var(--impact-ink-muted)]">
-            {area.description}
-          </p>
-        </div>
+      <span
+        className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-bold tracking-wide"
+        style={{ backgroundColor: area.softBg, color: area.softText }}
+      >
+        {area.badge}
+      </span>
+      <h3 className="mt-3 text-[22px] font-extrabold text-[color:var(--impact-ink)]">
+        {area.title}
+      </h3>
+      <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-[color:var(--impact-ink-muted)]">
+        {area.description}
+      </p>
 
+      <div className="mt-5">
         <Link
           to="/questionnaire/$area"
           params={{ area: area.key }}
-          className="inline-flex shrink-0 items-center justify-center rounded-full px-7 py-3.5 text-[14px] font-bold text-white transition hover:opacity-90 md:self-center"
+          className="inline-flex items-center justify-center rounded-full px-7 py-3.5 text-[14px] font-bold text-white transition hover:opacity-90"
           style={{ backgroundColor: area.color }}
         >
           Start a new assessment
@@ -440,17 +438,17 @@ function AreaCard({
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        className="group mt-5 flex w-full items-center justify-center gap-3 rounded-full py-1.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--impact-purple)]"
+        className="group mt-4 flex w-full items-center justify-center gap-2 rounded-full py-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--impact-purple)]"
         style={{ "--area-color": area.color } as CSSProperties}
       >
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-(--area-color) bg-(--impact-surface) shadow-sm transition-colors duration-200 group-hover:bg-(--area-color)">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-(--area-color) bg-(--impact-surface) transition-colors duration-200 group-hover:bg-(--area-color)">
           <ChevronDown
-            size={22}
-            strokeWidth={2.75}
+            size={18}
+            strokeWidth={2.5}
             className={`text-(--area-color) transition-transform duration-300 group-hover:text-(--impact-surface) ${expanded ? "rotate-180" : ""}`}
           />
         </span>
-        <span className="text-[13px] font-bold" style={{ color: area.softText }}>
+        <span className="text-[12px] font-bold" style={{ color: area.softText }}>
           {expanded ? "Hide completed questionnaires" : "Show completed questionnaires"}
         </span>
       </button>
