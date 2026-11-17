@@ -6,7 +6,7 @@ import { Users, Search, UserPlus, Mail, Trash2, RefreshCw, FlaskConical } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { listAdminAccounts, createUserAccount, resetAccountPassword, deleteTestAccount } from "@/lib/admin-accounts.functions";
+import { listAdminAccounts, createUserAccount, resetAccountPassword, deleteUserAccount } from "@/lib/admin-accounts.functions";
 
 const accountQuery = queryOptions({ queryKey: ["admin-accounts"], queryFn: () => listAdminAccounts() });
 
@@ -31,7 +31,7 @@ function AccountsPage() {
   const queryClient = useQueryClient();
   const createAccount = useServerFn(createUserAccount);
   const sendReset = useServerFn(resetAccountPassword);
-  const removeAccount = useServerFn(deleteTestAccount);
+  const removeAccount = useServerFn(deleteUserAccount);
   const [search, setSearch] = useState("");
   const [country, setCountry] = useState("");
   const [kind, setKind] = useState("all");
@@ -71,7 +71,7 @@ function AccountsPage() {
     try {
       if (action.type === "reset") await sendReset({ data: { id: action.account.id } });
       else await removeAccount({ data: { id: action.account.id } });
-      setNotice(action.type === "reset" ? "Password reset email sent." : "Test account deleted.");
+      setNotice(action.type === "reset" ? "Password reset email sent." : "Account deleted.");
       setAction(null);
       await refresh();
     } catch (err) { setError(err instanceof Error ? err.message : "Could not complete the action."); }
@@ -98,7 +98,7 @@ function AccountsPage() {
           <td className="px-5 py-4"><p>{account.country || "Not provided"}</p><p className="mt-1 text-xs text-muted-foreground">{account.council}</p></td>
           <td className="whitespace-nowrap px-5 py-4 text-xs">{new Date(account.createdAt).toLocaleDateString("en-GB")}<p className="mt-1 text-muted-foreground">{account.lastSignIn ? `Last log-in ${new Date(account.lastSignIn).toLocaleDateString("en-GB")}` : "Not logged in yet"}</p></td>
           <td className="px-5 py-4 text-xs">{account.confirmed ? "Verified" : "Awaiting verification"}</td>
-          <td className="px-5 py-4"><div className="flex gap-1"><Button variant="ghost" size="icon" aria-label={`Reset password for ${account.email}`} title="Send password reset email" disabled={!account.email} onClick={() => { setError(""); setAction({ type: "reset", account }); }}><Mail /></Button>{account.test && <Button variant="ghost" size="icon" className="text-destructive" aria-label={`Delete test account ${account.email}`} title="Delete test account" onClick={() => { setError(""); setAction({ type: "delete", account }); }}><Trash2 /></Button>}</div></td>
+          <td className="px-5 py-4"><div className="flex gap-1"><Button variant="ghost" size="icon" aria-label={`Reset password for ${account.email}`} title="Send password reset email" disabled={!account.email} onClick={() => { setError(""); setAction({ type: "reset", account }); }}><Mail /></Button><Button variant="ghost" size="icon" className="text-destructive" aria-label={`Delete account ${account.email}`} title="Delete account" onClick={() => { setError(""); setAction({ type: "delete", account }); }}><Trash2 /></Button></div></td>
         </tr>)}</tbody>
       </table>{!rows.length && <p className="p-10 text-center text-muted-foreground">No accounts match these filters.</p>}
     </div>
@@ -107,6 +107,6 @@ function AccountsPage() {
       <label className="block text-sm font-semibold">Name<Input name="name" required maxLength={100} className="mt-1" /></label><label className="block text-sm font-semibold">Email<Input name="email" type="email" autoComplete="off" required maxLength={255} className="mt-1" /></label><label className="block text-sm font-semibold">Country<Input name="country" required maxLength={80} className="mt-1" list="account-countries" /></label><datalist id="account-countries">{countries.map(c => <option key={c} value={c} />)}</datalist><label className="block text-sm font-semibold">Temporary password<Input name="password" type="password" autoComplete="new-password" required minLength={8} maxLength={72} className="mt-1" /></label>
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}<DialogFooter><Button type="button" variant="outline" disabled={busy} onClick={() => setCreating(false)}>Cancel</Button><Button type="submit" disabled={busy}>{busy ? "Creating…" : "Create account"}</Button></DialogFooter>
     </form></DialogContent></Dialog>
-    <Dialog open={Boolean(action)} onOpenChange={value => { if (!value && !busy) setAction(null); }}><DialogContent><DialogHeader><DialogTitle>{action?.type === "delete" ? "Delete test account?" : "Send password reset email?"}</DialogTitle><DialogDescription>{action?.type === "delete" ? "This permanently deletes the marked test account and its associated data. Real user accounts cannot be deleted here." : "The account owner will receive a secure link to choose a new password."}</DialogDescription></DialogHeader><p className="break-all text-sm font-semibold">{action?.account.email}</p>{error && <p role="alert" className="text-sm text-destructive">{error}</p>}<DialogFooter><Button variant="outline" disabled={busy} onClick={() => setAction(null)}>Cancel</Button><Button variant={action?.type === "delete" ? "destructive" : "default"} disabled={busy} onClick={() => void confirmAction()}>{busy ? "Please wait…" : action?.type === "delete" ? "Delete test account" : "Send reset email"}</Button></DialogFooter></DialogContent></Dialog>
+    <Dialog open={Boolean(action)} onOpenChange={value => { if (!value && !busy) setAction(null); }}><DialogContent><DialogHeader><DialogTitle>{action?.type === "delete" ? "Delete this account?" : "Send password reset email?"}</DialogTitle><DialogDescription>{action?.type === "delete" ? "This permanently deletes the account and all its assessments, action plans and messages. This cannot be undone." : "The account owner will receive a secure link to choose a new password."}</DialogDescription></DialogHeader><p className="break-all text-sm font-semibold">{action?.account.email}</p>{error && <p role="alert" className="text-sm text-destructive">{error}</p>}<DialogFooter><Button variant="outline" disabled={busy} onClick={() => setAction(null)}>Cancel</Button><Button variant={action?.type === "delete" ? "destructive" : "default"} disabled={busy} onClick={() => void confirmAction()}>{busy ? "Please wait…" : action?.type === "delete" ? "Delete test account" : "Send reset email"}</Button></DialogFooter></DialogContent></Dialog>
   </div>;
 }

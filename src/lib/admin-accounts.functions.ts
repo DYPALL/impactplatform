@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { requireAdminRole, requireDeletableTestAccount } from "./admin-accounts-policy";
+import { requireAdminRole, requireDeletableAccount } from "./admin-accounts-policy";
 import { userAccountAttributes } from "./admin-account-creation";
 
 export const listAdminAccounts = createServerFn({ method: "GET" })
@@ -62,7 +62,7 @@ export const resetAccountPassword = createServerFn({ method: "POST" })
     return { success: true };
   });
 
-export const deleteTestAccount = createServerFn({ method: "POST" })
+export const deleteUserAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator(input => z.object({ id: z.uuid() }).parse(input))
   .handler(async ({ data, context }) => {
@@ -73,13 +73,13 @@ export const deleteTestAccount = createServerFn({ method: "POST" })
     const { data: account, error } = await supabaseAdmin.auth.admin.getUserById(data.id);
     if (error || !account.user) throw new Error("Account not found.");
     const { data: targetRoles, error: targetError } = await supabaseAdmin.from("user_roles").select("role").eq("user_id", data.id);
-    if (targetError) throw new Error("Could not verify this test account.");
-    requireDeletableTestAccount(account.user, context.userId, (targetRoles ?? []).some(row => row.role === "admin"));
+    if (targetError) throw new Error("Could not verify this account.");
+    requireDeletableAccount(account.user, context.userId, (targetRoles ?? []).some(row => row.role === "admin"));
     for (const table of ["action_plans", "assessments", "community_feedback"] as const) {
       const { error: cleanupError } = await supabaseAdmin.from(table).delete().eq("user_id", data.id);
-      if (cleanupError) throw new Error("Could not remove this test account's saved data. The account has not been deleted.");
+      if (cleanupError) throw new Error("Could not remove this account's saved data. The account has not been deleted.");
     }
     const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(data.id);
-    if (deleteError) throw new Error("Could not delete the test account. Its saved data may need to be removed first.");
+    if (deleteError) throw new Error("Could not delete the account. Its saved data may need to be removed first.");
     return { success: true };
   });
