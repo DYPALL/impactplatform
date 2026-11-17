@@ -438,10 +438,10 @@ function AreaCard({
         type="button"
         onClick={onToggle}
         aria-expanded={expanded}
-        className="group mt-4 flex w-full items-center justify-center gap-2 rounded-full py-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--impact-purple)]"
+        className="group mt-4 flex w-full items-center justify-start gap-2 rounded-full py-1 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--impact-purple)]"
         style={{ "--area-color": area.color } as CSSProperties}
       >
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-(--area-color) bg-(--impact-surface) transition-colors duration-200 group-hover:bg-(--area-color)">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color:var(--impact-surface)] shadow-sm transition-colors duration-200 group-hover:bg-(--area-color)">
           <ChevronDown
             size={18}
             strokeWidth={2.5}
