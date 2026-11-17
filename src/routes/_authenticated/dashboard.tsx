@@ -354,7 +354,7 @@ function QuickLink({
   return (
     <Link
       to={to}
-      className={`flex flex-col items-center justify-center gap-2 rounded-2xl px-2 py-3 text-center text-[12px] font-bold leading-tight text-white transition lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-left lg:text-[14px] ${active ? "bg-white/25" : "bg-white/15 hover:bg-white/25"}`}
+      className={`flex flex-col items-center justify-center gap-2 rounded-2xl px-3 py-3 text-center text-[12px] font-bold leading-tight text-white transition lg:gap-2.5 lg:text-[14px] ${active ? "bg-white/25" : "bg-white/15 hover:bg-white/25"}`}
     >
       <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20">
         {iconSvg[icon]}
