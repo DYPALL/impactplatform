@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { clearResultsReturn, matchesResultsReturn, pendingResultsReturn, rememberResultsReturn, resultsReturnArea } from "@/lib/results-auth-return";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { isConfirmationRateLimit, isUnconfirmedEmailError } from "@/lib/auth-errors";
 import { lovable } from "@/integrations/lovable";
 import { FlowingPolygons } from "@/components/FlowingPolygons";
 import logoAsset from "@/assets/logo_color_impact.png.asset.json";
@@ -108,7 +109,9 @@ function AuthPage() {
   const router = useRouter();
   const { user } = useAuth();
   const returning = useRef(false);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{ email: string; fromSignUp: boolean } | null>(null);
+  const [resendNote, setResendNote] = useState<string | null>(null);
+  const [resending, setResending] = useState(false);
 
   const finishAuthentication = useCallback(async (userId: string) => {
     if (returning.current) return;
@@ -151,7 +154,15 @@ function AuthPage() {
         const parsed = signInSchema.safeParse(raw);
         if (!parsed.success) { setError(parsed.error.issues[0].message); return; }
         const { error } = await supabase.auth.signInWithPassword(parsed.data);
-        if (error) { setError(error.message); return; }
+        if (error) {
+          if (isUnconfirmedEmailError(error.message)) {
+            setResendNote(null);
+            setNotice({ email: parsed.data.email, fromSignUp: false });
+            return;
+          }
+          setError(error.message);
+          return;
+        }
       } else {
         const parsed = signUpSchema.safeParse(raw);
         if (!parsed.success) { setError(parsed.error.issues[0].message); return; }
@@ -167,7 +178,7 @@ function AuthPage() {
       }
       const { data: sess } = await supabase.auth.getSession();
       if (sess.session) await finishAuthentication(sess.session.user.id);
-      else setNotice(raw.email ?? "");
+      else { setResendNote(null); setNotice({ email: (raw.email ?? "").trim(), fromSignUp: true }); }
     } finally {
       setBusy(false);
     }
@@ -188,6 +199,34 @@ function AuthPage() {
       setError(err instanceof Error ? err.message : "Log-in failed");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function handleResendConfirmation() {
+    if (!notice) return;
+    setResending(true);
+    setError(null);
+    try {
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email: notice.email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth${search.resultArea ? `?resultArea=${encodeURIComponent(search.resultArea)}` : ""}`,
+        },
+      });
+      if (!error) {
+        setResendNote("Confirmation email sent again. Check your inbox and spam folder.");
+        return;
+      }
+      // The backend only allows one confirmation email per minute, so a click
+      // straight after sign-up is a wait-a-moment case, not a failure.
+      if (isConfirmationRateLimit(error.message, (error as unknown as { status?: number }).status)) {
+        setResendNote("A confirmation email is already on its way. Wait about a minute, then try again.");
+        return;
+      }
+      setError("We couldn't send the confirmation email again. Please try once more in a moment.");
+    } finally {
+      setResending(false);
     }
   }
 
@@ -231,12 +270,34 @@ function AuthPage() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[color:var(--impact-purple)]/10 text-[color:var(--impact-purple)]">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
               </div>
-              <h2 className="mt-6 text-[28px] font-extrabold text-[color:var(--impact-ink)]">Your account has been created successfully</h2>
+              <h2 className="mt-6 text-[28px] font-extrabold text-[color:var(--impact-ink)]">
+                {notice.fromSignUp ? "Your account has been created successfully" : "Confirm your email to log in"}
+              </h2>
               <p className="mt-3 text-[15px] leading-relaxed text-[color:var(--impact-ink)]/75">
-                Confirm your email to activate it. We sent a confirmation link to {notice ? <strong>{notice}</strong> : "your email"} — open it to finish signing up. You'll come straight back here and continue with your assessment.
+                {notice.fromSignUp ? (
+                  <>Confirm your email to activate it. We sent a confirmation link to <strong>{notice.email}</strong> — open it to finish signing up. You'll come straight back here and continue with your assessment.</>
+                ) : (
+                  <>We can't log you in until your email address is confirmed. We sent a confirmation link to <strong>{notice.email}</strong> — open it to activate your account, then log in again.</>
+                )}
               </p>
               <p className="mt-3 text-[13px] text-[color:var(--impact-ink)]/60">Can't find it? Check your spam folder.</p>
-              <button type="button" onClick={() => { setNotice(null); setMode("signin"); }} className="mt-8 rounded-full border border-[color:var(--impact-purple)] px-6 py-2.5 text-[14px] font-bold text-[color:var(--impact-purple)] hover:bg-[color:var(--impact-purple)]/5">Back to log-in</button>
+              {resendNote && (
+                <p className="mt-4 text-[13px] font-bold text-[color:var(--impact-teal,#219c9e)]">
+                  {resendNote}
+                </p>
+              )}
+              {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleResendConfirmation}
+                  disabled={resending}
+                  className="rounded-full bg-[color:var(--impact-purple)] px-6 py-2.5 text-[14px] font-bold text-white transition hover:opacity-90 disabled:opacity-50"
+                >
+                  {resending ? "Sending…" : "Resend confirmation email"}
+                </button>
+                <button type="button" onClick={() => { setNotice(null); setResendNote(null); setMode("signin"); }} className="rounded-full border border-[color:var(--impact-purple)] px-6 py-2.5 text-[14px] font-bold text-[color:var(--impact-purple)] hover:bg-[color:var(--impact-purple)]/5">Back to log-in</button>
+              </div>
             </div>
           ) : (
           <div className="w-full max-w-[440px]">
