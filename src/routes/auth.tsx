@@ -42,6 +42,7 @@ const signUpSchema = signInSchema.extend({
 
 /* ---------- Header (mirrors landing) ---------- */
 function Header() {
+  const { user, signOut } = useAuth();
   return (
     <header className="w-full border-b border-[color:var(--impact-border)] bg-white">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-5 lg:px-[120px]">
@@ -58,6 +59,20 @@ function Header() {
           <a href="/#contact" className="inline-flex items-center gap-2 text-[15px] font-bold text-[color:var(--impact-ink)]">
             <SendIcon /> Send us a message
           </a>
+          {user ? (
+            <button
+              type="button"
+              onClick={() => void signOut()}
+              className="inline-flex h-11 items-center gap-2 rounded-full bg-[color:var(--impact-surface-muted)] px-[18px] text-[14px] font-bold text-[color:var(--impact-ink)] transition hover:bg-[color:var(--impact-purple)] hover:text-white"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              Sign out
+            </button>
+          ) : (
           <Link
             to="/auth"
             className="inline-flex h-11 items-center gap-2 rounded-full bg-[color:var(--impact-purple)] px-[18px] text-[14px] font-bold text-white transition hover:opacity-90"
@@ -68,6 +83,7 @@ function Header() {
             </svg>
             Log-in / Sign-up
           </Link>
+          )}
         </nav>
       </div>
     </header>
